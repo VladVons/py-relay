@@ -124,6 +124,18 @@ GitToServ()
   GitSyncToServ "$aComment"
 }
 
+GitReset()
+{
+  Log "$0->$FUNCNAME"
+  
+  git checkout --orphan TEMP_BRANCH
+  git add -A
+  git commit -am "Initial commit"
+  git branch -D master
+  git branch -m master
+  git push -f origin master
+}
+
 Diff(){
   diff -r dir1 dir2 | sed '/Binary\ files\ /d' > diff.txt
 }
