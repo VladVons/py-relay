@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+Name="relay"
+
+case "$1" in
+  configure)
+    # Setup logfile permissions:
+    touch /var/log/$Name.log
+    chmod 640 /var/log/$Name.log
+    #chown root:adm /var/log/monit.log
+    ;;
+  abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+    ;;
+esac
+
+# Automatically added by dh_installinit
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/$Name" ]; then
+	    update-rc.d $Name defaults >/dev/null
+            update-rc.d $Name enable
+	fi
+	if [ -x "/etc/init.d/$Namet" ]; then
+		invoke-rc.d $Name start || exit $?
+	fi
+fi
+
+
+exit 0

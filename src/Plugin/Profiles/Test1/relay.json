@@ -1,0 +1,176 @@
+{
+    "Gpio":{
+        "Run":{
+            "Init":[
+            ],
+            "Start":[
+                {"Enable":false,   "ClassRef":"GroupOnStart"}
+            ],
+            "Loop":[
+                {"Enable":true,  "ClassRef":"Sleep"},
+                {"Enable":false,  "ClassRef":"Random_10_30"},
+                {"Enable":false,  "ClassRef":"WriteConsoleFinish"},
+
+                {"Enable":false,  "ClassRef":"SensorSun"},
+                {"Enable":false,  "ClassRef":"SensorMoon"},
+
+                {"Enable":false, "ClassRef":"SensorGrafana"},
+                {"Enable":false, "ClassRef":"SensorUptimeSys"},
+                {"Enable":false, "ClassRef":"SensorUptimeApp"},
+                {"Enable":false, "ClassRef":"CheckHost"},
+
+                {"Enable":false,  "ClassRef":"DH1_Sensor_Temper"},
+
+                {"Enable":false,  "ClassRef":"DH5_Sensor_Humid"},
+                {"Enable":false,  "ClassRef":"DH5_Sensor_Temper"},
+
+                {"Enable":true,  "ClassRef":"DH11_Sensor_Humid"},
+                {"Enable":true,  "ClassRef":"DH11_Sensor_Temper"},
+                {"Enable":true,  "ClassRef":"DH11_Sensor_CO2"}
+            ],
+            "Finish":[
+                {"Enable":false,   "ClassRef":"GroupOnFinish"}
+            ]
+        },
+       "Include":[
+                {"Enable":true,  "File":"DH1.json"},
+                {"Enable":true,  "File":"DH5.json"},
+                {"Enable":true,  "File":"DH11.json"},
+                {"Enable":true,  "File":"Random.json"}
+        ],
+        "Action":[
+
+            {"OnValue": {"Enable":false,  "ClassRef":"WriteConsole1"}},
+            {"OnValue": {"Enable":true, "ClassRef":"GroupOnValue"}},
+
+            {"OnError": {"Enable":true,  "ClassRef":"WriteLogErr"}},
+            {"OnRange": {"Enable":true,  "ClassRef":"WriteLogErr"}},
+            {"OnAvg":   {"Enable":false, "ClassRef":"WriteLogErr"}},
+            {"OnLoop":  {"Enable":false, "ClassRef":"MainLoop"}}
+        ],
+        "Classes":[
+            {
+                "Class":"TDeviceGroup",
+                "Alias":"GroupOnValue",
+                "Checks": [
+                    {"Enable":true,  "Always":"self.SetValue('$WriteConsole1')"},
+                    {"Enable":false, "Always":"self.SetValue('$Grafana')"}
+                ]
+            },
+            {
+                "Class":"TDeviceGroup",
+                "Alias":"GroupOnStart",
+                "Checks": [
+                    {"Enable":true,  "Always":"self.SetValue('$DH1_Relay_A', 0)"},
+                    {"Enable":true,  "Always":"self.SetValue('$DH1_Relay_B', 0)"},
+                    {"Enable":true,  "Always":"self.SetValue('$DH5_Relay_A', 0)"},
+                    {"Enable":true,  "Always":"self.SetValue('$DH5_Relay_B', 0)"}
+                ]
+            },
+            {
+                "Class":"TDeviceGroup",
+                "Alias":"GroupOnFinish",
+                "Checks": [
+                    {"Enable":true,  "Always":"self.SetValue('$DH1_Relay_A', 0)"},
+                    {"Enable":true,  "Always":"self.SetValue('$DH1_Relay_B', 0)"},
+                    {"Enable":true,  "Always":"self.SetValue('$DH5_Relay_A', 0)"},
+                    {"Enable":true,  "Always":"self.SetValue('$DH5_Relay_B', 0)"}
+                ]
+            },
+            {
+                "Class":"TControlLoop",
+                "Alias":"MainLoop",
+                "Parameter":{"Port":8000, "Timeout":1}
+            },
+            {
+                "Class":"TControlSleep",
+                "Alias":"Sleep",
+                "Parameter":{"Time":1}
+            },
+
+
+            {
+                "Class":"TControlGrafana",
+                "Alias":"Grafana",
+                "Parameter":{"Host":"192.168.2.111", "User":"grafana", "Password":"grafana2018", "DB":"3w_grafana", "Table":"Dict2", "Prefix":1}
+            },
+            {
+                "Class":"TSensorGrafana",
+                "Alias":"SensorGrafana",
+                "Parameter":{"Host":"192.168.2.111", "User":"grafana", "Password":"grafana2018", "DB":"3w_grafana", "Table":"Dict", "Prefix":1}
+            },
+            {
+                "Class":"TControlTelegram",
+                "Alias":"Telegram",
+                "Comment":"571074640-Taras, 423099610-Vlad",
+                "Parameter":{"Token":"482131719:AAHRZnIq-RsfNyF2LvaSIm028vGHgSv60dI", 
+                             "Chats":[423099610], 
+                             "Refresh":600, 
+                             "Footer":"http://oster.com.ua:3000/dashboard/db/noviki?orgId=1&from=now-3h&to=now&refresh=1m"}
+            },
+            {
+                "Class":"TControlWriteLog",
+                "Alias":"WriteLogErr",
+                "Parameter":{}
+            },
+            {
+                "Class":"TControlWriteLog",
+                "Alias":"WriteLog",
+                "Parameter":{}
+            },
+            {
+                "Class":"TControlWriteConsole",
+                "Alias":"WriteConsole1"
+            },
+            {
+                "Class":"TControlWriteConsole",
+                "Alias":"WriteConsole2"
+            },
+            {
+                "Class":"TControlWriteConsole",
+                "Alias":"WriteConsoleStart",
+                "Parameter":{"Tag":"Start"}
+            },
+            {
+                "Class":"TControlWriteConsole",
+                "Alias":"WriteConsoleFinish"
+            },
+            {
+                "Class":"TSensorUptimeSys",
+                "Alias":"SensorUptimeSys",
+                "Parameter":{"Unit":"H"}
+            },
+            {
+                "Class":"TSensorUptimeApp",
+                "Alias":"SensorUptimeApp",
+                "Parameter":{"Unit":"H"}
+            },
+            {
+                "Class":"TSensorSun",
+                "Alias":"SensorSun",
+                "Parameter":{"Latitude":"49.553516", "Longitude":"25.594767", "WaitValue":10}
+            },
+            {
+                "Class":"TSensorMoon",
+                "Alias":"SensorMoon",
+                "Parameter":{"Latitude":"49.553516", "Longitude":"25.594767", "WaitValue":10}
+            },
+            {
+                "Class":"TSensorCheckInternet",
+                "Alias":"CheckInternet",
+                "Triggers":[
+                    {"Enable":true, "If":"self.Value", "Always":"self.SetIf('$DH5_Relay_B')"}
+                ]
+            },
+            {
+                "Class":"TSensorCheckHost",
+                "Alias":"CheckHost",
+                "Parameter":{"Host":"192.168.2.104", "Port":80},
+                "Triggers":[
+                    {"Enable":false, "If":"self.Value", "Then":"self.SetValue('$DH5_Relay_B', self.Parent.PostCnt % 2 == 0)"},
+                    {"Enable":true, "Always":"self.SetIf('$DH5_Relay_B')"}
+                ]
+            }
+        ]
+    }
+}

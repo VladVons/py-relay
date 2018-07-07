@@ -1,0 +1,19 @@
+[
+           {
+                "Class":"TSensorDeviceHive_DS18B20",
+                "Alias":"DH1_Sensor_Temper",
+                "Parameter":{"Host":"http://192.168.2.133", "Pin":14}
+            },
+            {
+                "Class":"TRelayDeviceHive_PinOut",
+                "Alias":"DH1_Relay_A",
+                "Descr":"Kitchen_RA_1",
+                "Parameter":{"Host":"http://192.168.2.133", "Pin":12}
+            },
+            {
+                "Class":"TRelayDeviceHive_PinOut",
+                "Alias":"DH1_Relay_B",
+                "Descr":"Kitchen_RB",
+                "Parameter":{"Host":"http://192.168.2.133", "Pin":13}
+            }
+]

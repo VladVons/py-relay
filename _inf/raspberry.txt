@@ -1,0 +1,58 @@
+
+find /lib/modules | grep therm
+sudo modprobe w1-gpio
+sudo modprobe w1-therm
+
+Method 1:
+after connecting to GPIO 4 there is a folder 28-* 
+ls /sys/bus/w1/devices/28-*
+cd 28-0416936117ff
+cat w1_slave
+
+Method 2:
+sudo pip3 install w1thermsensor
+
+i2ctest:
+i2cdetect -y 1
+
+python compiler
+pip3 install nuitka
+nuitka --module --python-version='3.5' some_module.py
+nuitka --recurse-all --portable your-program.py
+
+
+DHT22 (AM2302)
+?git clone https://github.com/adafruit/Adafruit_Python_DHT.git
+?sudo python3 setup.py install
+
+apt-get install pigpio python3-pigpio
+
+BH1750FVI I2C Digital Light Intensity Sensor
+https://www.raspberrypi-spy.co.uk/2015/03/bh1750fvi-i2c-digital-light-intensity-sensor/
+
+--- collectd ---
+https://blog.dbrgn.ch/2017/3/10/write-a-collectd-python-plugin/
+https://collectd.org/documentation/manpages/collectd-python.5.shtml#examples
+sudo apt-get install collectd rrdtool apache2 php libapache2-mod-php --no-install-recommends
+collectd -f
+
+--- sqlite ---
+apt-get install sqlite 
+
+
+--- external clock ---
+http://isearch.kiev.ua/ru/searchpracticeru/-methodsinstruments/1904-adding-a-ds3231-real-time-clock-to-the-raspberry-pi-
+
+echo ds3231 0x68 > /sys/class/i2c-adapter/i2c-1/new_device
+hwclock -s
+
+hwclock -r
+
+
+
+Motherboard
+http://www.kosmodrom.com.ua/power/power.php
+http://www.kosmodrom.com.ua/prodlist.php?name=15EDGKB-3.5
+
+https://ru.aliexpress.com/wholesale?initiative_id=SB_20171115041616&site=rus&g=y&SearchText=szomk+enclosure&needQuery=n&page=3
+https://ru.aliexpress.com/item/1-pc-155-110-60mm-szomk-plastic-din-rail-enclosure-industrial-control-box-plastic-box-for/32610826799.html
