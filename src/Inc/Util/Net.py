@@ -9,12 +9,7 @@ Description:
 import uuid
 import sys
 import socket
-import requests
 
-try:
-    import urlparse
-except:
-    import urllib.parse as urlparse
 #
 from Inc.Util import FS
 
@@ -72,11 +67,6 @@ def GetHttpData(aUrl):
         Result = None
     return Result
 
-def PostRequest(aUrl, aData):
-    Data = requests.post(aUrl, data = aData)
-    Result = Data.content.decode('utf8')
-    return Result
-
 def CheckHostPort(aHost, aPort, aTimeOut = 1):
     Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     Sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -91,8 +81,35 @@ def CheckHostPort(aHost, aPort, aTimeOut = 1):
 def CheckInternet():
     return CheckHostPort('8.8.8.8', 53)
 
-
 def UrlParse(aUrl):
+    try:
+        import urlparse
+    except:
+        import urllib.parse as urlparse
+
     Result = urlparse.urlparse(aUrl)
     #print(Result.scheme, Result.netloc, Result.path)
+    return Result
+
+def PostRequest(aUrl, aData):
+    '''
+    import requests
+
+    Data = requests.post(aUrl, data = aData)
+    Result = Data.content.decode('utf8')
+    return Result
+    '''
+    
+    try:
+        from urllib2 import Request, urlopen
+        #from urllib import urlencode
+    except:
+        from urllib.request import Request, urlopen
+        #from urllib.parse import urlencode
+
+    #Data    = urlencode(aData)
+    #print(Data)
+
+    request = Request(aUrl, aData)
+    Result  = urlopen(request).read().decode()
     return Result

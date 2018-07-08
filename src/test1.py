@@ -60,9 +60,28 @@ print (Result._Get())
 #    time.sleep(1)
 
 
-sys.path.append('/usr/lib/python2.7/dist-packages')
-for i in sys.path:
-    print(i)
+#sys.path.append('/usr/lib/python2.7/dist-packages')
+#for i in sys.path:
+#    print(i)
 
-import MySQLdb
+#import MySQLdb
 #import radiotray
+
+
+
+#try:
+#    from urllib2 import Request, urlopen
+#except:
+#    from urllib.request import Request, urlopen
+
+#req = urllib2.Request('http://www.voidspace.org.uk')
+
+#import urlparse
+
+#from urllib.parse import urlencode
+#from urllib import urlencode
+
+
+from Inc.Util.Net import PostRequest
+R = PostRequest('http://192.168.2.131/dev/dht22', b'{"pin":14}')
+print(R)
