@@ -191,8 +191,10 @@ HowTo()
   ExecM "grep i2c /boot/config.txt"
 
   # show i2c devices
-  ExecM "i2cdetect -y 1"
-
+  i2cdetect -y 1
+  i2cset -y 1 0x25 0    # relay all on
+  i2cset -y 1 0x25 255  # relay all off
+  
   # i2c DS3231 clock
   #ExecM "cat /etc/rc.local"
   ExecM "/sys/class/i2c-adapter/i2c-1/new_device"

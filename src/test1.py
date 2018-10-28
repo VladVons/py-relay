@@ -82,6 +82,21 @@ print (Result._Get())
 #from urllib import urlencode
 
 
-from Inc.Util.Net import PostRequest
-R = PostRequest('http://192.168.2.131/dev/dht22', b'{"pin":14}')
-print(R)
+#from Inc.Util.Net import PostRequest
+#R = PostRequest('http://192.168.2.131/dev/dht22', b'{"pin":14}')
+#print(R)
+
+#from Plugin.Providers.UpsApc import TProviderUpsApc
+#APC = TProviderUpsApc()
+#APC = TProviderAPC('localhost', 11222)
+
+#Data = APC.Read(None)
+#print(Data)
+#print(APC.Get())
+
+
+#from Plugin.Devices.UpsApc import TSensorUps
+#S = TSensorUps(None)
+#S.DoParameter({})
+#print(S._Get())
+

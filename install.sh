@@ -52,6 +52,7 @@ Relay()
   pip install Adafruit_Python_DHT
   pip install minimalmodbus
   pip install yattag
+  pip install apcaccess
 }
 
 
