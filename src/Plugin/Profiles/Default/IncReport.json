@@ -1,0 +1,32 @@
+[
+    {
+        "Class":"TControlTelegram",
+        "Alias":"Telegram",
+        "Comment":"chat:oster_bot. users: 57107464X-Taras, 42309961X-Vlad",
+        "Parameter":{"Token":"482131719:AAHRZnIq-RsfNyF2LvaSIm028vGHgSv60dX",
+                     "Chats":[42309000,571074000],
+                     "Refresh":600,
+                     "Footer":"http://oster.com.ua:3000/dashboard/db/noviki?orgId=1&from=now-3h&to=now&refresh=1m"}
+    },
+    {
+        "Class":"TControlGrafana",
+        "Alias":"Grafana",
+        "Parameter":{"Host":"192.168.2.111", "User":"grafana", "Password":"xxxx", "DB":"3w_grafana", "Prefix":1}
+    },
+    {
+        "Class":"TControlWriteLog",
+        "Alias":"WriteLogErr"
+    },
+    {
+        "Class":"TControlWriteLog",
+        "Alias":"WriteLog"
+    },
+    {
+        "Class":"TControlWriteConsole",
+        "Alias":"WriteConsole"
+    },
+    {
+        "Class":"TControlWriteConsole",
+        "Alias":"WriteConsoleRand"
+    }
+]
