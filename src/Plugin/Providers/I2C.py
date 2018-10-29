@@ -115,15 +115,17 @@ Writes value to GPio
 
 Example:
 Bus     = 1
-Address = 27
-Command = 0x08
-Obj = TProviderI2CPioOut(Bus, Address, Command)
-Obj.Set(None, True)
+Address = 0x27
+Pin     = 3
+Value   = True
+Obj = TProviderI2CPioOut(Bus, Address, Pin)
+Obj.Set(None, Value)
 """
 class TProviderI2C_Relay_8574(TProviderI2C):
     def __init__(self, aBus, aAddress, aCommand):
         TProviderI2C.__init__(self, aBus, aAddress, aCommand)
-        self.Bits = 4
+        self.Command = aCommand
+        self.Bits    = 8
 
         if ((aCommand == 0) or (aCommand > self.Bits)):
             Msg = Log.Print(1, 'i', self.__class__.__name__, '__init__()', 'Command %s out of Bits %s' % (aCommand, self.Bits))
@@ -131,8 +133,9 @@ class TProviderI2C_Relay_8574(TProviderI2C):
 
     def Set(self, aCaller, aValue):
         PrevValue = self.Get()
-        Value     = Num.SetBit(PrevValue, 8 - self.Command, bool(aValue))
-        #print('--1', self.Address, PrevValue, "{0:b}".format(Value))
+        Value     = Num.SetBit(PrevValue, self.Command, bool(aValue))
+        #Value     = Num.SetBit(PrevValue, self.Bits - self.Command, bool(aValue))
+        #print('--1', self.Address, self.Command, "{0:b}".format(PrevValue), "{0:b}".format(Value), aValue)
         return self.WriteTry(Value)
 
     def Get(self):

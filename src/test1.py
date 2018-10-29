@@ -18,18 +18,6 @@ print (Result._Get())
 #print(sys.path)
 '''
 
-#from Inc.Crypt import TCrypt
-#Crypt = TCrypt()
-#Str = json.dumps({'Items' :20, 'Owner':'Pink', 'Expired_':2019})
-#D1  = Crypt.Encode(Str)
-#D2  = Crypt.Decode(D1)
-#print(D1, D2)
-
-#from Plugin.Providers.Pzem import TProviderPzem
-#Pzem = TProviderPzem('/dev/ttyUSB0')
-#Pzem.Get()
-
-
 #from Plugin.Providers.MHZ19 import TProviderMHZ19
 #Pzem = TProviderMHZ19('/dev/ttyUSB0')
 
@@ -69,34 +57,40 @@ print (Result._Get())
 
 
 
-#try:
-#    from urllib2 import Request, urlopen
-#except:
-#    from urllib.request import Request, urlopen
 
-#req = urllib2.Request('http://www.voidspace.org.uk')
-
-#import urlparse
-
-#from urllib.parse import urlencode
-#from urllib import urlencode
+def Pzem():
+    from Plugin.Providers.Pzem import TProviderPzem
+    Pzem = TProviderPzem('/dev/ttyUSB0')
+    Data = Pzem.Get()
+    print(Data)
 
 
-#from Inc.Util.Net import PostRequest
-#R = PostRequest('http://192.168.2.131/dev/dht22', b'{"pin":14}')
-#print(R)
-
-#from Plugin.Providers.UpsApc import TProviderUpsApc
-#APC = TProviderUpsApc()
-#APC = TProviderAPC('localhost', 11222)
-
-#Data = APC.Read(None)
-#print(Data)
-#print(APC.Get())
+def UPS():
+    from Plugin.Providers.UpsApc import TProviderUpsApc
+    APC = TProviderUpsApc()
+    Data = APC.Read(None)
+    print(APC.Get())
 
 
-#from Plugin.Devices.UpsApc import TSensorUps
-#S = TSensorUps(None)
-#S.DoParameter({})
-#print(S._Get())
+def LCD():
+    Bus     = 1
+    Address = 0x26
+    Cols    = 20
+    Rows    = 4
 
+    from Plugin.Providers.I2C_LCD_8574 import TProviderI2C_LCD_8574
+    Obj     = TProviderI2C_LCD_8574(Bus, Address, Cols, Rows)
+    Obj.CursorTo(0,0)
+    Obj.PrintLn('Hello world')
+
+
+def Relay():
+    Bus     = 1
+    Address = 0x25
+    Command = 3 - 1
+    Value   = not True
+    from Plugin.Providers.I2C import TProviderI2C_Relay_8574
+    Obj = TProviderI2C_Relay_8574(Bus, Address, Command)
+    Obj.Set(None, Value)
+
+Relay()

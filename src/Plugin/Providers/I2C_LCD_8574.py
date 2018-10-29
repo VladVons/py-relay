@@ -7,12 +7,12 @@ License:     GNU, see LICENSE for more details
 Description:
 Handling I2C LCD display based on 8574 chip
 
-xample:
+Example:
 Bus     = 1
 Address = 0x27
 Cols    = 20
 Rows    = 4
-Obj     = TProviderI2C_LCD_8574((Bus, Address, Cols, Rows)
+Obj     = TProviderI2C_LCD_8574(Bus, Address, Cols, Rows)
 Obj.CursorTo(0,0)
 Obj.PrintLn('Hello world')
 '''
