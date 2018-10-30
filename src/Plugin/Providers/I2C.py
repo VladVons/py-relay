@@ -125,11 +125,11 @@ class TProviderI2C_Relay_8574(TProviderI2C):
     def __init__(self, aBus, aAddress, aCommand):
         TProviderI2C.__init__(self, aBus, aAddress, aCommand)
         self.Command = aCommand
-        self.Bits    = 8
+        #self.Bits    = 8
 
-        if ((aCommand == 0) or (aCommand > self.Bits)):
-            Msg = Log.Print(1, 'i', self.__class__.__name__, '__init__()', 'Command %s out of Bits %s' % (aCommand, self.Bits))
-            raise Exception(Msg)
+        #if ((aCommand == 0) or (aCommand > self.Bits)):
+        #    Msg = Log.Print(1, 'i', self.__class__.__name__, '__init__()', 'Command %s out of Bits %s' % (aCommand, self.Bits))
+        #    raise Exception(Msg)
 
     def Set(self, aCaller, aValue):
         PrevValue = self.Get()
@@ -140,3 +140,4 @@ class TProviderI2C_Relay_8574(TProviderI2C):
 
     def Get(self):
         return self.ReadByte()
+

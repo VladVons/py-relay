@@ -4,7 +4,8 @@
 Start()
 {
   #python relay.py
-  python2 relay.py -p Test2
+  #python2 relay.py -p Test2
+  python2 test1.py
 }
 
 

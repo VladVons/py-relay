@@ -72,7 +72,7 @@ def UPS():
     print(APC.Get())
 
 
-def LCD():
+def LCD(aText = 'Hello world !'):
     Bus     = 1
     Address = 0x26
     Cols    = 20
@@ -80,17 +80,56 @@ def LCD():
 
     from Plugin.Providers.I2C_LCD_8574 import TProviderI2C_LCD_8574
     Obj     = TProviderI2C_LCD_8574(Bus, Address, Cols, Rows)
-    Obj.CursorTo(0,0)
-    Obj.PrintLn('Hello world')
+    Obj.CursorTo(0, 0)
+    Obj.PrintLn(aText)
 
 
 def Relay():
+    import time
+    from Plugin.Providers.I2C import TProviderI2C_Relay_8574
+
     Bus     = 1
     Address = 0x25
-    Command = 3 - 1
-    Value   = not True
-    from Plugin.Providers.I2C import TProviderI2C_Relay_8574
-    Obj = TProviderI2C_Relay_8574(Bus, Address, Command)
-    Obj.Set(None, Value)
+    Pin     = 0
 
-Relay()
+    Cnt = 0
+    while True:
+        Cnt += 1 
+        Value = bool(Cnt % 2)
+        print('Pin:',  Pin, 'Value:', Value)
+        Obj = TProviderI2C_Relay_8574(Bus, Address, Pin)
+        Obj.Set(None, Value)
+        time.sleep(1)
+
+
+def Relay_LCD():
+    import time
+    from Plugin.Providers.I2C import TProviderI2C_Relay_8574
+
+    LCD('Relay test ...')
+    time.sleep(1)
+
+    Bus     = 1
+    Address = 0x25
+
+    # Set all to ON
+    Obj = TProviderI2C_Relay_8574(Bus, Address, 0)
+    Obj.Write(0)
+
+    Cnt = 0
+    Len = 8
+    while True:
+        Cnt += 1 
+        for Pin in range(Len):
+            Obj = TProviderI2C_Relay_8574(Bus, Address, Pin)
+            Value = bool(Cnt % 2)
+            Obj.Set(None, Value)
+
+            Value = Obj.Get()
+            Mask  = "{0:b}".format(~Value & 0xFF).zfill(Len)
+            print('Pins:', Pin, Mask)
+            LCD(Mask)
+            time.sleep(1)
+
+#Relay()
+Relay_LCD()
