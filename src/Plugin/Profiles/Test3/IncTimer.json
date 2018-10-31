@@ -1,0 +1,24 @@
+[
+    {
+        "Class":"TSensorTimeRangeDay",
+        "Alias":"SensorTRD_Light",
+        "Descr":"Day light",
+        "Parameter":{"Ranges":[{ "On":"02:00", "Off": "18:00"}]},
+        "Triggers":[
+            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$WriteLog')"},
+            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$IRelay_2')"}
+        ]
+    },
+    {
+        "Class":"TSensorTimeRangeCycle",
+        "Alias":"SensorTRC_Air",
+        "Descr":"Air",
+        "Parameter":{"Ranges":[{ "On":"5S", "Off": "10S"}]},
+        "Triggers":[
+            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$WriteLog')"},
+            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$IRelay_2')"}
+        ]
+    }
+
+
+]

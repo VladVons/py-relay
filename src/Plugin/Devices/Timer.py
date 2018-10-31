@@ -23,12 +23,18 @@ class TSensorBaseRange(TSensor):
         self.Delim   = ''
         self.PadLen  = 2
 
+        #Pattern = {'Ranges': []}
+        #self.Param.AddDefPattern(Pattern)
+
     def DoParameter(self, aParam):
         self.Range = []
 
         Pattern = {'Ranges': []}
         self.Param.LoadPattern(aParam, Pattern)
 
+        #self.Param.LoadPattern(aParam)
+
+        Range = []
         for Range in self.Param.Ranges:
             On  = self._Adjust(Range.get('On'))
             Off = self._Adjust(Range.get('Off'))
@@ -109,8 +115,7 @@ class TSensorTimeRange(TSensorBaseRange):
 
         return 0
 
-
-#Data = '{"Timer_Day":{ "Range":[ { "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}}'
+#Data = '{"Timer_Day":{ "Ranges":[ { "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}}'
 class TSensorTimeRangeDay(TSensorTimeRange):
     def __init__(self, aParent):
         #super().__init__(aParent) # __need v3.5
@@ -120,7 +125,7 @@ class TSensorTimeRangeDay(TSensorTimeRange):
         self.Mask   = '00:00:00'
         self.Format = '%H:%M:%S'
 
-#Data = '{"Timer_Week":{ "Range":[ { "On":"0", "Off": "2"}] }}'
+#Data = '{"Timer_Week":{ "Ranges":[ { "On":"0", "Off": "2"}] }}'
 class TSensorTimeRangeWeek(TSensorTimeRange):
     # 0 is Sunday 
     def __init__(self, aParent):
@@ -131,7 +136,7 @@ class TSensorTimeRangeWeek(TSensorTimeRange):
         self.Format = '%w'
         self.PadLen = 1
 
-#Data = '{"Timer_Month":{ "Range":[ { "On":"2", "Off": "03"}, { "On":"10", "Off": "11"}] }}'
+#Data = '{"Timer_Month":{ "Ranges":[ { "On":"2", "Off": "03"}, { "On":"10", "Off": "11"}] }}'
 class TSensorTimeRangeMonth(TSensorTimeRange):
     def __init__(self, aParent):
         #super().__init__(aParent) # __need v3.5
@@ -140,7 +145,7 @@ class TSensorTimeRangeMonth(TSensorTimeRange):
         self.Mask   = '00'
         self.Format = '%m'
 
-#Data = '{"Timer_Year":{ "Range":[ { "On":"8", "Off": "08.12"}, { "On":"10.16", "Off": "10.17"}] }}'
+#Data = '{"Timer_Year":{ "Ranges":[ { "On":"8", "Off": "08.12"}, { "On":"10.16", "Off": "10.17"}] }}'
 class TSensorTimeRangeYear(TSensorTimeRange):
     def __init__(self, aParent):
         #super().__init__(aParent) # __need v3.5

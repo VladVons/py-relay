@@ -1,0 +1,12 @@
+[
+    {
+        "Class":"TSensorUptimeSys",
+        "Alias":"SensorUptimeSys",
+        "Parameter":{"Unit":"H"}
+    },
+    {
+        "Class":"TSensorUptimeApp",
+        "Alias":"SensorUptimeApp",
+        "Parameter":{"Unit":"H"}
+    }
+]

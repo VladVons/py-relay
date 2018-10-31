@@ -1,0 +1,7 @@
+[
+    {
+        "Class":"TSensorUps",
+        "Alias":"SensorUps",
+        "Parameter":{"Host":"localhost"}
+    }
+]
