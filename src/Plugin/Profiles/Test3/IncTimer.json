@@ -3,22 +3,18 @@
         "Class":"TSensorTimeRangeDay",
         "Alias":"SensorTRD_Light",
         "Descr":"Day light",
-        "Parameter":{"Ranges":[{ "On":"02:00", "Off": "18:00"}]},
+        "Parameter":{"Ranges":[{ "On":"17:15", "Off": "17:20"}]},
         "Triggers":[
-            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$WriteLog')"},
-            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$IRelay_2')"}
+            {"Enable":true, "Always":"self.SetValue('$IRelay_1')"}
         ]
     },
     {
         "Class":"TSensorTimeRangeCycle",
         "Alias":"SensorTRC_Air",
         "Descr":"Air",
-        "Parameter":{"Ranges":[{ "On":"5S", "Off": "10S"}]},
+        "Parameter":{"Ranges":[{ "On":"20S", "Off": "5S"}]},
         "Triggers":[
-            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$WriteLog')"},
-            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$IRelay_2')"}
+            {"Enable":true, "Always":"self.SetValue('$IRelay_2')"}
         ]
     }
-
-
 ]

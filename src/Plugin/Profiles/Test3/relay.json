@@ -11,10 +11,10 @@
 
                 {"Enable":false, "ClassRef":"Random_10_30"},
 
-                {"Enable":true, "ClassRef":"SensorTRD_Light"},
-                {"Enable":true, "ClassRef":"SensorTRC_Air"},
+                {"Enable":true,  "ClassRef":"SensorTRD_Light"},
+                {"Enable":false, "ClassRef":"SensorTRC_Air"},
 
-                {"Enable":true,  "ClassRef":"SensorUps"},
+                {"Enable":false, "ClassRef":"SensorUps"},
 
                 {"Enable":false, "ClassRef":"SensorSun"},
 

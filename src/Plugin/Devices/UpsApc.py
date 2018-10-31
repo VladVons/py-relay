@@ -1,7 +1,7 @@
 '''
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
-Created:     2018.04.13
+Created:     2018.10.28
 License:     GNU, see LICENSE for more details
 Description:
 '''

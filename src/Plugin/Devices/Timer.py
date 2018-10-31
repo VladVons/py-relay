@@ -22,19 +22,14 @@ class TSensorBaseRange(TSensor):
 
         self.Delim   = ''
         self.PadLen  = 2
-
-        #Pattern = {'Ranges': []}
-        #self.Param.AddDefPattern(Pattern)
-
-    def DoParameter(self, aParam):
-        self.Range = []
+        self.Ranges  = []
 
         Pattern = {'Ranges': []}
-        self.Param.LoadPattern(aParam, Pattern)
+        self.Param.AddDefPattern(Pattern)
 
-        #self.Param.LoadPattern(aParam)
+    def DoParameter(self, aParam):
+        self.Param.LoadPattern(aParam)
 
-        Range = []
         for Range in self.Param.Ranges:
             On  = self._Adjust(Range.get('On'))
             Off = self._Adjust(Range.get('Off'))
@@ -59,23 +54,25 @@ class TSensorTimeRangeCycle(TSensorBaseRange):
         return Time.StrToSec(aValue)
 
     def _Load(self, aOn, aOff):
-        self.Range.append(aOn)
-        self.Range.append(aOff)
+        self.Ranges.append(aOn)
+        self.Ranges.append(aOff)
 
     def _Get(self):
+        Result = 0
         Duration = self.GetDuration()
         Offset   = self.GetUptime() % Duration
         Idx      = 0
-        for i in range(0, len(self.Range), 2):
-            if ( (Offset >= Idx) and (Offset < Idx + self.Range[i]) ):
-                return 1
-            Idx += self.Range[i] + self.Range[i + 1]
+        for i in range(0, len(self.Ranges), 2):
+            if ( (Offset >= Idx) and (Offset < Idx + self.Ranges[i]) ):
+                Result = 1
+                break
+            Idx += self.Ranges[i] + self.Ranges[i + 1]
 
-        return 0
+        return Result
 
     def GetDuration(self):
         Result = 0
-        for Item in self.Range:
+        for Item in self.Ranges:
             Result += Item
         return Result
 
@@ -103,19 +100,21 @@ class TSensorTimeRange(TSensorBaseRange):
             Msg = Log.Print(1, 'e', self.__class__.__name__, '_Load()', '(On %s) is greater then (Off %s)' % (aOn, aOff))
             raise ValueError(Msg)
 
-        self.Range.append(aOn)
-        self.Range.append(aOff)
+        self.Ranges.append(aOn)
+        self.Ranges.append(aOff)
 
     def _Get(self):
+        Result = 0
         Now = datetime.datetime.now().strftime(self.Format)
 
-        for i in range(0, len(self.Range), 2):
-            if ( (Now >= self.Range[i]) and (Now < self.Range[i + 1]) ):
-                return 1
+        for i in range(0, len(self.Ranges), 2):
+            if ( (Now >= self.Ranges[i]) and (Now < self.Ranges[i + 1]) ):
+                Result = 1
+                break
 
-        return 0
+        return Result
 
-#Data = '{"Timer_Day":{ "Ranges":[ { "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}}'
+# "Parameter":{"Ranges":[ { "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}
 class TSensorTimeRangeDay(TSensorTimeRange):
     def __init__(self, aParent):
         #super().__init__(aParent) # __need v3.5
@@ -125,7 +124,7 @@ class TSensorTimeRangeDay(TSensorTimeRange):
         self.Mask   = '00:00:00'
         self.Format = '%H:%M:%S'
 
-#Data = '{"Timer_Week":{ "Ranges":[ { "On":"0", "Off": "2"}] }}'
+# "Parameter":{"Ranges":[ { "On":"0", "Off": "2"} ]}
 class TSensorTimeRangeWeek(TSensorTimeRange):
     # 0 is Sunday 
     def __init__(self, aParent):
@@ -136,7 +135,7 @@ class TSensorTimeRangeWeek(TSensorTimeRange):
         self.Format = '%w'
         self.PadLen = 1
 
-#Data = '{"Timer_Month":{ "Ranges":[ { "On":"2", "Off": "03"}, { "On":"10", "Off": "11"}] }}'
+# "Parameter":{"Ranges":[ { "On":"2", "Off": "03"}, { "On":"10", "Off": "11"} ]}
 class TSensorTimeRangeMonth(TSensorTimeRange):
     def __init__(self, aParent):
         #super().__init__(aParent) # __need v3.5
@@ -145,7 +144,7 @@ class TSensorTimeRangeMonth(TSensorTimeRange):
         self.Mask   = '00'
         self.Format = '%m'
 
-#Data = '{"Timer_Year":{ "Ranges":[ { "On":"8", "Off": "08.12"}, { "On":"10.16", "Off": "10.17"}] }}'
+# "Parameter":{"Ranges":[ { "On":"8", "Off": "08.12"}, { "On":"10.16", "Off": "10.17"} ]}
 class TSensorTimeRangeYear(TSensorTimeRange):
     def __init__(self, aParent):
         #super().__init__(aParent) # __need v3.5
