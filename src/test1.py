@@ -131,5 +131,19 @@ def Relay_LCD():
             LCD(Mask)
             time.sleep(1)
 
-Relay_One()
+def Telegram():
+    from Plugin.Providers.Telegram import TProviderTelegram
+
+    Token = '482131719:AAHRZnIq-RsfNyF2LvaSIm028vGHgSv60dI'
+    # send message
+    Chats = [571074640, 423099610]
+    Obj = TProviderTelegram(Token, Chats)
+    Obj.Set(None,'Hello')
+    # read last message
+    Updates = Obj.Telegram.GetUpdates()
+    Last    = Obj.Telegram.GetLastUpdate(Updates)
+    print('Last', Obj.Telegram.ParseUpdate(Last))
+
+#Relay_One()
 #Relay_LCD()
+Telegram()

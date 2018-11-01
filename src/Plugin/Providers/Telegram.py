@@ -70,12 +70,12 @@ class TTelegram():
 from .Provider import TProvider
 
 class TProviderTelegram(TProvider):
-    def __init__(self, aToken, aChatId):
+    def __init__(self, aToken, aChatIds):
         self.Telegram = TTelegram(aToken)
-        self.ChatId   = aChatId
+        self.ChatIds  = aChatIds
 
     def Write(self, aValue):
-        for ChatId in self.ChatId:
+        for ChatId in self.ChatIds:
             self.Telegram.SendMessage(ChatId, aValue)
 
     def Set(self, aCaller, aValue):
