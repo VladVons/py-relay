@@ -4,7 +4,7 @@
             "Init":[
             ],
             "Start":[
-                {"Enable":false,   "ClassRef":"GroupOnStart"}
+                {"Enable":true,   "ClassRef":"GroupOnStart"}
             ],
             "Loop":[
                 {"Enable":true, "ClassRef":"Sleep_1"},
@@ -12,23 +12,24 @@
                 {"Enable":false, "ClassRef":"Random_10_30"},
 
                 {"Enable":true,  "ClassRef":"SensorTRD_Light"},
-                {"Enable":false, "ClassRef":"SensorTRC_Air"},
+                {"Enable":true,  "ClassRef":"SensorTRD_Humid"},
+                {"Enable":true,  "ClassRef":"SensorTRC_Air"},
 
-                {"Enable":false, "ClassRef":"SensorUps"},
+                {"Enable":true,  "ClassRef":"SensorUps"},
 
-                {"Enable":false, "ClassRef":"SensorSun"},
+                {"Enable":true,  "ClassRef":"SensorSun"},
 
-                {"Enable":false, "ClassRef":"SensorUptimeSys"},
-                {"Enable":false, "ClassRef":"SensorUptimeSys"},
+                {"Enable":true,  "ClassRef":"SensorUptimeSys"},
 
-                {"Enable":false,  "ClassRef":"DH2_Sensor_Humid"},
-                {"Enable":false,  "ClassRef":"DH2_Sensor_Temper"},
+                {"Enable":true,  "ClassRef":"DH2_Sensor_Humid"},
+                {"Enable":true,  "ClassRef":"DH2_Sensor_Temper"},
 
-                {"Enable":false,  "ClassRef":"DH4_Sensor_Humid"},
-                {"Enable":false,  "ClassRef":"DH4_Sensor_Temper"}
+                {"Enable":true,  "ClassRef":"DH4_Sensor_Humid"},
+                {"Enable":true,  "ClassRef":"DH4_Sensor_Temper"}
             ],
             "Finish":[
-                {"Enable":false,   "ClassRef":"GroupOnFinish"}
+                {"Enable":false,  "ClassRef":"GroupOnFinish"},
+                {"Enable":true,   "ClassRef":"GroupOnStart"}
             ]
         },
        "Include":[
@@ -38,7 +39,7 @@
                 {"Enable":true,  "File":"IncRelay.json"},
                 {"Enable":true,  "File":"IncReport.json"},
                 {"Enable":true,  "File":"IncSolar.json"},
-                {"Enable":false, "File":"IncUptime.json"},
+                {"Enable":true,  "File":"IncUptime.json"},
                 {"Enable":true,  "File":"IncDh2.json"},
                 {"Enable":true,  "File":"IncDh4.json"}
         ],
@@ -64,7 +65,10 @@
                 "Class":"TDeviceGroup",
                 "Alias":"GroupOnStart",
                 "Checks": [
-                    {"Enable":true,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
+                    {"Enable":true,  "Always":"self.SetValue('$IRelay_1', 0)"},
+                    {"Enable":true,  "Always":"self.SetValue('$IRelay_2', 0)"},
+                    {"Enable":true,  "Always":"self.SetValue('$IRelay_3', 0)"},
+                    {"Enable":true,  "Always":"self.SetValue('$IRelay_4', 0)"}
                 ]
             },
             {

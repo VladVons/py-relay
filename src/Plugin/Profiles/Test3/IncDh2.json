@@ -8,17 +8,17 @@
         "Class":"TSensorProvider",
         "Alias":"DH2_Sensor_Temper",
         "Descr":"Matochnik_ST",
-        "Parameter":{"ClassRef":"DH2_Provider", "Tag":"temperature", "WaitValue":30},
+        "Parameter":{"ClassRef":"DH2_Provider", "Tag":"temperature", "WaitValue":600},
         "Triggers":[
-            {"Enable":false, "If":"self.Value > 23", "Always":"self.SetIf('$IRelay_3')"},
-            {"Enable":false, "If":"self.Value > 19", "Then":"self.SetValue('$Telegram')"}
+            {"Enable":true, "If":"self.Value < 18", "Always":"self.SetIf('$IRelay_3')"},
+            {"Enable":true, "If":"self.Value < 15", "Then":"self.SetValue('$Telegram')"}
         ]
     },
     {
         "Class":"TSensorProvider",
         "Alias":"DH2_Sensor_Humid",
         "Descr":"Matochnik_SH",
-        "Parameter":{"ClassRef":"DH2_Provider", "Tag":"humidity"},
+        "Parameter":{"ClassRef":"DH2_Provider", "Tag":"humidity", "WaitValue":600},
         "Triggers":[
             {"Enable":false, "If":"self.InValue(60, 80)", "Always":"self.SetIf('$DH2_Relay_A')"},
             {"Enable":false, "If":"self.Value < 50", "Always":"self.SetIf('$DH2_Relay_A')"},

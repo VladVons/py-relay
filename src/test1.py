@@ -84,7 +84,7 @@ def LCD(aText = 'Hello world !'):
     Obj.PrintLn(aText)
 
 
-def Relay():
+def Relay_One():
     import time
     from Plugin.Providers.I2C import TProviderI2C_Relay_8574
 
@@ -99,7 +99,7 @@ def Relay():
         print('Pin:',  Pin, 'Value:', Value)
         Obj = TProviderI2C_Relay_8574(Bus, Address, Pin)
         Obj.Set(None, Value)
-        time.sleep(1)
+        time.sleep(5)
 
 
 def Relay_LCD():
@@ -131,5 +131,5 @@ def Relay_LCD():
             LCD(Mask)
             time.sleep(1)
 
-#Relay()
-Relay_LCD()
+Relay_One()
+#Relay_LCD()

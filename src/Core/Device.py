@@ -195,7 +195,7 @@ class TRelay(TDevice):
     def __init__(self, aParent):
         # super().__init__(aParent) # __need 3.5
         TDevice.__init__(self, aParent)
-        self.Param.AddDefPattern( {'State':False} )
+        self.Param.AddDefPattern( {'State':False, 'Invert':False} )
         self.Range.Set(None, [0, 1])
 
     def DoPost(self, aCaller, aValue, aData):
@@ -205,13 +205,13 @@ class TRelay(TDevice):
 
     def _Set(self, aCaller, aValue):
         if (self.Provider):
-            self.Provider.Set(aCaller, aValue)
+            self.Provider.Set(aCaller, aValue ^ self.Param.Invert)
         else:
             Msg = Log.Print(1, 'x', self.__class__.__name__, '_Set()', 'Alias %s. No `Provider` assigned' % (self.Alias))
             raise NotImplementedError(Msg)
 
     def _Get(self):
-        return self.Provider.Get()
+        return self.Provider.Get() ^ self.Param.Invert
 
 
 class TControl(TRelay):
