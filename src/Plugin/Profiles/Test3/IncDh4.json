@@ -7,22 +7,16 @@
     {
         "Class":"TSensorProvider",
         "Alias":"DH4_Sensor_Temper",
-        "Descr":"Inkubator_ST",
+        "Descr":"Holodilnik_ST",
         "Parameter":{"ClassRef":"DH4_Provider", "Tag":"temperature", "WaitValue":600},
         "Triggers":[
-            {"Enable":false, "If":"self.Value > 23", "Always":"self.SetIf('$DH2_Relay_A')"},
-            {"Enable":false , "If":"self.Value > 19", "Then":"self.SetValue('$Telegram')"}
+            {"Enable":true, "If":"self.Value < 0 or self.Value > 8", "Then":"self.SetValue('$Telegram')"}
         ]
     },
     {
         "Class":"TSensorProvider",
         "Alias":"DH4_Sensor_Humid",
-        "Descr":"Inkubator_SH",
-        "Parameter":{"ClassRef":"DH4_Provider", "Tag":"humidity", "WaitValue":600},
-        "Triggers":[
-            {"Enable":false,  "If":"self.InValue(60, 80)", "Always":"self.SetIf('$DH2_Relay_A')"},
-            {"Enable":false, "If":"self.Value < 50", "Always":"self.SetIf('$DH2_Relay_A')"},
-            {"Enable":false,  "If":"self.Value > 50", "Always":"self.SetIf('$DH2_Relay_B')"}
-        ]
+        "Descr":"Holodilnik_SH",
+        "Parameter":{"ClassRef":"DH4_Provider", "Tag":"humidity", "WaitValue":600}
     }
 ]

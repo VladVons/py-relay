@@ -25,7 +25,13 @@
                 {"Enable":true,  "ClassRef":"DH2_Sensor_Temper"},
 
                 {"Enable":true,  "ClassRef":"DH4_Sensor_Humid"},
-                {"Enable":true,  "ClassRef":"DH4_Sensor_Temper"}
+                {"Enable":true,  "ClassRef":"DH4_Sensor_Temper"},
+
+                {"Enable":true,  "ClassRef":"DH5_Sensor_Humid"},
+                {"Enable":true,  "ClassRef":"DH5_Sensor_Temper"},
+
+                {"Enable":true,  "ClassRef":"DH7_Sensor_Humid"},
+                {"Enable":true,  "ClassRef":"DH7_Sensor_Temper"}
             ],
             "Finish":[
                 {"Enable":false,  "ClassRef":"GroupOnFinish"},
@@ -41,7 +47,9 @@
                 {"Enable":true,  "File":"IncSolar.json"},
                 {"Enable":true,  "File":"IncUptime.json"},
                 {"Enable":true,  "File":"IncDh2.json"},
-                {"Enable":true,  "File":"IncDh4.json"}
+                {"Enable":true,  "File":"IncDh4.json"},
+                {"Enable":true,  "File":"IncDh5.json"},
+                {"Enable":true,  "File":"IncDh7.json"}
         ],
         "Action":[
             {"OnLoop":  {"Enable":false, "ClassRef":"MainLoop"}},
