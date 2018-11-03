@@ -3,30 +3,35 @@
         "Class":"TRelayI2C_Relay_8574",
         "Alias":"IRelay_1",
         "Descr":"Light",
+        "Enable":true,
         "Parameter":{"Bus":1, "Address":37, "Command": 0, "Invert":true}
     },
     {
         "Class":"TRelayI2C_Relay_8574",
         "Alias":"IRelay_2",
         "Descr":"Air",
+        "Enable":true,
         "Parameter":{"Bus":1, "Address":37, "Command": 1, "Invert":true}
     },
     {
         "Class":"TRelayI2C_Relay_8574",
         "Alias":"IRelay_3",
         "Descr":"Warm",
+        "Enable":true,
         "Parameter":{"Bus":1, "Address":37, "Command": 2, "Invert":true}
     },
     {
         "Class":"TRelayI2C_Relay_8574",
         "Alias":"IRelay_4",
         "Descr":"Humidity",
+        "Enable":true,
         "Parameter":{"Bus":1, "Address":37, "Command": 3, "Invert":true}
     },
     {
         "Class":"TRelayI2C_Relay_8574",
         "Alias":"IRelay_8",
         "Descr":"Test",
+        "Enable":true,
         "Parameter":{"Bus":1, "Address":37, "Command": 7, "Invert":true}
     }
 ]
