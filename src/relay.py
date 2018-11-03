@@ -181,7 +181,7 @@ class TMain():
         self.Manager.OnClass = self._CallBack_OnClass
         self.Manager.SetStartTimeVirt(self.GetUptime())
         self.Manager.LoadConf.Macros(self.Param.FileMacros)
-        self.Manager.LoadFile(self.Param.FileConf, 'Gpio')
+        self.Manager.LoadFile(self.Param.FileConf)
         self.Manager.Run()
 
     '''

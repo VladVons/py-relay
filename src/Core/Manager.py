@@ -268,6 +268,8 @@ class TManager():
     def Load(self, aData):
         Log.Print(2, 'i', self.__class__.__name__, 'Load()')
 
+        self.Clear()
+
         self.Data = aData.get("Classes")
         if (not self.Data):
             Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Section `Classes` not found')
@@ -304,6 +306,10 @@ class TManager():
             if (not self.GetClass(Alias)):
                 Log.Print(1, 'w', self.__class__.__name__, 'Load()', 'Alias %s not used' % Alias)
 
-    def LoadFile(self, aFile, aSection):
+    def LoadFile(self, aFile, aSection = 'Gpio'):
+        self.File = aFile
         Data = self.LoadConf.Conf(aFile)
         self.Load(Data[aSection])
+
+    def Reload(self):
+        self.LoadFile(self.File)
