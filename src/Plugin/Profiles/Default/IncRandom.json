@@ -1,0 +1,15 @@
+[
+    {
+        "Class":"TSensorRandom",
+        "Alias":"Random_10_30",
+        "Descr":"Random generator",
+        "Parameter":{"Begin":10, "End":30},
+        "Triggers":[
+            {"Enable":false, "Always":"self.File('DH2.py')"},
+            {"Enable":true, "If":"self.Value > 20", "Then":"self.Break('Test')"},
+            {"Enable":true, "Always":"self.SetValue('$WriteConsoleRand', 1000)"},
+            {"Enable":true, "Label":"Test", "If":"self.Value > 15", "Then":"if self.CountIf > 10: self.SetIf('$WriteLog')"}
+        ]
+    }
+
+]

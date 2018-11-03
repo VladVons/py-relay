@@ -9,7 +9,6 @@
             "Loop":[
                 {"Enable":true, "ClassRef":"Sleep_1"},
                 {"Enable":true, "ClassRef":"Random_10_30"},
-                {"Enable":true, "ClassRef":"SensorSun"},
                 {"Enable":true, "ClassRef":"SensorUptimeSys"}
             ],
             "Finish":[
@@ -17,8 +16,8 @@
             ]
         },
        "Include":[
+                {"Enable":true, "File":"IncRandom.json"},
                 {"Enable":true, "File":"IncReport.json"},
-                {"Enable":true, "File":"IncSolar.json"},
                 {"Enable":true, "File":"IncUptime.json"}
         ],
         "Action":[
@@ -35,6 +34,7 @@
                 "Alias":"GroupOnValue",
                 "Checks": [
                     {"Enable":true,  "Always":"self.SetValue('$WriteConsole')"},
+                    {"Enable":true,  "Always":"self.SetValue('$WriteConsole2')"},
                     {"Enable":false,  "Always":"self.SetValue('$Grafana')"}
                 ]
             },
@@ -56,18 +56,6 @@
                 "Class":"TControlSleep",
                 "Alias":"Sleep_1",
                 "Parameter":{"Time":1}
-            },
-            {
-                "Class":"TSensorRandom",
-                "Alias":"Random_10_30", 
-                "Descr":"Random generator", 
-                "Parameter":{"Begin":10, "End":30},
-                "Triggers":[
-                    {"Enable":false, "Always":"self.File('DH2.py')"},
-                    {"Enable":true, "If":"self.Value > 20", "Then":"self.Break('Test')"},
-                    {"Enable":true, "Always":"self.SetValue('$WriteConsoleRand', 1000)"},
-                    {"Enable":true, "Label":"Test", "If":"self.Value > 15", "Then":"if self.CountIf > 10: self.SetIf('$WriteLog')"}
-                ]
             }
         ]
     }

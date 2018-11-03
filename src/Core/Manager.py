@@ -155,12 +155,12 @@ class TManager():
         else:
             ParentInfo = ''
 
-        Enable = aData.get('Enable', True)
-        if (not Enable):
-            return None
-
+        Enable   = aData.get('Enable', True)
         ClassRef = aData.get('ClassRef')
         if (ClassRef):
+            if (not Enable):
+                return None
+
             if (aParent and (aParent.Alias == ClassRef)):
                 Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'Cross link detected %s' % ClassRef)
                 raise Exception(Msg)
@@ -173,16 +173,24 @@ class TManager():
                 else:
                     Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'ClassRef `%s` not found in %s' % (ClassRef, ParentInfo))
                     raise Exception(Msg)
+        # normalclass
         else:
+            Alias = aData.get('Alias')
+            if (not Alias):
+                Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'Alias is empty in Class %s' % ClassName)
+                raise Exception(Msg)
+
+            if (not Enable):
+                if (aParent):
+                    Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'Alias %s disabled but used by %s' % (Alias, ParentInfo))
+                    raise Exception(Msg)
+                return None
+
             ClassName = aData.get('Class')
             if (not ClassName):
                 Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'Keyword `Class` is empty')
                 raise Exception(Msg)
 
-            Alias = aData.get('Alias')
-            if (not Alias):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'Alias is empty in Class %s' % ClassName)
-                raise Exception(Msg)
 
             ModuleName = aData.get('Module')
             if (ModuleName):
