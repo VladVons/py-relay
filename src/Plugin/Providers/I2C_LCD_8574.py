@@ -17,7 +17,6 @@ Obj.CursorTo(0,0)
 Obj.PrintLn('Hello world')
 '''
 
-from Inc.Log         import Log
 from Inc.Util        import Time
 from .I2C            import TProviderI2C
 

@@ -20,9 +20,9 @@ class TSensorBaseRange(TSensor):
         #super().__init__(aParent) # __need v3.5
         TSensor.__init__(self, aParent)
 
-        self.Delim   = ''
-        self.PadLen  = 2
-        self.Ranges  = []
+        self.Delim  = ''
+        self.PadLen = 2
+        self.Ranges = []
 
         Pattern = {'Ranges': []}
         self.Param.AddDefPattern(Pattern)

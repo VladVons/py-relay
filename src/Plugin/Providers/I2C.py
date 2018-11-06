@@ -24,7 +24,6 @@ except Exception as E:
     print(__file__, E, 'pip install Adafruit-BMP')
 
 #
-from Inc.Log         import Log
 from Inc.Util        import Num, Time
 from .Provider import TProvider
 

@@ -144,6 +144,33 @@ def Telegram():
     Last    = Obj.Telegram.GetLastUpdate(Updates)
     print('Last', Obj.Telegram.ParseUpdate(Last))
 
+
+
+def TimerRange():
+    from Plugin.Providers.Timer import TTimeRangeCycle, TTimeRangeDay, TTimeRangeDayFade
+
+    #Obj = TTimeRangeCycle()
+    #Obj.SetRanges([{"On": "2", "Off": "3"},{"On": "4", "Off": "5"}])
+    #Obj.SetRanges([{"On": "5", "Off": "3"}, {"On": "10", "Off": "2"}])
+    #Obj.SetRanges([{"On": "5M", "Off": "3M"}])
+
+    #Obj = TTimeRangeDay()
+    #Obj.SetRanges([{"On": "01:03:10", "Off": "01:03:20"}, {"On": "01:04:10", "Off": "01:04:20"}])
+
+    Obj = TTimeRangeDayFade()
+    Obj.SetRanges([{"On": "00:01", "Off": "03:00"}])
+
+    while True:
+        print(Obj.Get())
+        time.sleep(1)
+
+
 #Relay_One()
 #Relay_LCD()
-Telegram()
+#Telegram()
+TimerRange()
+
+#Arr1 = [{1,2}, {3,4}]
+#x = sum (On + Off for On, Off in Arr1) 
+#print(x)
+

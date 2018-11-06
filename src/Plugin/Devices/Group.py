@@ -23,9 +23,25 @@ class TDeviceGroup(TDevice):
         return True
 
 
-class TSensorGroupDiff(TSensor):
+class TSensorGroup(TSensor):
+    def GetItems(self):
+        return self.Exec.GetKey('Checks')
+
+    def GetSum(self):
+        Result = 0
+        for Item in self.GetItems():
+            Alias = Item.get('Alias')[0]
+            Class = self.Manager.GetClass(Alias)
+            Result += Class.Value
+        return Result
+
+    def GetAvg(self):
+        Items = self.GetItems()
+        return self.GetSum() / len(Items)
+
+class TSensorGroupAvg(TSensorGroup):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        TSensorGroup.__init__(self, aParent)
 
         Pattern = {'Diff': 1.03}
         self.Param.AddDefPattern(Pattern)
@@ -34,21 +50,18 @@ class TSensorGroupDiff(TSensor):
         self.Param.LoadPattern(aParam)
 
     def _Get(self):
-        ValueAvrg = 0
-        ValueSum  = 0
+        Result = self.GetAvg()
 
-        Items = self.Exec.GetKey('Checks')
-        for i in range(len(Items)):
-            Alias = Items[i].get('Alias')[0]
+        for Item in self.GetItems():
+            Alias = Item.get('Alias')[0]
             Class = self.Manager.GetClass(Alias)
+            if (self.Param.Diff != -1):
+                Diff = round(Result / Class.Value, 2)
+                if (Diff > self.Param.Diff):
+                    Log.Print(1, 'w', self.__class__.__name__, '_Get()', 'Too much sensor difference %s. Alias %s in %s' % (Diff, self.Alias, Class.Alias))
+        return Result
 
-            ValueSum += Class.Value
-            ValueAvrg = self.Round(ValueSum / (i + 1))
-            if (Class.Value == 0):
-                Log.Print(1, 'w', self.__class__.__name__, '_Get()', 'Zero value. Alias %s in %s' % (self.Alias, Class.Alias))
-            else:
-                if (self.Param.Diff != -1):    
-                    Diff = round(ValueAvrg / Class.Value, 2)
-                    if (Diff > self.Param.Diff):
-                        Log.Print(1, 'w', self.__class__.__name__, '_Get()', 'Too much sensor difference %s. Alias %s in %s' % (Diff, self.Alias, Class.Alias))
-        return ValueAvrg
+
+class TSensorGroupSum(TSensor):
+    def _Get(self):
+        return self.GetSum()

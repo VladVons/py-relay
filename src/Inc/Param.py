@@ -127,8 +127,14 @@ class TDictParam():
         self.OnLoad  = None
         self.DefPattern  = {}
 
+    def GetPattern(self):
+        return self.DefPattern
+
+    def GetVars(self):
+        return vars(self)
+
     def GetAttr(self, aKey = None):
-        Result = vars(self)
+        Result = self.GetVars()
         if (aKey):
             return Result.get(aKey)
         else:
