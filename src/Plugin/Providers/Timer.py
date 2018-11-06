@@ -20,7 +20,7 @@ import datetime
 import time
 #
 from Inc.Log   import Log
-from Inc.Util     import Time
+from Inc.Util  import Time
 
 
 class TBaseRange():
@@ -63,6 +63,7 @@ class TTimeRangeCycle(TBaseRange):
 
     def Get(self):
         Result = 0
+
         Duration = self.GetDuration()
         Offset   = self.GetUptime() % Duration
         Idx      = 0
@@ -71,7 +72,6 @@ class TTimeRangeCycle(TBaseRange):
                 Result = 1
                 break
             Idx += On + Off
-
         return Result
 
     def GetDuration(self):
@@ -179,7 +179,7 @@ class TTimeRangeDayFade(TTimeRangeDay):
         Result = None
         if ((Now >= On) and (Now < Off)):
             Mid    = (Off + On) / 2
-            Result = abs(Mid - Now)
+            Result = Mid - abs(Mid - Now)
         return Result
 
     def Get(self):
@@ -195,3 +195,32 @@ class TTimeRangeDayFade(TTimeRangeDay):
                 break
 
         return Result
+
+
+#---
+from .Provider import TProvider
+
+class TProviderTimeRangeCycle(TProvider):
+    def __init__(self, aRanges):
+        self.Obj = TTimeRangeCycle()
+        self.Obj.SetRanges(aRanges)
+
+    def Read(self, aNotUsed):
+        Result = self.Obj.Get()
+        return Result
+
+    def Get(self):
+        return self.ReadTry()
+
+
+class TProviderTimeRangeDay(TProvider):
+    def __init__(self, aRanges):
+        self.Obj = TTimeRangeDay()
+        self.Obj.SetRanges(aRanges)
+
+    def Read(self, aNotUsed):
+        Result = self.Obj.Get()
+        return Result
+
+    def Get(self):
+        return self.ReadTry()

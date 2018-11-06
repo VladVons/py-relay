@@ -51,10 +51,7 @@ from .Group import (
 
 from .Timer import (
     TSensorTimeRangeCycle,
-    TSensorTimeRangeDay,
-    TSensorTimeRangeWeek,
-    TSensorTimeRangeMonth,
-    TSensorTimeRangeYear
+    TSensorTimeRangeDay
 )
 
 

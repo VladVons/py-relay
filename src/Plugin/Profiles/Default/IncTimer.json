@@ -1,0 +1,29 @@
+[
+    {
+        "Class":"TSensorTimeRangeDay",
+        "Alias":"SensorTimeRangeDay",
+        "Descr":"Day light",
+        "Parameter":{"Ranges":[{ "On":"02:00", "Off": "18:00"}]},
+        "Triggers":[
+            {"Enable":false, "Always":"self.SetValue('$IRelay_1')"}
+        ]
+    },
+    {
+        "Class":"TSensorTimeRangeCycle",
+        "Alias":"SensorTimeRangeCycle",
+        "Descr":"Air",
+        "Parameter":{"Ranges":[{ "On":"3S", "Off": "2S"}]},
+        "Triggers":[
+            {"Enable":false, "Always":"self.SetValue('$IRelay_2')"}
+        ]
+    },
+    {
+        "Class":"TSensorTimeRangeDay",
+        "Alias":"SensorTRD_Humid",
+        "Descr":"Day Humid",
+        "Parameter":{"Ranges":[{ "On":"20:00", "Off": "20:01"}, { "On":"22:30", "Off": "22:31"}, { "On":"01:00", "Off": "01:01"}]},
+        "Triggers":[
+            {"Enable":false, "Always":"self.SetValue('$IRelay_4')"}
+        ]
+    }
+]
