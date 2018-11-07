@@ -99,6 +99,13 @@ class TTimeRange(TBaseRange):
         if (aOn >= aOff):
             Msg = Log.Print(1, 'e', self.__class__.__name__, '_Load()', '(On %s) is greater then (Off %s)' % (aOn, aOff))
             raise ValueError(Msg)
+
+        if (self.Ranges):
+            LastOff = self.Ranges[-1][1]
+            if (aOn < LastOff):
+                Msg = Log.Print(1, 'e', self.__class__.__name__, '_Load()', '(On %s) is less then last (Off %s)' % (aOn, LastOff))
+                raise ValueError(Msg)
+
         self.AddRange(aOn, aOff)
 
     def Get(self):
@@ -161,6 +168,17 @@ class TTimeRangeDayFade(TTimeRangeDay):
         TTimeRangeDay.__init__(self)
         self.Min = aMin
         self.Max = aMax
+        self.Mid = (aMin + aMax) / 2
+
+    def SetRanges(self, aRanges):
+        TTimeRangeDay.SetRanges(self, aRanges)
+
+        self.RangesSec = []
+        for i in range(len(self.Ranges)):
+            On, Off = self.Ranges[i]
+            self.RangesSec.append([Time.TimeToSec(On), Time.TimeToSec(Off)])
+            On, Off = self._GetHoleRange(i)
+            self.RangesSec.append([Time.TimeToSec(On) + 1, Time.TimeToSec(Off)])
 
     def _GetHoleRange(self, aIdx):
         Len = len(self.Ranges)
@@ -170,31 +188,22 @@ class TTimeRangeDayFade(TTimeRangeDay):
             Result = [self.Ranges[aIdx][1], self.Ranges[aIdx+1][0]]
         return Result
 
-    def _GetRatio(self, aArr):
-        StrNow = datetime.datetime.now().strftime(self.Format)
-        Now = Time.TimeToSec(StrNow)
-        On  = Time.TimeToSec(aArr[0])
-        Off = Time.TimeToSec(aArr[1])
-
-        Result = None
-        if ((Now >= On) and (Now < Off)):
-            Mid    = (Off + On) / 2
-            Result = Mid - abs(Mid - Now)
-        return Result
-
     def Get(self):
         Result = 0
-        Len = len(self.Ranges)
+        StrNow = datetime.datetime.now().strftime(self.Format)
+        Now = Time.TimeToSec(StrNow)
+
+        Len = len(self.RangesSec)
         for i in range(Len):
-            Result = self._GetRatio(self.Ranges[i])
-            if (Result):
-                break
-
-            Result = self._GetHoleRange(i)
-            if (Result):
-                break
-
-        return Result
+            On, Off = self.RangesSec[i]
+            if ((Now >= On) and (Now < Off)):
+                Mid = (Off + On) / 2
+                Abs = Mid - abs(Mid - Now)
+                Ratio = round(float(Abs) / On, 3)
+                Result = self.Max - ((self.Max - self.Mid) * Ratio)
+                print(Now, On, Off, Abs, Ratio, Result)
+                return Result
+        return 0
 
 
 #---

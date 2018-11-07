@@ -158,10 +158,10 @@ def TimerRange():
     #Obj.SetRanges([{"On": "01:03:10", "Off": "01:03:20"}, {"On": "01:04:10", "Off": "01:04:20"}])
 
     Obj = TTimeRangeDayFade()
-    Obj.SetRanges([{"On": "19:00", "Off": "20:00"}])
+    Obj.SetRanges([{"On": "9:46", "Off": "11:46"}, {"On": "12:00", "Off": "13:00"}])
 
     while True:
-        print(Obj.Get())
+        print('---1', Obj.Get())
         time.sleep(1)
 
 
