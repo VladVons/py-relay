@@ -10,6 +10,14 @@
             {"Enable":true, "Always":"self.SetValue('$WriteConsoleRand', 1000)"},
             {"Enable":true, "Label":"Test", "If":"self.Value > 15", "Then":"if self.CountIf > 10: self.SetIf('$WriteLog')"}
         ]
+    },
+    {
+        "Class":"TSensorRandom",
+        "Alias":"Random_100_100",
+        "Descr":"Random generator static",
+        "Parameter":{"Begin":21, "End":21, "WaitValue":2},
+        "Triggers":[
+            {"Enable":true, "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.SetIf('$WriteConsole2')"}
+        ]
     }
-
 ]

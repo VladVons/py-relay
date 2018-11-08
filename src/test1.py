@@ -157,8 +157,9 @@ def TimerRange():
     #Obj = TTimeRangeDay()
     #Obj.SetRanges([{"On": "01:03:10", "Off": "01:03:20"}, {"On": "01:04:10", "Off": "01:04:20"}])
 
-    Obj = TTimeRangeDayFade()
-    Obj.SetRanges([{"On": "9:46", "Off": "11:46"}, {"On": "12:00", "Off": "13:00"}])
+    Obj = TTimeRangeDayFade(-10, 10)
+    Obj.SetRanges([{"On": "2:00", "Off": "2:57"}, {"On": "3:02", "Off": "3:30"}])
+    #Obj.SetRanges([{"On": "2:00", "Off": "2:55"}])
 
     while True:
         print('---1', Obj.Get())

@@ -101,7 +101,7 @@ class TDevice(TDeviceBase):
         self.Avg = Num.TAvg()
         #self.Avg.Enable = False
 
-        self.Param.AddDefPattern( {'Enable': True, 'Periodic': 1, 'Delay': 0, 'AllValue': False, 'WaitValue': 3600*24})
+        self.Param.AddDefPattern( {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'WaitValue': 3600*24})
         self.ExtParam['Checks']   = self.Exec.Parse
         self.ExtParam['Triggers'] = self.Exec.Parse
 
@@ -126,6 +126,9 @@ class TDevice(TDeviceBase):
             if (self.DoPostBegin(aCaller, aValue, aData)):
                 if (self.Exec.Conditions('Checks')):
                     Result = self.DoPost(aCaller, aValue, aData)
+
+            if (self.Param.Debug):
+                Log.Print(0, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s, Result:%s' % (self.Alias, self.GetAlias(aCaller), aValue, Result))
         return Result
 
     def SetValue(self, aValue):
@@ -152,9 +155,10 @@ class TDevice(TDeviceBase):
 class TSensor(TDevice):
     def __init__(self, aParent):
         TDevice.__init__(self, aParent)
-        self.Param.AddDefPattern({'Round': 0.1, 'Avg': 1})
+        self.Param.AddDefPattern({'Round': 0.1, 'Avg': 3})
 
     def DoParameterFinish(self):
+        self.Avg.SetSize(self.Param.Avg)
         self._Get()
 
     def DoPost(self, aCaller, aValue, aData):

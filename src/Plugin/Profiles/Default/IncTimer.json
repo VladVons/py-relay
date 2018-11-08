@@ -12,7 +12,7 @@
         "Class":"TSensorTimeRangeCycle",
         "Alias":"SensorTimeRangeCycle",
         "Descr":"Air",
-        "Parameter":{"Ranges":[{ "On":"3S", "Off": "2S"}]},
+        "Parameter":{"Ranges":[{ "On":"3S", "Off": "2S"}], "Avg":5},
         "Triggers":[
             {"Enable":false, "Always":"self.SetValue('$IRelay_2')"}
         ]
@@ -25,5 +25,17 @@
         "Triggers":[
             {"Enable":false, "Always":"self.SetValue('$IRelay_4')"}
         ]
+    },
+    {
+        "Class":"TSensorTimeRangeDayFade",
+        "Alias":"SensorTRDF_1",
+        "Descr":"Day temp fade sum",
+        "Parameter":{"Ranges":[{ "On":"4:10", "Off": "4:30"}, { "On":"4:40", "Off": "4:50"}], "Min": -10, "Max": 10}
+    },
+    {
+        "Class":"TSensorTimeRangeDayFade",
+        "Alias":"SensorTRDF_2",
+        "Descr":"Day temp fade",
+        "Parameter":{"Ranges":[{ "On":"10:45", "Off": "11:00"}], "Min": 15, "Max": 25}
     }
 ]

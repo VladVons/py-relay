@@ -52,6 +52,7 @@ class TSensorGroupAvg(TSensorGroup):
     def _Get(self):
         Result = self.GetAvg()
 
+        # check anomaly
         for Item in self.GetItems():
             Alias = Item.get('Alias')[0]
             Class = self.Manager.GetClass(Alias)
@@ -62,6 +63,9 @@ class TSensorGroupAvg(TSensorGroup):
         return Result
 
 
-class TSensorGroupSum(TSensor):
+class TSensorGroupSum(TSensorGroup):
+    def DoParameter(self, aParam):
+        self.Param.LoadPattern(aParam)
+
     def _Get(self):
         return self.GetSum()

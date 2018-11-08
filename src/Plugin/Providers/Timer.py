@@ -21,6 +21,7 @@ import time
 #
 from Inc.Log   import Log
 from Inc.Util  import Time
+from Inc.Util  import Num
 
 
 class TBaseRange():
@@ -189,29 +190,28 @@ class TTimeRangeDayFade(TTimeRangeDay):
         return Result
 
     def Get(self):
-        Result = 0
         StrNow = datetime.datetime.now().strftime(self.Format)
-        Now = Time.TimeToSec(StrNow)
+        Now    = Time.TimeToSec(StrNow)
 
         Len = len(self.RangesSec)
         for i in range(Len):
             On, Off = self.RangesSec[i]
             if ((Now >= On) and (Now < Off)):
-                Mid = (Off + On) / 2
-                Abs = Mid - abs(Mid - Now)
-                Ratio = round(float(Abs) / On, 3)
-                Result = self.Max - ((self.Max - self.Mid) * Ratio)
-                print(Now, On, Off, Abs, Ratio, Result)
-                return Result
-        return 0
+                if (i % 2 == 0):
+                    self.Fade = Num.TFade(On, Off, self.Mid, self.Max)
+                else:
+                    self.Fade = Num.TFade(On, Off, self.Mid, self.Min)
+                    self.Fade.Night = True
+                return round(self.Fade.Get(Now), 2)
+        return self.Mid
 
 
 #---
 from .Provider import TProvider
 
-class TProviderTimeRangeCycle(TProvider):
+class TProviderTimeRangeBase(TProvider):
     def __init__(self, aRanges):
-        self.Obj = TTimeRangeCycle()
+        self.Obj = self.SetObj()
         self.Obj.SetRanges(aRanges)
 
     def Read(self, aNotUsed):
@@ -222,14 +222,21 @@ class TProviderTimeRangeCycle(TProvider):
         return self.ReadTry()
 
 
-class TProviderTimeRangeDay(TProvider):
-    def __init__(self, aRanges):
-        self.Obj = TTimeRangeDay()
-        self.Obj.SetRanges(aRanges)
+class TProviderTimeRangeCycle(TProviderTimeRangeBase):
+    def SetObj(self):
+        return TTimeRangeCycle()
 
-    def Read(self, aNotUsed):
-        Result = self.Obj.Get()
-        return Result
 
-    def Get(self):
-        return self.ReadTry()
+class TProviderTimeRangeDay(TProviderTimeRangeBase):
+    def SetObj(self):
+        return TTimeRangeDay()
+
+
+class TProviderTimeRangeDayFade(TProviderTimeRangeBase):
+    def __init__(self, aRanges, aMin, aMax):
+        self.Min = aMin
+        self.Max = aMax
+        TProviderTimeRangeBase.__init__(self, aRanges)
+
+    def SetObj(self):
+        return TTimeRangeDayFade(self.Min, self.Max)

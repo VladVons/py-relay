@@ -1,0 +1,14 @@
+[
+    {
+        "Class":"TSensorGroupSum",
+        "Alias":"SensorGroupSum",
+        "Descr":"Sum classes valuer",
+        "Checks":[
+            {"Enable":true, "Always":"self.Post('$Random_100_100', 0)"},
+            {"Enable":true, "Always":"self.Post('$SensorTRDF_1', 0)"}
+        ],
+       "Triggers":[
+            {"Enable":true, "If":"self.Value > 20", "Always":"self.SetValue('$WriteLog')"}
+        ]
+    }
+]

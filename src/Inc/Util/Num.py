@@ -42,6 +42,9 @@ class TAvg():
     def SetSize(self, aSize):
         self.Arr = collections.deque([], aSize)
 
+    def GetSize(self):
+        return self.Arr.maxlen
+
     def Validate(self, aValue):
         if (aValue is None):
             aValue = 0
@@ -88,3 +91,20 @@ class TUpdateDelay():
             Result = True
 
         return Result
+
+# Dvornitsky V.
+class TFade:
+    def __init__(self, aStarSec, aFinishSec, aStartVal, aPeakVal):
+        self._offsetX = aStarSec;
+        self._scaleX  = aFinishSec - aStarSec;
+        self._offsetY = aStartVal;
+        self._scaleY  = math.fabs(aPeakVal - aStartVal);
+
+        self.Night    = False;
+
+    def Get(self, aCurSec):
+        x = aCurSec - self._offsetX;
+        rad = x * math.pi / self._scaleX;
+        if (self.Night):
+            rad += math.pi
+        return (math.sin(rad) * self._scaleY) + self._offsetY;
