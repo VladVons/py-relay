@@ -32,15 +32,15 @@
         ]
     },
     {
-        "Class":"TSensorTimeRangeDayFade",
+        "Class":"TSensorTimeRangeDayFadeWave",
         "Alias":"SensorTRDF_1",
-        "Descr":"Day temp fade sum",
+        "Descr":"Day temp wave  sum",
         "Parameter":{"Ranges":[{ "On":"4:10", "Off": "4:30"}, { "On":"4:40", "Off": "4:50"}], "Min": -10, "Max": 10}
     },
     {
-        "Class":"TSensorTimeRangeDayFade",
+        "Class":"TSensorTimeRangeDayFadeWave",
         "Alias":"SensorTRDF_2",
-        "Descr":"Day temp fade",
+        "Descr":"Day temp wave",
         "Parameter":{"Ranges":[{ "On":"10:45", "Off": "11:00"}], "Min": 15, "Max": 25}
     }
 ]

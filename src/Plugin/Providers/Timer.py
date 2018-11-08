@@ -164,7 +164,7 @@ class TTimeRangeYear(TTimeRange):
         self.Format = '%m.%d'
 
 
-class TTimeRangeDayFade(TTimeRangeDay):
+class TTimeRangeDayFadeWave(TTimeRangeDay):
     def __init__(self, aMin = -10, aMax = 10):
         TTimeRangeDay.__init__(self)
         self.Min = aMin
@@ -198,11 +198,11 @@ class TTimeRangeDayFade(TTimeRangeDay):
             On, Off = self.RangesSec[i]
             if ((Now >= On) and (Now < Off)):
                 if (i % 2 == 0):
-                    self.Fade = Num.TFade(On, Off, self.Mid, self.Max)
+                    self.FadeW = Num.TFadeWave(On, Off, self.Mid, self.Max)
                 else:
-                    self.Fade = Num.TFade(On, Off, self.Mid, self.Min)
-                    self.Fade.Night = True
-                return round(self.Fade.Get(Now), 2)
+                    self.FadeW = Num.TFadeWave(On, Off, self.Mid, self.Min)
+                    self.FadeW.Night = True
+                return round(self.FadeW.Get(Now), 2)
         return self.Mid
 
 
@@ -232,11 +232,11 @@ class TProviderTimeRangeDay(TProviderTimeRangeBase):
         return TTimeRangeDay()
 
 
-class TProviderTimeRangeDayFade(TProviderTimeRangeBase):
+class TProviderTimeRangeDayFadeWave(TProviderTimeRangeBase):
     def __init__(self, aRanges, aMin, aMax):
         self.Min = aMin
         self.Max = aMax
         TProviderTimeRangeBase.__init__(self, aRanges)
 
     def SetObj(self):
-        return TTimeRangeDayFade(self.Min, self.Max)
+        return TTimeRangeDayFadeWave(self.Min, self.Max)

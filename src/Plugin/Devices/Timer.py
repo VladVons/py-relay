@@ -8,20 +8,19 @@ Description:
 
 from Inc.Param    import TDictParam
 from Core.Device  import TSensor
-from Plugin.Providers.Timer import TProviderTimeRangeCycle, TProviderTimeRangeDay, TProviderTimeRangeDayFade, TTimeRangeCycle
+from Plugin.Providers.Timer import TProviderTimeRangeCycle, TProviderTimeRangeDay, TProviderTimeRangeDayFadeWave, TTimeRangeCycle
 
 
 class TSensorTimeRange(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 
-        Pattern = {'Ranges': []}
+        Pattern = {'Ranges': [], 'Round': None}
         self.Param.AddDefPattern(Pattern)
 
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
         self.SetProvider()
-        self.Avg.SetSize(1)
 
 
 class TSensorTimeRangeCycle(TSensorTimeRange):
@@ -34,7 +33,7 @@ class TSensorTimeRangeDay(TSensorTimeRange):
         self.Provider = TProviderTimeRangeDay(self.Param.Ranges)
 
 
-class TSensorTimeRangeDayFade(TSensorTimeRange):
+class TSensorTimeRangeDayFadeWave(TSensorTimeRange):
     def __init__(self, aParent):
         TSensorTimeRange.__init__(self, aParent)
 
@@ -42,7 +41,7 @@ class TSensorTimeRangeDayFade(TSensorTimeRange):
         self.Param.AddDefPattern(Pattern)
 
     def SetProvider(self):
-        self.Provider = TProviderTimeRangeDayFade(self.Param.Ranges, self.Param.Min, self.Param.Max)
+        self.Provider = TProviderTimeRangeDayFadeWave(self.Param.Ranges, self.Param.Min, self.Param.Max)
 
 '''
 has no ReadTry() ?
