@@ -21,7 +21,7 @@ class TSensorTimeRange(TSensor):
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
         self.SetProvider()
-        #self.Avg.SetSize(1)
+        self.Avg.SetSize(1)
 
 
 class TSensorTimeRangeCycle(TSensorTimeRange):

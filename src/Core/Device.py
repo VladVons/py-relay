@@ -209,13 +209,14 @@ class TRelay(TDevice):
 
     def _Set(self, aCaller, aValue):
         if (self.Provider):
-            self.Provider.Set(aCaller, aValue ^ self.Param.Invert)
+            self.Provider.Set(aCaller, int(aValue) ^ self.Param.Invert)
         else:
             Msg = Log.Print(1, 'x', self.__class__.__name__, '_Set()', 'Alias %s. No `Provider` assigned' % (self.Alias))
             raise NotImplementedError(Msg)
 
     def _Get(self):
-        return self.Provider.Get() ^ self.Param.Invert
+        Value = int(self.Provider.Get())
+        return Value ^ self.Param.Invert
 
 
 class TControl(TRelay):

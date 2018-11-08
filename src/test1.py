@@ -169,9 +169,11 @@ def TimerRange():
 #Relay_One()
 #Relay_LCD()
 #Telegram()
-TimerRange()
+#TimerRange()
 
 #Arr1 = [{1,2}, {3,4}]
 #x = sum (On + Off for On, Off in Arr1) 
 #print(x)
 
+s = 0x0F
+print(s ^ False)
