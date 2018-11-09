@@ -7,6 +7,7 @@
     {
         "Class":"TSensorUptimeApp",
         "Alias":"SensorUptimeApp",
+        "Enable":false,
         "Parameter":{"Unit":"H"}
     }
 ]

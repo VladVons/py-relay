@@ -2,6 +2,7 @@
     {
         "Class":"TSensorRandom",
         "Alias":"Random_10_30",
+        "Enable":false,
         "Descr":"Random",
         "Parameter":{"Begin":10, "End":30},
         "Triggers":[

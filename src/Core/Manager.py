@@ -302,8 +302,9 @@ class TManager():
                     self.AddRuns(Item, Key)
 
         for Item in self.Data:
-            Alias = Item.get('Alias')
-            if (not self.GetClass(Alias)):
+            Alias  = Item.get('Alias')
+            Enable = Item.get('Enable', True)
+            if (not self.GetClass(Alias) and Enable):
                 Log.Print(1, 'w', self.__class__.__name__, 'Load()', 'Alias %s not used' % Alias)
 
     def LoadFile(self, aFile, aSection = 'Gpio'):

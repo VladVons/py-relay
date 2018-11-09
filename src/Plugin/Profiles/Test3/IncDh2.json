@@ -10,8 +10,9 @@
         "Descr":"Matochnik_ST",
         "Parameter":{"ClassRef":"DH2_Provider", "Tag":"temperature", "WaitValue":600},
         "Triggers":[
-            {"Enable":true, "If":"self.Value < 18", "Always":"self.SetIf('$IRelay_3')"},
-            {"Enable":true, "If":"self.Value < 15", "Then":"self.SetValue('$Telegram')"}
+            {"Enable":true,  "If":"self.Value < self.Class('$SensorTRDFW_Temper').Value", "Always":"self.SetIf('$IRelay_3')"},
+            {"Enable":false, "If":"self.Value < 18", "Always":"self.SetIf('$IRelay_3')"},
+            {"Enable":true,  "If":"self.Value < 15", "Then":"self.SetValue('$Telegram')"}
         ]
     },
     {

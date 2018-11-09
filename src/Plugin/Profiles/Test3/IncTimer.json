@@ -3,7 +3,11 @@
         "Class":"TSensorTimeRangeDay",
         "Alias":"SensorTRD_Light",
         "Descr":"Day light",
-        "Parameter":{"Ranges":[{ "On":"02:00", "Off": "18:00"}]},
+        "Parameter":{
+            "Ranges":[
+                { "On":"02:00", "Off": "18:00"}
+            ], 
+            "WaitValue":60},
         "Triggers":[
             {"Enable":true, "Always":"self.SetValue('$IRelay_1')"}
         ]
@@ -12,18 +16,51 @@
         "Class":"TSensorTimeRangeCycle",
         "Alias":"SensorTRC_Air",
         "Descr":"Air",
-        "Parameter":{"Ranges":[{ "On":"5M", "Off": "10M"}]},
+        "Parameter":{
+            "Ranges":[
+                { "On":"5M", "Off": "10M"}
+            ]
+        },
         "Triggers":[
             {"Enable":true, "Always":"self.SetValue('$IRelay_2')"}
+        ]
+    },
+    {
+        "Class":"TSensorTimeRangeCycle",
+        "Alias":"SensorTRC_Flash",
+        "Descr":"Air",
+        "Parameter":{
+            "Ranges":[
+                { "On":"10S", "Off": "10S"}
+            ]
+        },
+        "Triggers":[
+            {"Enable":true, "Always":"self.SetValue('$IRelay_8')"}
         ]
     },
     {
         "Class":"TSensorTimeRangeDay",
         "Alias":"SensorTRD_Humid",
         "Descr":"Day Humid",
-        "Parameter":{"Ranges":[{ "On":"20:00", "Off": "20:01"}, { "On":"22:30", "Off": "22:31"}, { "On":"01:00", "Off": "01:01"}]},
+        "Parameter":{
+            "Ranges":[
+                { "On":"01:00", "Off": "01:01"},
+                { "On":"20:00", "Off": "20:01"},
+                { "On":"22:30", "Off": "22:31"}
+            ]
+        },
         "Triggers":[
             {"Enable":true, "Always":"self.SetValue('$IRelay_4')"}
         ]
+    },
+    {
+        "Class":"TSensorTimeRangeDayFadeWave",
+        "Alias":"SensorTRDFW_Temper",
+        "Descr":"Day temp wave",
+        "Parameter":{
+            "Ranges":[
+                { "On":"02:00", "Off": "18:00"}
+            ],
+            "Min": 15, "Max": 22}
     }
 ]
