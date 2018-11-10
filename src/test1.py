@@ -147,18 +147,17 @@ def Telegram():
 
 
 def TimerRange():
-    from Plugin.Providers.Timer import TTimeRangeCycle, TTimeRangeDay, TTimeRangeDayFade
+    from Plugin.Providers.Timer import TTimeRangeCycle, TTimeRangeDay, TTimeRangeDayFadeWave
 
     #Obj = TTimeRangeCycle()
     #Obj.SetRanges([{"On": "2", "Off": "3"},{"On": "4", "Off": "5"}])
-    #Obj.SetRanges([{"On": "5", "Off": "3"}, {"On": "10", "Off": "2"}])
     #Obj.SetRanges([{"On": "5M", "Off": "3M"}])
 
     #Obj = TTimeRangeDay()
     #Obj.SetRanges([{"On": "01:03:10", "Off": "01:03:20"}, {"On": "01:04:10", "Off": "01:04:20"}])
 
-    Obj = TTimeRangeDayFade(-10, 10)
-    Obj.SetRanges([{"On": "2:00", "Off": "2:57"}, {"On": "3:02", "Off": "3:30"}])
+    Obj = TTimeRangeDayFadeWave(-10, 10)
+    Obj.SetRanges([{"On": "2:00", "Off": "2:57"}, {"On": "8:00", "Off": "9:00"}])
     #Obj.SetRanges([{"On": "2:00", "Off": "2:55"}])
 
     while True:
@@ -169,11 +168,4 @@ def TimerRange():
 #Relay_One()
 #Relay_LCD()
 #Telegram()
-#TimerRange()
-
-#Arr1 = [{1,2}, {3,4}]
-#x = sum (On + Off for On, Off in Arr1) 
-#print(x)
-
-s = 0x0F
-print(s ^ False)
+TimerRange()

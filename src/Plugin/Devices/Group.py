@@ -24,20 +24,27 @@ class TDeviceGroup(TDevice):
 
 
 class TSensorGroup(TSensor):
+    def DoParameter(self, aParam):
+        self.Param.LoadPattern(aParam)
+
     def GetItems(self):
         return self.Exec.GetKey('Checks')
+
+    def GetItemValue(self, aItem):
+        Alias = aItem.get('Alias')[0]
+        Class = self.Manager.GetClass(Alias)
+        return Class.Value
 
     def GetSum(self):
         Result = 0
         for Item in self.GetItems():
-            Alias = Item.get('Alias')[0]
-            Class = self.Manager.GetClass(Alias)
-            Result += Class.Value
+            Result += self.GetItemValue(Item)
         return Result
 
     def GetAvg(self):
         Items = self.GetItems()
         return self.GetSum() / len(Items)
+
 
 class TSensorGroupAvg(TSensorGroup):
     def __init__(self, aParent):
@@ -45,9 +52,6 @@ class TSensorGroupAvg(TSensorGroup):
 
         Pattern = {'Diff': 1.03}
         self.Param.AddDefPattern(Pattern)
-
-    def DoParameter(self, aParam):
-        self.Param.LoadPattern(aParam)
 
     def _Get(self):
         Result = self.GetAvg()
@@ -64,8 +68,23 @@ class TSensorGroupAvg(TSensorGroup):
 
 
 class TSensorGroupSum(TSensorGroup):
-    def DoParameter(self, aParam):
-        self.Param.LoadPattern(aParam)
-
     def _Get(self):
         return self.GetSum()
+
+
+class TSensorGroupAnd(TSensorGroup):
+    def _Get(self):
+        Result = True
+        for Item in self.GetItems():
+            Value = self.GetItemValue(Item)
+            Result = Result and bool(Value)
+        return Result
+
+
+class TSensorGroupOr(TSensorGroup):
+    def _Get(self):
+        Result = False
+        for Item in self.GetItems():
+            Value = self.GetItemValue(Item)
+            Result = Result or bool(Value)
+        return Result
