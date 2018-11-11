@@ -19,6 +19,8 @@
 
                 {"Enable":true,  "ClassRef":"SensorUps"},
 
+                {"Enable":false, "ClassRef":"Sensor_Pi_CPUTemp"},
+
                 {"Enable":true,  "ClassRef":"SensorSun"},
 
                 {"Enable":true,  "ClassRef":"SensorUptimeSys"},
@@ -48,12 +50,13 @@
                 {"Enable":true,  "File":"IncRandom.json"},
                 {"Enable":true,  "File":"IncTimer.json"},
                 {"Enable":true,  "File":"IncUps.json"},
+                {"Enable":false,  "File":"IncRasPi.json"},
                 {"Enable":true,  "File":"IncRelay.json"},
                 {"Enable":true,  "File":"IncReport.json"},
                 {"Enable":true,  "File":"IncSolar.json"},
                 {"Enable":true,  "File":"IncUptime.json"},
                 {"Enable":true,  "File":"IncDh2.json"},
-                {"Enable":true,  "File":"IncDh3.json"},
+                {"Enable":false,  "File":"IncDh3.json"},
                 {"Enable":true,  "File":"IncDh4.json"},
                 {"Enable":true,  "File":"IncDh5.json"},
                 {"Enable":true,  "File":"IncDh7.json"}

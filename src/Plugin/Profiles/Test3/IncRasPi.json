@@ -1,0 +1,6 @@
+[
+    {
+        "Class":"TSensorFile_CPUTemp",
+        "Alias":"Sensor_Pi_CPUTemp"
+    }
+]
