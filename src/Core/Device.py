@@ -22,6 +22,7 @@ class TDeviceBase(object):
         self.Provider   = None
         self.Alias      = None
         self.Descr      = None
+        self.HasParam   = False
         self.Actions    = {}
 
         self.Param      = TDictParam()
@@ -43,7 +44,8 @@ class TDeviceBase(object):
         if (aParam and aParam.get('ClassRef')):
             self._LoadClass(aParam, aData)
         self.DoParameter(aParam)
-        self.DoParameterFinish()
+        self.DoParameterExit()
+        self.HasParam = True
 
     def GetUptime(self):
         Now = int(time.time())
@@ -54,6 +56,10 @@ class TDeviceBase(object):
 
     def DoStart(self):
         self.Exec.Conditions('Start')
+        self.DoStartExit()
+
+    def DoStartExit(self):
+        pass
 
     def DoFinish(self):
         self.Exec.Conditions('Finish')
@@ -79,7 +85,7 @@ class TDeviceBase(object):
         Msg = Log.Print(1, 'e', self.__class__.__name__, 'DoParameter()', 'Not implemented')
         raise NotImplementedError(Msg)
 
-    def DoParameterFinish(self):
+    def DoParameterExit(self):
         pass
 
     def GetProvider(self):
@@ -157,7 +163,7 @@ class TSensor(TDevice):
         TDevice.__init__(self, aParent)
         self.Param.AddDefPattern({'Round': 0.1, 'Avg': 3})
 
-    def DoParameterFinish(self):
+    def DoParameterExit(self):
         self.Avg.SetSize(self.Param.Avg)
         self._Get()
 

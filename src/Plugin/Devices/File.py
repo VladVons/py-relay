@@ -11,27 +11,34 @@ from Core.Device      import TSensorThredRead
 from Plugin.Providers.File import TProviderFile_CPUTemp, TProviderFile_W1DS
 
 
-class TSensorFile_CPUTemp(TSensorThredRead):
-    def __init__(self, aParent):
-        TSensorThredRead.__init__(self, aParent)
-
-        Pattern = {'File':'/sys/class/thermal/thermal_zone0/temp'}
-        self.Param.AddDefPattern(Pattern)
-
-    def DoDoParameter(self, aParam):
-        self.Param.LoadPattern(aParam)
-        self.Provider = TProviderFile_CPUTemp(self.Param.File)
-        self.CreateThread()
-
-
-class TSensorFile_W1DS(TSensorThredRead):
-    def __init__(self, aParent):
-        TSensorThredRead.__init__(self, aParent)
-
-        Pattern = {'File':TDictParam.Required}
-        self.Param.AddDefPattern(Pattern)
+class TSensorThreadFile(TSensorThredRead):
+    # ensure to run self.CreateThread() if no parameters
+    def DoStartExit(self):
+        if (not self.HasParam):
+            self.DoParameter({})
 
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
-        self.Provider = TProviderFile_W1DS(self.Param.File)
+        self.SetProvider()
         self.CreateThread()
+
+class TSensorFile_CPUTemp(TSensorThreadFile):
+    def __init__(self, aParent):
+        TSensorThreadFile.__init__(self, aParent)
+
+        Pattern = {'File': '/sys/class/thermal/thermal_zone0/temp'}
+        self.Param.AddDefPattern(Pattern)
+
+    def SetProvider(self):
+        self.Provider = TProviderFile_CPUTemp(self.Param.File)
+
+
+class TSensorFile_W1DS(TSensorThreadFile):
+    def __init__(self, aParent):
+        TSensorThreadFile.__init__(self, aParent)
+
+        Pattern = {'File': TDictParam.Required}
+        self.Param.AddDefPattern(Pattern)
+
+    def SetProvider(self):
+        self.Provider = TProviderFile_W1DS(self.Param.File)

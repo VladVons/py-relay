@@ -64,6 +64,7 @@ class TSensorGroupAvg(TSensorGroup):
                 Diff = round(Result / Class.Value, 2)
                 if (Diff > self.Param.Diff):
                     Log.Print(1, 'w', self.__class__.__name__, '_Get()', 'Too much sensor difference %s. Alias %s in %s' % (Diff, self.Alias, Class.Alias))
+
         return Result
 
 

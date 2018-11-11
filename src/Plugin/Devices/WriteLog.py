@@ -50,19 +50,16 @@ class TControlWrite(TControl):
         )
         return Result
 
-
-class TControlWriteLog(TControlWrite):
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
 
+
+class TControlWriteLog(TControlWrite):
     def _Set(self, aCaller, aValue):
         Log.Print(1, 'i', self.__class__.__name__, '_Set()', self.Format(aCaller))
 
 
 class TControlWriteConsole(TControlWrite):
-    def DoParameter(self, aParam):
-        self.Param.LoadPattern(aParam)
-
     def _Set(self, aCaller, aValue):
         print(self.Format(aCaller))
 
@@ -73,9 +70,6 @@ class TControlWriteFile(TControlWrite):
 
         Pattern = {'File': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)
-
-    def DoParameter(self, aParam):
-        self.Param.LoadPattern(aParam)
 
     def _Set(self, aCaller, aValue):
         with open(self.Param.File, "a") as File:

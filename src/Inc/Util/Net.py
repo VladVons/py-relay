@@ -72,7 +72,7 @@ def CheckHostPort(aHost, aPort, aTimeOut = 1):
     Sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     Sock.settimeout(aTimeOut)
     try:
-        Result = (Sock.connect_ex((aHost, aPort) ) == 0)
+        Result = (Sock.connect_ex((aHost, aPort)) == 0)
     except:
         Result = False
     Sock.close()

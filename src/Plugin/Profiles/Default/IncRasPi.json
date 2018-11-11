@@ -4,9 +4,15 @@
         "Alias":"SensorUptimeSys",
         "Parameter":{"Unit":"H"}
     },
+
     {
         "Class":"TSensorUptimeApp",
         "Alias":"SensorUptimeApp",
         "Parameter":{"Unit":"S"}
+    },
+
+    {
+        "Class":"TSensorFile_CPUTemp",
+        "Alias":"Sensor_Pi_CPUTemp"
     }
 ]

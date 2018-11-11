@@ -10,10 +10,11 @@
                 {"Enable":true,  "ClassRef":"Sleep_1"},
                 {"Enable":false, "ClassRef":"SensorGroupSum"},
                 {"Enable":false, "ClassRef":"SensorTimeRangeCycle"},
-                {"Enable":true,  "ClassRef":"SensorTRD_Humid"},
+                {"Enable":false,  "ClassRef":"SensorTRD_Humid"},
                 {"Enable":false,  "ClassRef":"SensorTRDF_2"},
                 {"Enable":false,  "ClassRef":"Random_100_100"},
                 {"Enable":false, "ClassRef":"Random_10_30"},
+                {"Enable":true, "ClassRef":"Sensor_Pi_CPUTemp"},
                 {"Enable":false, "ClassRef":"SensorUptimeSys"}
             ],
             "Finish":[
@@ -25,7 +26,7 @@
                 {"Enable":true, "File":"IncRandom.json"},
                 {"Enable":true, "File":"IncTimer.json"},
                 {"Enable":true, "File":"IncReport.json"},
-                {"Enable":true, "File":"IncUptime.json"}
+                {"Enable":true, "File":"IncRasPi.json"}
         ],
         "Action":[
             {"OnLoop":  {"Enable":false, "ClassRef":"MainLoop"}},
