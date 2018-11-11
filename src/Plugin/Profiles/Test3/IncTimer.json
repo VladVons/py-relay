@@ -5,7 +5,7 @@
         "Descr":"Day light",
         "Parameter":{
             "Ranges":[
-                { "On":"02:00", "Off": "18:00"}
+                { "On":"$<DayOn>", "Off": "$<DayOff>"}
             ], 
             "WaitValue":60},
         "Triggers":[
@@ -18,7 +18,7 @@
         "Descr":"Air",
         "Parameter":{
             "Ranges":[
-                { "On":"5M", "Off": "10M"}
+                { "On":"5M", "Off": "6M"}
             ]
         },
         "Triggers":[
@@ -59,7 +59,7 @@
         "Descr":"Day temp wave",
         "Parameter":{
             "Ranges":[
-                { "On":"02:00", "Off": "18:00"}
+                { "On":"$<DayOn>", "Off": "$<DayOff>"}
             ],
             "Min": 15, "Max": 22}
     }

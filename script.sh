@@ -194,6 +194,8 @@ HowTo()
   i2cdetect -y 1
   i2cset -y 1 0x25 0    # relay all on
   i2cset -y 1 0x25 255  # relay all off
+  watch i2cget -y 1 0x25
+  #printf '%08d\n' $( echo "obase=2; ibase=16; F" | bc)
   
   # i2c DS3231 clock
   #ExecM "cat /etc/rc.local"

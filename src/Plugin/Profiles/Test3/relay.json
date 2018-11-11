@@ -26,8 +26,8 @@
                 {"Enable":true,  "ClassRef":"DH2_Sensor_Humid"},
                 {"Enable":true,  "ClassRef":"DH2_Sensor_Temper"},
 
-                {"Enable":true,  "ClassRef":"DH3_Sensor_Humid"},
-                {"Enable":true,  "ClassRef":"DH3_Sensor_Temper"},
+                {"Enable":false,  "ClassRef":"DH3_Sensor_Humid"},
+                {"Enable":false,  "ClassRef":"DH3_Sensor_Temper"},
 
                 {"Enable":true,  "ClassRef":"DH4_Sensor_Humid"},
                 {"Enable":true,  "ClassRef":"DH4_Sensor_Temper"},
