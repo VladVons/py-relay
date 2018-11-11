@@ -15,9 +15,20 @@
         "Class":"TSensorRandom",
         "Alias":"Random_100_100",
         "Descr":"Random generator static",
-        "Parameter":{"Begin":21, "End":21, "WaitValue":2},
+        "Parameter":{"Begin":100, "End":100, "WaitValue":2},
         "Triggers":[
-            {"Enable":true, "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.SetIf('$WriteConsole2')"}
+            {"Enable":false, "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.SetIf('$WriteConsole2')"}
         ]
+    },
+
+    {
+        "Class":"TSensorRandom",
+        "Alias":"Random_100_102",
+        "Parameter":{"Begin":100, "End":102}
+    },
+    {
+        "Class":"TSensorRandom",
+        "Alias":"Random_100_104",
+        "Parameter":{"Begin":100, "End":110}
     }
 ]

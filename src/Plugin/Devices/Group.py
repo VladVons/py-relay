@@ -27,18 +27,22 @@ class TSensorGroup(TSensor):
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
 
+    def DoStartExit(self):
+        for Item in self.GetItems():
+            Class = self.GetItemClass(Item)
+            Class.Param.OnValue = False
+
     def GetItems(self):
         return self.Exec.GetKey('Checks')
 
-    def GetItemValue(self, aItem):
+    def GetItemClass(self, aItem):
         Alias = aItem.get('Alias')[0]
-        Class = self.Manager.GetClass(Alias)
-        return Class.Value
+        return self.Manager.GetClass(Alias)
 
     def GetSum(self):
         Result = 0
         for Item in self.GetItems():
-            Result += self.GetItemValue(Item)
+            Result += self.GetItemClass(Item).Value
         return Result
 
     def GetAvg(self):
@@ -56,15 +60,14 @@ class TSensorGroupAvg(TSensorGroup):
     def _Get(self):
         Result = self.GetAvg()
 
-        # check anomaly
-        for Item in self.GetItems():
-            Alias = Item.get('Alias')[0]
-            Class = self.Manager.GetClass(Alias)
-            if (self.Param.Diff != -1):
+        if (self.Param.Diff != -1):
+            for Item in self.GetItems():
+                Alias = Item.get('Alias')[0]
+                Class = self.Manager.GetClass(Alias)
                 Diff = round(Result / Class.Value, 2)
                 if (Diff > self.Param.Diff):
-                    Log.Print(1, 'w', self.__class__.__name__, '_Get()', 'Too much sensor difference %s. Alias %s in %s' % (Diff, self.Alias, Class.Alias))
-
+                    Log.Print(1, 'w', self.__class__.__name__, '_Get()', 'Too much diff %s. Alias %s in %s' % (Diff, self.Alias, Class.Alias))
+                    self.Action('OnError', Class.Value)
         return Result
 
 
@@ -77,7 +80,7 @@ class TSensorGroupAnd(TSensorGroup):
     def _Get(self):
         Result = True
         for Item in self.GetItems():
-            Value = self.GetItemValue(Item)
+            Value = self.GetItemClass(Item).Value
             Result = Result and bool(Value)
         return Result
 
@@ -86,6 +89,6 @@ class TSensorGroupOr(TSensorGroup):
     def _Get(self):
         Result = False
         for Item in self.GetItems():
-            Value = self.GetItemValue(Item)
+            Value = self.GetItemClass(Item).Value
             Result = Result or bool(Value)
         return Result

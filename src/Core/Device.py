@@ -73,13 +73,13 @@ class TDeviceBase(object):
         return False
 
     def Action(self, aKey, aValue):
-        OnAvtionClass = self.Actions.get(aKey)
-        if (OnAvtionClass is None):
-            OnAvtionClass = self.Manager.Actions.get(aKey)
+        OnActionClass = self.Actions.get(aKey)
+        if (OnActionClass is None):
+            OnActionClass = self.Manager.Actions.get(aKey)
 
-        if (OnAvtionClass):
-            if (not self.IsInRecursion(OnAvtionClass, self)):
-                OnAvtionClass.Post(self, aValue, {'Key': aKey})
+        if (OnActionClass):
+            if (not self.IsInRecursion(OnActionClass, self)):
+                OnActionClass.Post(self, aValue, {'Key': aKey})
 
     def DoParameter(self, aParam):
         Msg = Log.Print(1, 'e', self.__class__.__name__, 'DoParameter()', 'Not implemented')
@@ -107,7 +107,7 @@ class TDevice(TDeviceBase):
         self.Avg = Num.TAvg()
         #self.Avg.Enable = False
 
-        self.Param.AddDefPattern( {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'WaitValue': 3600*24})
+        self.Param.AddDefPattern( {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'WaitValue': 3600*24, 'OnValue': True})
         self.ExtParam['Checks']   = self.Exec.Parse
         self.ExtParam['Triggers'] = self.Exec.Parse
 
@@ -153,7 +153,9 @@ class TDevice(TDeviceBase):
                 aValue = self.OnValue(self, aValue)
             self.Value = aValue
             self.LastChange = self.GetUptime()
-            self.Action('OnValue', aValue)
+
+            if (self.Param.OnValue):
+                self.Action('OnValue', aValue)
 
             self.Exec.Conditions('Triggers')
 

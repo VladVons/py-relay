@@ -10,5 +10,20 @@
        "Triggers":[
             {"Enable":true, "If":"self.Value > 20", "Always":"self.SetValue('$WriteLog')"}
         ]
+    },
+
+    {
+        "Class":"TSensorGroupAvg",
+        "Alias":"SensorGroupAvg",
+        "Checks":[
+            {"Enable":true, "Always":"self.Post('$Random_100_102', 0)"},
+            {"Enable":true, "Always":"self.Post('$Random_100_104', 0)"}
+        ],
+       "Triggers":[
+            {"Enable":true, "If":"self.Value > 103", "Always":"self.SetValue('$WriteLog')"}
+        ],
+        "Action":[
+            {"OnError": {"Enable":false,  "ClassRef":"WriteConsoleRand"}}
+        ]
     }
 ]
