@@ -12,7 +12,7 @@
         "Triggers":[
             {"Enable":true,  "If":"self.Value < self.Class('$SensorTRDFW_Temper').Value", "Always":"self.SetIf('$IRelay_3')"},
             {"Enable":false, "If":"self.Value < 18", "Always":"self.SetIf('$IRelay_3')"},
-            {"Enable":true,  "If":"self.Value < 15", "Then":"self.SetValue('$Telegram')"}
+            {"Enable":false, "If":"not self.InValue(14, 30)", "Always":"self.SetValue('$Telegram')"}
         ]
     },
     {

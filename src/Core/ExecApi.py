@@ -8,6 +8,7 @@ Description:
 
 import re
 import time
+import datetime
 #
 from Inc.Log  import Log
 from Inc.Util import Time, Obj
@@ -86,7 +87,7 @@ class TExecApi(TExecParse):
     def __init__(self, aParent):
         TExecParse.__init__(self, aParent)
 
-    def InTimeRange(self, aValue, aBegin, aEnd):
+    def _InTimeRange(self, aValue, aBegin, aEnd):
         Sec1 = Time.StrToSec(aBegin)
         Sec2 = Time.StrToSec(aEnd)
         if (Sec1 > Sec2):
@@ -144,13 +145,23 @@ class TExecApi(TExecParse):
         Class = self.Class(aAlias)
         return Class.Post(Caller, aValue)
 
-    def InUptime(self, aBegin = '0S', aEnd = '10y'):
-        return self.InTimeRange(self.Parent.GetUptime(), aBegin, aEnd)
-
     def InValue(self, aBegin, aEnd, aValue = None):
         if (aValue is None):
             aValue = self.GetValue()
         return (aValue >= aBegin) and (aValue <= aEnd)
+
+    def InUptime(self, aBegin = '0S', aEnd = '10y'):
+        return self.InTimeRange(self.Parent.GetUptime(), aBegin, aEnd)
+
+    def InHour(self, aBegin = '00:00:00', aEnd = '23:59:59'):
+        Sec1 = Time.TimeToSec(aBegin)
+        Sec2 = Time.TimeToSec(aEnd)
+        if (Sec1 > Sec2):
+            Msg = Log.Print(1, 'e', self.__class__.__name__, 'InHour()', '%s is greater than %s' % (Sec1, Sec2))
+            raise ValueError(Msg)
+
+        Now = datetime.datetime.now().strftime('%H:%M:%S')
+        return (Now >= Sec1) and (Now < Sec2)
 
     def SetPerCent(self, aAlias, aValue):
         Value = self.Parent.Range.PerCentSafe(None, aValue)

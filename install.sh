@@ -37,22 +37,27 @@ Install()
 
 Relay() 
 {
+  apt-get install libpython2.7
   apt-get install python-pip --no-install-recommends --reinstall
   apt-get install python-dev
-  #apt-get install build-essential libcap-dev
+  apt-get install python-prctl
+  apt-get install build-essential libcap-dev
   apt-get install python-mysqldb
   apt-get install python-smbus
 
   pip install --upgrade pip
-  #pip install setuptools
+  pip install setuptools
   #pip install wheel
-  pip install prctl
+  #pip install prctl
   pip install Adafruit-BMP
   pip install Adafruit-ADS1x15
   pip install Adafruit_Python_DHT
   pip install minimalmodbus
   pip install yattag
   pip install apcaccess
+  #pip install pycryptodome
+
+  #ln -s /usr/lib/python2.7/dist-packages /usr/local/lib/python2.7/dist-packages
 }
 
 

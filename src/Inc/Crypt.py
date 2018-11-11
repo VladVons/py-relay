@@ -4,11 +4,13 @@ Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.04.19
 License:     GNU, see LICENSE for more details
 Description:
-
-pip install pycrypto
 '''
 
-from Crypto.Cipher import AES
+try:
+    from Crypto.Cipher import AES
+except Exception as E:
+    print(__file__, E, 'pip install pycrypto')
+
 import base64
 
 
