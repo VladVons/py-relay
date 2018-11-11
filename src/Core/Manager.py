@@ -270,11 +270,7 @@ class TManager():
 
         self.Clear()
 
-        self.Data = aData.get("Classes")
-        if (not self.Data):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Section `Classes` not found')
-            raise Exception(Msg)
-
+        self.Data = aData.get("Classes", [])
         Include = aData.get("Include")
         if (Include):
             for Item in Include:
@@ -283,6 +279,10 @@ class TManager():
                     FileName = Item.get('File')
                     Data = self.LoadConf.Conf(FileName)
                     self.Data += Data
+
+        if (not self.Data):
+            Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Section `Classes` not found')
+            raise Exception(Msg)
 
         Runs = aData.get("Run")
         if (not Runs):

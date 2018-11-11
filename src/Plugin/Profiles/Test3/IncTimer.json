@@ -1,5 +1,11 @@
 [
     {
+        "Class":"TControlSleep",
+        "Alias":"Sleep_1",
+        "Parameter":{"Time":1}
+    },
+
+    {
         "Class":"TSensorTimeRangeDay",
         "Alias":"SensorTRD_Light",
         "Descr":"Day light",
@@ -12,6 +18,7 @@
             {"Enable":true, "Always":"self.SetValue('$IRelay_1')"}
         ]
     },
+
     {
         "Class":"TSensorTimeRangeCycle",
         "Alias":"SensorTRC_Air",
@@ -25,6 +32,7 @@
             {"Enable":true, "Always":"self.SetValue('$IRelay_2')"}
         ]
     },
+
     {
         "Class":"TSensorTimeRangeCycle",
         "Alias":"SensorTRC_Flash",
@@ -38,6 +46,7 @@
             {"Enable":true, "Always":"self.SetValue('$IRelay_8')"}
         ]
     },
+
     {
         "Class":"TSensorTimeRangeDay",
         "Alias":"SensorTRD_Humid",
@@ -53,6 +62,7 @@
             {"Enable":true, "Always":"self.SetValue('$IRelay_4')"}
         ]
     },
+
     {
         "Class":"TSensorTimeRangeDayFadeWave",
         "Alias":"SensorTRDFW_Temper",
