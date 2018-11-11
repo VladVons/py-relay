@@ -19,7 +19,7 @@
 
                 {"Enable":true,  "ClassRef":"SensorUps"},
 
-                {"Enable":false, "ClassRef":"Sensor_Pi_CPUTemp"},
+                {"Enable":true,  "ClassRef":"Sensor_Pi_CPUTemp"},
 
                 {"Enable":true,  "ClassRef":"SensorSun"},
 
@@ -50,7 +50,7 @@
                 {"Enable":true,  "File":"IncRandom.json"},
                 {"Enable":true,  "File":"IncTimer.json"},
                 {"Enable":true,  "File":"IncUps.json"},
-                {"Enable":false,  "File":"IncRasPi.json"},
+                {"Enable":true,  "File":"IncRasPi.json"},
                 {"Enable":true,  "File":"IncRelay.json"},
                 {"Enable":true,  "File":"IncReport.json"},
                 {"Enable":true,  "File":"IncSolar.json"},
