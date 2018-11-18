@@ -27,20 +27,5 @@
         "Checks": [
             {"Enable":true,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
         ]
-    },
-    {
-        "Class":"TSensorGroupAvg",
-        "Alias":"SensorGroupAvg_DH7_DH2",
-        "Enable":false,
-        "Checks":[
-            {"Enable":true, "Always":"self.Post('$DH2_Sensor_Temper')"},
-            {"Enable":true, "Always":"self.Post('$DH7_Sensor_Temper')"}
-        ],
-       "Triggers":[
-            {"Enable":true,  "If":"self.Value < self.Class('$SensorTRDFW_Temper').Value", "Always":"self.SetIf('$IRelay_3')"}
-        ],
-        "Action":[
-            {"OnError": {"Enable":true,  "ClassRef":"$Telegram"}}
-        ]
     }
 ]

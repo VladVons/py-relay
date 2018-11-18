@@ -25,7 +25,7 @@
         "Descr":"Air",
         "Parameter":{
             "Ranges":[
-                { "On":"5M", "Off": "6M"}
+                { "On":"$<MatochAirOn>", "Off": "$<MatochAirOff>"}
             ]
         },
         "Triggers":[
@@ -39,7 +39,7 @@
         "Descr":"Air",
         "Parameter":{
             "Ranges":[
-                { "On":"10S", "Off": "10S"}
+                { "On":"30S", "Off": "30S"}
             ]
         },
         "Triggers":[
@@ -54,6 +54,7 @@
         "Parameter":{
             "Ranges":[
                 { "On":"01:00", "Off": "01:01"},
+                { "On":"03:30", "Off": "03:31"},
                 { "On":"20:00", "Off": "20:01"},
                 { "On":"22:30", "Off": "22:31"}
             ]
@@ -71,6 +72,6 @@
             "Ranges":[
                 { "On":"$<DayOn>", "Off": "$<DayOff>"}
             ],
-            "Min": 15, "Max": 22}
+            "Min": "$<MatochTempMin>", "Max": "$<MatochTempMax>"}
     }
 ]
