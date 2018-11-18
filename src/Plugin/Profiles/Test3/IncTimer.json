@@ -29,7 +29,8 @@
             ]
         },
         "Triggers":[
-            {"Enable":true, "Always":"self.SetValue('$IRelay_2')"}
+            {"Enable":false, "Always":"self.SetValue('$IRelay_2')"},
+            {"Enable":true,  "Always":"self.SetValue('$IRelay_2', self.Value and (not self.InHours([['20:30', '21:30'], ['22:30', '23:30']])))"}
         ]
     },
 
