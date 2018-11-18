@@ -8,14 +8,15 @@ Description:
     Brightness 
 '''
 
-from Inc.Param        import TDictParam
-from Core.Device      import TSensorThredRead, TRelay
+from Inc.Param            import TDictParam
+from Core.Device          import TRelay
+from Core.DeviceThread    import TSensorThreadRead
 from Plugin.Providers.I2C import TProviderI2C_BH1750, TProviderI2C_Relay_8574, TProviderI2C_BMP280
 
 
-class TSensorI2C_BH1750(TSensorThredRead):
+class TSensorI2C_BH1750(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThredRead.__init__(self, aParent)
+        TSensorThreadRead.__init__(self, aParent)
 
         Pattern = {'Bus': 1, 'Address': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)
@@ -26,9 +27,9 @@ class TSensorI2C_BH1750(TSensorThredRead):
         self.CreateThread()
 
 
-class TSensorI2C_BMP280(TSensorThredRead):
+class TSensorI2C_BMP280(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThredRead.__init__(self, aParent)
+        TSensorThreadRead.__init__(self, aParent)
 
         Pattern = {'Address': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

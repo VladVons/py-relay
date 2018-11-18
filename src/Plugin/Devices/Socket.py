@@ -6,15 +6,16 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
-from Inc.Log          import Log
-from Inc.Param        import TDictParam
-from Core.Device      import TSensor, TSensorThredRead
+from Inc.Log           import Log
+from Inc.Param         import TDictParam
+from Core.Device       import TSensor
+from Core.DeviceThread import TSensorThreadRead
 from Plugin.Providers.Socket import TProviderSocket_Echo, TProviderCheckHost, TProviderCheckInternet
 
 
-class TSensorSocket_Echo(TSensorThredRead):
+class TSensorSocket_Echo(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThredRead.__init__(self, aParent)
+        TSensorThreadRead.__init__(self, aParent)
 
         Pattern = {'Host': TDictParam.Required, 'Port': TDictParam.Required, 'Data': 'MyData'}
         self.Param.AddDefPattern(Pattern)

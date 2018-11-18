@@ -23,6 +23,8 @@
                 {"Enable":true,  "ClassRef":"Sensor_Pi_CPUTemp"},
                 {"Enable":true,  "ClassRef":"SensorUps"},
 
+                {"Enable":false, "ClassRef":"SensorGroupAvg_DH7_DH2"},
+
                 {"Enable":true,  "ClassRef":"DH2_Sensor_Humid"},
                 {"Enable":true,  "ClassRef":"DH2_Sensor_Temper"},
 

@@ -5,16 +5,19 @@
         "Descr":"Day light",
         "Parameter":{"Ranges":[{ "On":"02:00", "Off": "18:00"}]},
         "Triggers":[
-            {"Enable":false, "Always":"self.SetValue('$IRelay_1')"}
+            {"Enable":true, "Always":"self.SetValue('$IRelay_1')"}
         ]
     },
     {
         "Class":"TSensorTimeRangeCycle",
         "Alias":"SensorTimeRangeCycle",
         "Descr":"Air",
-        "Parameter":{"Ranges":[{ "On":"3S", "Off": "2S"}], "Avg":5},
+        "Parameter":{"Ranges":[{ "On":"3S", "Off": "3S"}]},
+        "Checks":[
+            {"Enable":true, "If":"self.InHour('08:14', '08:15')"}
+        ],
         "Triggers":[
-            {"Enable":false, "Always":"self.SetValue('$IRelay_2')"}
+            {"Enable":true, "Always":"self.SetValue('$WriteLog')"}
         ]
     },
     {

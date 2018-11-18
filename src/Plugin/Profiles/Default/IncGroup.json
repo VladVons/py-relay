@@ -2,6 +2,7 @@
     {
         "Class":"TSensorGroupSum",
         "Alias":"SensorGroupSum",
+        "Enable":"false",
         "Descr":"Sum classes valuer",
         "Checks":[
             {"Enable":true, "Always":"self.Post('$Random_100_100', 0)"},
@@ -16,8 +17,8 @@
         "Class":"TSensorGroupAvg",
         "Alias":"SensorGroupAvg",
         "Checks":[
-            {"Enable":true, "Always":"self.Post('$Random_100_102', 0)"},
-            {"Enable":true, "Always":"self.Post('$Random_100_104', 0)"}
+            {"Enable":true, "Always":"self.Post('$Random_100_102')"},
+            {"Enable":true, "Always":"self.Post('$Random_100_104')"}
         ],
        "Triggers":[
             {"Enable":true, "If":"self.Value > 103", "Always":"self.SetValue('$WriteLog')"}

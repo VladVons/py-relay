@@ -135,7 +135,7 @@ class TExecApi(TExecParse):
     def SetIf(self, aAlias, aInvert = False):
         self.Post(aAlias, self.If ^ aInvert)
 
-    def Post(self, aAlias, aValue):
+    def Post(self, aAlias, aValue = 0):
         # Not a good idea pass a value via class property ???
         if (self.Caller):
             Caller = self.Caller
@@ -160,7 +160,7 @@ class TExecApi(TExecParse):
             Msg = Log.Print(1, 'e', self.__class__.__name__, 'InHour()', '%s is greater than %s' % (Sec1, Sec2))
             raise ValueError(Msg)
 
-        Now = datetime.datetime.now().strftime('%H:%M:%S')
+        Now = Time.TimeToSec(datetime.datetime.now().strftime('%H:%M:%S'))
         return (Now >= Sec1) and (Now < Sec2)
 
     def SetPerCent(self, aAlias, aValue):

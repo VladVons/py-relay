@@ -8,14 +8,14 @@ Description:
     gpio - 23 (was connected)
 '''
 
-from Inc.Param        import TDictParam
-from Core.Device      import TSensorThredRead
+from Inc.Param            import TDictParam
+from Core.DeviceThread    import TSensorThreadRead
 from Plugin.Providers.DHT import TProviderDHT_22
 
 
-class TSensorDHT_22(TSensorThredRead):
+class TSensorDHT_22(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThredRead.__init__(self, aParent)
+        TSensorThreadRead.__init__(self, aParent)
 
         Pattern = {'Address': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

@@ -6,12 +6,12 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
-from Inc.Param        import TDictParam
-from Core.Device      import TSensorThredRead
+from Inc.Param             import TDictParam
+from Core.DeviceThread     import TSensorThreadRead
 from Plugin.Providers.File import TProviderFile_CPUTemp, TProviderFile_W1DS
 
 
-class TSensorThreadFile(TSensorThredRead):
+class TSensorThreadFile(TSensorThreadRead):
     # ensure to run self.CreateThread() if no parameters
     def DoStartExit(self):
         if (not self.HasParam):

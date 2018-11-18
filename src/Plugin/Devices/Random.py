@@ -34,11 +34,11 @@ class TSensorRandomEx(TSensor):
     def DoParameter(self, aParam):
         self.ParamLoadPattern(aParam)
         self.Provider = TProviderRandom(self.Param.Begin, self.Param.End)
-        self.CreateThread()
+        #self.CreateThread()
 
     # Custom handler example
     def DoOnValue(self, aValue):
-        #TRelayThredRead.DoOnValue(self, aValue)
+        #TRelayThreadRead.DoOnValue(self, aValue)
         Log.Print(1, 'i', self.__class__.__name__, 'my DoOnValue()', 'Alias: %s, Descr: %s, Value: %s' % (self.Alias, self.Descr, self.Value))
 
         #Root = self.GetRoot()

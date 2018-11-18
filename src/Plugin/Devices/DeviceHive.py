@@ -10,11 +10,13 @@ from Inc.Log          import Log
 from Inc.Param        import TDictParam
 from Inc.Util         import Net
 
-
 from Core.Device import (
-    TSensorThredRead, 
-    TProviderThredRead,
     TRelay
+)
+
+from Core.DeviceThread import (
+    TSensorThreadRead, 
+    TProviderThreadRead,
 )
 
 from Plugin.Providers.DeviceHive import (
@@ -36,9 +38,9 @@ def CheckHostPort(aHost):
         #raise Exception(Msg)
 
 
-class TSensorDeviceHiveThread(TSensorThredRead):
+class TSensorDeviceHiveThread(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThredRead.__init__(self, aParent)
+        TSensorThreadRead.__init__(self, aParent)
 
         Pattern = {'Host': TDictParam.Required, 'Avg': 3, 'Round': 0.25}
         self.Param.AddDefPattern(Pattern)
@@ -77,9 +79,9 @@ class TSensorDeviceHive_DS18B20(TSensorDeviceHivePinThread):
 
 
 #--- ProviderDeviceHivePinThread Begin
-class TProviderDeviceHivePinThread(TProviderThredRead):
+class TProviderDeviceHivePinThread(TProviderThreadRead):
     def __init__(self, aParent):
-        TProviderThredRead.__init__(self, aParent)
+        TProviderThreadRead.__init__(self, aParent)
 
         Pattern = {'Host': TDictParam.Required, 'Pin': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

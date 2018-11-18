@@ -7,11 +7,11 @@ Description:
 '''
 
 
-from Core.Device import TSensorThredRead
+from Core.DeviceThread          import TSensorThreadRead
 from Plugin.Providers.HTTP_MyIP import TProviderHTTP_MyIP
 
 
-class TSensorHTTP_MyIP(TSensorThredRead):
+class TSensorHTTP_MyIP(TSensorThreadRead):
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
         self.Param.Round = None

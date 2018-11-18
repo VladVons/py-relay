@@ -3,14 +3,13 @@ Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.10.15
 License:     GNU, see LICENSE for more details
-Description: 10
+Description: 
 '''
 
 import time
 #
 from Inc.Log      import Log
 from Inc.Param    import TDictParam, TDictCall, TRange
-from Inc.Thread   import TThreadReadList
 from Inc.Util     import Num
 from Core.ExecApi import TExecApi
 
@@ -29,7 +28,7 @@ class TDeviceBase(object):
         self.Exec       = TExecApi(self)
 
         self.ExtParam   = TDictCall()
-        self.ExtParam['Parameter'] = self.ExtParametr
+        self.ExtParam['Parameter'] = self.ExtParameter
         self.ExtParam['Action']    = self.ExtAction
         self.ExtParam['Start']     = self.Exec.Parse
         self.ExtParam['Finish']    = self.Exec.Parse
@@ -40,7 +39,7 @@ class TDeviceBase(object):
     def ExtAction(self, aKey, aParam, aData):
         self.Manager.AddAction(aParam, self.Actions)
 
-    def ExtParametr(self, aKey, aParam, aData):
+    def ExtParameter(self, aKey, aParam, aData):
         if (aParam and aParam.get('ClassRef')):
             self._LoadClass(aParam, aData)
         self.DoParameter(aParam)
@@ -141,12 +140,7 @@ class TDevice(TDeviceBase):
         Log.Print(3, 'i', self.__class__.__name__, 'SetValue()', 'Alias %s, Value %s' % (self.Alias, aValue))
 
         if ((self.Value != aValue) or (self.Param.AllValue) or (self.GetUptime() - self.LastChange > self.Param.WaitValue)):
-            if (aValue is None):
-                self.Action('OnError', aValue)
-                return
-
-            if (not self.Range.Check(self.Key, aValue)):
-                self.Action('OnRange', aValue)
+            if (not self.CheckValue(aValue)):
                 return
 
             if (self.OnValue):
@@ -158,6 +152,19 @@ class TDevice(TDeviceBase):
                 self.Action('OnValue', aValue)
 
             self.Exec.Conditions('Triggers')
+
+    def CheckValue(self, aValue):
+        if (aValue is None):
+            Log.Print(1, 'e', self.__class__.__name__, 'CheckValue() None', 'Alias: %s, Value: %s' % (self.Alias, aValue))
+            self.Action('OnError', aValue)
+            return False
+
+        if (not self.Range.Check(self.Key, aValue)):
+            Log.Print(1, 'e', self.__class__.__name__, 'CheckValue() Range', 'Alias: %s, Value: %s' % (self.Alias, aValue))
+            self.Action('OnRange', aValue)
+            return False
+
+        return True
 
 
 class TSensor(TDevice):
@@ -180,11 +187,10 @@ class TSensor(TDevice):
                 Result = self.Provider.Get(self.Key)
             else:
                 Result = self.Provider.Get()
+            return self.Round(Result)
         else:
-            # get previous vaue
-            Result = self.Value
-        return self.Round(Result)
-
+            Msg = Log.Print(1, 'x', self.__class__.__name__, '_Get()', 'Alias %s. No `Provider` assigned' % (self.Alias))
+            raise NotImplementedError(Msg)
 
     def Round(self, aValue):
         if (self.Param.Round is None):
@@ -231,63 +237,3 @@ class TControl(TRelay):
     def __init__(self, aParent):
         TRelay.__init__(self, aParent)
         self.Range.SetMirror(None, 999999)
-
-
-#=== Read slow devices.
-class TSensorThredRead(TSensor):
-    def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
-        self.Thread = None
-
-    def CreateThread(self):
-        if (not self.Provider):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'CreateThread()', 'Alias %s. No `Provider` assigned' % (self.Alias))
-            raise NotImplementedError(Msg)
-
-        self.Thread   = TThreadReadList(self._ReadCallBack)
-        self.Thread.Periodic = self.Param.Periodic
-        self.Thread._SetData(self._ReadCallBack())
-        self.Thread.Create()
-
-    # call slow method from thread
-    def _ReadCallBack(self):
-        return self.Provider.Get()
-
-    def _Get(self):
-        Data = self.Thread.GetData()
-        if (Data is None):
-            # get previous value
-            Result = self.Value
-        else:
-            Result = Data
-        return self.Round(Result)
-
-
-# === Read slow devices.
-class TProviderThredRead(TDeviceBase):
-    def __init__(self, aParent):
-        TDeviceBase.__init__(self, aParent)
-        self.Thread = None
-
-        self.Param.AddDefPattern({'Periodic': 1})
-
-    def CreateThread(self):
-        if (not self.Provider):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'CreateThread()', 'Alias %s. Not `Provider` assigned' % (self.Alias))
-            raise NotImplementedError(Msg)
-
-        self.Thread = TThreadReadList(self._ReadCallBack)
-        self.Thread._SetData(self._ReadCallBack())
-        self.Thread.Periodic = self.Param.Periodic
-        self.Thread.Create()
-
-    # call slow method from thread
-    def _ReadCallBack(self):
-        Result = self.Provider.ReadTry()
-        return Result
-
-    def Get(self, aKey = ''):
-        Result = self.Thread.GetData()
-        if (Result and aKey): 
-            Result = Result.get(aKey)
-        return Result
