@@ -14,10 +14,10 @@
         "Descr":"Air",
         "Parameter":{"Ranges":[{ "On":"3S", "Off": "3S"}]},
         "Checks":[
-            {"Enable":true, "If":"self.InHour('08:14', '08:15')"}
+            {"Enable":false, "If":"self.InHour('08:14', '08:15')"}
         ],
         "Triggers":[
-            {"Enable":true, "Always":"self.SetValue('$WriteLog')"}
+            {"Enable":true, "Always":"self.SetValue('$WriteLog', self.Value and (not self.InHours([['19:50', '19:51'], ['19:55', '19:56']])))"}
         ]
     },
     {

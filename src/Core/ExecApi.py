@@ -87,13 +87,21 @@ class TExecApi(TExecParse):
     def __init__(self, aParent):
         TExecParse.__init__(self, aParent)
 
-    def _InTimeRange(self, aValue, aBegin, aEnd):
-        Sec1 = Time.StrToSec(aBegin)
-        Sec2 = Time.StrToSec(aEnd)
-        if (Sec1 > Sec2):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'InTimeRange()', 'Min %s is greater than Max %s' % (Sec1, Sec2))
+    def _RangeDecorator(aFunc):
+        def Wrapper(self, aRanges):
+            Result = False
+            for Range in aRanges:
+                Result = aFunc(self, Range)
+                if (Result):
+                    break
+            return Result
+        return Wrapper
+
+    def _CheckRange(self, aValue, aMin, aMax):
+        if (aMin > aMax):
+            Msg = Log.Print(1, 'e', self.__class__.__name__, '_CheckRange()', 'Min %s is greater than Max %s' % (aMin, aMax))
             raise ValueError(Msg)
-        return (Sec1 <= aValue) and (Sec2 >= aValue)
+        return (aValue >= aMin) and (aValue <= aMax)
 
     def Break(self, aLabel = 'EXIT'):
         self.BreakLabel = aLabel
@@ -148,20 +156,31 @@ class TExecApi(TExecParse):
     def InValue(self, aBegin, aEnd, aValue = None):
         if (aValue is None):
             aValue = self.GetValue()
-        return (aValue >= aBegin) and (aValue <= aEnd)
+        return self._CheckRange(aValue, aBegin, aEnd)
 
     def InUptime(self, aBegin = '0S', aEnd = '10y'):
-        return self.InTimeRange(self.Parent.GetUptime(), aBegin, aEnd)
+        Sec1 = Time.StrToSec(aBegin)
+        Sec2 = Time.StrToSec(aEnd)
+        Now  = self.Parent.GetUptime()
+        return self._CheckRange(Now, Sec1, Sec2)
 
     def InHour(self, aBegin = '00:00:00', aEnd = '23:59:59'):
         Sec1 = Time.TimeToSec(aBegin)
         Sec2 = Time.TimeToSec(aEnd)
-        if (Sec1 > Sec2):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'InHour()', '%s is greater than %s' % (Sec1, Sec2))
-            raise ValueError(Msg)
+        Now  = Time.TimeToSec(datetime.datetime.now().strftime('%H:%M:%S'))
+        return self._CheckRange(Now, Sec1, Sec2)
 
-        Now = Time.TimeToSec(datetime.datetime.now().strftime('%H:%M:%S'))
-        return (Now >= Sec1) and (Now < Sec2)
+    @_RangeDecorator
+    def InValues(self, aRange):
+        return self.InValue(aRange[0], aRange[1])
+
+    @_RangeDecorator
+    def InUptimes(self, aRange):
+        return self.InUptime(aRange[0], aRange[1])
+
+    @_RangeDecorator
+    def InHours(self, aRange):
+        return self.InHour(aRange[0], aRange[1])
 
     def SetPerCent(self, aAlias, aValue):
         Value = self.Parent.Range.PerCentSafe(None, aValue)

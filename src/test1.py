@@ -168,4 +168,4 @@ def TimerRange():
 #Relay_One()
 #Relay_LCD()
 #Telegram()
-TimerRange()
+#TimerRange()
