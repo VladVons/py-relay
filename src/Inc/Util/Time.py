@@ -53,3 +53,21 @@ def Uptime():
     with open('/proc/uptime', 'r') as File:
         Result = int(float(File.readline().split()[0]))
     return Result
+
+def RangeDecorator(aFunc):
+    # callsed from class
+    def Wrapper(self, aRanges):
+        Result = False
+        for Range in aRanges:
+            Result = aFunc(self, Range)
+            if (Result):
+                break
+        return Result
+    return Wrapper
+
+def CheckRange(aValue, aMin, aMax):
+    if (aMin > aMax):
+        Msg = Log.Print(1, 'e', __name__, '_CheckRange()', 'Min %s is greater than Max %s' % (aMin, aMax))
+        raise ValueError(Msg)
+    return (aValue >= aMin) and (aValue <= aMax)
+ 

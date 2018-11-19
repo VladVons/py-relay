@@ -87,22 +87,6 @@ class TExecApi(TExecParse):
     def __init__(self, aParent):
         TExecParse.__init__(self, aParent)
 
-    def _RangeDecorator(aFunc):
-        def Wrapper(self, aRanges):
-            Result = False
-            for Range in aRanges:
-                Result = aFunc(self, Range)
-                if (Result):
-                    break
-            return Result
-        return Wrapper
-
-    def _CheckRange(self, aValue, aMin, aMax):
-        if (aMin > aMax):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, '_CheckRange()', 'Min %s is greater than Max %s' % (aMin, aMax))
-            raise ValueError(Msg)
-        return (aValue >= aMin) and (aValue <= aMax)
-
     def Break(self, aLabel = 'EXIT'):
         self.BreakLabel = aLabel
 
@@ -156,29 +140,29 @@ class TExecApi(TExecParse):
     def InValue(self, aBegin, aEnd, aValue = None):
         if (aValue is None):
             aValue = self.GetValue()
-        return self._CheckRange(aValue, aBegin, aEnd)
+        return Time.CheckRange(aValue, aBegin, aEnd)
 
     def InUptime(self, aBegin = '0S', aEnd = '10y'):
         Sec1 = Time.StrToSec(aBegin)
         Sec2 = Time.StrToSec(aEnd)
         Now  = self.Parent.GetUptime()
-        return self._CheckRange(Now, Sec1, Sec2)
+        return Time.CheckRange(Now, Sec1, Sec2)
 
     def InHour(self, aBegin = '00:00:00', aEnd = '23:59:59'):
         Sec1 = Time.TimeToSec(aBegin)
         Sec2 = Time.TimeToSec(aEnd)
         Now  = Time.TimeToSec(datetime.datetime.now().strftime('%H:%M:%S'))
-        return self._CheckRange(Now, Sec1, Sec2)
+        return Time.CheckRange(Now, Sec1, Sec2)
 
-    @_RangeDecorator
+    @Time.RangeDecorator
     def InValues(self, aRange):
         return self.InValue(aRange[0], aRange[1])
 
-    @_RangeDecorator
+    @Time.RangeDecorator
     def InUptimes(self, aRange):
         return self.InUptime(aRange[0], aRange[1])
 
-    @_RangeDecorator
+    @Time.RangeDecorator
     def InHours(self, aRange):
         return self.InHour(aRange[0], aRange[1])
 
