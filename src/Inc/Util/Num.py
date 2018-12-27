@@ -73,10 +73,16 @@ class TUpdateDelay():
     def __init__(self):
         self.Data = {}
         self.Diff    = 0.01
-        self.Refresh = 10
+        self.Refresh = 60
 
     def Update(self, aAlias):
         self.Data[aAlias]['Updated'] = time.time()
+
+    def Get(self, aAlias):
+        try:
+            return self.Data[aAlias]['Avg'].GetAvg()
+        except:
+            return 0
 
     def Check(self, aAlias, aValue):
         Result = False

@@ -40,7 +40,7 @@ class TControlGrafana(TControl):
 
         Pattern = {
             'Host': TDictParam.Required, 'User': TDictParam.Required, 'Password': TDictParam.Required, 'DB': TDictParam.Required, 'Table': TDictParam.Required, 'Prefix': 1,
-            'Refresh': 60, 'Diff': 0.025
+            'Refresh': 60*3, 'Diff': 0.025
         }
         self.Param.AddDefPattern(Pattern)
 
@@ -66,7 +66,8 @@ class TControlGrafana(TControl):
 
 
     def _Set(self, aCaller, aValue):
-        Info = 'Caller {:15} Descr {:15} Alias {:15} Value {:6}'.format(self.Alias, aCaller.Descr, aCaller.Alias, aCaller.Value)
+        CAlias = aCaller.Alias
+        Info = 'Caller {:15} Descr {:15} Alias {:15} Value {:6}'.format(self.Alias, aCaller.Descr, CAlias, aCaller.Value)
         #print(Info)
 
         try:
@@ -75,9 +76,10 @@ class TControlGrafana(TControl):
             Value = 0
             Log.Print(1, 'e', self.__class__.__name__, '_Set()', E)
 
-        if (self.UpdateDelay.Check(aCaller.Alias, Value)):
-            self.UpdateDelay.Update(aCaller.Alias)
-            self.Delivery.Send([aCaller.Alias, Value, self.MySQL.Now()])
+        if (self.UpdateDelay.Check(CAlias, Value)):
+            self.UpdateDelay.Update(CAlias)
+            #Value = self.UpdateDelay.Get(CAlias)
+            self.Delivery.Send([CAlias, Value, self.MySQL.Now()])
 
     def Send(self, aData):
         Result = False
