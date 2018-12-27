@@ -7,6 +7,8 @@ Description:
 '''
 
 import os
+import time
+
 
 def FindFile(aDirs, aFiles, aSubDir = False):
     Result = []
@@ -49,3 +51,8 @@ def GetCoreName(aPath):
 
 def ChangeExt(aPath, aExt):
     return os.path.splitext(aPath)[0] + aExt
+
+def GetCTime(aFile):
+    Result = time.gmtime(os.path.getctime(aFile))
+    #time.strftime('%Y-%m-%d', Result)
+    return Result

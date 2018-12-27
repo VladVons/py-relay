@@ -102,7 +102,7 @@ class TDbDict(TDbSQL):
         SQL = "SELECT %s \
                FROM   %s \
                WHERE  Prefix = %d \
-               ORDER  BY Modified DESC \
+               ORDER  BY ID DESC \
                LIMIT  1" % (aFields, self.Dict, self.Prefix)
         self.Exec(SQL)
         return self.Cursor.fetchone()
