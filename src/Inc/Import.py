@@ -5,11 +5,11 @@ Created:     2017.10.20
 License:     GNU, see LICENSE for more details
 Description:
 
-self.Imports = TImports()
-self.Imports.Load()
-self.Imports.GetInstance(ClassName)
-TClass = self.Imports.GetInstance(ClassName, aData.get('Module'))
-Result = TClass(aParent)
+Import = TDynImport()
+Import.ParseDir('Plugin/Devices')
+Import.GetInstance(ClassName)
+TClass = Import.GetInstance(ClassName)
+Result = TClass(None)
 '''
 
 import os
