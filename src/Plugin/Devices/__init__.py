@@ -38,6 +38,9 @@ from .Socket_ESP   import TSensorSocket_ESP_DHT
 from .Stop         import TControlStop
 from .Telegram     import TControlTelegram
 
+from .UpsApc       import TSensorUpsApc
+from .UpsNut       import TSensorUpsNut
+
 
 from .ShellExec import (
     TSensorShellExec, 
