@@ -46,13 +46,16 @@ from .ShellExec import (
 
 from .Group import (
     TDeviceGroup, 
-    TSensorGroupDiff
+    TSensorGroupAvg,
+    TSensorGroupSum,
+    TSensorGroupAnd,
+    TSensorGroupOr
 )
 
 from .Timer import (
     TSensorTimeRangeCycle,
     TSensorTimeRangeDay,
-    TSensorTimeRangeDayFade
+    TSensorTimeRangeDayFadeWave
 )
 
 

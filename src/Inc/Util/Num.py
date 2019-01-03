@@ -99,7 +99,7 @@ class TUpdateDelay():
         return Result
 
 # Dvornitsky V.
-class TFadeWave:
+class TFadeWave():
     def __init__(self, aStarSec, aFinishSec, aStartVal, aPeakVal):
         self._offsetX = aStarSec;
         self._scaleX  = aFinishSec - aStarSec;

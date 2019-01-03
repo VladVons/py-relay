@@ -169,3 +169,11 @@ def TimerRange():
 #Relay_LCD()
 #Telegram()
 #TimerRange()
+
+#from Plugin.Devices.Timer import TSensorTimeRangeDay
+#Obj = TSensorTimeRangeDay(None)
+#print(Obj.Param.DefPattern)
+
+from Plugin.Devices.Sleep import TControlSleep
+Obj = TControlSleep(None)
+print(Obj.Param.DefPattern)

@@ -12,8 +12,10 @@ FROM
   Dict
 WHERE 
   $__timeFilter(Modified) and (Prefix = 1) and (Item = 'DH4_Sensor_Humid')
+  #Modified BETWEEN FROM_UNIXTIME(1546037408) AND FROM_UNIXTIME(1546123808) and (Prefix = 1) and (Item = 'DH2_Sensor_Humid')
 ORDER BY 
   Modified ASC
+
 
 #select count(*) from Dict
 #delete from Dict

@@ -106,7 +106,9 @@ class TDevice(TDeviceBase):
         self.Avg = Num.TAvg()
         #self.Avg.Enable = False
 
-        self.Param.AddDefPattern( {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'WaitValue': 3600*24, 'OnValue': True})
+        Pattern = {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'WaitValue': 3600*24, 'OnValue': True}
+        self.Param.AddDefPattern(Pattern)
+
         self.ExtParam['Checks']   = self.Exec.Parse
         self.ExtParam['Triggers'] = self.Exec.Parse
 
@@ -170,7 +172,9 @@ class TDevice(TDeviceBase):
 class TSensor(TDevice):
     def __init__(self, aParent):
         TDevice.__init__(self, aParent)
-        self.Param.AddDefPattern({'Round': 0.1, 'Avg': 3})
+
+        Pattern = {'Round': 0.1, 'Avg': 3}
+        self.Param.AddDefPattern(Pattern)
 
     def DoParameterExit(self):
         self.Avg.SetSize(self.Param.Avg)
@@ -213,7 +217,10 @@ class TRelay(TDevice):
     def __init__(self, aParent):
         # super().__init__(aParent) # __need 3.5
         TDevice.__init__(self, aParent)
-        self.Param.AddDefPattern( {'State':False, 'Invert':False} )
+
+        Pattern = {'State':False, 'Invert':False}
+        self.Param.AddDefPattern(Pattern)
+
         self.Range.Set(None, [0, 1])
 
     def DoPost(self, aCaller, aValue, aData):
