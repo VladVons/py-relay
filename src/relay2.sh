@@ -3,7 +3,7 @@
 Test1()
 {
   #python2 relay.py -p Test3
-  python2 relay.py -p Default
+  python2 relay.py -p Test1
 }
 
 Test2()

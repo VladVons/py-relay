@@ -11,6 +11,8 @@
                 {"Enable":false,  "ClassRef":"Random_10_30"},
                 {"Enable":false,  "ClassRef":"WriteConsoleFinish"},
 
+                {"Enable":true,  "ClassRef":"UpsNut"},
+
                 {"Enable":false,  "ClassRef":"SensorSun"},
                 {"Enable":false,  "ClassRef":"SensorMoon"},
 
@@ -24,18 +26,18 @@
                 {"Enable":false,  "ClassRef":"DH5_Sensor_Humid"},
                 {"Enable":false,  "ClassRef":"DH5_Sensor_Temper"},
 
-                {"Enable":true,  "ClassRef":"DH11_Sensor_Humid"},
-                {"Enable":true,  "ClassRef":"DH11_Sensor_Temper"},
-                {"Enable":true,  "ClassRef":"DH11_Sensor_CO2"}
+                {"Enable":false,  "ClassRef":"DH11_Sensor_Humid"},
+                {"Enable":false,  "ClassRef":"DH11_Sensor_Temper"},
+                {"Enable":false,  "ClassRef":"DH11_Sensor_CO2"}
             ],
             "Finish":[
                 {"Enable":false,   "ClassRef":"GroupOnFinish"}
             ]
         },
        "Include":[
-                {"Enable":true,  "File":"DH1.json"},
-                {"Enable":true,  "File":"DH5.json"},
-                {"Enable":true,  "File":"DH11.json"},
+                {"Enable":false,  "File":"DH1.json"},
+                {"Enable":false,  "File":"DH5.json"},
+                {"Enable":false,  "File":"DH11.json"},
                 {"Enable":true,  "File":"Random.json"}
         ],
         "Action":[
@@ -144,6 +146,11 @@
                 "Class":"TSensorUptimeApp",
                 "Alias":"SensorUptimeApp",
                 "Parameter":{"Unit":"H"}
+            },
+            {
+                "Class":"TSensorUpsNut",
+                "Alias":"UpsNut",
+                "Parameter":{"Name":"MyUPS"}
             },
             {
                 "Class":"TSensorSun",

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 '''
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
@@ -6,6 +8,11 @@ License:     GNU, see LICENSE for more details
 
 Description:
 control NUT UPS voltage
+
+Example:
+Obj = TProviderUpsNut('MyUPS')
+Data = Obj.Read(None)
+print(Data.get('Voltage'))
 '''
 
 try:
@@ -19,18 +26,18 @@ from .Provider import TProvider
 
 
 class TProviderUpsNut(TProvider):
-    def __init__(self, aName = 'MyUPS'):
-        self.Name = aName
+    def __init__(self, aName):
+        self.Name = aName.encode("utf8")
 
-    def Read(self, aNotUsed):
+    def Read(self, aNotUsed = None):
         Client = PyNUTClient()
         #Client.help()
         #Client.list_ups()
         Data = Client.list_vars(self.Name)
 
         Result = {}
-        Result['Voltage'] = Data['LINEV']
-        Result['Status']  = Data['STATUS']
+        Result['Voltage'] = float(Data['input.voltage'])
+        Result['Status']  = Data['ups.status']
         Result['default'] = Result['Voltage']
         return Result
 

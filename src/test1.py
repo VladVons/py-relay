@@ -174,6 +174,11 @@ def TimerRange():
 #Obj = TSensorTimeRangeDay(None)
 #print(Obj.Param.DefPattern)
 
-from Plugin.Devices.Sleep import TControlSleep
-Obj = TControlSleep(None)
-print(Obj.Param.DefPattern)
+#from Plugin.Devices.Sleep import TControlSleep
+#Obj = TControlSleep(None)
+#print(Obj.Param.DefPattern)
+
+from Plugin.Providers.UpsNut import TProviderUpsNut
+Obj = TProviderUpsNut('MyUPS1')
+Data = Obj.Read(None)
+print(Data)
