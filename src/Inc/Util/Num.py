@@ -9,6 +9,7 @@ Description:
 import math
 import collections
 import time
+import random
 
 
 def SetBit(aValue, aIdx, aSet = True):
@@ -28,6 +29,18 @@ def Clamp(aMin, aMax, aValue):
 def InDevation(aBase, aValue, aDevation):
     Devation = aBase * aDevation
     return (aValue >= aBase - Devation) and (aValue <= aBase + Devation)
+
+def RandOne(aCnt, aRound = 2):
+    Numbers = []
+    for i in range(aCnt):
+        Numbers.append(random.randint(1, 100))
+    Sum = float(sum(Numbers))
+
+    Result = []
+    for Number in Numbers:
+        Result.append(round(Number / Sum, aRound))
+
+    return Result
 
 
 #--- Classes

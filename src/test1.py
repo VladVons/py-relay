@@ -178,7 +178,13 @@ def TimerRange():
 #Obj = TControlSleep(None)
 #print(Obj.Param.DefPattern)
 
-from Plugin.Providers.UpsNut import TProviderUpsNut
-Obj = TProviderUpsNut('MyUPS1')
-Data = Obj.Read(None)
-print(Data)
+#from Plugin.Providers.UpsNut import TProviderUpsNut
+#Obj = TProviderUpsNut('MyUPS1')
+#Data = Obj.Read(None)
+#print(Data)
+
+from Inc.Util.Num import RandOne
+Arr = RandOne(10)
+print(sum(Arr), Arr)
+
+
