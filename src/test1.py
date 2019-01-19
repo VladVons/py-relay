@@ -183,8 +183,9 @@ def TimerRange():
 #Data = Obj.Read(None)
 #print(Data)
 
-from Inc.Util.Num import RandOne
-Arr = RandOne(10)
-print(sum(Arr), Arr)
+from Inc.Util.Num import RandSum
+for i in range(10):
+    Arr = RandSum(5, 100, 1)
+    print(sum(Arr), Arr)
 
 

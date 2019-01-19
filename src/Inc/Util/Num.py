@@ -30,16 +30,19 @@ def InDevation(aBase, aValue, aDevation):
     Devation = aBase * aDevation
     return (aValue >= aBase - Devation) and (aValue <= aBase + Devation)
 
-def RandOne(aCnt, aRound = 2):
+def RandSum(aCnt, aSum = 1, aRound = 2):
     Numbers = []
     for i in range(aCnt):
-        Numbers.append(random.randint(1, 100))
+        Num = random.randint(20, 100)
+        Numbers.append(Num)
     Sum = float(sum(Numbers))
 
     Result = []
     for Number in Numbers:
-        Result.append(round(Number / Sum, aRound))
+        Num = round(Number / Sum * aSum, aRound)
+        Result.append(Num)
 
+    Result[0] += aSum - sum(Result)
     return Result
 
 
