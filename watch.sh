@@ -1,27 +1,4 @@
 #!/bin/bash
-# VladVons@gmail.com
-
-
-Start()
-{
-  #python relay.py
-  #python2 relay.py -p Test2
-  python2 relay.py -p Test3
-  #python2 test1.py
-}
-
-
-Register()
-{
-  #systemctl enable relay
-  #systemctl status -l relay
-
-  update-rc.d relay defaults
-  update-rc.d relay enable
-
-  #/lib/systemd/systemd-sysv-install enable relay
-}
-
 
 Watch()
 {
@@ -30,7 +7,7 @@ Watch()
 
     Cnt=0
     PrevVar=0
-    while true
+    while true  
     do
         Var=$(i2cget -y $Bus $Addr)
         if [ $PrevVar != $Var ] ; then
@@ -46,9 +23,4 @@ Watch()
     done
 }
 
-
-case $1 in
-    Register)   $1      "$2"  ;;
-    Watch)      $1      "$2"  ;;
-    *)          Start ;;
-esac
+Watch
