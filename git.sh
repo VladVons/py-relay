@@ -5,6 +5,8 @@
 User="VladVons"
 Name="py-relay"
 Mail="vladvons@gmail.com"
+#
+Url="https://github.com/vladvons/py-relay.git"
 Url="https://github.com/$User/$Name.git"
 
 

@@ -1,27 +1,27 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:          relay
+# Provides:          py-relay
 # Required-Start:    $network $syslog
 # Required-Stop:     $network $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # X-Interactive:     true
 # Author:            VladVons@gmail.com
-# Short-Description: relay
-# Description:       relay daemon
+# Short-Description: py-relay
+# Description:       py-relay daemon
 ### END INIT INFO
 
 # http://www.projectclearwater.org/using-start-stop-daemon-with-the-python-interpreter/
 
-NAME="relay"
+NAME="py-relay"
 DESCR="Some description $NAME"
 PIDFILE="/var/run/$NAME.pid"
 USER="root"
 
 # Read default configuration variable
 ENABLED=1
-SCRYPT="relay_Server.py"
+SCRYPT="py-relay_Server.py"
 WORKDIR="/usr/lib/$NAME"
 ARGS=""
 DEFAULT="/etc/default/$NAME"

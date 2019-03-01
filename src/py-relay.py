@@ -196,7 +196,7 @@ class TMain():
 if (__name__ == '__main__'):
     # kill all threads on SIGTERM via 'service relay stop'
     def SetExitHandler(aFunc):
-        prctl.prctl(prctl.NAME, 'relay')
+        prctl.prctl(prctl.NAME, 'py-relay')
         prctl.prctl(prctl.PDEATHSIG, signal.SIGTERM)
 
         signal.signal(signal.SIGTERM, aFunc)

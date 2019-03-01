@@ -4,22 +4,22 @@
 
 Start()
 {
-  #python relay.py
-  #python2 relay.py -p Test2
-  python2 relay.py -p Test3
+  #python py-relay.py
+  #python2 py-relay.py -p Test2
+  python2 py-relay.py -p Test3
   #python2 test1.py
 }
 
 
 Register()
 {
-  #systemctl enable relay
-  #systemctl status -l relay
+  #systemctl enable py-relay
+  #systemctl status -l py-relay
 
-  update-rc.d relay defaults
-  update-rc.d relay enable
+  update-rc.d py-relay defaults
+  update-rc.d py-relay enable
 
-  #/lib/systemd/systemd-sysv-install enable relay
+  #/lib/systemd/systemd-sysv-install enable py-relay
 }
 
 

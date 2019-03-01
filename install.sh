@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 # Created: 28.09.2016
 # Vladimir Vons, VladVons@gmail.com
 
@@ -61,8 +61,18 @@ Relay()
 }
 
 
+RaspiImg()
+{
+  #lsblk
+
+  Img="/mnt/hdd/data1/share/public/image/raspberry/img/2018-11-13-raspbian-stretch-lite.img"
+  Dev="/dev/sdb"
+  dd bs=4M conv=fsync if=$Img of=$Dev
+}
+
 clear
 case $1 in
     Install)        "$1"        "$2" "$3" ;;
+    RaspiImg)       "$1"        "$2" "$3" ;;
 esac
 

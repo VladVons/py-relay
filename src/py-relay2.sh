@@ -2,8 +2,8 @@
 
 Test1()
 {
-  #python2 relay.py -p Test3
-  python2 relay.py -p Test1
+  #python2 py-relay.py -p Test3
+  python2 py-relay.py -p Test1
 }
 
 Test2()

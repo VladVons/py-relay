@@ -15,8 +15,8 @@ def Version():
     Disk = OS.GetDiskInfo('/')
 
     Result = {
-        "Date":     "2018.11.10",
-        "Software": "1.0.15",
+        "Date":     "2019.03.01",
+        "Software": "1.0.16",
         "Hardware": "1.0.2",
         "Author":   "Volodymyr Vons",
         "EMail":    "VladVons@gmail.com",

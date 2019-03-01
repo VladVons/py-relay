@@ -1,7 +1,0 @@
-# defaults for /etc/init.d/relay
-
-ENABLED=0
-OPTIONS="-p Default"
-SCRYPT="relay.exe"
-WORKDIR="/usr/lib/relay"
-ARGS=
