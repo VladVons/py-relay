@@ -11,9 +11,9 @@ https://legacy.gitbook.com/book/groosha/telegram-bot-lessons/details
 '''
 
 import json 
-import requests
 import datetime
 #
+from Inc.Util import Net
 
 class TTelegram():
     def __init__(self, aToken):
@@ -24,8 +24,12 @@ class TTelegram():
         self.Url = 'https://api.telegram.org/bot%s/' % (aValue)
 
     def PostUrl(self, aUrl, aData):
-        Data = requests.post(aUrl, data = aData)
-        return Data.content.decode('utf8')
+        #import requests # huge dependencies
+        #Data = requests.post(aUrl, data = aData)
+        #return Data.content.decode('utf8')
+
+        Data = Net.urlopen(aUrl, Net.urlencode(aData), timeout = 1)
+        return Data
 
     def GetData(self, aUrl, aParam):
         Data = self.PostUrl(aUrl, aParam)

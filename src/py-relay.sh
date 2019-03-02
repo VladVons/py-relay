@@ -2,12 +2,28 @@
 # VladVons@gmail.com
 
 
+ForceLog()
+{
+  echo ForceLog $(date +%Y-%m-%d-%a) >> /var/log/py-relay.log
+}
+
+
+Emulator()
+{
+  while true; do
+    echo "hello"
+    sleep 1
+  done
+}
+
+
 Start()
 {
+  #ForceLog
+  #Emulator
+
   #python py-relay.py
-  #python2 py-relay.py -p Test2
-  python2 py-relay.py -p Test3
-  #python2 test1.py
+  python2 py-relay.py -p Test1
 }
 
 
@@ -45,7 +61,6 @@ Watch()
         sleep 1
     done
 }
-
 
 case $1 in
     Register)   $1      "$2"  ;;

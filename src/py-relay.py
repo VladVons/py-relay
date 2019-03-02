@@ -11,7 +11,9 @@ Description:
 try:
     import prctl
 except:
-    print('Error: import prctl', 'pip install prctl')
+    #https://github.com/seveas/python-prctl/blob/master/test_prctl.py
+    #print('Error: import prctl', 'pip install prctl')
+    print('Error: import prctl', 'apt-get install python-prctl')
 
 import signal
 #
@@ -196,8 +198,10 @@ class TMain():
 if (__name__ == '__main__'):
     # kill all threads on SIGTERM via 'service relay stop'
     def SetExitHandler(aFunc):
-        prctl.prctl(prctl.NAME, 'py-relay')
-        prctl.prctl(prctl.PDEATHSIG, signal.SIGTERM)
+        #prctl.prctl(prctl.NAME, 'py-relay')
+        #prctl.prctl(prctl.PDEATHSIG, signal.SIGTERM)
+        prctl.set_name('py-relay')
+        prctl.set_pdeathsig(signal.SIGINT)
 
         signal.signal(signal.SIGTERM, aFunc)
 

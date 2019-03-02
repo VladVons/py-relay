@@ -8,7 +8,7 @@
             ],
             "Loop":[
                 {"Enable":true,  "ClassRef":"Sleep"},
-                {"Enable":true,  "ClassRef":"Random_10_30"},
+                {"Enable":false, "ClassRef":"Random_10_30"},
                 {"Enable":false,  "ClassRef":"WriteConsoleFinish"},
 
                 {"Enable":false,  "ClassRef":"UpsNut"},
@@ -23,8 +23,8 @@
 
                 {"Enable":false,  "ClassRef":"DH1_Sensor_Temper"},
 
-                {"Enable":false,  "ClassRef":"DH5_Sensor_Humid"},
-                {"Enable":false,  "ClassRef":"DH5_Sensor_Temper"},
+                {"Enable":true,  "ClassRef":"DH6_Sensor_Humid"},
+                {"Enable":true,  "ClassRef":"DH6_Sensor_Temper"},
 
                 {"Enable":false,  "ClassRef":"DH11_Sensor_Humid"},
                 {"Enable":false,  "ClassRef":"DH11_Sensor_Temper"},
@@ -36,7 +36,7 @@
         },
        "Include":[
                 {"Enable":false,  "File":"DH1.json"},
-                {"Enable":false,  "File":"DH5.json"},
+                {"Enable":true,   "File":"DH6.json"},
                 {"Enable":false,  "File":"DH11.json"},
                 {"Enable":true,  "File":"Random.json"}
         ],

@@ -15,14 +15,10 @@ import json
 import time
 import base64
 
-try:
-    import urllib2 as urllib
-except:
-    import urllib.request as urllib
-
 #
 from .Provider import TProvider
 from Inc.Log   import Log
+from Inc.Util  import Net
 
 
 class TDeviceHive():
@@ -34,14 +30,14 @@ class TDeviceHive():
         Url  = self.Host + aCommand
         #print('---Send', Url, aData)
 
-        Request  = urllib.Request(Url)
+        Request = Net.Request(Url)
         Request.add_header('Content-Type', 'text/json')
         while (aTries > 0):
             aTries -= 1
             try:
-                Response = urllib.urlopen(Request, json.dumps(aData), timeout = self.Timeout)
-                Data   = Response.read()
-                Result = json.loads(Data)
+                Response = Net.urlopen(Request, json.dumps(aData), timeout = self.Timeout)
+                Data     = Response.read()
+                Result   = json.loads(Data)
                 break
             except Exception as E:
                 Log.Print(1, 'e', self.__class__.__name__, 'Send()', 'Url %s, Data %s' % (Url, aData))

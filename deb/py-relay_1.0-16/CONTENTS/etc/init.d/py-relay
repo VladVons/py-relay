@@ -21,7 +21,7 @@ USER="root"
 
 # Read default configuration variable
 ENABLED=1
-SCRYPT="py-relay_Server.py"
+SCRYPT="py-relay.sh"
 WORKDIR="/usr/lib/$NAME"
 ARGS=""
 DEFAULT="/etc/default/$NAME"
@@ -30,6 +30,13 @@ if [ -r $DEFAULT ] ; then
 fi
 DAEMON="$WORKDIR/$SCRYPT"
 
+##--- after modify this file
+## systemctl daemon-reload
+## service py-relay restart
+## journalctl -u py-relay
+
+#echo "Debug: $DEFAULT $DAEMON" >> /py-relay_1.log
+#test -x $SCRYPT || exit 0
 . /lib/lsb/init-functions
 
 case "$1" in

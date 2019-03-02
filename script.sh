@@ -204,6 +204,7 @@ HowTo()
   #hwclock -s
 }
 
+
 Install()
 {
   Log "$0->$FUNCNAME"
@@ -221,6 +222,16 @@ Install()
 }
 
 
+Wget()
+{
+  #???
+  Url="https://api.telegram.org/bot482131719:AAHRZnIq-RsfNyF2LvaSIm028vGHgSv60dI/sendMessage"
+  Post='{"text": "Hello-3", "chat_id": "423099610"}'
+  echo "$Url, $Post"
+  wget -qO- "$Url" --post-data $Post
+}
+
+
 Help()
 {
   Log "$0->$FUNCNAME"
@@ -235,6 +246,7 @@ Help()
 
 clear
 #BuildDeb
+Wget
 case $1 in
     Clean)          "$1"        "$2" "$3" ;;
     HowTo)          "$1"        "$2" "$3" ;;

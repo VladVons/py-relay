@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
 import time
@@ -183,9 +183,8 @@ def TimerRange():
 #Data = Obj.Read(None)
 #print(Data)
 
-from Inc.Util.Num import RandSum
-for i in range(10):
-    Arr = RandSum(5, 100, 1)
-    print(sum(Arr), Arr)
 
+from Plugin.Providers.Telegram import TProviderTelegram
+Telegram = TProviderTelegram('482131719:AAHRZnIq-RsfNyF2LvaSIm028vGHgSv60dI', ['423099610'])
+Telegram.Write('Hello-21')
 

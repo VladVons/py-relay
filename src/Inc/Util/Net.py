@@ -9,7 +9,17 @@ Description:
 import uuid
 import sys
 import socket
-
+#
+try:
+    import urlparse
+except:
+    import urllib.parse as urlparse
+#
+try:
+    from urllib2 import Request, urlopen
+except:
+    from urllib.request import Request, urlopen
+from urllib import urlencode
 #
 from Inc.Util import FS
 
@@ -82,10 +92,6 @@ def CheckInternet():
     return CheckHostPort('8.8.8.8', 53)
 
 def UrlParse(aUrl):
-    try:
-        import urlparse
-    except:
-        import urllib.parse as urlparse
 
     Result = urlparse.urlparse(aUrl)
     #print(Result.scheme, Result.netloc, Result.path)
@@ -99,14 +105,6 @@ def PostRequest(aUrl, aData):
     Result = Data.content.decode('utf8')
     return Result
     '''
-    
-    try:
-        from urllib2 import Request, urlopen
-        #from urllib import urlencode
-    except:
-        from urllib.request import Request, urlopen
-        #from urllib.parse import urlencode
-
     #Data    = urlencode(aData)
     #print(Data)
 
