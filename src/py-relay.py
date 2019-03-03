@@ -48,7 +48,7 @@ class TMain():
         self.TimeStart = int(time.time())
         self.AppName   = FS.GetCoreName(__file__)
 
-        if (not Log.SetFile('/var/log/%s.log' % self.AppName), True):
+        if (not Log.SetFile('/var/log/%s/%s.log' % self.AppName), True):
             Log.SetFile('%s.log' % self.AppName)
         Log.SetConsole()
 

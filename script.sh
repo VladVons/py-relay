@@ -7,12 +7,13 @@
 # Description:
 
 
-FileModule="relay"
+Name="py-relay"
 DirSrc="src"
 DirRelease="__Release"
 #
-Ver="1.0-12"
-DirDeb="deb/${FileModule}_${Ver}"
+Ver="1.0-16"
+Platform="amd64"
+DirDeb="deb/${Name}_${Ver}_${Platform}"
 
 Log()
 {
@@ -60,15 +61,20 @@ Release()
 
   cd $DirSrc
   echo "Building..."
-  #nuitka --exe --recurse-all --recurse-not-to=Plugin $FileModule.py
+  #nuitka --exe --recurse-all --recurse-not-to=Plugin $Name.py
   #nuitka --exe --recurse-all --recurse-not-to=Plugin --python-version=3.5 relay.py
-  nuitka --exe --recurse-all --recurse-directory --recurse-not-to=Plugin --python-version=2.7 relay.py
+  nuitka --exe --recurse-all --recurse-directory --recurse-not-to=Plugin --python-version=2.7 $Name.py
   cd ..
 
   find $DirSrc/Plugin -name "*.pyc" -type f -delete
   ls
-  cp $DirSrc/$FileModule.{exe,conf} $DirRelease
-  cp -R $DirSrc/Plugin $DirRelease
+  #cp $DirSrc/$Name.{exe,conf} $DirRelease
+  #cp -R $DirSrc/Plugin $DirRelease
+  #cp -R $DirSrc/py-relay.key $DirRelease
+
+  #cp $DirSrc/$Name.{exe,conf} $DirRelease
+  #cp -R $DirSrc/Plugin $DirRelease
+  #cp -R $DirSrc/py-relay.key $DirRelease
 }
 
 
@@ -76,9 +82,17 @@ BuildDeb()
 {
   Log "$0->$FUNCNAME"
 
-  DirDst="$DirDeb/CONTENTS/usr/lib/relay"
-  mkdir -p $DirDst
-  cp -R $DirRelease/* $DirDst
+  echo "remove old $DirDeb"
+  rm -R $DirDeb $DirDeb.deb
+
+  DirApp="$DirDeb/usr/lib/$Name"
+  mkdir -p $DirApp
+
+  cp -R deb/src/CONTENTS/* $DirDeb
+  cp -R deb/src/DEBIAN $DirDeb
+  cp -R $DirSrc/$Name.{exe,conf,key} $DirApp
+  cp -R $DirSrc/Plugin $DirApp
+
   dpkg-deb --build $DirDeb
 }
 
@@ -246,7 +260,7 @@ Help()
 
 clear
 #BuildDeb
-Wget
+#Wget
 case $1 in
     Clean)          "$1"        "$2" "$3" ;;
     HowTo)          "$1"        "$2" "$3" ;;

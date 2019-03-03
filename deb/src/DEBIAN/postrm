@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Exit on error
+set -e
+
+#. /usr/share/debconf/confmodule
+Name="py-relay"
+
+
+if [ "$1" = "purge" ] ; then
+    update-rc.d $Name remove >/dev/null
+fi
+
+if [ -d /run/systemd/system ] ; then
+    systemctl --system daemon-reload >/dev/null || true
+fi
+
+echo "postrm: $1" >> /$Name.log

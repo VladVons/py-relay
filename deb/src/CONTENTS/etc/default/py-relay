@@ -2,7 +2,7 @@
 
 ENABLED=1
 OPTIONS="-p Default"
-SCRYPT="py-relay.sh"
-WORKDIR="/usr/lib/py-relay/src"
-USER="linux"
+SCRYPT="py-relay.exe"
+WORKDIR="/usr/lib/py-relay"
+USER="root"
 ARGS=

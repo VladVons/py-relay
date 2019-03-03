@@ -1,2 +1,1 @@
-import requests
 no such module by default
