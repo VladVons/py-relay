@@ -82,6 +82,12 @@ BuildDeb()
 {
   Log "$0->$FUNCNAME"
 
+  Release="$DirSrc/py-relay.exe"
+  if [ ! -x $Release ]; then
+    echo "Release not compiled $Release"
+    exit
+  fi
+
   echo "remove old $DirDeb"
   rm -R $DirDeb $DirDeb.deb
 
