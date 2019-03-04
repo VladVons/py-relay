@@ -9,9 +9,9 @@
 
 Name="py-relay"
 DirSrc="src"
-DirRelease="__Release"
 #
 Ver="1.0-16"
+#Platform="armhf"
 Platform="amd64"
 DirDeb="deb/${Name}_${Ver}_${Platform}"
 
