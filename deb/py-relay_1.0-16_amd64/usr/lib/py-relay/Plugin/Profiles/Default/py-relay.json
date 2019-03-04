@@ -1,0 +1,71 @@
+{
+    "Gpio":{
+        "Run":{
+            "Init":[
+            ],
+            "Start":[
+                {"Enable":false,   "ClassRef":"GroupOnStart"}
+            ],
+            "Loop":[
+                {"Enable":true,  "ClassRef":"Sleep_1"},
+                {"Enable":false, "ClassRef":"SensorGroupSum"},
+                {"Enable":false, "ClassRef":"SensorGroupAvg"},
+                {"Enable":true,  "ClassRef":"SensorTimeRangeCycle"},
+                {"Enable":false, "ClassRef":"SensorTRD_Humid"},
+                {"Enable":false, "ClassRef":"SensorTRDF_2"},
+                {"Enable":false, "ClassRef":"Random_100_100"},
+                {"Enable":false, "ClassRef":"Random_10_30"},
+                {"Enable":false, "ClassRef":"Sensor_Pi_CPUTemp"},
+                {"Enable":false, "ClassRef":"SensorUptimeSys"}
+            ],
+            "Finish":[
+                {"Enable":false,   "ClassRef":"GroupOnFinish"}
+            ]
+        },
+       "Include":[
+                {"Enable":true, "File":"IncGroup.json"},
+                {"Enable":true, "File":"IncRandom.json"},
+                {"Enable":true, "File":"IncTimer.json"},
+                {"Enable":true, "File":"IncReport.json"},
+                {"Enable":true, "File":"IncRasPi.json"}
+        ],
+        "Action":[
+            {"OnLoop":  {"Enable":false, "ClassRef":"MainLoop"}},
+
+            {"OnValue": {"Enable":true,  "ClassRef":"GroupOnValue"}},
+            {"OnError": {"Enable":true,  "ClassRef":"WriteLogErr"}},
+            {"OnRange": {"Enable":true,  "ClassRef":"WriteLogErr"}},
+            {"OnAvg":   {"Enable":false, "ClassRef":"WriteLogErr"}}
+        ],
+        "Classes":[
+            {
+                "Class":"TDeviceGroup",
+                "Alias":"GroupOnValue",
+                "Checks": [
+                    {"Enable":true,   "Always":"self.SetValue('$WriteConsole')"},
+                    {"Enable":false,  "Always":"self.SetValue('$WriteConsole2')"},
+                    {"Enable":false,  "Always":"self.SetValue('$Grafana')"}
+                ]
+            },
+            {
+                "Class":"TDeviceGroup",
+                "Alias":"GroupOnStart",
+                "Checks": [
+                    {"Enable":false,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
+                ]
+            },
+            {
+                "Class":"TDeviceGroup",
+                "Alias":"GroupOnFinish",
+                "Checks": [
+                    {"Enable":false,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
+                ]
+            },
+            {
+                "Class":"TControlSleep",
+                "Alias":"Sleep_1",
+                "Parameter":{"Time":1}
+            }
+        ]
+    }
+}

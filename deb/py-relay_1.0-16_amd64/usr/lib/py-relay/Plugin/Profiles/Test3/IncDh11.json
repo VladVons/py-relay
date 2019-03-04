@@ -1,0 +1,19 @@
+[
+   {
+        "Class":"TProviderDeviceHivePinThread_DHT22",
+        "Alias":"DH11_Provider",
+        "Parameter":{"Host":"http://dh11.lan", "Pin":14}
+    },
+    {
+        "Class":"TSensorProvider",
+        "Alias":"DH11_Sensor_Temper",
+        "Descr":"Street_ST",
+        "Parameter":{"ClassRef":"DH11_Provider", "Tag":"temperature", "WaitValue":600}
+    },
+    {
+        "Class":"TSensorProvider",
+        "Alias":"DH11_Sensor_Humid",
+        "Descr":"Street_SH",
+        "Parameter":{"ClassRef":"DH11_Provider", "Tag":"humidity", "WaitValue":600}
+    }
+]

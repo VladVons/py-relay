@@ -18,6 +18,7 @@ Log()
   echo "$Msg"
 }
 
+
 Clean()
 {
   echo "delete objects"
@@ -45,6 +46,7 @@ Clean()
   find . -name '*.json' | xargs wc
 }
 
+
 GitAuth()
 {
   Log "$0->$FUNCNAME"
@@ -59,6 +61,7 @@ GitAuth()
   git config --global credential.helper 'cache --timeout=36000'
 }
 
+
 GitCreate()
 {
   Log "$0->$FUNCNAME"
@@ -72,6 +75,7 @@ GitCreate()
 
 }
 
+
 GitClone()
 {
   Log "$0->$FUNCNAME"
@@ -84,10 +88,12 @@ GitClone()
   #https://github.com/VladVons/appman
 }
 
+
 GitFromSrvMissed()
 {
   git ls-files -d | xargs git checkout --
 }
+
 
 GitSyncToServ()
 # sync only changes from disk to server 
@@ -107,6 +113,7 @@ GitSyncToServ()
   git push -u origin master
 }
 
+
 GitFromServ()
 # sync changes from server to disk
 {
@@ -114,6 +121,7 @@ GitFromServ()
 
   git pull
 }
+
 
 GitToServ()
 # sync changes from disk to serv
@@ -127,6 +135,7 @@ GitToServ()
   GitSyncToServ "$aComment"
 }
 
+
 GitReset()
 {
   Log "$0->$FUNCNAME"
@@ -139,9 +148,18 @@ GitReset()
   git push -f origin master
 }
 
-Diff(){
+
+Diff()
+{
   diff -r dir1 dir2 | sed '/Binary\ files\ /d' > diff.txt
 }
+
+
+Help()
+{
+  echo "Unknown option"
+}
+
 
 #GitUpdate
 
@@ -154,5 +172,6 @@ case $1 in
     GitFromServ|f)      GitFromServ "$2" "$3" ;;
     GitFromSrvMissed)   "$1"        "$2" "$3" ;;
     GitClone)           "$1"        "$2" "$3" ;;
+    *)                  Help ;;
 esac
 

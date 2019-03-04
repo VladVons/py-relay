@@ -57,24 +57,15 @@ Release()
 {
   Log "$0->$FUNCNAME"
 
-  mkdir -p $DirRelease
-
   cd $DirSrc
   echo "Building..."
   #nuitka --exe --recurse-all --recurse-not-to=Plugin $Name.py
   #nuitka --exe --recurse-all --recurse-not-to=Plugin --python-version=3.5 relay.py
-  nuitka --exe --recurse-all --recurse-directory --recurse-not-to=Plugin --python-version=2.7 $Name.py
+  #nuitka --exe --recurse-all --recurse-directory --recurse-not-to=Plugin --python-version=2.7 $Name.py
+  nuitka --exe --recurse-all --include-plugin-directory --recurse-not-to=Plugin $Name.py
   cd ..
 
   find $DirSrc/Plugin -name "*.pyc" -type f -delete
-  ls
-  #cp $DirSrc/$Name.{exe,conf} $DirRelease
-  #cp -R $DirSrc/Plugin $DirRelease
-  #cp -R $DirSrc/py-relay.key $DirRelease
-
-  #cp $DirSrc/$Name.{exe,conf} $DirRelease
-  #cp -R $DirSrc/Plugin $DirRelease
-  #cp -R $DirSrc/py-relay.key $DirRelease
 }
 
 
@@ -82,7 +73,7 @@ BuildDeb()
 {
   Log "$0->$FUNCNAME"
 
-  Release="$DirSrc/py-relay.exe"
+  Release="$DirSrc/py-relay.bin"
   if [ ! -x $Release ]; then
     echo "Release not compiled $Release"
     exit
@@ -96,7 +87,7 @@ BuildDeb()
 
   cp -R deb/src/CONTENTS/* $DirDeb
   cp -R deb/src/DEBIAN $DirDeb
-  cp -R $DirSrc/$Name.{exe,conf,key} $DirApp
+  cp -R $DirSrc/$Name.{bin,conf,key} $DirApp
   cp -R $DirSrc/Plugin $DirApp
 
   dpkg-deb --build $DirDeb

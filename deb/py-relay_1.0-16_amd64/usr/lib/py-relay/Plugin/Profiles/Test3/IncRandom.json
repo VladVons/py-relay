@@ -1,0 +1,14 @@
+[
+    {
+        "Class":"TSensorRandom",
+        "Alias":"Random_10_30",
+        "Enable":false,
+        "Descr":"Random",
+        "Parameter":{"Begin":10, "End":30},
+        "Triggers":[
+            {"Enable":false, "Always":"self.SetValue('$WriteConsole', 100)"},
+            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$WriteLog')"},
+            {"Enable":false, "If":"self.Value > 20", "Always":"self.SetIf('$IRelay_2')"}
+        ]
+    }
+]
