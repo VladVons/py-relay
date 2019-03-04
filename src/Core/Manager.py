@@ -252,7 +252,6 @@ class TManager():
             Log.Print(1, 'w', self.__class__.__name__, 'Run()', 'Loop section is empty')
 
     def Stop(self):
-        Log.Print(2, 'i', self.__class__.__name__, 'Stop()')
 
         if (self.InRun):
             self.InRun = False
@@ -308,6 +307,8 @@ class TManager():
                 Log.Print(1, 'w', self.__class__.__name__, 'Load()', 'Alias %s not used' % Alias)
 
     def LoadFile(self, aFile, aSection = 'Gpio'):
+        Log.Print(1, 'i', self.__class__.__name__, 'LoadFile()', 'Dir:%s, File:%s' % (self.LoadConf.Dir, aFile))
+
         self.File = aFile
         Data = self.LoadConf.Conf(aFile)
         self.Load(Data[aSection])

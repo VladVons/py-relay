@@ -1,8 +1,0 @@
-# defaults for /etc/init.d/py-relay
-
-ENABLED=1
-OPTIONS="-p Default"
-SCRYPT="py-relay.exe"
-WORKDIR="/usr/lib/py-relay"
-USER="root"
-ARGS=

@@ -57,10 +57,11 @@ Release()
 {
   Log "$0->$FUNCNAME"
 
+  #apt-get install python-dev 
+
   cd $DirSrc
   echo "Building..."
   #nuitka --exe --recurse-all --recurse-not-to=Plugin $Name.py
-  #nuitka --exe --recurse-all --recurse-not-to=Plugin --python-version=3.5 relay.py
   #nuitka --exe --recurse-all --recurse-directory --recurse-not-to=Plugin --python-version=2.7 $Name.py
   nuitka --exe --recurse-all --include-plugin-directory --recurse-not-to=Plugin $Name.py
   cd ..
