@@ -1,6 +1,7 @@
 *.pyc
 *.log
 *.db
+*.deb
 __pycache__
 __Release
 relay.build
