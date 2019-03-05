@@ -5,7 +5,7 @@
 *.bin
 deb/py-relay_*
 __pycache__
-relay.build
+py-relay.build
 Web
 .idea
 local
