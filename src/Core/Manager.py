@@ -307,7 +307,7 @@ class TManager():
                 Log.Print(1, 'w', self.__class__.__name__, 'Load()', 'Alias %s not used' % Alias)
 
     def LoadFile(self, aFile, aSection = 'Gpio'):
-        Log.Print(1, 'i', self.__class__.__name__, 'LoadFile()', 'Dir:%s, File:%s' % (self.LoadConf.Dir, aFile)) 
+        Log.Print(1, 'i', self.__class__.__name__, 'LoadFile()', '%s%s' % (self.LoadConf.Dir, aFile))
 
         self.File = aFile
         Data = self.LoadConf.Conf(aFile)

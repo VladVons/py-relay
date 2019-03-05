@@ -60,8 +60,6 @@ class TLog():
         #self.Logger.setLevel(logging.INFO)
 
     def SetFile(self, aFile):
-        Result = False
-
         # Format = '[%(asctime)s], %(module)s->%(funcName)s->%(lineno)d,
         # %(levelname)s: %(message)s'
         Format = '[%(asctime)s], %(levelname)s:%(message)s'
@@ -72,10 +70,11 @@ class TLog():
                             datefmt='%Y/%m/%d %H:%M:%S',
                             filename=aFile,
                             filemode='a')
+            print ('%s->SetFile(): %s' % (self.__class__.__name__, aFile))
             Result = True
         except IOError as E:
-            print ('%s->SetLoger Error: %s: %s' % (self.__class__.__name__, E, aFile))
-
+            print ('%s->SetFile() Error: %s: %s' % (self.__class__.__name__, E, aFile))
+            Result = False
         return Result
 
     def SetTail(self, aValue):

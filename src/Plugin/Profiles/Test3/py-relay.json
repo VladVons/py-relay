@@ -21,25 +21,25 @@
 
                 {"Enable":true,  "ClassRef":"SensorUptimeSys"},
                 {"Enable":true,  "ClassRef":"Sensor_Pi_CPUTemp"},
-                {"Enable":true,  "ClassRef":"SensorUps"},
+                {"Enable":false, "ClassRef":"SensorUpsApc"},
 
-                {"Enable":true,  "ClassRef":"DH2_Sensor_Humid"},
-                {"Enable":true,  "ClassRef":"DH2_Sensor_Temper"},
+                {"Enable":false,  "ClassRef":"DH2_Sensor_Humid"},
+                {"Enable":false,  "ClassRef":"DH2_Sensor_Temper"},
 
-                {"Enable":true,  "ClassRef":"DH3_Sensor_Humid"},
-                {"Enable":true,  "ClassRef":"DH3_Sensor_Temper"},
+                {"Enable":false,  "ClassRef":"DH3_Sensor_Humid"},
+                {"Enable":false,  "ClassRef":"DH3_Sensor_Temper"},
 
-                {"Enable":true,  "ClassRef":"DH4_Sensor_Humid"},
-                {"Enable":true,  "ClassRef":"DH4_Sensor_Temper"},
+                {"Enable":false,  "ClassRef":"DH4_Sensor_Humid"},
+                {"Enable":false,  "ClassRef":"DH4_Sensor_Temper"},
 
-                {"Enable":true,  "ClassRef":"DH5_Sensor_Humid"},
-                {"Enable":true,  "ClassRef":"DH5_Sensor_Temper"},
+                {"Enable":false,  "ClassRef":"DH5_Sensor_Humid"},
+                {"Enable":false,  "ClassRef":"DH5_Sensor_Temper"},
 
-                {"Enable":true,  "ClassRef":"DH7_Sensor_Humid"},
-                {"Enable":true,  "ClassRef":"DH7_Sensor_Temper"},
+                {"Enable":false,  "ClassRef":"DH7_Sensor_Humid"},
+                {"Enable":false,  "ClassRef":"DH7_Sensor_Temper"},
 
-                {"Enable":true,  "ClassRef":"DH11_Sensor_Humid"},
-                {"Enable":true,  "ClassRef":"DH11_Sensor_Temper"}
+                {"Enable":false,  "ClassRef":"DH11_Sensor_Humid"},
+                {"Enable":false,  "ClassRef":"DH11_Sensor_Temper"}
             ],
             "Finish":[
                 {"Enable":false,  "ClassRef":"GroupOnFinish"},

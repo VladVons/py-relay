@@ -22,8 +22,8 @@ Start()
   #ForceLog
   #Emulator
 
-  python py-relay.py
-  #python2 py-relay.py -p Test1
+  #python py-relay.py
+  python2 py-relay.py -p Test3
 }
 
 

@@ -43,7 +43,9 @@ Relay()
   apt-get install python-prctl
   apt-get install build-essential libcap-dev
   apt-get install python-mysqldb
+  
   apt-get install python-smbus
+  adduser linux i2c # allow non root user access
 
   pip install --upgrade pip
   pip install setuptools

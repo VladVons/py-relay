@@ -5,7 +5,7 @@
         "Checks": [
             {"Enable":true,  "Always":"self.SetValue('$WriteConsole')"},
             {"Enable":false, "Always":"self.SetValue('$WriteLog')"},
-            {"Enable":true,  "Always":"self.SetValue('$Grafana')"}
+            {"Enable":false, "Always":"self.SetValue('$Grafana')"}
         ]
     },
 

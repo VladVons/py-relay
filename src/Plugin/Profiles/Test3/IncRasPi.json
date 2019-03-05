@@ -15,8 +15,8 @@
         "Alias":"Sensor_Pi_CPUTemp"
     },
     {
-        "Class":"TSensorUps",
-        "Alias":"SensorUps",
+        "Class":"TSensorUpsApc",
+        "Alias":"SensorUpsApc",
         "Parameter":{"Host":"localhost", "WaitValue":600},
         "Triggers":[
             {"Enable":true, "If":"self.Value < 180 or self.Value > 260", "Then":"self.SetValue('$Telegram')"}

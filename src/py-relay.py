@@ -45,15 +45,20 @@ class TMain():
 
         self.TimeStart = int(time.time())
         self.AppName   = FS.GetCoreName(__file__)
+
+        self.Protect   = TProtect()
+        self.Options   = self.ParseOptions()
         self.Init()
 
     def Init(self):
-        if (not Log.SetFile('/var/log/%s/%s.log' % (self.AppName, self.AppName)), True):
+        if (not Log.SetFile(self.Options.FileLog)):
             Log.SetFile('%s.log' % self.AppName)
         Log.SetConsole()
 
-        self.Protect = TProtect()
-        self.Options = self.ParseOptions()
+        if (self.Options.Options):
+            print(self.Options.GetVars())
+            sys.exit(1)
+
         if (self.Options.Serial):
             print('Serial', self.Protect.GetSerial())
             sys.exit(1)
@@ -98,6 +103,7 @@ class TMain():
         Parser.add_option('-d', '--Directory', help = 'root directory')
         Parser.add_option('-s', '--Serial',    help = 'get serial key', action = "store_true")
         Parser.add_option('-v', '--Verbose',   help = 'verbose level')
+        Parser.add_option('-o', '--Options',   help = 'Options list')
         CmdParam, Args = Parser.parse_args()
 
         Pattern = {
@@ -112,7 +118,7 @@ class TMain():
             'FileConf':      self.AppName + '.json',
             'FileMacros':    self.AppName + '.conf',
             'FileDb':        self.AppName + '.db',
-            'FileLog':       self.AppName + '.log',
+            'FileLog':       '/var/log/%s/%s.log' % (self.AppName, self.AppName),
             'PkgPath':       '/usr/lib/python2.7/dist-packages'
         }
 
