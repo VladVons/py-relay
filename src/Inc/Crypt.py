@@ -9,7 +9,7 @@ Description:
 try:
     from Crypto.Cipher import AES
 except Exception as E:
-    print(__file__, E, 'pip install pycrypto')
+    print(__file__, E, 'pip install pycrypto | apt install python-crypto')
 
 import base64
 

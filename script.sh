@@ -80,9 +80,6 @@ BuildDeb()
     exit
   fi
 
-  echo "remove old $DirDeb"
-  rm -R $DirDeb $DirDeb.deb
-
   DirApp="$DirDeb/usr/lib/$Name"
   mkdir -p $DirApp
 
@@ -91,7 +88,9 @@ BuildDeb()
   cp -R $DirSrc/$Name.{bin,conf,key} $DirApp
   cp -R $DirSrc/Plugin $DirApp
 
+  rm $DirDeb.deb
   dpkg-deb --build $DirDeb
+  rm -R $DirDeb
 }
 
 
@@ -104,10 +103,14 @@ Install_pi_img()
   wget https://downloads.raspberrypi.org/raspbian_lite_latest -O raspbian-jessie-lite.zip
   unzip raspbian-jessie-lite.zip
 
+  Dir="/mnt/hdd/data1/share/public/image/raspberry/img"
+  Img="2018-11-13-raspbian-stretch-lite.img"
+
   #--- List usb disks
   df -h
-  echo "in most cases USB stick is /dev/sdb. Not a dev/sdb1"
-  echo "dd bs=4M conv=fsync if=2017-09-07-raspbian-stretch-lite.img of=/dev/sdX"
+  echo "in most cases USB stick is /dev/sdb (not a dev/sdb1)"
+  echo "do not use buffer bs=4M. Write direct. More stableX"
+  echo "dd conv=fsync if=$Dir/$Img of=/dev/sdX"
   sync
 
   #--- Boot Raspberry

@@ -2,9 +2,9 @@
 *.log
 *.db
 *.deb
+*.bin
 deb/py-relay_*
 __pycache__
-__Release
 relay.build
 Web
 .idea

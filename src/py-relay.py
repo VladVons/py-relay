@@ -25,8 +25,6 @@ import optparse
 import random
 import traceback
 
-sys.path.append('/usr/lib/python2.7/dist-packages')
-
 #
 #sys.path.insert(0, './Plugin/Providers')
 #sys.path.insert(0, 'Plugin/Controls')
@@ -47,14 +45,16 @@ class TMain():
 
         self.TimeStart = int(time.time())
         self.AppName   = FS.GetCoreName(__file__)
+        self.Init()
 
+    def Init(self):
         if (not Log.SetFile('/var/log/%s/%s.log' % (self.AppName, self.AppName)), True):
             Log.SetFile('%s.log' % self.AppName)
         Log.SetConsole()
 
         self.Protect = TProtect()
-        self.Options = self.GetCommandLine()
-        if (self.Options.serial):
+        self.Options = self.ParseOptions()
+        if (self.Options.Serial):
             print('Serial', self.Protect.GetSerial())
             sys.exit(1)
 
@@ -69,47 +69,64 @@ class TMain():
             os.makedirs(ProfileDir)
         #Log.Tail  = ProfileDir
 
-        self.Param = TDictParam()
-        Pattern = { 
-            'CheckUpdate':   False,
-            'DebugLevel':    1,
-            'ExceptionHook': False,
-            'FileConf':      self.AppName + '.json',
-            'FileMacros':    self.AppName + '.conf',
-            'FileDb':        self.AppName + '.db',
-            'FileLog':       self.AppName + '.log'
-        }
+        Log.LogLevel = self.Options.Verbose
 
-        ConfFile = self.AppName + '.conf'
-        if (FS.FileExists(ConfFile)):
-            self.Param.LoadFile(ConfFile, Pattern)
-        else:
-            self.Param.AddDefPattern(Pattern)
-
-        Log.LogLevel = self.Param.DebugLevel
-
-        DB = self.GetProfilePath(self.Param.FileDb)
+        DB = self.GetProfilePath(self.Options.FileDb)
         self.DbDict = TDbDictSQLite()
         self.DbDict.SetSource(DB)
         self.DbDict.Connect()
         self.DbDict.CreateTable()
 
-        if (self.Param.ExceptionHook):
+        if (self.Options.ExceptionHook):
             sys.excepthook = self.GlobalUnhandledExceptionHook
 
         #signal.signal(signal.SIGINT, self.KeyboardSignalHook)
 
-    def GetCommandLine(self):
+        # Add native python packages path
+        if (self.Options.PkgPath):
+            for Item in self.Options.PkgPath.split(','):
+                Dir = Item.strip()
+                if (os.path.isdir(Dir)):
+                    sys.path.append(Dir)
+                else:
+                    Log.Print(1, 'w', self.__class__.__name__, 'Init()', 'PkgPath not found %s' % Dir)
+
+    def ParseOptions(self):
         Usage = 'usage: %prog [options] arg'
         Parser = optparse.OptionParser(usage = Usage)
-        Parser.add_option('-p', '--profile',   default = 'Default',         help = 'profile directory')
-        Parser.add_option('-d', '--directory', default = 'Plugin/Profiles', help = 'root directory')
-        Parser.add_option('-s', '--serial',    default = False,             help = 'get serial key', action = "store_true")
-        Result, Args = Parser.parse_args()
+        Parser.add_option('-p', '--Profile',   help = 'profile directory')
+        Parser.add_option('-d', '--Directory', help = 'root directory')
+        Parser.add_option('-s', '--Serial',    help = 'get serial key', action = "store_true")
+        Parser.add_option('-v', '--Verbose',   help = 'verbose level')
+        CmdParam, Args = Parser.parse_args()
+
+        Pattern = {
+            # command line
+            'Verbose':       1,
+            'Profile':       'Default',
+            'Directory':     'Plugin/Profiles',
+            'Serial':        False,
+            # misc conf
+            'ExceptionHook': False,
+            'CheckUpdate':   False,
+            'FileConf':      self.AppName + '.json',
+            'FileMacros':    self.AppName + '.conf',
+            'FileDb':        self.AppName + '.db',
+            'FileLog':       self.AppName + '.log',
+            'PkgPath':       '/usr/lib/python2.7/dist-packages'
+        }
+
+        Result = TDictParam()
+        ConfFile = self.AppName + '.conf'
+        if (FS.FileExists(ConfFile)):
+            Result.LoadFile(ConfFile, Pattern)
+        else:
+            Result.AddDefPattern(Pattern)
+        Result.Load(vars(CmdParam), False)
         return Result
 
     def GetProfilePath(self, aName):
-        return self.Options.directory + '/' + self.Options.profile + '/' + aName
+        return self.Options.Directory + '/' + self.Options.Profile + '/' + aName
 
     def GlobalUnhandledExceptionHook(self, aType, aValue, aTraceback):
         Msg = traceback.format_exception(aType, aValue, aTraceback)
@@ -175,15 +192,15 @@ class TMain():
         return aObj
 
     def Run(self):
-        if (self.Param.CheckUpdate):
+        if (self.Options.CheckUpdate):
             self.CheckUpdate()
 
         self.IsRun = True
         self.Manager = TManager(self, self.GetProfilePath(''))
         self.Manager.OnClass = self._CallBack_OnClass
         self.Manager.SetStartTimeVirt(self.GetUptime())
-        self.Manager.LoadConf.Macros(self.Param.FileMacros)
-        self.Manager.LoadFile(self.Param.FileConf)
+        self.Manager.LoadConf.Macros(self.Options.FileMacros)
+        self.Manager.LoadFile(self.Options.FileConf)
         self.Manager.Run()
 
     '''

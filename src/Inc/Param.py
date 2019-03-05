@@ -146,9 +146,11 @@ class TDictParam():
         Log.Print(3, 'i', self.__class__.__name__, 'SetAttr()', 'Key: %s, Value: %s' % (aKey, aValue))
         setattr(self, aKey, aValue)
 
-    def Load(self, aParam):
+    def Load(self, aParam, aAll = True):
         for Key in aParam:
-            self.SetAttr(Key, aParam.get(Key))
+            Value = aParam.get(Key)
+            if (aAll or Value != None):
+                self.SetAttr(Key, Value)
         self.Loaded = True
 
     def LoadPattern(self, aParam, aPattern = {}):

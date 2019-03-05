@@ -4,7 +4,7 @@ Section: IoT
 Priority: optional
 #Architecture: amd64
 Architecture: armhf
-Depends: python-prctl, python-mysqldb, python-smbus
+Depends: libpython2.7, python-prctl, python-mysqldb, python-smbus, python-crypto
 Suggests: python-pip
 Recommends: monit
 Maintainer: Vladimir Vons <VladVons@gmail.com>
