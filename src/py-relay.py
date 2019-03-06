@@ -55,7 +55,7 @@ class TMain():
             Log.SetFile('%s.log' % self.AppName)
         Log.SetConsole()
 
-        if (self.Options.Options):
+        if (self.Options.GetAttr('Options')):
             print(self.Options.GetVars())
             sys.exit(1)
 

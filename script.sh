@@ -63,7 +63,8 @@ Release()
   echo "Building..."
   #nuitka --exe --recurse-all --recurse-not-to=Plugin $Name.py
   #nuitka --exe --recurse-all --recurse-directory --recurse-not-to=Plugin --python-version=2.7 $Name.py
-  nuitka --exe --recurse-all --include-plugin-directory --recurse-not-to=Plugin $Name.py
+  #nuitka --exe --recurse-all --include-plugin-directory --recurse-not-to=Plugin $Name.py
+  nuitka --exe --recurse-all --include-plugin-directory  $Name.py
   cd ..
 
   find $DirSrc/Plugin -name "*.pyc" -type f -delete
