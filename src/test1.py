@@ -184,7 +184,18 @@ def TimerRange():
 #print(Data)
 
 
-from Plugin.Providers.Telegram import TProviderTelegram
-Telegram = TProviderTelegram('482131719:AAHRZnIq-RsfNyF2LvaSIm028vGHgSv60dI', ['423099610'])
-Telegram.Write('Hello-21')
+#from Plugin.Providers.Telegram import TProviderTelegram
+#Telegram = TProviderTelegram('482131719:AAHRZnIq-RsfNyF2LvaSIm028vGHgSv60dI', ['423099610'])
+#Telegram.Write('Hello-21')
 
+
+import site
+#print(site.getsitepackages())
+
+import sys
+#print(sys.path)
+print [f for f in sys.path if f.endswith('packages')]
+
+for Item in sys.path:
+    if (Item.endswith('packages')):
+        print(Item)

@@ -119,7 +119,7 @@ class TMain():
             'FileMacros':    self.AppName + '.conf',
             'FileDb':        self.AppName + '.db',
             'FileLog':       '/var/log/%s/%s.log' % (self.AppName, self.AppName),
-            'PkgPath':       '/usr/lib/python2.7/dist-packages'
+            'PkgPath':       ''
         }
 
         Result = TDictParam()
