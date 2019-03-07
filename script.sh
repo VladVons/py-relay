@@ -8,7 +8,8 @@
 
 
 Name="py-relay"
-DirSrc="src"
+#DirSrc="src"
+DirSrc="/usr/lib/py-relay"
 #
 Ver="1.0-16"
 #Platform="armhf"
@@ -60,7 +61,7 @@ Release()
   #apt-get install python-dev 
 
   cd $DirSrc
-  echo "Building..."
+  echo "Building in $(pwd) ..."
   nuitka --follow-imports --remove-output $Name.py
   cd ..
 
