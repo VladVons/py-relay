@@ -121,22 +121,20 @@ Obj = TProviderI2CPioOut(Bus, Address, Pin)
 Obj.Set(None, Value)
 """
 class TProviderI2C_Relay_8574(TProviderI2C):
-    def __init__(self, aBus, aAddress, aCommand):
+    def __init__(self, aBus, aAddress, aCommand, aMirror = False):
         TProviderI2C.__init__(self, aBus, aAddress, aCommand)
-        self.Command = aCommand
-        #self.Bits    = 8
-
-        #if ((aCommand == 0) or (aCommand > self.Bits)):
-        #    Msg = Log.Print(1, 'i', self.__class__.__name__, '__init__()', 'Command %s out of Bits %s' % (aCommand, self.Bits))
-        #    raise Exception(Msg)
+        self.Mirror = aMirror
 
     def Set(self, aCaller, aValue):
         PrevValue = self.Get()
         Value     = Num.SetBit(PrevValue, self.Command, bool(aValue))
-        #Value     = Num.SetBit(PrevValue, self.Bits - self.Command, bool(aValue))
+        if (self.Mirror):
+            Value = Num.MirrorBit(Value)
         #print('--1', self.Address, self.Command, "{0:b}".format(PrevValue), "{0:b}".format(Value), aValue)
         return self.WriteTry(Value)
 
     def Get(self):
-        return self.ReadByte()
-
+        Result = self.ReadByte()
+        if (self.Mirror):
+            Result = Num.MirrorBit(Result)
+        return Result

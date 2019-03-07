@@ -20,6 +20,11 @@ def SetBit(aValue, aIdx, aSet = True):
         aValue &= ~Mask
     return aValue
 
+def MirrorBit(aValue, aWidth = 8):
+    StrBin  = '{:0{width}b}'.format(aValue, width = aWidth)
+    StrMir  = StrBin[::-1]
+    return int(StrMir, 2)
+
 def RoundPart(aValue, aPart = 0.25):
     return round(math.floor(float(aValue) / aPart) * aPart, 3)
 

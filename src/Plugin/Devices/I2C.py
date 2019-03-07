@@ -44,9 +44,9 @@ class TRelayI2C_Relay_8574(TRelay):
     def __init__(self, aParent):
         TRelay.__init__(self, aParent)
 
-        Pattern = {'Bus': 1, 'Address': TDictParam.Required, 'Bits': 8, 'Command': TDictParam.Required}
+        Pattern = {'Bus': 1, 'Address': TDictParam.Required, 'Command': TDictParam.Required, 'Mirror':False}
         self.Param.AddDefPattern(Pattern)
 
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
-        self.Provider = TProviderI2C_Relay_8574(self.Param.Bus, self.Param.Address, self.Param.Command)
+        self.Provider = TProviderI2C_Relay_8574(self.Param.Bus, self.Param.Address, self.Param.Command, self.Param.Mirror)

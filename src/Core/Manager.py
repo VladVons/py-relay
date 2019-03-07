@@ -6,6 +6,7 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
+import sys
 import time
 import json
 #
@@ -202,7 +203,7 @@ class TManager():
                     TClass = self.Import.GetInstance(ClassName)
                 except Exception as E:
                     Log.Print(1, 'x', self.__class__.__name__, '_LoadClass()', 'Can`t load class %s' % ClassName)
-                    exit()
+                    sys.exit(1)
                     #raise
 
             Result = TClass(aParent)

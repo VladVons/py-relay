@@ -84,22 +84,18 @@ def LCD(aText = 'Hello world !'):
     Obj.PrintLn(aText)
 
 
-def Relay_One():
+def Relay_One(aBus, aAddress, aPin):
     import time
     from Plugin.Providers.I2C import TProviderI2C_Relay_8574
-
-    Bus     = 1
-    Address = 0x25
-    Pin     = 0
 
     Cnt = 0
     while True:
         Cnt += 1 
         Value = bool(Cnt % 2)
-        print('Pin:',  Pin, 'Value:', Value)
-        Obj = TProviderI2C_Relay_8574(Bus, Address, Pin)
+        print('Pin:',  aPin, 'Value:', Value)
+        Obj = TProviderI2C_Relay_8574(aBus, aAddress, aPin, True)
         Obj.Set(None, Value)
-        time.sleep(5)
+        time.sleep(3)
 
 
 def Relay_LCD():
@@ -113,7 +109,7 @@ def Relay_LCD():
     Address = 0x25
 
     # Set all to ON
-    Obj = TProviderI2C_Relay_8574(Bus, Address, 0)
+    Obj = TProviderI2C_Relay_8574(Bus, Address, 0, True)
     Obj.Write(0)
 
     Cnt = 0
@@ -165,7 +161,7 @@ def TimerRange():
         time.sleep(1)
 
 
-#Relay_One()
+Relay_One(1, 0x25, 7)
 #Relay_LCD()
 #Telegram()
 #TimerRange()
@@ -189,13 +185,8 @@ def TimerRange():
 #Telegram.Write('Hello-21')
 
 
-import site
-#print(site.getsitepackages())
+#for Item in sys.path:
+#    if (Item.endswith('packages')):
+#        print(Item)
 
-import sys
-#print(sys.path)
-print [f for f in sys.path if f.endswith('packages')]
 
-for Item in sys.path:
-    if (Item.endswith('packages')):
-        print(Item)

@@ -62,7 +62,8 @@ Release()
 
   cd $DirSrc
   echo "Building in $(pwd) ..."
-  nuitka --follow-imports --remove-output $Name.py
+  #nuitka --follow-imports --remove-output $Name.py
+  nuitka --follow-imports --remove-output --standalone $Name.py
   cd ..
 
   find $DirSrc/Plugin -name "*.pyc" -type f -delete
