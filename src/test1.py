@@ -161,7 +161,7 @@ def TimerRange():
         time.sleep(1)
 
 
-Relay_One(1, 0x25, 7)
+#Relay_One(1, 0x25, 7)
 #Relay_LCD()
 #Telegram()
 #TimerRange()
@@ -189,4 +189,4 @@ Relay_One(1, 0x25, 7)
 #    if (Item.endswith('packages')):
 #        print(Item)
 
-
+print("helo")

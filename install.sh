@@ -2,8 +2,27 @@
 # Created: 28.09.2016
 # Vladimir Vons, VladVons@gmail.com
 
-
 Install()
+{
+  apt install i2c-tools
+  apt install git-core
+  apt install rsync
+  apt install mailutils
+
+  apt install libpython2.7 
+  apt install python-prctl
+  apt install python-smbus
+  apt install python-mysqldb
+  apt install python-crypto
+  apt install python-ephem
+
+  apt install python-pip --no-install-recommends
+  pip install wheel
+  pip install setuptools
+}
+
+
+Install_1()
 {
   #pip search Flask
 
