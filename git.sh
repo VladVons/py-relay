@@ -9,7 +9,6 @@ Mail="vladvons@gmail.com"
 #Branch="master"
 Branch="v2"
 #
-Url="https://github.com/vladvons/py-relay.git"
 Url="https://github.com/$User/$Name.git"
 
 
@@ -84,7 +83,7 @@ GitClone()
   Log "$0->$FUNCNAME"
 
   # restore clone copy fromserver to disk 
-  git clone $Url
+  git clone --single-branch -b $Branch $Url
   GitAuth
 
   #web admin access here
@@ -136,6 +135,16 @@ GitToServ()
   # add all new files
   git add -A -v
   GitSyncToServ "$aComment"
+}
+
+
+GitNewBranch()
+# sync changes from disk to serv
+{
+  Log "$0->$FUNCNAME"
+
+  git checkout -b $Branch
+  #GitSyncToServ
 }
 
 
