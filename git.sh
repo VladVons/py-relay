@@ -122,7 +122,7 @@ GitFromServ()
 {
   Log "$0->$FUNCNAME"
 
-  git pull
+  git pull origin $Branch
 }
 
 
