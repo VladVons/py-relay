@@ -23,4 +23,4 @@ class TSensorProvider(TSensor):
         self.Avg.SetSize(self.Param.Avg)
 
         self.Key = self.Param.Tag
-        self.Provider = self.Manager.GetClass(self.Param.ClassRef)
+        self.Provider = self.Manager.SecClass.GetClass(self.Param.ClassRef)

@@ -153,6 +153,13 @@ class TDictParam():
                 self.SetAttr(Key, Value)
         self.Loaded = True
 
+    def CheckPattern(self, aValue1, aValue2):
+        Diff = set(aValue1.keys()) - set(aValue2.keys())
+        if (Diff):
+            print(aValue2)
+            Msg = Log.Print(1, 'e', self.__class__.__name__, 'CheckPattern()', 'Unknown key %s in %s' % (str(Diff), Obj.GetTreeAsStr(aValue1, 2)))
+            raise Exception(Msg)
+
     def LoadPattern(self, aParam, aPattern = {}):
         #Pattern = {**self.Pattern, **aPattern} # need 3.0
         #Pattern = dict(self.Pattern.items() + aPattern.items()) #only 2.7
@@ -161,13 +168,7 @@ class TDictParam():
             Pattern.update(self.DefPattern)
         if (aPattern):
             Pattern.update(aPattern)
-
-        Diff = set(aParam.keys()) - set(Pattern.keys())
-        #print('---1', 'Diff', Diff, aParam.keys(), Pattern.keys())
-        if (Diff):
-            print(Pattern)
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'LoadPattern()', 'Unknown key %s in %s' % (str(Diff), Obj.GetTreeAsStr(aParam, 2)))
-            raise Exception(Msg)
+        self.CheckPattern(aParam, Pattern)
 
         for Key in Pattern:
             Default = Pattern.get(Key)

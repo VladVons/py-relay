@@ -94,7 +94,7 @@ class TExecApi(TExecParse):
         time.sleep(aValue)
 
     def Class(self, aAlias):
-        Class = self.Parent.Manager.GetClass(aAlias[1:])
+        Class = self.Parent.Manager.SecClass.GetClass(aAlias[1:])
         #print('---', aAlias, Class.Parent.Value)
         if (not Class):
             Msg = Log.Print(1, 'x', self.__class__.__name__, 'Alias()', 'Alias not found %s' % aAlias)

@@ -41,7 +41,13 @@ class TControlGrafana(TControl):
         TControl.__init__(self, aParent)
 
         Pattern = {
-            'Host': TDictParam.Required, 'User': TDictParam.Required, 'Password': TDictParam.Required, 'DB': TDictParam.Required, 'Table': TDictParam.Required, 'Prefix': 1,
+            'Host': TDictParam.Required, 
+            'User': TDictParam.Required, 
+            'Password': TDictParam.Required, 
+            'DB': TDictParam.Required, 
+            'Table': TDictParam.Required, 
+            'Prefix': 1,
+
             'Refresh': 60*3, 'Diff': 0.025
         }
         self.Param.AddDefPattern(Pattern)

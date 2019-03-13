@@ -8,6 +8,10 @@ Description:
 Help:
 https://www.codementor.io/garethdwyer/building-a-telegram-bot-using-python-part-1-goi5fncay
 https://legacy.gitbook.com/book/groosha/telegram-bot-lessons/details
+
+/newbot py-relay
+user:PyRelayBot
+https://api.telegram.org/bot<YourToken>/getUpdates
 '''
 
 import json 

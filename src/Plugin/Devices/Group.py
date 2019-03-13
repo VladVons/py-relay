@@ -37,7 +37,7 @@ class TSensorGroup(TSensor):
 
     def GetItemClass(self, aItem):
         Alias = aItem.get('Alias')[0]
-        return self.Manager.GetClass(Alias)
+        return self.Manager.SecClass.GetClass(Alias)
 
     def GetSum(self):
         Result = 0
@@ -63,7 +63,7 @@ class TSensorGroupAvg(TSensorGroup):
         if (self.Param.Diff != -1):
             for Item in self.GetItems():
                 Alias = Item.get('Alias')[0]
-                Class = self.Manager.GetClass(Alias)
+                Class = self.Manager.SecClass.GetClass(Alias)
                 Diff = round(Result / Class.Value, 2)
                 if (Diff > self.Param.Diff):
                     Log.Print(1, 'w', self.__class__.__name__, '_Get()', 'Too much diff %s. Alias %s in %s' % (Diff, self.Alias, Class.Alias))

@@ -8,6 +8,8 @@ Install()
   apt install git-core
   apt install rsync
   apt install mailutils
+  apt install bc
+  apt install lsof
 
   apt install libpython2.7 
   apt install python-prctl

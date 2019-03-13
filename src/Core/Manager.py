@@ -6,6 +6,7 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
+
 import sys
 import time
 import json
@@ -33,7 +34,7 @@ class TLoadConf():
         FilePath = self.Path(aFile)
         Result = FS.LoadFromFileToStr(FilePath)
         if (not Result):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'LoadFile()', 'Cant load file %s' % (FilePath))
+            Msg = Log.Print(1, 'e', self.__class__.__name__, 'File()', 'Cant load file %s' % (FilePath))
             raise Exception(Msg)
         return Result
 
@@ -60,167 +61,61 @@ class TLoadConf():
         return Result
 
 
-class TManager():
-    def __init__(self, aParent, aDir):
-        self.Parent    = aParent
-
-        self.OnClass   = None
-        self.MaxDepth  = 10
-        self.InRun     = False
-        self.RunKeys   = ['Init', 'Start', 'Loop', 'Finish']
-        self.Actions   = {}
-
-        self.Import = TDynImport()
-        self.Import.ParseDir('Plugin/Devices')
-
-        self.LoadConf  = TLoadConf(aDir)
-
-        self.StartTimeVirt = time.time()
-        self.StartTimeReal = time.time()
-        self.SetStartTimeVirt(time.time())
-
-        self.Clear()
-
-        self.DictReplace = TDictReplace()
-        self.DictReplace.OnParse = self._CallBack_DictReplace
- 
-    def SetStartTimeVirt(self, aValue):
-        self.StartTimeVirt = int(aValue)
-
-    def _CallBack_DictReplace(self, aParent, aName):
-        Path   = aParent.CurField + "/" + aName
-        Result = self.GetField(Path)
-        return Result
+class TSec():
+    def __init__(self, aParent):
+        self.Parent = aParent
+        self.Data   = {}
 
     def Clear(self):
-        self.Obj  = {}
-        self.Runs = {}
+        self.Data.clear()
 
-    def CheckKey(self, aList1, aList2):
+    @staticmethod
+    def CheckKey(aList1, aList2):
         Diff = set(aList1) - (set(aList2))
         if (Diff):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'CheckKey()', 'Unknown key %s in %s' % (str(Diff), aList1))
+            Msg = Log.Print(1, 'e', 'TSec', 'CheckKey()', 'Unknown key %s in %s' % (str(Diff), aList1))
             raise ValueError(Msg)
 
-    def GetSection(self, aAlias):
-        for Item in self.Data:
-            Alias = Item.get('Alias')
-            if (aAlias == Alias):
-                return Item
-        return None
-
-    def AddAction(self, aAction, aDict):
-        ActionKeys = ['OnError', 'OnValue', 'OnRange', 'OnLoop', 'OnAvg']
-        # self.CheckKey(Action.keys(), self.ActionKeys)
-        for Item in aAction:
-            for Key in ActionKeys:
-                Data = Item.get(Key)
-                if (Data):
-                    Class = self._LoadClass(Data, None, self.MaxDepth)
-                    if (Class):
-                        aDict[Key] = Class
-
-    def AddRuns(self, aData, aKey):
-        Class = self._LoadClass(aData, None, self.MaxDepth)
-        if (Class):
-            if (not aKey in self.Runs):
-                self.Runs[aKey] = []
-            self.Runs[aKey].append(Class)
-
-    def GetClass(self, aAlias):
-        return self.Obj.get(aAlias)
-
-    def _AddClass(self, aClass):
-        # print("aAlias", aAlias, "aClass", aClass)
-        if (self.GetClass(aClass.Alias)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, '_AddClass()', 'Alias already exists %s' % aClass.Alias)
-            raise Exception(Msg)
-
-        if (self.OnClass):
-            aClass = self.OnClass(aClass)
-
-        if (aClass):
-            self.Obj[aClass.Alias] = aClass
-
-        return aClass
-
-    def _LoadClass(self, aData, aParent, aDepth):
-        Result = None
-
-        if (aDepth < 0):
-            Log.Print(1, 'i', self.__class__.__name__, '_LoadClass()', 'Max depth recursion reached %s' % self.MaxDepth)
-            return Result
-
-        if (aParent):
-            ParentInfo = aParent.Alias   
-        else:
-            ParentInfo = ''
-
-        Enable   = aData.get('Enable', True)
-        ClassRef = aData.get('ClassRef')
-        if (ClassRef):
-            if (not Enable):
-                return None
-
-            if (aParent and (aParent.Alias == ClassRef)):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'Cross link detected %s' % ClassRef)
-                raise Exception(Msg)
-
-            Result = self.GetClass(ClassRef)
-            if (not Result):
-                Data = self.GetSection(ClassRef)
-                if (Data):
-                    Result = self._LoadClass(Data, aParent, aDepth - 1)
-                else:
-                    Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'ClassRef `%s` not found in %s' % (ClassRef, ParentInfo))
-                    raise Exception(Msg)
-        # normalclass
-        else:
-            Alias = aData.get('Alias')
-            if (not Alias):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'Alias is empty in Class %s' % ClassName)
-                raise Exception(Msg)
-
-            if (not Enable):
-                if (aParent):
-                    Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'Alias %s disabled but used by %s' % (Alias, ParentInfo))
-                    raise Exception(Msg)
-                return None
-
-            ClassName = aData.get('Class')
-            if (not ClassName):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, '_LoadClass()', 'Keyword `Class` is empty')
-                raise Exception(Msg)
+    def Load(self, aData):
+        Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Not implemented')
+        raise NotImplementedError(Msg)
 
 
-            ModuleName = aData.get('Module')
-            if (ModuleName):
-                Module = __import__(ModuleName)
-                TClass = getattr(Module, ClassName)
+class TSecInclude(TSec):
+    def Add(self, aData):
+        for Key in aData.keys():
+            if (self.Data.has_key(Key)):
+                for Item in aData[Key]:
+                    self.Data[Key].append(Item)
             else:
-                try:
-                    #TClass = globals()[ClassName]
-                    TClass = self.Import.GetInstance(ClassName)
-                except Exception as E:
-                    Log.Print(1, 'x', self.__class__.__name__, '_LoadClass()', 'Can`t load class %s' % ClassName)
-                    sys.exit(1)
-                    #raise
+                self.Data.update(aData)
 
-            Result = TClass(aParent)
-            Result.Alias   = Alias
-            Result.Descr   = aData.get('Descr')
-            Result.Manager = self
-            Result = self._AddClass(Result)
-            # print('->_CreateClass', 'Alias', Result.Alias, 'Class', aClassName)
+    def Load(self, aData):
+        for Item in aData:
+            self.CheckKey(Item.keys(), ['Enable', 'File'])
+            if (Item.get('Enable', True)):
+                FileName = Item.get('File')
+                Data = self.Parent.LoadConf.Conf(FileName)
+                self.Add(Data)
 
-            if (Result):
-                for Key in aData.keys():
-                    if (Key not in ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment']):
-                        Result.ExtParam(Key, aData.get(Key), {'Depth': aDepth, 'Parent': self})
 
-                Result.DoStart()
+class TSecRun(TSec):
+    def Add(self, aData, aKey):
+        Class = self.Parent.SecClass.Parse(aData, None)
+        if (Class):
+            if (not aKey in self.Data):
+                self.Data[aKey] = []
+            self.Data[aKey].append(Class)
 
-        return Result
+    def Load(self, aData):
+        Keys  = ['Init', 'Start', 'Loop', 'Finish']
+        self.CheckKey(aData.keys(), Keys)
+
+        for Key in Keys:
+            Data = aData.get(Key)
+            if (Data):
+                for Item in aData.get(Key):
+                    self.Add(Item, Key)
 
     def PostAll(self, aClass):
         if (aClass):
@@ -233,14 +128,14 @@ class TManager():
         Obj.Dump(Version())
         print('')
 
-        Items = self.Runs.get('Start')
+        Items = self.Data.get('Start')
         self.PostAll(Items)
 
-        Items = self.Runs.get('Loop')
+        Items = self.Data.get('Loop')
         if (Items):
             self.InRun = True
             try:
-                OnLoop = self.Actions.get('OnLoop')
+                OnLoop = self.Parent.SecAction.Data.get('OnLoop')
                 if (OnLoop):
                     OnLoop.Post(Items, 0, None)
                 else:
@@ -253,66 +148,223 @@ class TManager():
             Log.Print(1, 'w', self.__class__.__name__, 'Run()', 'Loop section is empty')
 
     def Stop(self):
-
         if (self.InRun):
             self.InRun = False
 
-            Items = self.Runs.get('Finish')
+            Items = self.Data.get('Finish')
             self.PostAll(Items)
 
-            for Item in self.Obj:
-                Class = self.Obj.get(Item)
+            Obj = self.Parent.SecClass.Data
+            for Item in Obj:
+                Class = Obj.get(Item)
                 Class.DoFinish()
 
+
+class TSecAction(TSec):
+    def Load(self, aData):
+        Keys = ['OnError', 'OnValue', 'OnRange', 'OnLoop', 'OnAvg']
+        for Item in aData:
+            self.CheckKey(Item.keys(), Keys)
+            for Key in Keys:
+                Data = Item.get(Key)
+                if (Data):
+                    Class = self.Parent.SecClass.Parse(Data, None)
+                    if (Class):
+                        self.Data[Key] = Class
+
+
+class TSecDefault(TSec):
+    def __init__(self, aParent):
+        TSec.__init__(self, aParent)
+
+    def Load(self, aData):
+        Keys = ['Enable', 'Class', 'Parameter']
+        for Item in aData:
+            self.CheckKey(Item.keys(), Keys)
+            if (Item.get('Enable', True)):
+                Name = Item.get('Class')
+                self.Data[Name] = Item.get('Parameter')
+
+    def SetClassParam(self, aClass):
+        Name  = aClass.__class__.__name__
+        Param = self.Data.get(Name)
+        if (Param):
+            aClass.Param.CheckPattern(Param, aClass.Param.DefPattern)
+            aClass.Param.AddDefPattern(Param)
+
+class TSecClass(TSec):
+    def __init__(self, aParent):
+        TSec.__init__(self, aParent)
+        self.OnClass   = None
+
+        self.Import = TDynImport()
+        self.Import.ParseDir('Plugin/Devices')
+
+    def Check(self):
+        Items = self.Parent.SecInclude.Data.get('Class')
+        for Item in Items:
+            Alias  = Item.get('Alias')
+            Enable = Item.get('Enable', True)
+            if (not self.Parent.SecClass.GetClass(Alias) and Enable):
+                Log.Print(1, 'w', self.__class__.__name__, 'Check()', 'Alias %s not used' % Alias)
+
+    def GetSection(self, aAlias):
+        Items = self.Parent.SecInclude.Data['Class']
+        for Item in Items:
+            Alias = Item.get('Alias')
+            if (aAlias == Alias):
+                return Item
+        return None
+
+    def GetClass(self, aAlias):
+        return self.Data.get(aAlias)
+
+    def AddClass(self, aClass):
+        # print("aAlias", aAlias, "aClass", aClass)
+        if (self.GetClass(aClass.Alias)):
+            Msg = Log.Print(1, 'e', self.__class__.__name__, 'AddClass()', 'Alias already exists %s' % aClass.Alias)
+            raise Exception(Msg)
+
+        if (self.OnClass):
+            aClass = self.OnClass(aClass)
+
+        if (aClass):
+            self.Data[aClass.Alias] = aClass
+
+        return aClass
+
+    def Load(self, aData):
+        pass
+
+    def Parse(self, aData, aParent):
+        Result = None
+
+        if (aParent):
+            ParentInfo = aParent.Alias
+        else:
+            ParentInfo = ''
+
+        Enable = aData.get('Enable', True)
+        ClassRef = aData.get('ClassRef')
+        if (ClassRef):
+            if (not Enable):
+                return None
+
+            if (aParent and (aParent.Alias == ClassRef)):
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Cross link detected %s' % ClassRef)
+                raise Exception(Msg)
+
+            Result = self.GetClass(ClassRef)
+            if (not Result):
+                Data = self.GetSection(ClassRef)
+                if (Data):
+                    Result = self.Parse(Data, aParent)
+                else:
+                    Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'ClassRef `%s` not found in %s' % (ClassRef, ParentInfo))
+                    raise Exception(Msg)
+        # normalclass
+        else:
+            Alias = aData.get('Alias')
+            if (not Alias):
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Alias is empty in Class %s' % ClassName)
+                raise Exception(Msg)
+
+            if (not Enable):
+                if (aParent):
+                    Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Alias %s disabled but used by %s' % (Alias, ParentInfo))
+                    raise Exception(Msg)
+                return None
+
+            ClassName = aData.get('Class')
+            if (not ClassName):
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Keyword `Class` is empty')
+                raise Exception(Msg)
+
+            ModuleName = aData.get('Module')
+            if (ModuleName):
+                Module = __import__(ModuleName)
+                TClass = getattr(Module, ClassName)
+            else:
+                try:
+                    # TClass = globals()[ClassName]
+                    TClass = self.Import.GetInstance(ClassName)
+                except Exception as E:
+                    Log.Print(1, 'x', self.__class__.__name__, 'Load()', 'Can`t load class %s' % ClassName)
+                    sys.exit(1)
+                    # raise
+
+            Result = TClass(aParent)
+            Result.Alias = Alias
+            Result.Descr = aData.get('Descr')
+            Result.Manager = self.Parent
+            Result = self.AddClass(Result)
+            # print('->_CreateClass', 'Alias', Result.Alias, 'Class', aClassName)
+
+            if (Result):
+                for Key in aData.keys():
+                    if (Key not in ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment']):
+                        Result.ExtParam(Key, aData.get(Key), {'Parent': self})
+                Result.DoStart()
+
+        return Result
+
+
+class TManager():
+    def __init__(self, aParent, aDir):
+        self.Parent    = aParent
+
+        self.LoadConf   = TLoadConf(aDir)
+
+        self.StartTimeVirt = time.time()
+        self.StartTimeReal = time.time()
+        self.SetStartTimeVirt(time.time())
+
+        self.Init()
+
+    def Init(self):
+        self.SecAction  = TSecAction(self)
+        self.SecClass   = TSecClass(self)
+        self.SecDefault = TSecDefault(self)
+        self.SecInclude = TSecInclude(self)
+        self.SecRun     = TSecRun(self)
+
+    def SetStartTimeVirt(self, aValue):
+        self.StartTimeVirt = int(aValue)
 
     def Load(self, aData):
         Log.Print(2, 'i', self.__class__.__name__, 'Load()')
 
-        self.Clear()
+        self.Init()
 
-        self.Data = aData.get("Classes", [])
-        Include = aData.get("Include")
-        if (Include):
-            for Item in Include:
-                self.CheckKey(Item.keys(), ['Enable', 'File'])
-                if (Item.get('Enable', True)):
-                    FileName = Item.get('File')
-                    Data = self.LoadConf.Conf(FileName)
-                    self.Data += Data
+        Keys = ['Include', 'Default', 'Run', 'Action']
+        self.SecInclude.CheckKey(aData.keys(), Keys + ['Class'])
+        self.SecInclude.Data = aData
 
-        if (not self.Data):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Section `Classes` not found')
-            raise Exception(Msg)
+        # call self.SecInclude, self.SecDefault etc
+        for Key in Keys:
+            Name = 'Sec' + Key
+            Obj  = getattr(self, Name)
+            if (Obj):
+                Data = self.SecInclude.Data.get(Key)
+                if (Data):
+                    Obj.Load(Data)
+                else:
+                    Log.Print(1, 'w', self.__class__.__name__, 'Load()', 'Empty section %s' % Key)
+            else:
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Cant find object %s' % Name)
+                raise Exception(Msg)
 
-        Runs = aData.get("Run")
-        if (not Runs):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Section `Run` not found')
-            raise Exception(Msg)
+        self.SecClass.Check()
 
-        self.Clear()
+    def Run(self):
+        self.SecRun.Run()
 
-        Action = aData.get("Action")
-        self.AddAction(Action, self.Actions)
-
-        self.CheckKey(Runs.keys(), self.RunKeys)
-        for Key in self.RunKeys:
-            KeyData = Runs.get(Key)
-            if (KeyData):
-                for Item in Runs.get(Key):
-                    self.AddRuns(Item, Key)
-
-        for Item in self.Data:
-            Alias  = Item.get('Alias')
-            Enable = Item.get('Enable', True)
-            if (not self.GetClass(Alias) and Enable):
-                Log.Print(1, 'w', self.__class__.__name__, 'Load()', 'Alias %s not used' % Alias)
-
-    def LoadFile(self, aFile, aSection = 'Gpio'):
+    def LoadFile(self, aFile):
         Log.Print(1, 'i', self.__class__.__name__, 'LoadFile()', '%s%s' % (self.LoadConf.Dir, aFile))
 
         self.File = aFile
         Data = self.LoadConf.Conf(aFile)
-        self.Load(Data[aSection])
+        self.Load(Data)
 
     def Reload(self):
         self.LoadFile(self.File)

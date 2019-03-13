@@ -1,4 +1,5 @@
-[
+{
+"Class":[
     {
         "Class":"TSensorTimeRangeDay",
         "Alias":"SensorTimeRangeDay",
@@ -47,3 +48,4 @@
         "Parameter":{"Ranges":[{ "On":"10:45", "Off": "11:00"}], "Min": 15, "Max": 25}
     }
 ]
+}

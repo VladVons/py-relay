@@ -1,4 +1,5 @@
-[
+{
+"Class":[
     {
         "Class":"TSensorSun",
         "Alias":"SensorSun",
@@ -11,3 +12,4 @@
         "Parameter":{"Latitude":"49.553516", "Longitude":"25.594767"}
     }
 ]
+}

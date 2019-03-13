@@ -1,4 +1,5 @@
-[
+{
+"Class":[
     {
         "Class":"TControlTelegram",
         "Alias":"Telegram",
@@ -35,3 +36,4 @@
         "Parameter":{"Enable":true}
     }
 ]
+}

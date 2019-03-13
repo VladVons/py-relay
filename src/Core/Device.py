@@ -34,7 +34,7 @@ class TDeviceBase(object):
         self.ExtParam['Finish']    = self.Exec.Parse
 
     def _LoadClass(self, aParam, aData):
-        return aData.get('Parent')._LoadClass(aParam, self, aData.get('Depth') - 1)
+        return aData.get('Parent').Parse(aParam, self)
 
     def ExtAction(self, aKey, aParam, aData):
         self.Manager.AddAction(aParam, self.Actions)
@@ -42,6 +42,7 @@ class TDeviceBase(object):
     def ExtParameter(self, aKey, aParam, aData):
         if (aParam and aParam.get('ClassRef')):
             self._LoadClass(aParam, aData)
+        self.Manager.SecDefault.SetClassParam(self)
         self.DoParameter(aParam)
         self.DoParameterExit()
         self.HasParam = True
@@ -74,7 +75,7 @@ class TDeviceBase(object):
     def Action(self, aKey, aValue):
         OnActionClass = self.Actions.get(aKey)
         if (OnActionClass is None):
-            OnActionClass = self.Manager.Actions.get(aKey)
+            OnActionClass = self.Manager.SecAction.Data.get(aKey)
 
         if (OnActionClass):
             if (not self.IsInRecursion(OnActionClass, self)):

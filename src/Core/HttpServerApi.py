@@ -40,7 +40,7 @@ class TWeb():
         self.Serialize.AddModule('Api')
 
     def GetClass(self, aAlias):
-        Class = self.Parent.Manager.GetClass(aAlias)
+        Class = self.Parent.Manager.SecClass.GetClass(aAlias)
         if (not Class):
             Msg = Log.Print(1, 'e', self.__class__.__name__, 'UrlDeviceSet()', 'Alias not found %s' % aAlias)
             self.Parent.AddData(Msg)

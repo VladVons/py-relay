@@ -1,21 +1,20 @@
 {
-    "Gpio":{
         "Run":{
             "Init":[
             ],
             "Start":[
-                {"Enable":false,   "ClassRef":"GroupOnStart"}
+                {"Enable":true,   "ClassRef":"GroupOnStart"}
             ],
             "Loop":[
                 {"Enable":true,  "ClassRef":"Sleep_1"},
                 {"Enable":false, "ClassRef":"SensorGroupSum"},
                 {"Enable":false, "ClassRef":"SensorGroupAvg"},
-                {"Enable":true,  "ClassRef":"SensorTimeRangeCycle"},
+                {"Enable":false,  "ClassRef":"SensorTimeRangeCycle"},
                 {"Enable":true,  "ClassRef":"SensorSun"},
                 {"Enable":false, "ClassRef":"SensorTRD_Humid"},
                 {"Enable":false, "ClassRef":"SensorTRDF_2"},
                 {"Enable":false, "ClassRef":"Random_100_100"},
-                {"Enable":false, "ClassRef":"Random_10_30"},
+                {"Enable":true, "ClassRef":"Random_10_30"},
                 {"Enable":false, "ClassRef":"Sensor_Pi_CPUTemp"},
                 {"Enable":false, "ClassRef":"SensorUptimeSys"}
             ],
@@ -24,12 +23,13 @@
             ]
         },
        "Include":[
-                {"Enable":true, "File":"IncGroup.json"},
-                {"Enable":true, "File":"IncRandom.json"},
-                {"Enable":true, "File":"IncTimer.json"},
-                {"Enable":true, "File":"IncReport.json"},
-                {"Enable":true, "File":"IncSolar.json"},
-                {"Enable":true, "File":"IncRasPi.json"}
+            {"Enable":true, "File":"IncDefault.json"},
+            {"Enable":true, "File":"IncClassGroup.json"},
+            {"Enable":true, "File":"IncClassRandom.json"},
+            {"Enable":true, "File":"IncClassTimer.json"},
+            {"Enable":true, "File":"IncClassReport.json"},
+            {"Enable":true, "File":"IncClassSolar.json"},
+            {"Enable":true, "File":"IncClassRasPi.json"}
         ],
         "Action":[
             {"OnLoop":  {"Enable":false, "ClassRef":"MainLoop"}},
@@ -39,7 +39,16 @@
             {"OnRange": {"Enable":true,  "ClassRef":"WriteLogErr"}},
             {"OnAvg":   {"Enable":false, "ClassRef":"WriteLogErr"}}
         ],
-        "Classes":[
+        "Default":[
+            {
+                "Enable":true, 
+                "Class":"TSensorSun", 
+                "Parameter": {
+                    "WaitValue":100
+                }
+            }
+        ],
+        "Class":[
             {
                 "Class":"TDeviceGroup",
                 "Alias":"GroupOnValue",
@@ -66,8 +75,7 @@
             {
                 "Class":"TControlSleep",
                 "Alias":"Sleep_1",
-                "Parameter":{"Time":1}
+                "Parameter":{"Time":2}
             }
         ]
-    }
 }

@@ -1,4 +1,5 @@
-[
+{
+"Class":[
     {
         "Class":"TSensorGroupSum",
         "Alias":"SensorGroupSum",
@@ -28,3 +29,4 @@
         ]
     }
 ]
+}

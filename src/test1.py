@@ -86,14 +86,14 @@ def LCD(aText = 'Hello world !'):
 
 def Relay_One(aBus, aAddress, aPin):
     import time
-    from Plugin.Providers.I2C import TProviderI2C_Relay_8574
+    from Plugin.Providers.I2C_Relay_8574 import TProviderI2C_Relay_8574
 
     Cnt = 0
     while True:
         Cnt += 1 
         Value = bool(Cnt % 2)
         print('Pin:',  aPin, 'Value:', Value)
-        Obj = TProviderI2C_Relay_8574(aBus, aAddress, aPin, True)
+        Obj = TProviderI2C_Relay_8574(aBus, aAddress, aPin)
         Obj.Set(None, Value)
         time.sleep(3)
 
@@ -161,7 +161,7 @@ def TimerRange():
         time.sleep(1)
 
 
-#Relay_One(1, 0x25, 7)
+Relay_One(1, 0x25, 1)
 #Relay_LCD()
 #Telegram()
 #TimerRange()
@@ -189,4 +189,4 @@ def TimerRange():
 #    if (Item.endswith('packages')):
 #        print(Item)
 
-print("helo")
+#print("helo")

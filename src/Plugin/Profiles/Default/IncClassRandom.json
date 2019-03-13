@@ -1,4 +1,5 @@
-[
+{
+"Class":[
     {
         "Class":"TSensorRandom",
         "Alias":"Random_10_30",
@@ -32,3 +33,4 @@
         "Parameter":{"Begin":100, "End":110}
     }
 ]
+}

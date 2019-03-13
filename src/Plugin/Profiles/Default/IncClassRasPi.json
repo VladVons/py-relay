@@ -1,4 +1,5 @@
-[
+{
+"Class":[
     {
         "Class":"TSensorUptimeSys",
         "Alias":"SensorUptimeSys",
@@ -16,3 +17,4 @@
         "Alias":"Sensor_Pi_CPUTemp"
     }
 ]
+}

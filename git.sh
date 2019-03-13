@@ -6,6 +6,9 @@ User="VladVons"
 Name="py-relay"
 Mail="vladvons@gmail.com"
 #
+#Branch="master"
+Branch="v2"
+#
 Url="https://github.com/vladvons/py-relay.git"
 Url="https://github.com/$User/$Name.git"
 
@@ -110,7 +113,7 @@ GitSyncToServ()
 
   git add -u -v
   git commit -a -m "$aComment"
-  git push -u origin master
+  git push -u origin $Branch
 }
 
 
@@ -143,9 +146,9 @@ GitReset()
   git checkout --orphan TEMP_BRANCH
   git add -A
   git commit -am "Initial commit"
-  git branch -D master
-  git branch -m master
-  git push -f origin master
+  git branch -D $Branch
+  git branch -m $Branch
+  git push -f origin $Branch
 }
 
 
