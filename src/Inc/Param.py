@@ -23,7 +23,7 @@ import re
 import os
 #
 from Inc.Log        import Log
-from Inc.Util       import Str, Obj, Num
+from Inc.Util       import Str, Obj, Num, Arr
 from Inc.ConfEditor import TEditorConf
 
 #__all__ = ['TDictParam', 'TDictReplace']
@@ -153,13 +153,6 @@ class TDictParam():
                 self.SetAttr(Key, Value)
         self.Loaded = True
 
-    def CheckPattern(self, aValue1, aValue2):
-        Diff = set(aValue1.keys()) - set(aValue2.keys())
-        if (Diff):
-            print(aValue2)
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'CheckPattern()', 'Unknown key %s in %s' % (str(Diff), Obj.GetTreeAsStr(aValue1, 2)))
-            raise Exception(Msg)
-
     def LoadPattern(self, aParam, aPattern = {}):
         #Pattern = {**self.Pattern, **aPattern} # need 3.0
         #Pattern = dict(self.Pattern.items() + aPattern.items()) #only 2.7
@@ -168,7 +161,7 @@ class TDictParam():
             Pattern.update(self.DefPattern)
         if (aPattern):
             Pattern.update(aPattern)
-        self.CheckPattern(aParam, Pattern)
+        Arr.CheckDif(aParam, Pattern)
 
         for Key in Pattern:
             Default = Pattern.get(Key)

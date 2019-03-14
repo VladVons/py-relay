@@ -31,6 +31,27 @@
         "Class":"TSensorRandom",
         "Alias":"Random_100_104",
         "Parameter":{"Begin":100, "End":110}
+    },
+    {
+        "Class":"TSensorRandom",
+        "Alias":"RandomEx_11_31",
+        "Descr":"Random",
+        "Parameter":{"Begin":11, "End":31},
+        "Action":[
+            {"OnValue": {"Enable":false,  "ClassRef":"WriteConsole1"}}
+        ],
+        "Start":[
+            {"Enable":false,  "Always":"self.SetValue('$WriteConsoleStart',1000)"}
+        ],
+        "Checks":[
+            {"Enable":false,  "If":"self.GetValue('$Random_1000_3000') > 2500"}
+        ],
+        "Triggers":[
+            {"Enable":true, "If":"self.Value > 28", "Then":"self.SetIf('$WriteConsole1')"}
+        ],
+        "Finish":[
+            {"Enable":false,  "Always":"self.SetValue('$WriteConsoleFinish',2000)"}
+        ]
     }
 ]
 }

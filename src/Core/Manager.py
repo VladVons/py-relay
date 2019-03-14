@@ -12,7 +12,7 @@ import time
 import json
 #
 from Inc.Log        import Log
-from Inc.Util       import Obj, FS
+from Inc.Util       import Obj, FS, Arr
 from Inc.Param      import TDictReplace
 from Inc.ConfEditor import TEditorConf
 from Api            import Version
@@ -69,13 +69,6 @@ class TSec():
     def Clear(self):
         self.Data.clear()
 
-    @staticmethod
-    def CheckKey(aList1, aList2):
-        Diff = set(aList1) - (set(aList2))
-        if (Diff):
-            Msg = Log.Print(1, 'e', 'TSec', 'CheckKey()', 'Unknown key %s in %s' % (str(Diff), aList1))
-            raise ValueError(Msg)
-
     def Load(self, aData):
         Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Not implemented')
         raise NotImplementedError(Msg)
@@ -92,7 +85,7 @@ class TSecInclude(TSec):
 
     def Load(self, aData):
         for Item in aData:
-            self.CheckKey(Item.keys(), ['Enable', 'File'])
+            Arr.CheckDif(Item.keys(), ['Enable', 'File'])
             if (Item.get('Enable', True)):
                 FileName = Item.get('File')
                 Data = self.Parent.LoadConf.Conf(FileName)
@@ -109,7 +102,7 @@ class TSecRun(TSec):
 
     def Load(self, aData):
         Keys  = ['Init', 'Start', 'Loop', 'Finish']
-        self.CheckKey(aData.keys(), Keys)
+        Arr.CheckDif(aData.keys(), Keys)
 
         for Key in Keys:
             Data = aData.get(Key)
@@ -124,9 +117,6 @@ class TSecRun(TSec):
 
     def Run(self):
         Log.Print(2, 'i', self.__class__.__name__, 'Run()')
-
-        Obj.Dump(Version())
-        print('')
 
         Items = self.Data.get('Start')
         self.PostAll(Items)
@@ -164,7 +154,7 @@ class TSecAction(TSec):
     def Load(self, aData):
         Keys = ['OnError', 'OnValue', 'OnRange', 'OnLoop', 'OnAvg']
         for Item in aData:
-            self.CheckKey(Item.keys(), Keys)
+            Arr.CheckDif(Item.keys(), Keys)
             for Key in Keys:
                 Data = Item.get(Key)
                 if (Data):
@@ -180,7 +170,7 @@ class TSecDefault(TSec):
     def Load(self, aData):
         Keys = ['Enable', 'Class', 'Parameter']
         for Item in aData:
-            self.CheckKey(Item.keys(), Keys)
+            Arr.CheckDif(Item.keys(), Keys)
             if (Item.get('Enable', True)):
                 Name = Item.get('Class')
                 self.Data[Name] = Item.get('Parameter')
@@ -189,23 +179,27 @@ class TSecDefault(TSec):
         Name  = aClass.__class__.__name__
         Param = self.Data.get(Name)
         if (Param):
-            aClass.Param.CheckPattern(Param, aClass.Param.DefPattern)
+            Arr.CheckDif(Param, aClass.Param.DefPattern)
             aClass.Param.AddDefPattern(Param)
 
 class TSecClass(TSec):
     def __init__(self, aParent):
         TSec.__init__(self, aParent)
-        self.OnClass   = None
+        self.OnClass = None
+        self.Unused  = []
 
-        self.Import = TDynImport()
+        self.Import  = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
 
     def Check(self):
+        self.Unused = []
+
         Items = self.Parent.SecInclude.Data.get('Class')
         for Item in Items:
             Alias  = Item.get('Alias')
             Enable = Item.get('Enable', True)
             if (not self.Parent.SecClass.GetClass(Alias) and Enable):
+                self.Unused.append(Alias)
                 Log.Print(1, 'w', self.__class__.__name__, 'Check()', 'Alias %s not used' % Alias)
 
     def GetSection(self, aAlias):
@@ -328,6 +322,14 @@ class TManager():
         self.SecInclude = TSecInclude(self)
         self.SecRun     = TSecRun(self)
 
+    def Info(self):
+        Ver = Version()
+        Ver['iClass']  = len(self.SecClass.Data)
+        Ver['iUnused'] = len(self.SecClass.Unused)
+        Ver['iLoop']   = len(self.SecRun.Data.get('Loop'))
+        Obj.Dump(Ver)
+        print('')
+
     def SetStartTimeVirt(self, aValue):
         self.StartTimeVirt = int(aValue)
 
@@ -337,7 +339,7 @@ class TManager():
         self.Init()
 
         Keys = ['Include', 'Default', 'Run', 'Action']
-        self.SecInclude.CheckKey(aData.keys(), Keys + ['Class'])
+        Arr.CheckDif(aData.keys(), Keys + ['Class'])
         self.SecInclude.Data = aData
 
         # call self.SecInclude, self.SecDefault etc
@@ -351,7 +353,7 @@ class TManager():
                 else:
                     Log.Print(1, 'w', self.__class__.__name__, 'Load()', 'Empty section %s' % Key)
             else:
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Cant find object %s' % Name)
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Cant find method %s' % Name)
                 raise Exception(Msg)
 
         self.SecClass.Check()
@@ -365,6 +367,8 @@ class TManager():
         self.File = aFile
         Data = self.LoadConf.Conf(aFile)
         self.Load(Data)
+
+        self.Info()
 
     def Reload(self):
         self.LoadFile(self.File)

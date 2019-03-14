@@ -6,6 +6,10 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
+from .Obj    import GetTreeAsStr
+from Inc.Log import Log
+
+
 def FindNode(aNode, aPath):
     for Item in aPath.strip("/").split("/"):
         if (Item != ""):
@@ -45,3 +49,15 @@ def Find(aList, aData):
 def Diff(aData1, aData2):
     return set(aData1) - set(aData2)
 
+def CheckDif(aValue1, aValue2):
+    if (type(aValue1).__name__ == 'dict'):
+        aValue1  = aValue1.keys()
+
+    if (type(aValue2).__name__ == 'dict'):
+        aValue2  = aValue2.keys()
+
+    Diff = set(aValue1) - set(aValue2)
+    if (Diff):
+        print(aValue2)
+        Msg = Log.Print(1, 'e', __name__, 'CheckDif()', 'Unknown key %s in %s' % (str(Diff), GetTreeAsStr(aValue1, 2)))
+        raise Exception(Msg)

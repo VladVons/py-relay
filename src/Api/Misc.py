@@ -16,7 +16,7 @@ def Version():
 
     Result = {
         "Date":     "2019.03.01",
-        "Software": "1.0.16",
+        "Software": "1.0.20",
         "Hardware": "1.0.2",
         "Author":   "Volodymyr Vons",
         "EMail":    "VladVons@gmail.com",

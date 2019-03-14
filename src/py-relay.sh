@@ -23,7 +23,7 @@ Start()
   #Emulator
 
   #python py-relay.py
-  python2 py-relay.py -p Test3
+  python2 py-relay.py -p Hust1
 }
 
 

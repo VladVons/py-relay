@@ -4,6 +4,7 @@
 *.deb
 *.bin
 deb/py-relay_*
+Profiles/Client
 __pycache__
 py-relay.build
 py-relay.dist
