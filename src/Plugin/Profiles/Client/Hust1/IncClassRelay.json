@@ -1,0 +1,55 @@
+{
+    "Class":[
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_1",
+            "Descr":"Matoch_humid",
+            "Parameter":{"Bus":1, "Address":37, "Command": 0}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_2",
+            "Descr":"Matoch_light",
+            "Parameter":{"Bus":1, "Address":37, "Command": 1}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_3",
+            "Descr":"Matoch_air",
+            "Parameter":{"Bus":1, "Address":37, "Command": 2}
+        },
+        {
+            "Enable":false,
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_4",
+            "Descr":"Reserved",
+            "Parameter":{"Bus":1, "Address":37, "Command": 3}
+        },
+        {
+            "Enable":false,
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_5",
+            "Descr":"Reserved",
+            "Parameter":{"Bus":1, "Address":37, "Command": 4}
+        },
+        {
+            "Enable":false,
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_6",
+            "Descr":"Unused",
+            "Parameter":{"Bus":1, "Address":37, "Command": 5}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_7",
+            "Descr":"Inkub_warm",
+            "Parameter":{"Bus":1, "Address":37, "Command": 6}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_8",
+            "Descr":"Matoch_warm",
+            "Parameter":{"Bus":1, "Address":37, "Command": 7}
+        }
+    ]
+}

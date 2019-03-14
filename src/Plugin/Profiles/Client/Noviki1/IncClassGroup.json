@@ -1,0 +1,32 @@
+{
+    "Class":[
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnValue",
+            "Checks": [
+                {"Enable":true,  "Always":"self.SetValue('$WriteConsole')"},
+                {"Enable":false, "Always":"self.SetValue('$WriteLog')"},
+                {"Enable":true,  "Always":"self.SetValue('$Grafana')"}
+            ]
+        },
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnStart",
+            "Checks": [
+                {"Enable":true,  "Always":"self.SetValue('$IRelay_1', 0)"},
+                {"Enable":true,  "Always":"self.SetValue('$IRelay_2', 0)"},
+                {"Enable":true,  "Always":"self.SetValue('$IRelay_3', 0)"},
+                {"Enable":true,  "Always":"self.SetValue('$IRelay_4', 0)"},
+                {"Enable":true,  "Always":"self.SetValue('$IRelay_5', 0)"}
+            ]
+        },
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnFinish",
+            "Enable": false,
+            "Checks": [
+                {"Enable":true,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
+            ]
+        }
+    ]
+}

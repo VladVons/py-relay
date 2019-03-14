@@ -7,3 +7,4 @@ Description:
 '''
 
 from .Device import *
+from .DeviceThread import *

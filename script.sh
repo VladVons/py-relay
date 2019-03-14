@@ -8,8 +8,8 @@
 
 
 Name="py-relay"
-#DirSrc="src"
-DirSrc="/usr/lib/py-relay"
+DirSrc="src"
+#DirSrc="/usr/lib/py-relay"
 #
 Ver="1.0-16"
 #Platform="armhf"
@@ -62,8 +62,8 @@ Release()
 
   cd $DirSrc
   echo "Building in $(pwd) ..."
-  #nuitka --follow-imports --remove-output $Name.py
-  nuitka --follow-imports --remove-output --standalone $Name.py
+  nuitka --follow-imports --remove-output $Name.py
+  #nuitka --follow-imports --remove-output --standalone $Name.py
   cd ..
 
   find $DirSrc/Plugin -name "*.pyc" -type f -delete

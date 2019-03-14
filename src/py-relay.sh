@@ -22,8 +22,10 @@ Start()
   #ForceLog
   #Emulator
 
+  i2cset -y 1 0x25 255 
   #python py-relay.py
-  python2 py-relay.py -p Hust1
+  python2 py-relay.py -p Client/Noviki1
+  i2cset -y 1 0x25 255 
 }
 
 

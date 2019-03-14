@@ -10,6 +10,7 @@ Install()
   apt install mailutils
   apt install bc
   apt install lsof
+  apt install zip
 
   apt install libpython2.7 
   apt install python-prctl

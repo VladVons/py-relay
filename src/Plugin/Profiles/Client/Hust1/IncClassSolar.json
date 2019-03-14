@@ -1,0 +1,15 @@
+{
+    "Class":[
+        {
+            "Class":"TSensorSun",
+            "Alias":"SensorSun",
+            "Parameter":{"Latitude":"48.1923508", "Longitude":"23.2412203"}
+        },
+        {
+            "Class":"TSensorMoon",
+            "Alias":"SensorMoon",
+            "Enable":false,
+            "Parameter":{"Latitude":"48.1923508", "Longitude":"23.2412203"}
+        }
+    ]
+}

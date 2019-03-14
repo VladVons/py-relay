@@ -188,7 +188,7 @@ class TSecClass(TSec):
         self.OnClass = None
         self.Unused  = []
 
-        self.Import  = TDynImport()
+        self.Import = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
 
     def Check(self):
@@ -245,7 +245,7 @@ class TSecClass(TSec):
                 return None
 
             if (aParent and (aParent.Alias == ClassRef)):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Cross link detected %s' % ClassRef)
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'Cross link detected %s' % ClassRef)
                 raise Exception(Msg)
 
             Result = self.GetClass(ClassRef)
@@ -254,24 +254,24 @@ class TSecClass(TSec):
                 if (Data):
                     Result = self.Parse(Data, aParent)
                 else:
-                    Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'ClassRef `%s` not found in %s' % (ClassRef, ParentInfo))
+                    Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'ClassRef `%s` not found in %s' % (ClassRef, ParentInfo))
                     raise Exception(Msg)
         # normalclass
         else:
             Alias = aData.get('Alias')
             if (not Alias):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Alias is empty in Class %s' % ClassName)
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'Alias is empty in Class %s' % ClassName)
                 raise Exception(Msg)
 
             if (not Enable):
                 if (aParent):
-                    Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Alias %s disabled but used by %s' % (Alias, ParentInfo))
+                    Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'Alias %s disabled but used by %s' % (Alias, ParentInfo))
                     raise Exception(Msg)
                 return None
 
             ClassName = aData.get('Class')
             if (not ClassName):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Keyword `Class` is empty')
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'Keyword `Class` is empty')
                 raise Exception(Msg)
 
             ModuleName = aData.get('Module')
@@ -283,9 +283,9 @@ class TSecClass(TSec):
                     # TClass = globals()[ClassName]
                     TClass = self.Import.GetInstance(ClassName)
                 except Exception as E:
-                    Log.Print(1, 'x', self.__class__.__name__, 'Load()', 'Can`t load class %s' % ClassName)
+                    Log.Print(1, 'x', self.__class__.__name__, 'Parse()', 'Cant load class %s' % ClassName, E)
                     sys.exit(1)
-                    # raise
+                    #raise
 
             Result = TClass(aParent)
             Result.Alias = Alias

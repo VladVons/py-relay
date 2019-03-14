@@ -1,0 +1,25 @@
+{
+    "Class":[
+       {
+            "Class":"TProviderDeviceHivePinThread_DHT22",
+            "Alias":"DH3_Provider",
+            "Parameter":{"Host":"http://dh3.lan", "Pin":14}
+        },
+        {
+            "Class":"TSensorProvider",
+            "Alias":"DH3_Sensor_Temper",
+            "Descr":"Inkub_ST",
+            "Parameter":{"ClassRef":"DH3_Provider", "Tag":"temperature", "WaitValue":600},
+            "Triggers":[
+                {"Enable":true,  "If":"self.Value < $<InkubTempMin>",      "Always":"self.SetIf('$IRelay_7')"},
+                {"Enable":false, "If":"self.Value < $<InkubTempMinAlarm>", "Then":"self.SetValue('$Telegram')"}
+            ]
+        },
+        {
+            "Class":"TSensorProvider",
+            "Alias":"DH3_Sensor_Humid",
+            "Descr":"Inkub_SH",
+            "Parameter":{"ClassRef":"DH3_Provider", "Tag":"humidity", "WaitValue":600}
+        }
+    ]
+}

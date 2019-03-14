@@ -1,0 +1,40 @@
+{
+    "Class":[
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_1",
+            "Descr":"Matochnik Light",
+            "Parameter":{"Bus":1, "Address":37, "Command": 0, "Invert":true, "Enable":true}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_2",
+            "Descr":"Matochnik Air",
+            "Parameter":{"Bus":1, "Address":37, "Command": 1, "Invert":true}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_3",
+            "Descr":"Matochnik Warm",
+            "Parameter":{"Bus":1, "Address":37, "Command": 2, "Invert":true}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_4",
+            "Descr":"Matochnik Humidity",
+            "Parameter":{"Bus":1, "Address":37, "Command": 3, "Invert":true}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_5",
+            "Descr":"Teplitsa Warm",
+            "Parameter":{"Bus":1, "Address":37, "Command": 4, "Invert":true}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_8",
+            "Descr":"Test",
+            "Parameter":{"Bus":1, "Address":37, "Command": 7, "Invert":true}
+        }
+    ]
+}

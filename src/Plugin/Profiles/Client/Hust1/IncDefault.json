@@ -1,0 +1,9 @@
+{
+   "Default":[
+        {
+            "Enable":false,
+            "Class":"TRelayI2C_Relay_8574",
+            "Parameter": {"Invert":true, "Mirror":true}
+        }
+    ]
+}
