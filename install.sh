@@ -90,6 +90,8 @@ RaspiImg()
   # 7 raspi
   #https://github.com/RPi-Distro/pi-gen
 
+  #sudo dd if=/dev/sdb of=raspi_4g.img bs=4096 conv=notrunc,noerror
+
   Dir="/mnt/hdd/data1/share/public/image/raspberry/img"
   Img="2018-11-13-raspbian-stretch-lite.img"
   Arc="raspbian-jessie-lite.zip"
