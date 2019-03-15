@@ -2,6 +2,7 @@
 # Created: 28.09.2016
 # Vladimir Vons, VladVons@gmail.com
 
+
 Install()
 {
   apt install i2c-tools
@@ -22,6 +23,9 @@ Install()
   apt install python-pip --no-install-recommends
   pip install wheel
   pip install setuptools
+
+  pip install nuitka
+  apt install python-dev --no-install-recommends
 }
 
 
@@ -87,10 +91,13 @@ Relay()
 
 RaspiImg()
 {
-  # 7 raspi
-  #https://github.com/RPi-Distro/pi-gen
+  ## 7 raspi
+  ##https://github.com/RPi-Distro/pi-gen
 
-  #sudo dd if=/dev/sdb of=raspi_4g.img bs=4096 conv=notrunc,noerror
+  ## copy all data
+  #dd if=/dev/sdb of=raspi.img bs=4M conv=notrunc,noerror
+  ## copy only 1.7G data
+  #dd if=/dev/sdb of=raspi_1700M.img bs=1M count=1700 conv=noerror
 
   Dir="/mnt/hdd/data1/share/public/image/raspberry/img"
   Img="2018-11-13-raspbian-stretch-lite.img"
@@ -103,8 +110,8 @@ RaspiImg()
 
   lsblk
   #dd bs=4M conv=fsync if=$Img of=$Dev
-  # disable buffering for safe
-  dd conv=fsync if=$Img of=$Dev
+  ## disable buffering for safe
+  #dd conv=fsync if=$Img of=$Dev
 }
 
 clear

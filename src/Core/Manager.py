@@ -366,7 +366,7 @@ class TManager():
                 raise Exception(Msg)
 
         self.SecClass.Check()
-        self.SecClass.SetParam('Sleep_1', 'Time', 5)
+        #self.SecClass.SetParam('Sleep_1', 'Time', 5)
 
     def Run(self):
         self.SecRun.Run()
