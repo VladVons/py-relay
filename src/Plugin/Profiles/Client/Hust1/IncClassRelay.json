@@ -4,7 +4,7 @@
             "Class":"TRelayI2C_Relay_8574",
             "Alias":"IRelay_1",
             "Descr":"Matoch_humid",
-            "Parameter":{"Bus":1, "Address":37, "Command": 0}
+            "Parameter":{"Bus":1, "Address":37, "Command": 0, "Invert":true, "Mirror":true}
         },
         {
             "Class":"TRelayI2C_Relay_8574",

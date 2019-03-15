@@ -182,6 +182,7 @@ class TSecDefault(TSec):
             Arr.CheckDif(Param, aClass.Param.DefPattern)
             aClass.Param.AddDefPattern(Param)
 
+
 class TSecClass(TSec):
     def __init__(self, aParent):
         TSec.__init__(self, aParent)
@@ -190,6 +191,14 @@ class TSecClass(TSec):
 
         self.Import = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
+
+    def SetParam(self, aAlias, aParam, aValue):
+        Result = None
+        Class  = self.GetClass(aAlias)
+        if (Class and Class.Param.HasParam(aParam)):
+            Class.Param.SetAttr(aParam, aValue)
+            Result = Class.Param.GetAttr(aParam)
+        return Result
 
     def Check(self):
         self.Unused = []
@@ -357,6 +366,7 @@ class TManager():
                 raise Exception(Msg)
 
         self.SecClass.Check()
+        self.SecClass.SetParam('Sleep_1', 'Time', 5)
 
     def Run(self):
         self.SecRun.Run()

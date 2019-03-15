@@ -130,6 +130,10 @@ class TDictParam():
     def GetPattern(self):
         return self.DefPattern
 
+    def HasParam(self, aName):
+        Vars = self.GetVars()
+        return (aName in Vars)
+
     def GetVars(self):
         return vars(self)
 

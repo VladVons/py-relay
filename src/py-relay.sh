@@ -24,7 +24,7 @@ Start()
 
   i2cset -y 1 0x25 255 
   #python py-relay.py
-  python2 py-relay.py -p Client/Noviki1
+  python2 py-relay.py -p Client/Hust1
   i2cset -y 1 0x25 255 
 }
 
