@@ -7,7 +7,7 @@ Watch()
 
     Cnt=0
     PrevVar=0
-    while true  
+    while true
     do
         Var=$(i2cget -y $Bus $Addr)
         if [ $PrevVar != $Var ] ; then

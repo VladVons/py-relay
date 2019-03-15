@@ -54,7 +54,6 @@ class TDynImport():
                                 ClassName = Data.group(2)
                                 self.AddClass(ClassName, FileName, Root)
                                 #print('--- FilePath, line, ClassName', FilePath, Line, ClassName)
-        
 
     def GetAttr(self, aClassName, aModuleName):
         Module = __import__(aModuleName)

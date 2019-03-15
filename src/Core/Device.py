@@ -146,9 +146,9 @@ class TDevice(TDeviceBase):
         if (aValue is None):
             self.MaxErr -= 1
             if (self.MaxErr < 0):
-                self.Value = 0
+                self.Value  = 0
                 self.Action('OnValue', self.Value)
-            Log.Print(1, 'w', self.__class__.__name__, 'SetValue()', 'Alias %s, Value is None' % (self.Alias))
+                Log.Print(1, 'w', self.__class__.__name__, 'SetValue()', 'Alias %s, Value is None' % (self.Alias))
 
         elif ((self.Value != aValue) or (self.Param.AllValue) or (self.GetUptime() - self.LastChange > self.Param.WaitValue)):
             if (not self.CheckValue(aValue)):
