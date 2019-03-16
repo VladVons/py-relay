@@ -9,7 +9,7 @@
             "Class":"TSensorProvider",
             "Alias":"DH5_Sensor_Temper",
             "Descr":"Inkubator_ST",
-            "Parameter":{"ClassRef":"DH5_Provider", "Tag":"temperature", "WaitValue":600},
+            "Parameter":{"ClassRef":"DH5_Provider", "Tag":"temperature", "Refresh":600},
             "Triggers":[
                 {"Enable":true, "If":"self.Value < 15", "Then":"self.SetValue('$Telegram')"}
             ]
@@ -18,7 +18,7 @@
             "Class":"TSensorProvider",
             "Alias":"DH5_Sensor_Humid",
             "Descr":"Inkubator_SH",
-            "Parameter":{"ClassRef":"DH5_Provider", "Tag":"humidity", "WaitValue":600}
+            "Parameter":{"ClassRef":"DH5_Provider", "Tag":"humidity", "Refresh":600}
         }
     ]
 }

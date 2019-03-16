@@ -9,7 +9,7 @@
             "Class":"TSensorProvider",
             "Alias":"DH3_Sensor_Temper",
             "Descr":"Teplitsa_ST",
-            "Parameter":{"ClassRef":"DH3_Provider", "Tag":"temperature", "WaitValue":600},
+            "Parameter":{"ClassRef":"DH3_Provider", "Tag":"temperature", "Refresh":600},
             "Triggers":[
                 {"Enable":true, "If":"self.Value < $<TeplitsaTempMin>", "Always":"self.SetIf('$IRelay_5')"},
                 {"Enable":false, "If":"self.Value < 15", "Then":"self.SetValue('$Telegram')"}
@@ -19,7 +19,7 @@
             "Class":"TSensorProvider",
             "Alias":"DH3_Sensor_Humid",
             "Descr":"Teplitsa_SH",
-            "Parameter":{"ClassRef":"DH3_Provider", "Tag":"humidity", "WaitValue":600}
+            "Parameter":{"ClassRef":"DH3_Provider", "Tag":"humidity", "Refresh":600}
         }
     ]
 }

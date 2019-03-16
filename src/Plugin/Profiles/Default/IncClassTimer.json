@@ -30,7 +30,7 @@
             { "On":"12:10", "Off": "12:20"}, 
             { "On":"20:00", "Off": "20:01"}, 
             { "On":"22:30", "Off": "22:31"}
-        ], "WaitValue":2},
+        ], "Refresh":2},
         "Triggers":[
             {"Enable":false, "Always":"self.SetValue('$IRelay_4')"}
         ]

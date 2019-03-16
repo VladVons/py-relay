@@ -4,9 +4,9 @@ Section: IoT
 Priority: optional
 #Architecture: amd64
 Architecture: armhf
-Depends: libpython2.7, python-prctl, python-mysqldb, python-smbus, python-crypto
+Depends: libpython2.7, python-prctl, python-mysqldb, python-smbus, python-crypto, python-ephem, monit
 Suggests: python-pip
-Recommends: monit
+#Recommends:
 Maintainer: Vladimir Vons <VladVons@gmail.com>
 Homepage: http://oster.com.ua/software
 Description: Relay automation

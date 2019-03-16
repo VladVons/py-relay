@@ -13,7 +13,7 @@
                 "Ranges":[
                     { "On":"$<DayOn>", "Off": "$<DayOff>"}
                 ], 
-                "WaitValue":60},
+                "Refresh":60},
             "Triggers":[
                 {"Enable":true, "Always":"self.SetValue('$IRelay_2')"}
             ]

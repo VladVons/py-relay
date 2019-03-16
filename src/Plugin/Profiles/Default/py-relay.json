@@ -9,12 +9,12 @@
                 {"Enable":true,  "ClassRef":"Sleep_1"},
                 {"Enable":false, "ClassRef":"SensorGroupSum"},
                 {"Enable":false, "ClassRef":"SensorGroupAvg"},
-                {"Enable":false,  "ClassRef":"SensorTimeRangeCycle"},
-                {"Enable":true,  "ClassRef":"SensorSun"},
+                {"Enable":false, "ClassRef":"SensorTimeRangeCycle"},
+                {"Enable":false, "ClassRef":"SensorSun"},
                 {"Enable":false, "ClassRef":"SensorTRD_Humid"},
                 {"Enable":false, "ClassRef":"SensorTRDF_2"},
                 {"Enable":false, "ClassRef":"Random_100_100"},
-                {"Enable":true, "ClassRef":"Random_10_30"},
+                {"Enable":true,  "ClassRef":"RandomNone_10_100"},
                 {"Enable":false, "ClassRef":"Sensor_Pi_CPUTemp"},
                 {"Enable":false, "ClassRef":"SensorUptimeSys"}
             ],
@@ -40,13 +40,6 @@
             {"OnAvg":   {"Enable":false, "ClassRef":"WriteLogErr"}}
         ],
         "Default":[
-            {
-                "Enable":true, 
-                "Class":"TSensorSun", 
-                "Parameter": {
-                    "WaitValue":100
-                }
-            }
         ],
         "Class":[
             {

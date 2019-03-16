@@ -108,7 +108,7 @@ class TDevice(TDeviceBase):
         self.Avg = Num.TAvg()
         #self.Avg.Enable = False
 
-        Pattern = {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'WaitValue': 3600, 'OnValue': True, 'MaxErr': 5}
+        Pattern = {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'Refresh': 3600, 'OnValue': True, 'MaxErr': 5}
         self.Param.AddDefPattern(Pattern)
 
         self.ExtParam['Checks']   = self.Exec.Parse
@@ -143,17 +143,11 @@ class TDevice(TDeviceBase):
     def SetValue(self, aValue):
         Log.Print(3, 'i', self.__class__.__name__, 'SetValue()', 'Alias %s, Value %s' % (self.Alias, aValue))
 
-        if (aValue is None):
-            self.MaxErr -= 1
-            if (self.MaxErr < 0):
-                self.Value  = 0
-                self.Action('OnValue', self.Value)
-                Log.Print(1, 'w', self.__class__.__name__, 'SetValue()', 'Alias %s, Value is None' % (self.Alias))
+        if (not self.CheckValue(aValue)):
+            self.Exec.Conditions('Triggers')
+            return False
 
-        elif ((self.Value != aValue) or (self.Param.AllValue) or (self.GetUptime() - self.LastChange > self.Param.WaitValue)):
-            if (not self.CheckValue(aValue)):
-                return
-
+        if ((self.Value != aValue) or (self.Param.AllValue) or (self.GetUptime() - self.LastChange > self.Param.Refresh)):
             if (self.OnValue):
                 aValue = self.OnValue(self, aValue)
             self.Value = aValue
@@ -165,14 +159,20 @@ class TDevice(TDeviceBase):
             self.Exec.Conditions('Triggers')
             self.MaxErr = self.Param.MaxErr
 
+        return True
+
     def CheckValue(self, aValue):
         if (aValue is None):
-            Log.Print(1, 'e', self.__class__.__name__, 'CheckValue() None', 'Alias: %s, Value: %s' % (self.Alias, aValue))
-            self.Action('OnError', aValue)
+            self.MaxErr -= 1
+            if (self.MaxErr < 0):
+                self.Value  = 0
+                if (self.MaxErr % self.Param.MaxErr == 0):
+                    Log.Print(1, 'i', self.__class__.__name__, 'CheckValue()', 'Invalid value. Alias: %s, Value: None' % (self.Alias))
+                    self.Action('OnError', self.Value)
             return False
 
         if (not self.Range.Check(self.Key, aValue)):
-            Log.Print(1, 'e', self.__class__.__name__, 'CheckValue() Range', 'Alias: %s, Value: %s' % (self.Alias, aValue))
+            Log.Print(1, 'i', self.__class__.__name__, 'CheckValue()', 'Invalid range. Alias: %s, Value: %s' % (self.Alias, aValue))
             self.Action('OnRange', aValue)
             return False
 
@@ -187,13 +187,14 @@ class TSensor(TDevice):
         self.Param.AddDefPattern(Pattern)
 
     def DoParameterExit(self):
+        self.MaxErr = self.Param.MaxErr
         self.Avg.SetSize(self.Param.Avg)
         self._Get()
 
     def DoPost(self, aCaller, aValue, aData):
-        Value = self._Get()
-        self.SetValue(Value)
-        return True
+        Value  = self._Get()
+        Result = self.SetValue(Value)
+        return Result
 
     def _Get(self):
         if (self.Provider):

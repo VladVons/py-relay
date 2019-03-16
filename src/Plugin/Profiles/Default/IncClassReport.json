@@ -32,6 +32,10 @@
     },
     {
         "Class":"TControlWriteConsole",
+        "Alias":"WriteConsole3"
+    },
+    {
+        "Class":"TControlWriteConsole",
         "Alias":"WriteConsoleRand",
         "Parameter":{"Enable":true}
     }

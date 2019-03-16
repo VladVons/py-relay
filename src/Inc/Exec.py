@@ -48,7 +48,7 @@ class TExec():
             Result = Vars.get('Result')
         except Exception as E:
             Msg = Log.Print(1, 'e', self.__class__.__name__, 'Scrypt()', E, aValue)
-            raise Exception(Msg)
+            #raise Exception(Msg)
         return Result
 
     def ExecKey(self, aKey):

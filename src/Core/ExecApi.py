@@ -105,6 +105,10 @@ class TExecApi(TExecParse):
         return self.Class(aAlias).Exec
 
     @property
+    def Error(self):
+        return self.Parent.MaxErr < 0
+
+    @property
     def Value(self):
         return self.GetValue()
 

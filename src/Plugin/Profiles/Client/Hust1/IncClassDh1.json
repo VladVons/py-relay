@@ -9,13 +9,13 @@
             "Class":"TSensorProvider",
             "Alias":"DH1_Sensor_Temper",
             "Descr":"Street_ST",
-            "Parameter":{"ClassRef":"DH1_Provider", "Tag":"temperature", "WaitValue":600}
+            "Parameter":{"ClassRef":"DH1_Provider", "Tag":"temperature", "Refresh":600}
         },
         {
             "Class":"TSensorProvider",
             "Alias":"DH1_Sensor_Humid",
             "Descr":"Street_SH",
-            "Parameter":{"ClassRef":"DH1_Provider", "Tag":"humidity", "WaitValue":600}
+            "Parameter":{"ClassRef":"DH1_Provider", "Tag":"humidity", "Refresh":600}
         }
     ]
 }

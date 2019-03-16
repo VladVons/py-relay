@@ -13,15 +13,24 @@
         ]
     },
     {
+        "Class":"TSensorRandomNone",
+        "Alias":"RandomNone_10_100",
+        "Descr":"Random generator with None value",
+        "Parameter":{"Begin":10, "End":100},
+        "Triggers":[
+            {"Enable":true, "If":"self.Error",      "Always":"self.SetValue('$WriteConsole3', 111); self.Break()"},
+            {"Enable":true, "If":"self.Value < 40", "Always":"self.SetIf('$WriteConsole2')"}
+        ]
+    },
+    {
         "Class":"TSensorRandom",
         "Alias":"Random_100_100",
         "Descr":"Random generator static",
-        "Parameter":{"Begin":100, "End":100, "WaitValue":2},
+        "Parameter":{"Begin":100, "End":100, "Refresh":2},
         "Triggers":[
             {"Enable":false, "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.SetIf('$WriteConsole2')"}
         ]
     },
-
     {
         "Class":"TSensorRandom",
         "Alias":"Random_100_102",

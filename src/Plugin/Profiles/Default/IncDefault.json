@@ -1,18 +1,10 @@
 {
    "Default":[
         {
-            "Enable":false,
-            "Class":"TSensorRandom",
-            "Parameter": {
-                "Begin":10,
-                "End":20
-            }
-        },
-        {
             "Enable":true,
-            "Class":"TControlSleep",
+            "Class":"TSensorRandomNone",
             "Parameter": {
-                "Time":3
+                "None": 10, "MaxErr": 2
             }
         }
     ]

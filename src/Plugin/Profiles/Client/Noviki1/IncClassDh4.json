@@ -9,7 +9,7 @@
             "Class":"TSensorProvider",
             "Alias":"DH4_Sensor_Temper",
             "Descr":"Holodilnik_ST",
-            "Parameter":{"ClassRef":"DH4_Provider", "Tag":"temperature", "WaitValue":600},
+            "Parameter":{"ClassRef":"DH4_Provider", "Tag":"temperature", "Refresh":600},
             "Triggers":[
                 {"Enable":true, "If":"self.Value < 0 or self.Value > 8", "Then":"self.SetValue('$Telegram')"}
             ]
@@ -18,7 +18,7 @@
             "Class":"TSensorProvider",
             "Alias":"DH4_Sensor_Humid",
             "Descr":"Holodilnik_SH",
-            "Parameter":{"ClassRef":"DH4_Provider", "Tag":"humidity", "WaitValue":600}
+            "Parameter":{"ClassRef":"DH4_Provider", "Tag":"humidity", "Refresh":600}
         }
     ]
 }
