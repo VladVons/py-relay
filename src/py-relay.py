@@ -74,7 +74,7 @@ class TMain():
             os.makedirs(ProfileDir)
         #Log.Tail  = ProfileDir
 
-        Log.LogLevel = self.Options.Verbose
+        Log.SetLogLevel(self.Options.Verbose)
 
         DB = self.GetProfilePath(self.Options.FileDb)
         self.DbDict = TDbDictSQLite()
@@ -207,6 +207,10 @@ class TMain():
         self.Manager.SetStartTimeVirt(self.GetUptime())
         self.Manager.LoadConf.Macros(self.Options.FileMacros)
         self.Manager.LoadFile(self.Options.FileConf)
+
+        if (self.Options.Verbose > 1):
+            Params = self.Manager.SecClass.GetParams()
+            Obj.Dump(Params)
         self.Manager.Run()
 
     '''

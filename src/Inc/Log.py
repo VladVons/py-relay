@@ -52,6 +52,9 @@ class TLog():
     def Warn(self, aLevel, aMsg):
         self.Print(aLevel, 'w', [aMsg])
 
+    def SetLogLevel(self, aValue):
+        self.LogLevel = int(aValue)
+
     def SetConsole(self):
         self.Logger = logging.getLogger('MyConsole')
         self.Logger.addHandler(logging.StreamHandler())

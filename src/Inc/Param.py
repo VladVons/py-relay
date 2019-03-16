@@ -125,24 +125,23 @@ class TDictParam():
     def __init__(self):
         self.Loaded  = False
         self.OnLoad  = None
-        self.DefPattern  = {}
+        self.DefPattern = {}
 
     def GetPattern(self):
         return self.DefPattern
 
-    def HasParam(self, aName):
-        Vars = self.GetVars()
+    def HasAttr(self, aName):
+        Vars = self.GetAttrs()
         return (aName in Vars)
 
-    def GetVars(self):
-        return vars(self)
+    def GetAttrs(self):
+        Result = dict(vars(self))
+        for Item in ['Loaded', 'OnLoad', 'DefPattern']:
+            Result.pop(Item)
+        return Result
 
-    def GetAttr(self, aKey = None):
-        Result = self.GetVars()
-        if (aKey):
-            return Result.get(aKey)
-        else:
-            return Result
+    def GetAttr(self, aKey):
+        return self.GetAttrs().get(aKey)
 
     def SetAttr(self, aKey, aValue):
         if (self.OnLoad):

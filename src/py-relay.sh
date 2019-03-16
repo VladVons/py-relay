@@ -23,7 +23,7 @@ Start()
   #Emulator
 
   i2cset -y 1 0x25 255 
-  python py-relay.py
+  python py-relay.py -v 2
   #python2 py-relay.py -p Client/Hust1
   i2cset -y 1 0x25 255 
 }

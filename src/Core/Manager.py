@@ -192,10 +192,16 @@ class TSecClass(TSec):
         self.Import = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
 
+    def GetParams(self):
+        Result = {}
+        for Item in self.Data:
+            Result[Item] = self.Data[Item].Param.GetAttrs()
+        return Result
+
     def SetParam(self, aAlias, aParam, aValue):
         Result = None
         Class  = self.GetClass(aAlias)
-        if (Class and Class.Param.HasParam(aParam)):
+        if (Class and Class.Param.HasAttr(aParam)):
             Class.Param.SetAttr(aParam, aValue)
             Result = Class.Param.GetAttr(aParam)
         return Result
