@@ -123,6 +123,8 @@ class TSecRun(TSec):
 
         Items = self.Data.get('Loop')
         if (Items):
+            Log.Print(2, 'i', self.__class__.__name__, 'Run() Loop')
+
             self.InRun = True
             try:
                 OnLoop = self.Parent.SecAction.Data.get('OnLoop')
@@ -138,6 +140,8 @@ class TSecRun(TSec):
             Log.Print(1, 'w', self.__class__.__name__, 'Run()', 'Loop section is empty')
 
     def Stop(self):
+        Log.Print(2, 'i', self.__class__.__name__, 'Stop()')
+
         if (self.InRun):
             self.InRun = False
 
