@@ -141,6 +141,12 @@ class TExecApi(TExecParse):
         Class = self.Class(aAlias)
         return Class.Post(Caller, aValue)
 
+    def Hyster(self, aBase, aTrash = 1):
+        Value = self.GetValue()
+        if not (aBase - aTrash <= Value <= aBase + aTrash):
+            aBase = Value
+        return aBase
+
     def InValue(self, aBegin, aEnd, aValue = None):
         if (aValue is None):
             aValue = self.GetValue()

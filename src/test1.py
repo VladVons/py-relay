@@ -161,7 +161,7 @@ def TimerRange():
         time.sleep(1)
 
 
-Relay_One(1, 0x25, 1)
+#Relay_One(1, 0x25, 1)
 #Relay_LCD()
 #Telegram()
 #TimerRange()
@@ -190,3 +190,12 @@ Relay_One(1, 0x25, 1)
 #        print(Item)
 
 #print("helo")
+
+def Hyster(aBase, aTrash = 1):
+    Value = 21.1
+    if not (aBase - aTrash <= Value <= aBase + aTrash):
+        aBase = Value
+    return aBase
+
+print(Hyster(20))
+
