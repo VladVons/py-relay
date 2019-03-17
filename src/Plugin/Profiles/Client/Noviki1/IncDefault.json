@@ -1,9 +1,0 @@
-{
-   "Default":[
-        {
-            "Enable":true,
-            "Class":"TRelayI2C_Relay_8574",
-            "Parameter": {"Invert":true}
-        }
-    ]
-}

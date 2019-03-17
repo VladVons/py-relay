@@ -2,8 +2,8 @@ Package: py-relay
 Version: 1.0-17
 Section: IoT
 Priority: optional
-#Architecture: amd64
-Architecture: armhf
+Architecture: amd64
+#Architecture: armhf
 Depends: libpython2.7, python-prctl, python-mysqldb, python-smbus, python-crypto, python-ephem, monit
 Suggests: python-pip
 #Recommends:

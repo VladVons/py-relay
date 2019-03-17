@@ -56,6 +56,8 @@ BuildDeb()
 {
   Log "$0->$FUNCNAME"
 
+  find ./ \( -name "*.pyc" -o -name "*.log" -o -name "*.pyi" -o -name "*.db" \) -type f -delete
+
   Release="$DirSrc/py-relay.bin"
   if [ ! -x $Release ]; then
     echo "Release not compiled $Release"
