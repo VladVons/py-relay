@@ -103,7 +103,8 @@ class TMain():
         Parser.add_option('-d', '--Directory', help = 'root directory')
         Parser.add_option('-s', '--Serial',    help = 'get serial key', action = "store_true")
         Parser.add_option('-v', '--Verbose',   help = 'verbose level')
-        Parser.add_option('-o', '--Options',   help = 'Options list')
+        Parser.add_option('-o', '--Options',   help = 'options list')
+        Parser.add_option('-i', '--Info',      help = 'information',    action = "store_true")
         CmdParam, Args = Parser.parse_args()
 
         Pattern = {
@@ -112,6 +113,8 @@ class TMain():
             'Profile':       'Default',
             'Directory':     'Plugin/Profiles',
             'Serial':        False,
+            'Info':          False,
+
             # misc conf
             'ExceptionHook': False,
             'CheckUpdate':   False,
@@ -208,9 +211,10 @@ class TMain():
         self.Manager.LoadConf.Macros(self.Options.FileMacros)
         self.Manager.LoadFile(self.Options.FileConf)
 
-        if (self.Options.Verbose > 1):
-            Params = self.Manager.SecClass.GetParams()
-            Obj.Dump(Params)
+        if (self.Options.Info):
+            self.Manager.InfoLoad()
+            sys.exit()
+
         self.Manager.Run()
 
     '''

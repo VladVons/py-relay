@@ -19,14 +19,11 @@ class TControlSleep(TControl):
     def __init__(self, aParent):
         TControl.__init__(self, aParent)
 
-        Pattern = {'Time': 1, 'OnStart': True}
+        Pattern = {'Time': 1, 'Init': False}
         self.Param.AddDefPattern(Pattern)
 
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
-
-        if (self.Param.OnStart):
-            time.sleep(self.Param.Time)
 
     def _Set(self, aCaller, aValue):
         #Log.Print(1, 'i', self.__class__.__name__, '_Set()', 'Alias %s' % (self.Alias))

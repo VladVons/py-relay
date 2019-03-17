@@ -30,23 +30,35 @@ class TLog():
 
 
     def Print(self, aLevel, aType, *aParam):
-        if (aLevel <= self.LogLevel):
-            List, Dict = self._Parse(*aParam)
-            Result = 'Log: Level:%d, Type:%s, List:%s, Dict:%s, Tail:%s' % (aLevel, aType, list(List), Dict, self.Tail)
+        if (aLevel > self.LogLevel):
+            return ''
 
-            if (aType == 'w'):
-                self.Logger.warn(Result)
-            elif (aType == 'e'):
-                self.Logger.error(Result)
-            elif (aType == 'x'):
-                self.Logger.exception(Result)
-            else:
-                self.Logger.info(Result)
+        List, Dict = self._Parse(*aParam)
 
-            if (self.OnPrint):
-                self.OnPrint(aLevel, aType, Dict)
+        Str = 'Log: Level:%d, Type:%s, List:%s'
+        Arr = [aLevel, aType, list(List)]
+        if (Dict):
+            Arr.append(Dict)
+            Str += ', Dict:%s'
+
+        if (self.Tail):
+            Arr.append(self.Tail)
+            Str += ', Tail:%s'
+
+        Result = Str % tuple(Arr)
+
+        if (aType == 'w'):
+            self.Logger.warn(Result)
+        elif (aType == 'e'):
+            self.Logger.error(Result)
+        elif (aType == 'x'):
+            self.Logger.exception(Result)
         else:
-            Result = ''
+            self.Logger.info(Result)
+
+        if (self.OnPrint):
+            self.OnPrint(aLevel, aType, Dict)
+
         return Result
 
     def Warn(self, aLevel, aMsg):

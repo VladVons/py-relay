@@ -196,12 +196,6 @@ class TSecClass(TSec):
         self.Import = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
 
-    def GetParams(self):
-        Result = {}
-        for Item in self.Data:
-            Result[Item] = self.Data[Item].Param.GetAttrs()
-        return Result
-
     def SetParam(self, aAlias, aParam, aValue):
         Result = None
         Class  = self.GetClass(aAlias)
@@ -210,16 +204,16 @@ class TSecClass(TSec):
             Result = Class.Param.GetAttr(aParam)
         return Result
 
-    def Check(self):
-        self.Unused = []
+    def GetUnused(self):
+        Result = []
 
         Items = self.Parent.SecInclude.Data.get('Class')
         for Item in Items:
             Alias  = Item.get('Alias')
             Enable = Item.get('Enable', True)
             if (not self.Parent.SecClass.GetClass(Alias) and Enable):
-                self.Unused.append(Alias)
-                Log.Print(1, 'w', self.__class__.__name__, 'Check()', 'Alias %s not used' % Alias)
+                Result.append(Alias)
+        return Result
 
     def GetSection(self, aAlias):
         Items = self.Parent.SecInclude.Data['Class']
@@ -306,6 +300,7 @@ class TSecClass(TSec):
                     sys.exit(1)
                     #raise
 
+            Log.Print(1, 'i', self.__class__.__name__, 'Parse()', 'Load %s->%s (%s)' % (ParentInfo, Alias, TClass.__name__))
             Result = TClass(aParent)
             Result.Alias = Alias
             Result.Descr = aData.get('Descr')
@@ -341,12 +336,23 @@ class TManager():
         self.SecInclude = TSecInclude(self)
         self.SecRun     = TSecRun(self)
 
-    def Info(self):
-        Ver = Version()
-        Ver['iClass']  = len(self.SecClass.Data)
-        Ver['iUnused'] = len(self.SecClass.Unused)
-        Ver['iLoop']   = len(self.SecRun.Data.get('Loop'))
-        Obj.Dump(Ver)
+    def InfoLoad(self):
+        Arr = {}
+        for Item in self.SecClass.Data:
+            Arr[Item] = self.SecClass.Data[Item].Param.GetAttrs()
+        Obj.Dump(Arr)
+        print('')
+
+        Unused = self.SecClass.GetUnused()
+        for Item in Unused:
+            Log.Print(1, 'w', self.__class__.__name__, 'InfoLoad()', 'Alias %s not used' % Item)
+        print('')
+
+        Arr = {}
+        Arr['Class']  = len(self.SecClass.Data)
+        Arr['Unused'] = len(Unused)
+        Arr['Loop']   = len(self.SecRun.Data.get('Loop'))
+        Obj.Dump(Arr)
         print('')
 
     def SetStartTimeVirt(self, aValue):
@@ -375,7 +381,6 @@ class TManager():
                 Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Cant find method %s' % Name)
                 raise Exception(Msg)
 
-        self.SecClass.Check()
         #self.SecClass.SetParam('Sleep_1', 'Time', 5)
 
     def Run(self):
@@ -388,7 +393,8 @@ class TManager():
         Data = self.LoadConf.Conf(aFile)
         self.Load(Data)
 
-        self.Info()
+        Obj.Dump(Version())
+        print('')
 
     def Reload(self):
         self.LoadFile(self.File)
