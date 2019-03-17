@@ -41,11 +41,11 @@ class TBaseRange():
             Off = self._Adjust(Range.get('Off'))
 
             if (not On):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'init()', 'On is empty')
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'SetRanges()', 'On is empty')
                 raise ValueError(Msg)
 
             if (not Off):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'init()', 'Off is empty')
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'SetRanges()', 'Off is empty')
                 raise ValueError(Msg)
 
             self._Load(On, Off)

@@ -67,7 +67,7 @@ def RangeDecorator(aFunc):
 
 def CheckRange(aValue, aMin, aMax):
     if (aMin > aMax):
-        Msg = Log.Print(1, 'e', __name__, '_CheckRange()', 'Min %s is greater than Max %s' % (aMin, aMax))
+        Msg = Log.Print(1, 'e', __name__, 'CheckRange()', 'Min %s is greater than Max %s' % (aMin, aMax))
         raise ValueError(Msg)
     return (aValue >= aMin) and (aValue <= aMax)
  

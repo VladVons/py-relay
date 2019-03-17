@@ -34,7 +34,7 @@ class TProviderSocket(TProvider):
             Sock.sendall(aData)
             Result = Net.SockReceive(Sock, self.BufSize)
         except Exception as E:
-            Log.Print(1, 'x', self.__class__.__name__, 'Socket error', E, Addr)
+            Log.Print(1, 'x', self.__class__.__name__, 'Read()', 'Socket error', E, Addr)
         finally:
             Sock.close()
         return Result

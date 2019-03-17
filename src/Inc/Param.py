@@ -97,7 +97,7 @@ class TRange():
     def PerCentSafe(self, aKey, aPC):
         Range = [0, 100]
         if (aPC < Range[0]) or (aPC > Range[1]):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'PerCent()', 'Value %s is out of range %s' % (aPC, Range))
+            Msg = Log.Print(1, 'e', self.__class__.__name__, 'PerCentSafe()', 'Value %s is out of range %s' % (aPC, Range))
             raise Exception(Msg)
         return self.PerCent(aKey, aPC)
 

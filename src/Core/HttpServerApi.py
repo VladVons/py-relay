@@ -42,7 +42,7 @@ class TWeb():
     def GetClass(self, aAlias):
         Class = self.Parent.Manager.SecClass.GetClass(aAlias)
         if (not Class):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'UrlDeviceSet()', 'Alias not found %s' % aAlias)
+            Msg = Log.Print(1, 'e', self.__class__.__name__, 'GetClass()', 'Alias not found %s' % aAlias)
             self.Parent.AddData(Msg)
         return Class
 

@@ -154,7 +154,7 @@ class TMain():
         StartTime = self.DbDict.Get('StartTime')
         if (StartTime):
             Result = Str.ConvertTo(StartTime)
-            Log.Print(1, 'i', self.__class__.__name__, 'Run()', 'StartTime restored to %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(Result)))
+            Log.Print(1, 'i', self.__class__.__name__, 'GetUptime()', 'StartTime restored to %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(Result)))
         else:
             Result = int(time.time())
             self.DbDict.Set('StartTime', Result)
