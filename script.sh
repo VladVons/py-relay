@@ -36,24 +36,6 @@ ExecM()
 }
  
 
-Clean()
-{
-  echo "delete objects"
-  find ./ \( -name "*.pyc" -o -name "*.log" -o -name "*.pyi" -o -name "*.db" \) -type f -delete
-  #find ./ \( -name '*.so'  -o -name "*.exe" \) -type f -delete
-  find . -name '__pycache__' -exec rm -v -f -R {} \;
-
-  echo
-  echo "Statistics *.py"
-  #find . -name '*.py' -ls | awk '{total += $7} END {print total}'
-  find . -name '*.py' | xargs wc
-
-  #echo
-  #echo "Statistics *.json"
-  #find . -name '*.json' | xargs wc
-}
-
-
 Release()
 {
   Log "$0->$FUNCNAME"
@@ -263,7 +245,6 @@ clear
 #BuildDeb
 #Wget
 case $1 in
-    Clean)          "$1"        "$2" "$3" ;;
     HowTo)          "$1"        "$2" "$3" ;;
     Release)        "$1"        "$2" "$3" ;;
     BuildDeb)       "$1"        "$2" "$3" ;;

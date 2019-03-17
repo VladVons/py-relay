@@ -33,19 +33,19 @@ Clean()
   echo
   echo "Statistics *.py"
   #find . -name '*.py' -ls | awk '{total += $7} END {print total}'
-  find . -name '*.py' | xargs wc
+  find . -name '*.py' | xargs wc | cat -n
+  #find . -name '*.py' | wc -l
 
   #echo
   #du -s -b py-relay/src/* | sort -n -r
   #find py-relay/src/ -ls -type f | awk '{sum += $7} END {print sum}'
 
-  echo
-  echo "Files *.py"
-  find . -name '*.py' | wc -l
+  #echo
+  #echo "Files *.py"
 
-  echo
-  echo "Statistics *.json"
-  find . -name '*.json' | xargs wc
+  #echo
+  #echo "Statistics *.json"
+  #find . -name '*.json' | xargs wc
 }
 
 
