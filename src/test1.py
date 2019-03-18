@@ -191,11 +191,11 @@ def TimerRange():
 
 #print("helo")
 
-def Hyster(aBase, aTrash = 1):
-    Value = 21.1
-    if not (aBase - aTrash <= Value <= aBase + aTrash):
-        aBase = Value
+
+def Hyster(aBase, aValue, aTrash = 1):
+    if not (aBase - aTrash <= aValue <= aBase + aTrash):
+        aBase = aValue
     return aBase
 
-print(Hyster(20))
-
+for Item in range(15, 25):
+    print(Hyster(20, Item), Item == 20)
