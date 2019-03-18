@@ -38,6 +38,22 @@
         "Parameter":{"Begin":100, "End":110}
     },
     {
+        "Class":"TSensorCycleInc",
+        "Alias":"SensorCycleInc",
+        "Parameter":{"Begin":15, "End":25},
+        "Triggers":[
+            {"Enable":true, "If":"self.Hyster(20) < 20", "Always":"self.SetIf('$WriteConsole2')"}
+        ]
+    },
+    {
+        "Class":"TSensorCycleDec",
+        "Alias":"SensorCycleDec",
+        "Parameter":{"Begin":15, "End":25},
+        "Triggers":[
+            {"Enable":true, "If":"self.Hyster(20) < 20", "Always":"self.SetIf('$WriteConsole2')"}
+        ]
+    },
+    {
         "Class":"TSensorRandom",
         "Alias":"RandomEx_11_31",
         "Descr":"Random",

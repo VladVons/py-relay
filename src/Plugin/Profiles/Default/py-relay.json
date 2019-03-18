@@ -13,8 +13,9 @@
                 {"Enable":false, "ClassRef":"SensorSun"},
                 {"Enable":false, "ClassRef":"SensorTRD_Humid"},
                 {"Enable":false, "ClassRef":"SensorTRDF_2"},
-                {"Enable":true,  "ClassRef":"Random_15_25"},
+                {"Enable":false, "ClassRef":"Random_15_25"},
                 {"Enable":false, "ClassRef":"RandomNone_10_100"},
+                {"Enable":true,  "ClassRef":"SensorCycleDec"},
                 {"Enable":false, "ClassRef":"Sensor_Pi_CPUTemp"},
                 {"Enable":false, "ClassRef":"SensorUptimeSys"}
             ],

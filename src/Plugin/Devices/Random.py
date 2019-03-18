@@ -13,7 +13,7 @@ from Core.Device      import TSensor
 from Plugin.Providers.Random import TProviderRandom
 
 
-class TSensorRandom(TSensor):
+class TSensorRange(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 
@@ -22,11 +22,16 @@ class TSensorRandom(TSensor):
 
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
+
+
+class TSensorRandom(TSensorRange):
+    def DoParameter(self, aParam):
+        self.Param.LoadPattern(aParam)
         self.Provider = TProviderRandom(self.Param.Begin, self.Param.End)
         self.Range.Set(None, [self.Param.Begin, self.Param.End])
 
 
-class TSensorRandomEx(TSensorRandom):
+class TSensorRandomEx(TSensorRange):
     # Custom handler example
     def DoOnValue(self, aValue):
         #TRelayThreadRead.DoOnValue(self, aValue)
@@ -43,15 +48,12 @@ class TSensorRandomEx(TSensorRandom):
     #    print('my DoOnPost', self.Alias, aValue)
 
 
-class TSensorRandomNone(TSensor):
+class TSensorRandomNone(TSensorRange):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 
-        Pattern = {'Begin': 0, 'End': 99, 'None': 5}
+        Pattern = {'None': 5}
         self.Param.AddDefPattern(Pattern)
-
-    def DoParameter(self, aParam):
-        self.Param.LoadPattern(aParam)
 
     def _Get(self):
         Result = random.randint(self.Param.Begin, self.Param.End)
@@ -59,3 +61,26 @@ class TSensorRandomNone(TSensor):
         if (Div < self.Param.None):
             Result = None
         return Result
+
+
+class TSensorCycleInc(TSensorRange):
+    def DoParameter(self, aParam):
+        self.Param.LoadPattern(aParam)
+        self.Count = self.Param.Begin
+
+    def _Get(self):
+        self.Count += 1
+        if (self.Count > self.Param.End):
+            self.Count = self.Param.Begin
+        return self.Count
+
+class TSensorCycleDec(TSensorRange):
+    def DoParameter(self, aParam):
+        self.Param.LoadPattern(aParam)
+        self.Count = self.Param.End
+
+    def _Get(self):
+        self.Count -= 1
+        if (self.Count < self.Param.Begin):
+            self.Count = self.Param.End
+        return self.Count

@@ -11,7 +11,7 @@ Name="py-relay"
 DirSrc="src"
 #DirSrc="/usr/lib/py-relay"
 #
-Ver="1.0-17"
+Ver="1.0-18"
 #Platform="armhf"
 Platform="amd64"
 DirDeb="deb/${Name}_${Ver}_${Platform}"
