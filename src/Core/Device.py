@@ -137,7 +137,7 @@ class TDevice(TDeviceBase):
                     Result = self.DoPost(aCaller, aValue, aData)
 
             if (self.Param.Debug):
-                Log.Print(0, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s, Result:%s' % (self.Alias, self.GetAlias(aCaller), aValue, Result))
+                Log.Print(1, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s, Result:%s' % (self.Alias, self.GetAlias(aCaller), aValue, Result))
         return Result
 
     def SetValue(self, aValue):

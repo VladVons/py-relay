@@ -40,10 +40,11 @@ class TDeviceHive():
                 Result   = json.loads(Data)
                 break
             except Exception as E:
-                Log.Print(1, 'e', self.__class__.__name__, 'Send()', 'Url %s, Data %s' % (Url, aData))
                 time.sleep(aSleep)
                 Result = None
         #print('Result', aTries, Url, aData, Result)
+        if (Result is None):
+            Log.Print(1, 'e', self.__class__.__name__, 'Send()', 'Url %s, Data %s' % (Url, aData))
         return Result
 
 

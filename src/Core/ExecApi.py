@@ -145,7 +145,7 @@ class TExecApi(TExecParse):
         Value = self.GetValue()
         if (Time.CheckRange(Value, aBase - aDif, aBase + aDif)):
             Value = aBase
-        print('--',Value)
+        print('---v1', Value)
         return Value
 
     def InValue(self, aBegin, aEnd, aValue = None):
