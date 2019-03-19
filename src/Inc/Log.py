@@ -7,6 +7,7 @@ Description:
 '''
 
 import logging
+import time
 
 __all__ = ['TLog', 'Log']
 
@@ -17,6 +18,7 @@ class TLog():
         self.OnPrint  = None
         self.Tail     = ''
         self.Logger   = logging
+        self.Format   = '%Y/%m/%d %H:%M:%S' 
 
     def _Parse(self, *aParam):
         List = []
@@ -35,8 +37,8 @@ class TLog():
 
         List, Dict = self._Parse(*aParam)
 
-        Str = 'Log: Level:%d, Type:%s, List:%s'
-        Arr = [aLevel, aType, list(List)]
+        Str = 'Log: %s, Level:%d, Type:%s, List:%s'
+        Arr = [time.strftime(self.Format), aLevel, aType, list(List)]
         if (Dict):
             Arr.append(Dict)
             Str += ', Dict:%s'
@@ -82,7 +84,7 @@ class TLog():
             logging.basicConfig(
                             level=logging.INFO,
                             format=Format,
-                            datefmt='%Y/%m/%d %H:%M:%S',
+                            datefmt=self.Format,
                             filename=aFile,
                             filemode='a')
             print ('%s->SetFile(): %s' % (self.__class__.__name__, aFile))

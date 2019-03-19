@@ -208,7 +208,9 @@ class TSensor(TDevice):
             raise NotImplementedError(Msg)
 
     def Round(self, aValue):
-        if (self.Param.Round is None):
+        if (aValue is None):
+            Result = None
+        elif (self.Param.Round is None):
             Result = aValue
         else:
             if (not self.Avg.Check(aValue)):
@@ -219,7 +221,7 @@ class TSensor(TDevice):
             try:
                 Result = Num.RoundPart(Value, self.Param.Round)
             except:
-                Result = 0
+                Result = None
                 Log.Print(1, 'x', self.__class__.__name__, 'Round()', 'Alias: %s, Value: %s' % (self.Alias, aValue))
         return Result
 

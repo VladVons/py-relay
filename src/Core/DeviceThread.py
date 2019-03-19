@@ -34,12 +34,7 @@ class TSensorThreadRead(TSensor):
 
     def _Get(self):
         Data = self.Thread.GetData()
-        if (Data is None):
-            # get previous value
-            Result = self.Value
-        else:
-            Result = Data
-        return self.Round(Result)
+        return self.Round(Data)
 
 
 # === Read slow devices.
