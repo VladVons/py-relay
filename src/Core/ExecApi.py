@@ -143,7 +143,7 @@ class TExecApi(TExecParse):
 
     def Thermostat(self, aBase, aDif = 1):
         Value = self.GetValue()
-        return (Value < aBase) or (Value >= self.Parent.PrevValue and Value < aBase + aDif):
+        return (Value < aBase) or (Value >= self.Parent.PrevValue and Value < aBase + aDif)
 
     def InValue(self, aBegin, aEnd, aValue = None):
         if (aValue is None):

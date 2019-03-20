@@ -69,7 +69,7 @@ class TExec():
         self.Current = aData
         self.CurResult.Clear()
 
-        if (not Data.get('Enable', True)):
+        if (not aData.get('Enable', True)):
             return False
 
         self.BreakLabel = None
