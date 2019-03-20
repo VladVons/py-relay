@@ -148,7 +148,8 @@ class TDevice(TDeviceBase):
             self.Exec.Conditions('Triggers')
             return False
 
-        if ((self.Value != aValue) or (self.Param.AllValue) or (self.GetUptime() - self.LastChange > self.Param.Refresh)):
+        Result = False
+        if (self.Value != aValue) or (self.Param.AllValue) or (self.GetUptime() - self.LastChange > self.Param.Refresh):
             if (self.OnValue):
                 aValue = self.OnValue(self, aValue)
             self.Value = aValue
@@ -161,7 +162,9 @@ class TDevice(TDeviceBase):
             self.LastChange = self.GetUptime()
             self.PrevValue  = aValue 
             self.MaxErr     = self.Param.MaxErr
-        return True
+            Result = True
+
+        return Result
 
     def CheckValue(self, aValue):
         if (aValue is None):

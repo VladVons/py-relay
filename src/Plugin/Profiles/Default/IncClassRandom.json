@@ -29,7 +29,7 @@
         "Parameter":{"Begin":15, "End":25, "Refresh":200},
         "Triggers":[
             {"Enable":false, "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.SetIf('$WriteConsole2')"},
-            {"Enable":true,  "If":"self.Value < self.Hyster(20)", "Then":"self.SetIf('$WriteConsole2')"}
+            {"Enable":true,  "If":"self.Value < self.Thermostat(20, 1)", "Then":"self.SetIf('$WriteConsole2')"}
         ]
     },
     {
@@ -42,8 +42,7 @@
         "Alias":"SensorCycleInc",
         "Parameter":{"Begin":15, "End":25},
         "Triggers":[
-            {"Enable":false, "If":"self.Hyster(20) < 20", "Always":"self.SetIf('$WriteConsole2')"},
-            {"Enable":true, "If":"self.Hyster(20) < 20", "Always":"self.SetIf('$WriteConsole2')"}
+            {"Enable":true, "If":"self.Thermostat(20, 1)", "Always":"self.SetIf('$WriteConsole2')"}
         ]
     },
     {
@@ -51,7 +50,7 @@
         "Alias":"SensorCycleDec",
         "Parameter":{"Begin":15, "End":25},
         "Triggers":[
-            {"Enable":true, "If":"self.Hyster(20) < 20", "Always":"self.SetIf('$WriteConsole2')"}
+            {"Enable":true, "If":"self.Thermostat(20)", "Always":"self.SetIf('$WriteConsole2')"}
         ]
     },
     {

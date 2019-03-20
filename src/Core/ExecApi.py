@@ -141,9 +141,15 @@ class TExecApi(TExecParse):
         Class = self.Class(aAlias)
         return Class.Post(Caller, aValue)
 
-    def Thermostat(self, aBase, aDif = 1):
-        Value = self.GetValue()
-        return (Value < aBase) or (Value >= self.Parent.PrevValue and Value < aBase + aDif)
+    def Thermostat(self, aBase, aDif = 1, aValue = None):
+        if (aValue is None):
+            aValue = self.GetValue()
+
+        if (aDif > 0):
+            Result = (aValue < aBase) or (aValue >= self.Parent.PrevValue and aValue < aBase + aDif)
+        else:
+            Result = (aValue > aBase) or (aValue <= self.Parent.PrevValue and aValue > aBase + aDif)
+        return Result
 
     def InValue(self, aBegin, aEnd, aValue = None):
         if (aValue is None):
