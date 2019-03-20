@@ -11,7 +11,7 @@ Name="py-relay"
 DirSrc="src"
 #DirSrc="/usr/lib/py-relay"
 #
-Ver="1.0-18"
+Ver="1.0-19"
 #Platform="armhf"
 Platform="amd64"
 DirDeb="deb/${Name}_${Ver}_${Platform}"
@@ -35,48 +35,6 @@ ExecM()
   eval "$aExec"
 }
  
-
-Release()
-{
-  Log "$0->$FUNCNAME"
-
-  #apt-get install python-dev 
-
-  cd $DirSrc
-  echo "Building in $(pwd) ..."
-  nuitka --follow-imports --remove-output $Name.py
-  #nuitka --follow-imports --remove-output --standalone $Name.py
-  cd ..
-
-  find $DirSrc/Plugin -name "*.pyc" -type f -delete
-}
-
-
-BuildDeb()
-{
-  Log "$0->$FUNCNAME"
-
-  find ./ \( -name "*.pyc" -o -name "*.log" -o -name "*.pyi" -o -name "*.db" \) -type f -delete
-
-  Release="$DirSrc/py-relay.bin"
-  if [ ! -x $Release ]; then
-    echo "Release not compiled $Release"
-    exit
-  fi
-
-  DirApp="$DirDeb/usr/lib/$Name"
-  mkdir -p $DirApp
-
-  cp -R deb/src/CONTENTS/* $DirDeb
-  cp -R deb/src/DEBIAN $DirDeb
-  cp -R $DirSrc/$Name.{bin,conf,key} $DirApp
-  cp -R $DirSrc/Plugin $DirApp
-
-  rm $DirDeb.deb
-  dpkg-deb --build $DirDeb
-  rm -R $DirDeb
-}
-
 
 Install_pi_img()
 {
@@ -248,8 +206,6 @@ clear
 #Wget
 case $1 in
     HowTo)          "$1"        "$2" "$3" ;;
-    Release)        "$1"        "$2" "$3" ;;
-    BuildDeb)       "$1"        "$2" "$3" ;;
     Install)        "$1"        "$2" "$3" ;;
     Install_Pkg)    "$1"        "$2" "$3" ;;
     Help|*)         "Help"       ;;
