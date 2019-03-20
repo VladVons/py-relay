@@ -14,13 +14,14 @@ Abstract base classes for Providers
 import socket
 #
 from Inc.Log    import Log
-from Inc.Util   import Net
+from Inc.Util   import Net, Time
 
 
 class TProvider():
     # ToDo: MultiThread lock is better
     ReadConfirm = False
     ReadMax = 2
+    ReadDelayMs = 100
 
     def _ReadWithExcept(self, aValue):
         try:
@@ -34,7 +35,9 @@ class TProvider():
         for Cnt in range(self.ReadMax):
             Result = self._ReadWithExcept(aValue)
             if (self.ReadConfirm):
+                Time.DelayMicroSec(self.ReadDelayMs)
                 Result2 = self._ReadWithExcept(aValue)
+                #print('---x1', Result, Result2)
                 if (Result != Result2):
                     Log.Print(1, 'e', self.__class__.__name__, 'ReadTry()', 'Diff values %s and %s ' % (Result, Result2))
                 else:

@@ -87,7 +87,6 @@ class TProviderSolar(TProvider):
 class TProviderSun(TProviderSolar):
     def __init__(self, aLatitude, aLongitude):
         self.SolarObj = TSun(aLatitude, aLongitude)
-        self.ReadConfirm = True
 
 
 class TProviderMoon(TProviderSolar):
