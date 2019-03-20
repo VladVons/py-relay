@@ -26,20 +26,6 @@ Description: Relay automation" > $DirDebRoot/src/DEBIAN/control
 }
 
 
-Release()
-{
-  #apt-get install python-dev 
-
-  cd $DirSrc
-  echo "Building in $(pwd) ..."
-  nuitka --follow-imports --remove-output $Name.py
-  #nuitka --follow-imports --remove-output --standalone $Name.py
-  cd ..
-
-  find $DirSrc/Plugin -name "*.pyc" -type f -delete
-}
-
-
 Deb()
 {
   find ./ \( -name "*.pyc" -o -name "*.log" -o -name "*.pyi" -o -name "*.db" \) -type f -delete
@@ -63,6 +49,21 @@ Deb()
   rm $DirDeb.deb
   dpkg-deb --build $DirDeb
   rm -R $DirDeb
+}
+
+
+Release()
+{
+  #apt-get install python-dev 
+
+  cd $DirSrc
+  echo "Building in $(pwd) ..."
+  nuitka3 --follow-imports --remove-output $Name.py
+  #nuitka --follow-imports --remove-output $Name.py
+  #nuitka --follow-imports --remove-output --standalone $Name.py
+  cd ..
+
+  find $DirSrc/Plugin -name "*.pyc" -type f -delete
 }
 
 

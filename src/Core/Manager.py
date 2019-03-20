@@ -77,7 +77,7 @@ class TSec():
 class TSecInclude(TSec):
     def Add(self, aData):
         for Key in aData.keys():
-            if (self.Data.has_key(Key)):
+            if (Key in self.Data):
                 for Item in aData[Key]:
                     self.Data[Key].append(Item)
             else:

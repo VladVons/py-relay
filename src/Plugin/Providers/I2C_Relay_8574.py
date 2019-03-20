@@ -25,6 +25,7 @@ class TProviderI2C_Relay_8574(TProviderI2C):
     def __init__(self, aBus, aAddress, aCommand, aMirror = False):
         TProviderI2C.__init__(self, aBus, aAddress, aCommand)
         self.Mirror = aMirror
+        self.ReadConfirm = True
 
     def Set(self, aCaller, aValue):
         PrevValue = self.Get()

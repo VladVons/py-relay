@@ -60,5 +60,7 @@ def GetTreeAsStr(aValue, aDepth = 99):
 def Dump(aValue, aDepth = 99):
     Items = GetTree(aValue, '', aDepth)
     if (Items):
-        for Item in sorted(Items):
+        # ToDo: py3 
+        #for Item in sorted(Items):
+        for Item in Items:
             print('{:25} = {}'.format(Item['Key'], Item['Value']))

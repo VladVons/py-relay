@@ -10,16 +10,14 @@ import uuid
 import sys
 import socket
 #
-try:
-    import urlparse
-except:
-    import urllib.parse as urlparse
+try: import urlparse
+except: import urllib.parse as urlparse
 #
-try:
-    from urllib2 import Request, urlopen
-except:
-    from urllib.request import Request, urlopen
-from urllib import urlencode
+try: from urllib2 import Request, urlopen
+except: from urllib.request import Request, urlopen
+#
+try: from urllib import urlencode
+except: from urllib.parse import urlencode
 #
 from Inc.Util import FS
 

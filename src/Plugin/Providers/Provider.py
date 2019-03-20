@@ -18,12 +18,27 @@ from Inc.Util   import Net
 
 
 class TProvider():
-    def ReadTry(self, aValue = None):
+    # ToDo: MultiThread lock is better
+    ReadConfirm = False
+    ReadMax = 2
+
+    def _ReadWithExcept(self, aValue):
         try:
             Result = self.Read(aValue)
         except Exception as E:
-            Log.Print(1, 'x', self.__class__.__name__, 'ReadTry()', aValue, E)
+            Log.Print(1, 'x', self.__class__.__name__, '_ReadWithExcept()', aValue, E)
             Result = None
+        return Result
+
+    def ReadTry(self, aValue = None):
+        for Cnt in range(self.ReadMax):
+            Result = self._ReadWithExcept(aValue)
+            if (self.ReadConfirm):
+                Result2 = self._ReadWithExcept(aValue)
+                if (Result != Result2):
+                    Log.Print(1, 'e', self.__class__.__name__, 'ReadTry()', 'Diff values %s and %s ' % (Result, Result2))
+                else:
+                    break
         return Result
 
     def WriteTry(self, aValue):
