@@ -141,11 +141,9 @@ class TExecApi(TExecParse):
         Class = self.Class(aAlias)
         return Class.Post(Caller, aValue)
 
-    def Hyster(self, aBase, aDif = 1):
+    def Thermostat(self, aBase, aDif = 1):
         Value = self.GetValue()
-        if (Time.CheckRange(Value, aBase - aDif, aBase + aDif)):
-            Value = aBase
-        return Value
+        return (Value < aBase) or (Value >= self.Parent.PrevValue and Value < aBase + aDif):
 
     def InValue(self, aBegin, aEnd, aValue = None):
         if (aValue is None):

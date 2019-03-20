@@ -66,25 +66,26 @@ class TExec():
     def ExecSection(self, aData):
         Log.Print(3, 'i', self.__class__.__name__, 'ExecSection()', aData)
 
-
         self.Current = aData
         self.CurResult.Clear()
 
-        Result = aData.get('Enable', True)
-        if (Result):
-            self.BreakLabel = None
+        if (not Data.get('Enable', True)):
+            return False
 
-            Keys = aData.keys()
-            if (('Then' in Keys) or ('Else' in Keys)) and (not 'If' in Keys):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'ExecSection()', 'Then/Else without If', aData)
-                raise ValueError(Msg)
-
+        self.BreakLabel = None
+        Keys = aData.keys()
+        if ('If' in Keys):
             if (self.ExecKey('If') is True):
                 self.CurResult.CountIf += 1
                 self.ExecKey('Then')
             else:
                 self.CurResult.CountIf = 0
                 self.ExecKey('Else')
+        else:
+            if (('Then' in Keys) or ('Else' in Keys)):
+                Msg = Log.Print(1, 'e', self.__class__.__name__, 'ExecSection()', 'Then/Else without If', aData)
+                raise ValueError(Msg)
 
-            self.ExecKey('Always')
-        return Result
+        self.ExecKey('Always')
+        return True
+        

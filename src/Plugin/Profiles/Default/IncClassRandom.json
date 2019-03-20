@@ -42,6 +42,7 @@
         "Alias":"SensorCycleInc",
         "Parameter":{"Begin":15, "End":25},
         "Triggers":[
+            {"Enable":false, "If":"self.Hyster(20) < 20", "Always":"self.SetIf('$WriteConsole2')"},
             {"Enable":true, "If":"self.Hyster(20) < 20", "Always":"self.SetIf('$WriteConsole2')"}
         ]
     },

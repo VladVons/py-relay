@@ -99,6 +99,7 @@ class TDevice(TDeviceBase):
 
         self.LastChange = 0
         self.Value      = 0
+        self.PrevValue  = 0
         self.PostCnt    = 0
         self.MaxErr     = 0
         self.Key        = ''
@@ -151,14 +152,15 @@ class TDevice(TDeviceBase):
             if (self.OnValue):
                 aValue = self.OnValue(self, aValue)
             self.Value = aValue
-            self.LastChange = self.GetUptime()
 
             if (self.Param.OnValue):
                 self.Action('OnValue', aValue)
 
             self.Exec.Conditions('Triggers')
-            self.MaxErr = self.Param.MaxErr
 
+            self.LastChange = self.GetUptime()
+            self.PrevValue  = aValue 
+            self.MaxErr     = self.Param.MaxErr
         return True
 
     def CheckValue(self, aValue):
