@@ -58,8 +58,8 @@ Release()
 
   cd $DirSrc
   echo "Building in $(pwd) ..."
-  nuitka3 --follow-imports --remove-output $Name.py
-  #nuitka --follow-imports --remove-output $Name.py
+  #nuitka3 --follow-imports --remove-output $Name.py
+  nuitka --follow-imports --remove-output $Name.py
   #nuitka --follow-imports --remove-output --standalone $Name.py
   cd ..
 
