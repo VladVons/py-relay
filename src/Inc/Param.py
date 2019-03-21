@@ -241,7 +241,6 @@ class TDictReplace():
     # search macros $<xxx> in aStr and repalce it with value returned by aFunc
     def _ParseRecurs(self, aData):
         Items = self.GetMatch(aData)
-
         if (Items):
             for Item in Items:
                 Item = Item.strip()
@@ -272,7 +271,8 @@ class TDictReplace():
     def ParseVar(self, aData):
         if (isinstance(aData, dict)):
             for Key in aData:
-                aData[Key] = self.ParseVar(aData[Key])
+                Value = self.ParseVar(aData[Key])
+                aData[Key] = Value
         elif (isinstance(aData, list)):
             for i in range(len(aData)):
                  aData[i] = self.ParseVar(aData[i])

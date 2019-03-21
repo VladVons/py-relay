@@ -46,7 +46,7 @@ Deb()
   cp -R $DirSrc/$Name.{bin,conf,key} $DirApp
   cp -R $DirSrc/Plugin $DirApp
 
-  rm $DirDeb.deb
+  rm -f $DirDeb.deb
   dpkg-deb --build $DirDeb
   rm -R $DirDeb
 }

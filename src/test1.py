@@ -191,14 +191,10 @@ def TimerRange():
 
 #print("helo")
 
+from Inc.Util import Str
+Str.ToFloat('1')
+Str.ToFloat('1.2')
+Str.ToFloat('1,2')
+Str.ToFloat('1,2s')
 
-def Hyster(aBase, aValue, aDif = 1):
-    Result = (aValue < aBase) or (aBase <= aValue <= aBase + aDif)
-    return Result
-
-#for Item in range(15, 25):
-#    print(Hyster(20, Item), Item == 20)
-
-T = Hyster(20, 21, 3)
-print(T)
 

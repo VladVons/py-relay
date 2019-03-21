@@ -15,7 +15,6 @@ from Inc.Log        import Log
 from Inc.Util       import Obj, FS, Arr
 from Inc.Param      import TDictReplace
 from Inc.ConfEditor import TEditorConf
-from Api            import Version
 
 # for nuitka compiler
 #from Plugin.Devices import *
@@ -336,25 +335,6 @@ class TManager():
         self.SecInclude = TSecInclude(self)
         self.SecRun     = TSecRun(self)
 
-    def InfoLoad(self):
-        Arr = {}
-        for Item in self.SecClass.Data:
-            Arr[Item] = self.SecClass.Data[Item].Param.GetAttrs()
-        Obj.Dump(Arr)
-        print('')
-
-        Unused = self.SecClass.GetUnused()
-        for Item in Unused:
-            Log.Print(1, 'w', self.__class__.__name__, 'InfoLoad()', 'Alias %s not used' % Item)
-        print('')
-
-        Arr = {}
-        Arr['Class']  = len(self.SecClass.Data)
-        Arr['Unused'] = len(Unused)
-        Arr['Loop']   = len(self.SecRun.Data.get('Loop'))
-        Obj.Dump(Arr)
-        print('')
-
     def SetStartTimeVirt(self, aValue):
         self.StartTimeVirt = int(aValue)
 
@@ -386,6 +366,26 @@ class TManager():
     def Run(self):
         self.SecRun.Run()
 
+    def Info(self, aMode):
+        if (aMode == 'Attrs'):
+            Arr = {}
+            for Item in self.SecClass.Data:
+                Arr[Item] = self.SecClass.Data[Item].Param.GetAttrs()
+            Obj.Dump(Arr)
+        elif (aMode == 'Unused'):
+            Unused = self.SecClass.GetUnused()
+            for Item in Unused:
+                Log.Print(1, 'w', self.__class__.__name__, 'Info()', 'Alias %s not used' % Item)
+        elif (aMode == 'Total'):
+            Arr = {}
+            Arr['Class'] = len(self.SecClass.Data)
+            Arr['Unused'] = len(self.SecClass.GetUnused())
+            Arr['Loop'] = len(self.SecRun.Data.get('Loop'))
+            Obj.Dump(Arr)
+        else:
+            Log.Print(1, 'w', self.__class__.__name__, 'Info()', 'Unknown option %s' % aMode)
+        print('')
+
     def LoadFile(self, aFile):
         Log.Print(1, 'i', self.__class__.__name__, 'LoadFile()', '%s%s' % (self.LoadConf.Dir, aFile))
 
@@ -393,8 +393,8 @@ class TManager():
         Data = self.LoadConf.Conf(aFile)
         self.Load(Data)
 
-        Obj.Dump(Version())
-        print('')
+        self.Info('Unused')
+        self.Info('Total')
 
     def Reload(self):
         self.LoadFile(self.File)

@@ -32,9 +32,10 @@ import traceback
 from Inc.Log          import Log
 from Inc.DB           import TDbDictSQLite
 from Inc.Util         import Obj, FS, Net, Str
-from Inc.Param        import TDictParam, TDictReplace
+from Inc.Param        import TDictParam
 from Inc.Protect      import TProtect
-from Core.Manager     import TManager, Version, TLoadConf
+from Core.Manager     import TManager
+from Api              import Version
 
 
 class TMain():
@@ -51,6 +52,9 @@ class TMain():
         self.Init()
 
     def Init(self):
+        Obj.Dump(Version())
+        print('')
+
         if (not Log.SetFile(self.Options.FileLog)):
             Log.SetFile('%s.log' % self.AppName)
         Log.SetConsole()
@@ -212,7 +216,7 @@ class TMain():
         self.Manager.LoadFile(self.Options.FileConf)
 
         if (self.Options.Info):
-            self.Manager.InfoLoad()
+            self.Manager.Info('Attrs')
             sys.exit()
 
         self.Manager.Run()

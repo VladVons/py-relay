@@ -7,6 +7,8 @@ Description:
 '''
 
 import re
+import json
+
 
 def ActionDelim(self, aStr, aFunc, aDelim = ","):
     Result = ''
@@ -23,10 +25,11 @@ def ConvertTo(aData):
             aData = bool(aData)
         elif (aData.isdigit()):
             aData = int(aData)
-        elif (ToFloat(aData) is not None):
+        elif (IsFloat(aData)):
             aData = ToFloat(aData)
+        elif (IsArr(aData)):
+            aData = json.loads(aData)
     return aData
-
 
 def GetPart(aStr, aIdx, aDelim = ','):
     Items = aStr.split(aDelim)
@@ -35,13 +38,18 @@ def GetPart(aStr, aIdx, aDelim = ','):
     else:
         return ''
 
+def IsFloat(aStr):
+    return re.match("^\d+?[\.\,]\d+?$", aStr) != None
+
+def IsArr(aStr):
+    return (aStr[0] in ['{', '[']) and ((aStr[-1:] in ['}', ']']))
+
 def ToFloat(aStr):
-    aStr = aStr.replace(',', '.')
-    try:
+    if (IsFloat(aStr)):
+        aStr = aStr.replace(',', '.')
         Result = float(aStr)
-    # ToDo type
-    except:
-        Result = None
+    else:
+        Result = 0.0
     return Result
 
 def MultiRepl(aStr, aFindRepl):
@@ -49,8 +57,5 @@ def MultiRepl(aStr, aFindRepl):
         aStr = aStr.replace(Find, Repl)
     return aStr
 
-
 def ReplaceIdx(aStr, aIdx, aReplace):
     return aStr[:aIdx] + aReplace + aStr[aIdx + len(aReplace):]
-
-

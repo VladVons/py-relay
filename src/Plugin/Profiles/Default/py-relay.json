@@ -1,75 +1,76 @@
 {
-        "Run":{
-            "Init":[
-            ],
-            "Start":[
-                {"Enable":true,   "ClassRef":"GroupOnStart"}
-            ],
-            "Loop":[
-                {"Enable":true,  "ClassRef":"Sleep_1"},
-                {"Enable":false, "ClassRef":"SensorGroupSum"},
-                {"Enable":false, "ClassRef":"SensorGroupAvg"},
-                {"Enable":false, "ClassRef":"SensorTimeRangeCycle"},
-                {"Enable":true,  "ClassRef":"SensorSun"},
-                {"Enable":false, "ClassRef":"SensorTRD_Humid"},
-                {"Enable":false, "ClassRef":"SensorTRDF_2"},
-                {"Enable":false, "ClassRef":"Random_15_25"},
-                {"Enable":false, "ClassRef":"RandomNone_10_100"},
-                {"Enable":false, "ClassRef":"SensorCycleDec"},
-                {"Enable":false, "ClassRef":"Sensor_Pi_CPUTemp"},
-                {"Enable":false, "ClassRef":"SensorUptimeSys"}
-            ],
-            "Finish":[
-                {"Enable":false,   "ClassRef":"GroupOnFinish"}
+    "Run":{
+        "Init":[
+        ],
+        "Start":[
+            {"Enable":true,   "ClassRef":"GroupOnStart"}
+        ],
+        "Loop":[
+            {"Enable":true,  "ClassRef":"Sleep_1"},
+            {"Enable":false, "ClassRef":"SensorGroupSum"},
+            {"Enable":false, "ClassRef":"SensorGroupAvg"},
+            {"Enable":true,  "ClassRef":"SensorTimeRangeCycle1"},
+            {"Enable":false, "ClassRef":"SensorSun"},
+            {"Enable":false, "ClassRef":"SensorTRD_Humid"},
+            {"Enable":false, "ClassRef":"SensorTRDF_2"},
+            {"Enable":false, "ClassRef":"Random_15_25"},
+            {"Enable":false, "ClassRef":"RandomNone_10_100"},
+            {"Enable":false, "ClassRef":"SensorCycleDec"},
+            {"Enable":false, "ClassRef":"Sensor_Pi_CPUTemp"},
+            {"Enable":false, "ClassRef":"SensorUptimeSys"}
+        ],
+        "Finish":[
+            {"Enable":false,   "ClassRef":"GroupOnFinish"}
+        ]
+    },
+   "Include":[
+        {"Enable":true,  "File":"IncClassTest.json"},
+        {"Enable":false, "File":"IncDefault.json"},
+        {"Enable":true,  "File":"IncClassGroup.json"},
+        {"Enable":true,  "File":"IncClassRandom.json"},
+        {"Enable":false, "File":"IncClassTimer.json"},
+        {"Enable":true,  "File":"IncClassReport.json"},
+        {"Enable":true,  "File":"IncClassSolar.json"},
+        {"Enable":true,  "File":"IncClassRasPi.json"}
+    ],
+    "Action":[
+        {"OnLoop":  {"Enable":false, "ClassRef":"MainLoop"}},
+
+        {"OnValue": {"Enable":true,  "ClassRef":"GroupOnValue"}},
+        {"OnError": {"Enable":true,  "ClassRef":"WriteLogErr"}},
+        {"OnRange": {"Enable":true,  "ClassRef":"WriteLogErr"}},
+        {"OnAvg":   {"Enable":false, "ClassRef":"WriteLogErr"}}
+    ],
+    "Default":[
+    ],
+    "Class":[
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnValue",
+            "Checks": [
+                {"Enable":true,   "Always":"self.SetValue('$WriteConsole')"},
+                {"Enable":false,  "Always":"self.SetValue('$WriteConsole2')"},
+                {"Enable":false,  "Always":"self.SetValue('$Grafana')"}
             ]
         },
-       "Include":[
-            {"Enable":true, "File":"IncDefault.json"},
-            {"Enable":true, "File":"IncClassGroup.json"},
-            {"Enable":true, "File":"IncClassRandom.json"},
-            {"Enable":true, "File":"IncClassTimer.json"},
-            {"Enable":true, "File":"IncClassReport.json"},
-            {"Enable":true, "File":"IncClassSolar.json"},
-            {"Enable":true, "File":"IncClassRasPi.json"}
-        ],
-        "Action":[
-            {"OnLoop":  {"Enable":false, "ClassRef":"MainLoop"}},
-
-            {"OnValue": {"Enable":true,  "ClassRef":"GroupOnValue"}},
-            {"OnError": {"Enable":true,  "ClassRef":"WriteLogErr"}},
-            {"OnRange": {"Enable":true,  "ClassRef":"WriteLogErr"}},
-            {"OnAvg":   {"Enable":false, "ClassRef":"WriteLogErr"}}
-        ],
-        "Default":[
-        ],
-        "Class":[
-            {
-                "Class":"TDeviceGroup",
-                "Alias":"GroupOnValue",
-                "Checks": [
-                    {"Enable":true,   "Always":"self.SetValue('$WriteConsole')"},
-                    {"Enable":false,  "Always":"self.SetValue('$WriteConsole2')"},
-                    {"Enable":false,  "Always":"self.SetValue('$Grafana')"}
-                ]
-            },
-            {
-                "Class":"TDeviceGroup",
-                "Alias":"GroupOnStart",
-                "Checks": [
-                    {"Enable":false,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
-                ]
-            },
-            {
-                "Class":"TDeviceGroup",
-                "Alias":"GroupOnFinish",
-                "Checks": [
-                    {"Enable":false,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
-                ]
-            },
-            {
-                "Class":"TControlSleep",
-                "Alias":"Sleep_1",
-                "Parameter":{"Time":2}
-            }
-        ]
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnStart",
+            "Checks": [
+                {"Enable":false,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
+            ]
+        },
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnFinish",
+            "Checks": [
+                {"Enable":false,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
+            ]
+        },
+        {
+            "Class":"TControlSleep",
+            "Alias":"Sleep_1",
+            "Parameter":{"Time":2}
+        }
+    ]
 }
