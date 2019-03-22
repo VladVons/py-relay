@@ -191,5 +191,13 @@ def TimerRange():
 
 #print("helo")
 
-Ar1 = [1,2,3]
-print(sum(Ar1))
+def MirrorBit(aValue, aWidth = 8):
+    Value = int(aValue)
+    Result = 0
+    for i in range(aWidth):
+        Result <<= 1
+        Result |= Value & 1
+        Value >>= 1
+    return Result
+
+print(MirrorBit(128))
