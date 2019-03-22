@@ -115,6 +115,10 @@ class TDevice(TDeviceBase):
         self.ExtParam['Checks']   = self.Exec.Parse
         self.ExtParam['Triggers'] = self.Exec.Parse
 
+    @property
+    def Direction(self):
+        return self.Avg.Direction
+
     def GetAlias(self, aCaller):
         Result = ''
         if (aCaller):
@@ -221,7 +225,7 @@ class TSensor(TDevice):
             if (not self.Avg.Check(aValue)):
                 self.Action('OnAvg', aValue)
             self.Avg.Add(aValue)
-            Value = self.Avg.GetAvg()
+            Value = self.Avg.GetAvgRound()
 
             try:
                 Result = Num.RoundPart(Value, self.Param.Round)

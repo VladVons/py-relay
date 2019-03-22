@@ -146,9 +146,9 @@ class TExecApi(TExecParse):
             aValue = self.GetValue()
 
         if (aDif > 0):
-            Result = (aValue < aBase) or (aValue >= self.Parent.PrevValue and aValue < aBase + aDif)
+            Result = (aValue < aBase) or (self.Parent.Direction > 0 and aValue < aBase + aDif)
         else:
-            Result = (aValue > aBase) or (aValue <= self.Parent.PrevValue and aValue > aBase + aDif)
+            Result = (aValue > aBase) or (self.Parent.Direction < 0 and aValue > aBase + aDif)
         return Result
 
     def InValue(self, aBegin, aEnd, aValue = None):

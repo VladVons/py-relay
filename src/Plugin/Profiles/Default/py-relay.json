@@ -9,8 +9,9 @@
             {"Enable":true,  "ClassRef":"Sleep_1"},
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
-            {"Enable":true,  "ClassRef":"SensorTimeRangeCycle1"},
-            {"Enable":false, "ClassRef":"SensorSun"},
+            {"Enable":false, "ClassRef":"SensorTimeRangeCycle1"},
+            {"Enable":true,  "ClassRef":"SensorSun"},
+            {"Enable":false, "ClassRef":"DH1_Sensor_Humid"},
             {"Enable":false, "ClassRef":"SensorTRD_Humid"},
             {"Enable":false, "ClassRef":"SensorTRDF_2"},
             {"Enable":false, "ClassRef":"Random_15_25"},
@@ -31,6 +32,7 @@
         {"Enable":false, "File":"IncClassTimer.json"},
         {"Enable":true,  "File":"IncClassReport.json"},
         {"Enable":true,  "File":"IncClassSolar.json"},
+        {"Enable":true,  "File":"IncClassDh1.json"},
         {"Enable":true,  "File":"IncClassRasPi.json"}
     ],
     "Action":[

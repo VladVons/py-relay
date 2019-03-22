@@ -56,9 +56,10 @@ def RandSum(aCnt, aSum = 1, aRound = 2):
 class TAvg():
     def __init__(self, aSize = 3, aRound = 2):
         self.SetSize(aSize)
-        self.Enable   = True
-        self.Round    = aRound
-        self.LastTime = None
+        self.Enable    = True
+        self.Round     = aRound
+        self.LastTime  = None
+        self.Direction = 0
 
     def SetSize(self, aSize):
         self.Arr = collections.deque([], aSize)
@@ -72,16 +73,18 @@ class TAvg():
         return float(aValue)
 
     def Add(self, aValue):
-        self.Arr.append(self.Validate(aValue))
+        self.Direction = aValue - self.GetAvg()
         self.LastTime = time.time()
+        self.Arr.append(self.Validate(aValue))
 
     def GetAvg(self):
-        Result = 0
-        if (self.Arr):
-            for Item in self.Arr:
-                Result += Item
-            Result = round(Result / len(self.Arr), self.Round)
+        Result = sum(self.Arr)
+        if (Result != 0):
+            Result = Result / len(self.Arr)
         return Result
+
+    def GetAvgRound(self):
+        return round(self.GetAvg(), self.Round)
 
     def Check(self, aValue, aDevation = 0.5):
         Result = True

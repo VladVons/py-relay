@@ -191,10 +191,5 @@ def TimerRange():
 
 #print("helo")
 
-from Inc.Util import Str
-Str.ToFloat('1')
-Str.ToFloat('1.2')
-Str.ToFloat('1,2')
-Str.ToFloat('1,2s')
-
-
+Ar1 = [1,2,3]
+print(sum(Ar1))

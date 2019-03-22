@@ -30,7 +30,6 @@ class TBaseRange():
         self.PadLen = 2
         self.Ranges = []
 
-
     def AddRange(self, aOn, aOff):
         self.Ranges.append([aOn, aOff])
 
