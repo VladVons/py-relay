@@ -109,9 +109,11 @@ RaspiImg()
   #unzip $Arc
 
   lsblk
-  dd bs=4M conv=fsync if=$Img of=$Dev
+  # with cache
+  #dd bs=4M conv=fsync if=$Img of=$Dev
+
   ## disable buffering for safe ?
-  #dd conv=fsync if=$Img of=$Dev
+  dd conv=fsync if=$Img of=$Dev
 
   ## resize only 200M or comment to disable resizing
   ##/media/linux/rootfs/etc/init.d/resize2fs_once
