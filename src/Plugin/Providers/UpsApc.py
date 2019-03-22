@@ -15,6 +15,7 @@ except Exception as E:
 
 
 from Inc.Log   import Log
+from Inc.Util  import Str
 from .Provider import TProvider
 
 
@@ -30,7 +31,7 @@ class TProviderUpsApc(TProvider):
         RowData = status.get(host = self.Host, port = self.Port)
         Data = status.parse(RowData, strip_units = True)
         Result = {}
-        Result['Voltage'] = Data['LINEV']
+        Result['Voltage'] = Str.ToFloat(Data['LINEV'])
         Result['Status']  = Data['STATUS']
         Result['default'] = Result['Voltage']
         return Result
