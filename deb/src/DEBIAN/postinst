@@ -39,7 +39,7 @@ Debug()
   #printenv > /$Name.log2
 }
 
-Debug $1
+#Debug $1
 
 case "$1" in
   configure)

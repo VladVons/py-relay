@@ -102,16 +102,23 @@ RaspiImg()
   Dir="/mnt/hdd/data1/share/public/image/raspberry/img"
   Img="2018-11-13-raspbian-stretch-lite.img"
   Arc="raspbian-jessie-lite.zip"
-  Dev="/dev/sdc"
+  Dev="/dev/sdb"
 
   cd $Dir
   #wget https://downloads.raspberrypi.org/raspbian_lite_latest -O $Arc
   #unzip $Arc
 
   lsblk
-  #dd bs=4M conv=fsync if=$Img of=$Dev
-  ## disable buffering for safe
+  dd bs=4M conv=fsync if=$Img of=$Dev
+  ## disable buffering for safe ?
   #dd conv=fsync if=$Img of=$Dev
+
+  ## resize only 200M or comment to disable resizing
+  ##/media/linux/rootfs/etc/init.d/resize2fs_once
+  #resize2fs $ROOT_DEV 200M &&
+  ## --- ssh enable 
+  #update-rc.d ssh enable 
+  #update-rc.d ssh defaults
 }
 
 clear
