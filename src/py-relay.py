@@ -29,7 +29,7 @@ import traceback
 #sys.path.insert(0, './Plugin/Providers')
 #sys.path.insert(0, 'Plugin/Controls')
 #
-from Inc.Log          import Log
+from Inc.Log          import Log, TLogFile, TLogConsole
 from Inc.DB           import TDbDictSQLite
 from Inc.Util         import Obj, FS, Net, Str
 from Inc.Param        import TDictParam
@@ -55,9 +55,12 @@ class TMain():
         Obj.Dump(Version())
         print('')
 
-        if (not Log.SetFile(self.Options.FileLog)):
-            Log.SetFile('%s.log' % self.AppName)
-        Log.SetConsole()
+        Log.AddEcho(TLogConsole())
+
+        FileLog = self.Options.FileLog
+        if (not os.access(FileLog, os.W_OK)):
+            FileLog = '%s.log' % self.AppName
+        Log.AddEcho(TLogFile(FileLog))
 
         if (self.Options.GetAttr('Options')):
             print(self.Options.GetVars())

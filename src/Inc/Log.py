@@ -6,19 +6,45 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
-import logging
 import time
+import os
 
-__all__ = ['TLog', 'Log']
+__all__ = ['TLog', 'Log', 'TLogConsole', 'TLogFile']
+
+
+class TLogEcho():
+    def Write(self, aMsg):
+        raise NotImplementedError('Write')
+
+
+class TLogConsole(TLogEcho):
+    def Write(self, aMsg):
+        print(aMsg)
+
+
+class TLogFile(TLogEcho):
+    def __init__(self, aName):
+        self.Name = aName
+
+    def Write(self, aMsg):
+        with open(self.Name, 'a') as hFile:
+            hFile.write(aMsg + '\n')
 
 
 class TLog():
     def __init__(self):
+        self.Cnt      = 0
         self.LogLevel = 1
+        self.Echoes   = []
         self.OnPrint  = None
         self.Tail     = ''
-        self.Logger   = logging
-        self.DateFmt  = '%Y/%m/%d %H:%M:%S'
+        self.DateFmt  = '%Y-%m-%d %H:%M:%S'
+
+    def AddEcho(self, aEcho):
+        if (not isinstance(aEcho, TLogEcho)):
+            raise ValueError('Class %s must be inherited from TLogEcho' % aEcho)
+
+        self.Echoes.append(aEcho)
 
     def _Parse(self, *aParam):
         List = []
@@ -31,10 +57,10 @@ class TLog():
         return List, Dict
 
     def Format(self, aLevel, aType, *aParam):
-        List, Dict = self._Parse(*aParam)
+        List, Dict = self._Parse(aParam)
 
-        Str = 'Log: %s, Level:%d, Type:%s, List:%s'
-        Arr = [time.strftime(self.DateFmt), aLevel, aType, list(List)]
+        Str = '%s, %s, Level:%d, Type:%s, List:%s'
+        Arr = [self.Cnt, time.strftime(self.DateFmt), aLevel, aType, list(List)]
         if (Dict):
             Arr.append(Dict)
             Str += ', Dict:%s'
@@ -47,55 +73,18 @@ class TLog():
         return Result
 
     def Print(self, aLevel, aType, *aParam):
-        if (aLevel > self.LogLevel):
-            return ''
-
-        Result = self.Format(aLevel, aType, *aParam)
-
-        if (aType == 'w'):
-            self.Logger.warn(Result)
-        elif (aType == 'e'):
-            self.Logger.error(Result)
-        elif (aType == 'x'):
-            self.Logger.exception(Result)
-        else:
-            self.Logger.info(Result)
-
-        if (self.OnPrint):
-            self.OnPrint(aLevel, aType, Dict)
-
+        Result = self.Format(aLevel, aType, aParam)
+        if (aLevel <= self.LogLevel):
+            self.Cnt += 1
+            for Echo in self.Echoes:
+                Echo.Write(Result)
         return Result
 
-    def Warn(self, aLevel, aMsg):
-        self.Print(aLevel, 'w', [aMsg])
+    def PrintStr(self, aLevel, aMsg):
+        self.Print(aLevel, 'i', [aMsg])
 
     def SetLogLevel(self, aValue):
         self.LogLevel = int(aValue)
-
-    def SetConsole(self):
-        self.Logger = logging.getLogger('MyConsole')
-        self.Logger.addHandler(logging.StreamHandler())
-
-        # by default print only warnings
-        #self.Logger.setLevel(logging.INFO)
-
-    def SetFile(self, aFile):
-        # Format = '[%(asctime)s], %(module)s->%(funcName)s->%(lineno)d,
-        # %(levelname)s: %(message)s'
-        Format = '[%(asctime)s], %(levelname)s:%(message)s'
-        try:
-            logging.basicConfig(
-                            level   = logging.INFO,
-                            format  = Format,
-                            datefmt = self.DateFmt,
-                            filename= aFile,
-                            filemode='a')
-            print ('%s->SetFile(): %s' % (self.__class__.__name__, aFile))
-            Result = True
-        except IOError as E:
-            print ('%s->SetFile() Error: %s: %s' % (self.__class__.__name__, E, aFile))
-            Result = False
-        return Result
 
     def SetTail(self, aValue):
         self.Tail = aValue
