@@ -16,6 +16,11 @@
             "Class":"TRelayI2C_Relay_8574",
             "Alias":"IRelay_1",
             "Parameter":{"Bus":1, "Address":37, "Command": 0, "Mirror": true}
+        },
+        {
+            "Class":"TSensorFile_Size",
+            "Alias":"FileSizeLog",
+            "Parameter":{"File":"/var/log/py-relay/py-relay.log", "Refresh":3}
         }
     ]
 }

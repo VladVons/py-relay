@@ -56,3 +56,6 @@ def GetCTime(aFile):
     Result = time.gmtime(os.path.getctime(aFile))
     #time.strftime('%Y-%m-%d', Result)
     return Result
+
+def GetFileSize(aFile):
+    return os.path.getsize(aFile)

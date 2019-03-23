@@ -7,17 +7,18 @@
         ],
         "Loop":[
             {"Enable":true,  "ClassRef":"Sleep_1"},
+            {"Enable":true,  "ClassRef":"FileSizeLog"},
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
             {"Enable":false, "ClassRef":"SensorTimeRangeCycle1"},
-            {"Enable":true,  "ClassRef":"SensorSun"},
+            {"Enable":false, "ClassRef":"SensorSun"},
             {"Enable":false, "ClassRef":"DH1_Sensor_Humid"},
             {"Enable":false, "ClassRef":"SensorTRD_Humid"},
             {"Enable":false, "ClassRef":"SensorTRDF_2"},
             {"Enable":false, "ClassRef":"Random_15_25"},
             {"Enable":false, "ClassRef":"RandomNone_10_100"},
             {"Enable":false, "ClassRef":"SensorCycleDec"},
-            {"Enable":false, "ClassRef":"Sensor_Pi_CPUTemp"},
+            {"Enable":true,  "ClassRef":"Sensor_CPUTemp"},
             {"Enable":false, "ClassRef":"SensorUptimeSys"}
         ],
         "Finish":[
