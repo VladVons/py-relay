@@ -109,7 +109,7 @@ class TDevice(TDeviceBase):
         self.Avg = Num.TAvg()
         #self.Avg.Enable = False
 
-        Pattern = {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'Refresh': 3600, 'OnValue': True, 'MaxErr': 5}
+        Pattern = {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'Refresh': 3600, 'OnValue': True, 'MaxErr': 5, 'ForceLog': False}
         self.Param.AddDefPattern(Pattern)
 
         self.ExtParam['Checks']   = self.Exec.Parse
@@ -137,6 +137,9 @@ class TDevice(TDeviceBase):
         Result = True
         self.PostCnt += 1
         if (self.Param.Enable and (self.PostCnt % self.Param.Periodic == 0) and (self.PostCnt >= self.Param.Delay)):
+            if (self.Param.ForceLog):
+                Log.Print(0, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
+
             if (self.DoPostBegin(aCaller, aValue, aData)):
                 if (self.Exec.Conditions('Checks')):
                     Result = self.DoPost(aCaller, aValue, aData)

@@ -18,7 +18,7 @@ class TLog():
         self.OnPrint  = None
         self.Tail     = ''
         self.Logger   = logging
-        self.Format   = '%Y/%m/%d %H:%M:%S' 
+        self.DateFmt  = '%Y/%m/%d %H:%M:%S'
 
     def _Parse(self, *aParam):
         List = []
@@ -30,15 +30,11 @@ class TLog():
                 List.append(Param)
         return List, Dict
 
-
-    def Print(self, aLevel, aType, *aParam):
-        if (aLevel > self.LogLevel):
-            return ''
-
+    def Format(self, aLevel, aType, *aParam):
         List, Dict = self._Parse(*aParam)
 
         Str = 'Log: %s, Level:%d, Type:%s, List:%s'
-        Arr = [time.strftime(self.Format), aLevel, aType, list(List)]
+        Arr = [time.strftime(self.DateFmt), aLevel, aType, list(List)]
         if (Dict):
             Arr.append(Dict)
             Str += ', Dict:%s'
@@ -48,6 +44,13 @@ class TLog():
             Str += ', Tail:%s'
 
         Result = Str % tuple(Arr)
+        return Result
+
+    def Print(self, aLevel, aType, *aParam):
+        if (aLevel > self.LogLevel):
+            return ''
+
+        Result = self.Format(aLevel, aType, *aParam)
 
         if (aType == 'w'):
             self.Logger.warn(Result)
@@ -82,10 +85,10 @@ class TLog():
         Format = '[%(asctime)s], %(levelname)s:%(message)s'
         try:
             logging.basicConfig(
-                            level=logging.INFO,
-                            format=Format,
-                            datefmt=self.Format,
-                            filename=aFile,
+                            level   = logging.INFO,
+                            format  = Format,
+                            datefmt = self.DateFmt,
+                            filename= aFile,
                             filemode='a')
             print ('%s->SetFile(): %s' % (self.__class__.__name__, aFile))
             Result = True

@@ -136,7 +136,8 @@ class TSecRun(TSec):
             finally:
                 self.Stop()
         else:
-            Log.Print(1, 'w', self.__class__.__name__, 'Run()', 'Loop section is empty')
+            Msg = Log.Print(1, 'e', self.__class__.__name__, 'Run()', 'Run->Loop section is empty')
+            raise Exception(Msg)
 
     def Stop(self):
         Log.Print(2, 'i', self.__class__.__name__, 'Stop()')
@@ -207,19 +208,21 @@ class TSecClass(TSec):
         Result = []
 
         Items = self.Parent.SecInclude.Data.get('Class')
-        for Item in Items:
-            Alias  = Item.get('Alias')
-            Enable = Item.get('Enable', True)
-            if (not self.Parent.SecClass.GetClass(Alias) and Enable):
-                Result.append(Alias)
+        if (Items):
+            for Item in Items:
+                Alias  = Item.get('Alias')
+                Enable = Item.get('Enable', True)
+                if (not self.Parent.SecClass.GetClass(Alias) and Enable):
+                    Result.append(Alias)
         return Result
 
     def GetSection(self, aAlias):
-        Items = self.Parent.SecInclude.Data['Class']
-        for Item in Items:
-            Alias = Item.get('Alias')
-            if (aAlias == Alias):
-                return Item
+        Items = self.Parent.SecInclude.Data.get('Class')
+        if (Items):
+            for Item in Items:
+                Alias = Item.get('Alias')
+                if (aAlias == Alias):
+                    return Item
         return None
 
     def GetClass(self, aAlias):
@@ -378,9 +381,9 @@ class TManager():
                 Log.Print(1, 'w', self.__class__.__name__, 'Info()', 'Alias %s not used' % Item)
         elif (aMode == 'Total'):
             Arr = {}
-            Arr['Class'] = len(self.SecClass.Data)
+            Arr['Class']  = len(self.SecClass.Data)
             Arr['Unused'] = len(self.SecClass.GetUnused())
-            Arr['Loop'] = len(self.SecRun.Data.get('Loop'))
+            Arr['Loop']   = len(self.SecRun.Data.get('Loop', []))
             Obj.Dump(Arr)
         else:
             Log.Print(1, 'w', self.__class__.__name__, 'Info()', 'Unknown option %s' % aMode)
