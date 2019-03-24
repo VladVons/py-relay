@@ -13,19 +13,25 @@ Install()
   apt install lsof
   apt install zip
 
-  apt install libpython2.7 
+  #@ some package for app 
   apt install python-prctl
   apt install python-smbus
   apt install python-mysqldb
   apt install python-crypto
   apt install python-ephem
 
+  ##  python minimal installer
+  apt install libpython2.7 
   apt install python-pip --no-install-recommends
   pip install wheel
   pip install setuptools
 
+  ## python binary compiler 
   pip install nuitka
   apt install python-dev --no-install-recommends
+
+  ## for test connections
+  apt install mysql-client --no-install-recommends
 }
 
 

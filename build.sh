@@ -43,7 +43,7 @@ Deb()
 
   cp -R deb/src/CONTENTS/* $DirDeb
   cp -R deb/src/DEBIAN $DirDeb
-  cp -R $DirSrc/$Name.{bin,conf,key} $DirApp
+  cp -R $DirSrc/$Name.{bin,sh,conf,key} $DirApp
   cp -R $DirSrc/Plugin $DirApp
 
   rm -f $DirDeb.deb
