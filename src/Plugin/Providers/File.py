@@ -18,7 +18,7 @@ class TProviderFile(TProvider):
         self.File = aFile
 
         if (not os.path.exists(aFile)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__,'__init__()', 'File not found %s' % self.Param.File)
+            Msg = Log.Print(1, 'e', self.__class__.__name__,'__init__()', 'File not found %s' % self.File)
             raise Exception(Msg)
 
 
