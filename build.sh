@@ -56,14 +56,20 @@ Release()
 {
   #apt-get install python-dev 
 
-  cd $DirSrc
+  CurDir=$(pwd)
+  find $DirSrc -name "*.pyc" -type f -delete
+
+  mkdir -p $DirSrcRelease
+  cp -R $DirSrc/* $DirSrcRelease
+  cd $DirSrcRelease
+
   echo "Building in $(pwd) ..."
   #nuitka3 --follow-imports --remove-output $Name.py
   nuitka --follow-imports --remove-output $Name.py
   #nuitka --follow-imports --remove-output --standalone $Name.py
-  cd ..
 
-  find $DirSrc/Plugin -name "*.pyc" -type f -delete
+  cd $CurDir
+  cp $DirSrcRelease/$Name.bin $DirSrc
 }
 
 

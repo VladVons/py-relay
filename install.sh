@@ -28,7 +28,8 @@ Install()
 
   ## python binary compiler 
   pip install nuitka
-  apt install python-dev --no-install-recommends
+  apt install python-dev
+  #apt install build-essential
 
   ## for test connections
   apt install mysql-client --no-install-recommends

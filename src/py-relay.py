@@ -99,7 +99,8 @@ class TMain():
             for Item in self.Options.PkgPath.split(','):
                 Dir = Item.strip()
                 if (os.path.isdir(Dir)):
-                    sys.path.append(Dir)
+                    if (not Dir in sys.path):
+                        sys.path.append(Dir)
                 else:
                     Log.Print(1, 'w', self.__class__.__name__, 'Init()', 'PkgPath not found %s' % Dir)
 
@@ -140,6 +141,12 @@ class TMain():
             Result.AddDefPattern(Pattern)
         Result.Load(vars(CmdParam), False)
         return Result
+
+    def Info(self):
+        self.Manager.Info('Attrs')
+
+        for Item in sys.path:
+            print('path', Item)
 
     def GetProfilePath(self, aName):
         return self.Options.Directory + '/' + self.Options.Profile + '/' + aName
@@ -219,7 +226,7 @@ class TMain():
         self.Manager.LoadFile(self.Options.FileConf)
 
         if (self.Options.Info):
-            self.Manager.Info('Attrs')
+            self.Info()
             sys.exit()
 
         self.Manager.Run()
