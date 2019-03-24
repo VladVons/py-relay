@@ -20,7 +20,7 @@
         {
             "Class":"TSensorFile_Size",
             "Alias":"FileSizeLog",
-            "Parameter":{"File":"/var/log/py-relay/py-relay.log"}
+            "Parameter":{"File":"/var/log/py-relay/py-relay.log", "Refresh":1}
         },
         {
             "Class":"TSensorFile_CPULoad",

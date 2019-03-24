@@ -58,4 +58,4 @@ def GetCTime(aFile):
     return Result
 
 def GetFileSize(aFile):
-    return os.path.getsize(aFile)
+    return int(os.path.getsize(aFile))
