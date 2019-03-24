@@ -17,9 +17,9 @@ Version: $Ver
 Architecture: $Platform
 Section: IoT
 Priority: optional
-Depends: libpython2.7, python-prctl, python-mysqldb, python-smbus, python-crypto, python-ephem, monit
+Depends: libpython2.7, python-prctl, python-crypto
 Suggests: python-pip
-#Recommends:
+Recommends: python-mysqldb, python-smbus, python-ephem, monit
 Maintainer: Vladimir Vons <VladVons@gmail.com>
 Homepage: http://oster.com.ua/software
 Description: Relay automation" > $DirDebRoot/src/DEBIAN/control

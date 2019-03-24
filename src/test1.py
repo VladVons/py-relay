@@ -190,3 +190,7 @@ def TimerRange():
 #        print(Item)
 
 #print("helo")
+
+from Plugin.Providers.File import TProviderFile_CPULoad
+s1 = TProviderFile_CPULoad('/proc/loadavg')
+print(s1.Get())

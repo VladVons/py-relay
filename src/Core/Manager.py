@@ -298,7 +298,7 @@ class TSecClass(TSec):
                     # TClass = globals()[ClassName]
                     TClass = self.Import.GetInstance(ClassName)
                 except Exception as E:
-                    Log.Print(1, 'x', self.__class__.__name__, 'Parse()', 'Cant load class %s' % ClassName, E)
+                    Log.Print(1, 'x', self.__class__.__name__, 'Parse()', 'Cant load class %s->%s' % (ParentInfo, ClassName), E)
                     sys.exit(1)
                     #raise
 

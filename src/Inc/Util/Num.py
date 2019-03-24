@@ -10,6 +10,10 @@ import math
 import collections
 import time
 import random
+#
+from Inc.Log  import Log
+from Inc.Util import Str
+
 
 
 def SetBit(aValue, aIdx, aSet = True):
@@ -77,6 +81,10 @@ class TAvg():
         return float(aValue)
 
     def Add(self, aValue):
+        if (not type(aValue).__name__ in ['int', 'float']):
+            Log.Print(1, 'w', self.__class__.__name__, 'Add()', 'Value is not digital %s' % aValue)
+            aValue = Str.ToFloat(aValue)
+
         self.Direction = aValue - self.GetAvg()
         self.LastTime = time.time()
         self.Arr.append(self.Validate(aValue))
