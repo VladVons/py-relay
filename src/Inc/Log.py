@@ -6,15 +6,17 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
+
 import time
 import os
 
 __all__ = ['TLog', 'Log', 'TLogConsole', 'TLogFile']
 
 
+
 class TLogEcho():
     def Write(self, aMsg):
-        raise NotImplementedError('Write')
+        raise NotImplementedError('class Write()')
 
 
 class TLogConsole(TLogEcho):
@@ -27,7 +29,7 @@ class TLogFile(TLogEcho):
         self.Name = aName
 
     def Write(self, aMsg):
-        with open(self.Name, 'a') as hFile:
+        with open(self.Name, 'a+') as hFile:
             hFile.write(aMsg + '\n')
 
 

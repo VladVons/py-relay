@@ -3,8 +3,8 @@ Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.11.04
 License:     GNU, see LICENSE for more details
-
 Description:
+
 Handling I2C LCD display based on 8574 chip
 
 Example:
