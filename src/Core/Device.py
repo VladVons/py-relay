@@ -133,6 +133,9 @@ class TDevice(TDeviceBase):
 
     def Post(self, aCaller, aValue, aData = None):
         Log.Print(3, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
+        if (self.Manager.Parent.Options.DebugAlias):
+            Msg = Log.Format(1, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
+            Log.PrintTo(Msg)
 
         Result = True
         self.PostCnt += 1

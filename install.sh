@@ -12,6 +12,7 @@ Install()
   apt install bc
   apt install lsof
   apt install zip
+  apt install screen
 
   #@ some package for app 
   apt install python-prctl

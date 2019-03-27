@@ -82,8 +82,11 @@ class TLog():
                 Echo.Write(Result)
         return Result
 
-    def PrintStr(self, aLevel, aMsg):
-        self.Print(aLevel, 'i', [aMsg])
+    def PrintTo(self, aMsg, aToEcho = 0):
+        Echoes = len(self.Echoes)
+        if (aToEcho >= Echoes):
+            aToEcho = Echoes - 1
+        self.Echoes[aToEcho].Write(aMsg)
 
     def SetLogLevel(self, aValue):
         self.LogLevel = int(aValue)

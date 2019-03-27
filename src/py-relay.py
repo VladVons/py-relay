@@ -126,6 +126,7 @@ class TMain():
             # misc conf
             'ExceptionHook': False,
             'CheckUpdate':   False,
+            'DebugAlias':    False,
             'FileConf':      self.AppName + '.json',
             'FileMacros':    self.AppName + '.conf',
             'FileDb':        self.AppName + '.db',
