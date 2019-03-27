@@ -33,6 +33,10 @@ class TDeviceBase(object):
         self.ExtParam['Start']     = self.Exec.Parse
         self.ExtParam['Finish']    = self.Exec.Parse
 
+    @property
+    def Options(self):
+        return self.Manager.Parent.Options
+
     def _LoadClass(self, aParam, aData):
         return aData.get('Parent').Parse(aParam, self)
 
@@ -133,7 +137,7 @@ class TDevice(TDeviceBase):
 
     def Post(self, aCaller, aValue, aData = None):
         Log.Print(3, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
-        if (self.Manager.Parent.Options.DebugAlias):
+        if (self.Options.DebugAlias):
             Msg = Log.Format(1, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
             Log.PrintTo(Msg)
 

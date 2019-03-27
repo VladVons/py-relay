@@ -84,7 +84,7 @@ class TThreadReadQueue(TThreadRead):
 class TThreadReadList(TThreadRead):
     def __init__(self, aObjRead):
         TThreadRead.__init__(self, aObjRead)
-        self.Data = multiprocessing.Manager().list([0,1])
+        self.Data = multiprocessing.Manager().list([0, 1])
         self.Data[0] = None
 
     # Method called from outside a thread
