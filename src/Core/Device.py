@@ -144,6 +144,8 @@ class TDevice(TDeviceBase):
         Result = True
         self.PostCnt += 1
         if (self.Param.Enable and (self.PostCnt % self.Param.Periodic == 0) and (self.PostCnt >= self.Param.Delay)):
+            self.Manager.SecRun.InClass = self
+
             if (self.Param.ForceLog):
                 Log.Print(0, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
 

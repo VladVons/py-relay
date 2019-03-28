@@ -92,6 +92,10 @@ class TSecInclude(TSec):
 
 
 class TSecRun(TSec):
+    def __init__(self, aParent):
+        TSec.__init__(self, aParent)
+        self.InClass = None
+
     def Add(self, aData, aKey):
         Class = self.Parent.SecClass.Parse(aData, None)
         if (Class):
@@ -140,7 +144,7 @@ class TSecRun(TSec):
             raise Exception(Msg)
 
     def Stop(self):
-        Log.Print(2, 'i', self.__class__.__name__, 'Stop()')
+        Log.Print(1, 'i', self.__class__.__name__, 'Stop()', 'Alias %s' % self.InClass.Alias)
 
         if (self.InRun):
             self.InRun = False
