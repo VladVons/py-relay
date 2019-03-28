@@ -10,6 +10,10 @@ from Inc.Param    import TDictParam
 from Core.Device  import TSensor
 from Plugin.Providers.UpsApc import TProviderUpsApc
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
 
 class TSensorUpsApc(TSensor):
     def __init__(self, aParent):

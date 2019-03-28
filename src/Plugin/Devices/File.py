@@ -8,9 +8,20 @@ Description:
 
 from Inc.Param             import TDictParam
 from Core.DeviceThread     import TSensorThreadRead
-from Core.Device           import TSensor
-from Plugin.Providers.File import TProviderFile_CPUTemp, TProviderFile_W1DS, TProviderFile_Size, TProviderFile_CPULoad
+from Core.Device           import TSensor, TControl
 
+from Plugin.Providers.File import (
+    TProviderFile_CPUTemp, 
+    TProviderFile_W1DS, 
+    TProviderFile_Size, 
+    TProviderFile_CPULoad
+)
+
+
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
 
 class TSensorThreadFile(TSensorThreadRead):
     # ensure to run self.CreateThread() if no parameters

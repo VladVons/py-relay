@@ -23,6 +23,11 @@
             "Parameter":{"File":"/var/log/py-relay/py-relay.log", "Refresh":1}
         },
         {
+            "Class":"TControl_WatchDog",
+            "Alias":"WatchDog",
+            "Parameter":{"Periodic": 6}
+        },
+        {
             "Class":"TSensorFile_CPULoad",
             "Alias":"Sensor_CPULoad"
         }

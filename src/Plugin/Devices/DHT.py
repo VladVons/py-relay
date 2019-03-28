@@ -12,6 +12,10 @@ from Inc.Param            import TDictParam
 from Core.DeviceThread    import TSensorThreadRead
 from Plugin.Providers.DHT import TProviderDHT_22
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
 
 class TSensorDHT_22(TSensorThreadRead):
     def __init__(self, aParent):

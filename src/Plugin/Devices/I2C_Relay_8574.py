@@ -13,6 +13,11 @@ from Core.Device          import TRelay
 from Plugin.Providers.I2C_Relay_8574  import TProviderI2C_Relay_8574
 
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
+
 class TRelayI2C_Relay_8574(TRelay):
     def __init__(self, aParent):
         TRelay.__init__(self, aParent)

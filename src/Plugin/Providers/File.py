@@ -18,7 +18,7 @@ class TProviderFile(TProvider):
         self.File = aFile
 
         if (not os.path.exists(aFile)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__,'__init__()', 'File not found %s' % self.File)
+            Msg = Log.Print(1, 'e', self.__class__.__name__,'__init__()', 'File not found %s' % aFile)
             raise Exception(Msg)
 
 
@@ -30,16 +30,30 @@ class TProviderFile_Size(TProviderFile):
         return self.Read()
 
 
-class TProviderFile_Data(TProviderFile):
+class TProviderFile_Read(TProviderFile):
     def Read(self, aUnused = None):
         return FS.LoadFromFileToStr(self.File)
 
+
+class TProviderFile_Write(TProvider):
+    def __init__(self, aFile, aMode = 'w+'):
+        self.File = aFile
+        self.Mode = aMode
+
+
+        if (not FS.IsFileWrite(aFile)):
+            Msg = Log.Print(1, 'e', self.__class__.__name__,'__init__()', 'Cant write to %s' % aFile)
+            raise Exception(Msg)
+
+    def Write(self, aData):
+        with open(self.File, self.Mode) as File:
+            File.write(aData)
 
 """
 Reads raspberry CPU temperature from a file.
 File  = '/sys/class/thermal/thermal_zone0/temp'
 """
-class TProviderFile_CPUTemp(TProviderFile_Data):
+class TProviderFile_CPUTemp(TProviderFile_Read):
     def Get(self):
         Result = self.ReadTry()
         if (Result):
@@ -51,7 +65,7 @@ class TProviderFile_CPUTemp(TProviderFile_Data):
 Reads `one wire` temperature from a file.
 File  = '/sys/bus/w1/devices/28-0416939679ff/w1_slave'
 """
-class TProviderFile_W1DS(TProviderFile_Data):
+class TProviderFile_W1DS(TProviderFile_Read):
     def Get(self):
         Result = self.ReadTry()
         if (Result):
@@ -60,7 +74,7 @@ class TProviderFile_W1DS(TProviderFile_Data):
         return Result
 
 
-class TProviderFile_CPULoad(TProviderFile_Data):
+class TProviderFile_CPULoad(TProviderFile_Read):
     def Get(self, aKey = 'default'):
         Result = {}
         Data = self.ReadTry()

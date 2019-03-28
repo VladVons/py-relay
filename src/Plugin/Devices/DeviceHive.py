@@ -27,6 +27,11 @@ from Plugin.Providers.DeviceHive import (
 )
 
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
+
 def CheckHostPort(aHost):
     Arr = Net.UrlParse(aHost)
     Host = Arr.netloc

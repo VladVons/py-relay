@@ -34,6 +34,12 @@ from Inc.Util     import Net, Num
 from Core.Device import TControl, TSensor
 
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
+
+
 MySQL_Port = 3306
 
 class TControlGrafana(TControl):

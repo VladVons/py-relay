@@ -23,6 +23,20 @@ def FindFile(aDirs, aFiles, aSubDir = False):
             break
     return Result
 
+
+def IsFileWrite(aPath):
+    if (os.path.exists(aPath)):
+        Result = os.access(aPath, os.W_OK)
+    else:
+        try:
+            with open(aPath, 'w+') as File:
+                os.unlink(File.name)
+            Result = True
+        except:
+            Result = False
+    return Result
+
+
 def FileExists(aPath):
     return os.path.exists(aPath)
 

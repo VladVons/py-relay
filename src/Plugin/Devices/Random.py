@@ -12,6 +12,10 @@ from Inc.Log          import Log
 from Core.Device      import TSensor
 from Plugin.Providers.Random import TProviderRandom
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
 
 class TSensorRange(TSensor):
     def __init__(self, aParent):

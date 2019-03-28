@@ -10,6 +10,10 @@ from Inc.Param    import TDictParam
 from Core.Device  import TSensor
 from Plugin.Providers.Timer import TProviderTimeRangeCycle, TProviderTimeRangeDay, TProviderTimeRangeDayFadeWave, TTimeRangeCycle
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
 
 class TSensorTimeRange(TSensor):
     def __init__(self, aParent):

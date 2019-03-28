@@ -10,6 +10,11 @@ from Inc.Param    import TDictParam
 from Core.Device  import TSensor
 from Plugin.Providers.Solar import TProviderSun, TProviderMoon
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
+
 
 class TSensorSolar(TSensor):
     def __init__(self, aParent):

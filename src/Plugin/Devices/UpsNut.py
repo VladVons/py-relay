@@ -11,6 +11,11 @@ from Core.Device  import TSensor
 from Plugin.Providers.UpsNut import TProviderUpsNut
 
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
+
 class TSensorUpsNut(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)

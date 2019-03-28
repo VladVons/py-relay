@@ -145,6 +145,13 @@ def Telegram():
 def TimerRange():
     from Plugin.Providers.Timer import TTimeRangeCycle, TTimeRangeDay, TTimeRangeDayFadeWave
 
+
+def MemRecurs(aDepth, aStr):
+    print(aDepth, aStr)
+    time.sleep(0.1)
+    MemRecurs(aDepth + 1, aDepth * "x")
+
+
     #Obj = TTimeRangeCycle()
     #Obj.SetRanges([{"On": "2", "Off": "3"},{"On": "4", "Off": "5"}])
     #Obj.SetRanges([{"On": "5M", "Off": "3M"}])
@@ -195,4 +202,4 @@ def TimerRange():
 #s1 = TProviderFile_CPULoad('/proc/loadavg')
 #print(s1.Get())
 
-import MySQLdb1
+MemRecurs(0, "1")

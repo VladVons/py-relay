@@ -15,6 +15,11 @@ from Inc.Log          import Log
 from Core.Device      import TControl
 
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
+
 class TControlSleep(TControl):
     def __init__(self, aParent):
         TControl.__init__(self, aParent)

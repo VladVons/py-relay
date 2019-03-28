@@ -12,6 +12,10 @@ from Inc.Util         import Num
 from Core.Device      import TControl
 from Plugin.Providers.Telegram import TProviderTelegram
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
 
 class TControlTelegram(TControl):
     def __init__(self, aParent):

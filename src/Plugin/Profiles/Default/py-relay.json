@@ -7,11 +7,12 @@
         ],
         "Loop":[
             {"Enable":true,  "ClassRef":"Sleep_1"},
-            {"Enable":true,  "ClassRef":"FileSizeLog"},
-            {"Enable":true,  "ClassRef":"Sensor_CPULoad"},
-            {"Enable":true,  "ClassRef":"Sensor_CPUTemp"},
-            {"Enable":true,  "ClassRef":"Random_15_25"},
-            {"Enable":true,  "ClassRef":"SensorUptimeSys"},
+            {"Enable":true,  "ClassRef":"WatchDog"},
+            {"Enable":false, "ClassRef":"FileSizeLog"},
+            {"Enable":false, "ClassRef":"Sensor_CPULoad"},
+            {"Enable":false, "ClassRef":"Sensor_CPUTemp"},
+            {"Enable":false, "ClassRef":"Random_15_25"},
+            {"Enable":false, "ClassRef":"SensorUptimeSys"},
 
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},

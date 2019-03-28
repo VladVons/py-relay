@@ -13,6 +13,11 @@ from Inc.Param    import TDictParam
 from Core.Device  import TSensor
 
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
+
 class TSensorUptime(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)

@@ -11,6 +11,11 @@ from Inc.Log     import Log
 from Core.Device import TRelay, TSensor, TDevice
 
 
+PkgConf = {
+    "Version": "1.01",
+    "Author": "Vladvons"
+}
+
 class TDeviceGroup(TDevice):
     def DoPostBegin(self, aCaller, aValue, aData):
         #Log.Print(3, 'i', self.__class__.__name__, 'DoPost()', 'Alias %s, CAlias %s, Value %s' % (self.Alias, aCaller.Alias, aValue))

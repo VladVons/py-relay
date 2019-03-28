@@ -56,7 +56,7 @@ class TDeviceBase(object):
         return Now - self.Manager.StartTimeVirt
 
     def GetUptimeReal(self):
-        return int(time.time()) - self.Manager.StartTimeReal
+        return int(time.time() - self.Manager.StartTimeReal)
 
     def DoStart(self):
         self.Exec.Conditions('Start')
