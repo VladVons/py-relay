@@ -35,7 +35,7 @@ Debug()
 
   Msg="postinst: $aMode"
   echo $Msg
-  echo $Msg >> /$Name.log
+  #echo $Msg >> /$Name.log
   #printenv > /$Name.log2
 }
 

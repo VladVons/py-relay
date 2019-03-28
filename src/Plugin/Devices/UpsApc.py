@@ -19,7 +19,7 @@ class TSensorUpsApc(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 
-        Pattern = {'Host': 'localhost', 'Port': 3551}
+        Pattern = {'Host': 'localhost', 'Port': 3551, "Round": 1}
         self.Param.AddDefPattern(Pattern)
 
     def DoParameter(self, aParam):

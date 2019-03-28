@@ -1,7 +1,12 @@
 # defaults for /etc/init.d/py-relay
 
 ENABLED=0
+
 WORKDIR="/usr/lib/py-relay"
-SCRYPT="py-relay.bin"
-ARGS="-p Default"
+
+#SCRYPT="py-relay.bin"
+#ARGS="-p Default"
+
+SCRYPT="py-relay.sh"
+
 USER="root"
