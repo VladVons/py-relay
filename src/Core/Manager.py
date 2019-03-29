@@ -298,13 +298,11 @@ class TSecClass(TSec):
                 Module = __import__(ModuleName)
                 TClass = getattr(Module, ClassName)
             else:
-                try:
-                    # TClass = globals()[ClassName]
-                    TClass = self.Import.GetInstance(ClassName)
-                except Exception as E:
-                    Log.Print(1, 'x', self.__class__.__name__, 'Parse()', 'Cant load class %s->%s' % (ParentInfo, ClassName), E)
+                # TClass = globals()[ClassName]
+                TClass = self.Import.GetInstance(ClassName)
+                if (TClass is None):
+                    Log.Print(1, 'x', self.__class__.__name__, 'Parse()', 'Cant load class %s->%s' % (ParentInfo, ClassName))
                     sys.exit(1)
-                    #raise
 
             Log.Print(1, 'i', self.__class__.__name__, 'Parse()', 'Load %s->%s (%s)' % (ParentInfo, Alias, TClass.__name__))
             Result = TClass(aParent)

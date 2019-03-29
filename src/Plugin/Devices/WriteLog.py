@@ -46,10 +46,9 @@ class TControlWrite(TControl):
             CallerAlias = ''
             CallerValue = ''
 
-        Result = '{:5}, {:5}, Tag: {:10}, Alias: {:15}, Value: {:10}, CAlias:{:20}, CValue:{:6}'.format(
+        Result = '{:5}, {:5}, Alias: {:15}, Value: {:10}, CAlias:{:20}, CValue:{:6}'.format(
             self.Cnt,
             datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            self.Param.Tag,
             self.Alias,
             self.Value,
             CallerAlias,

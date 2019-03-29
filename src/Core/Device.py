@@ -11,7 +11,7 @@ import time
 from Inc.Log      import Log
 from Inc.Param    import TDictParam, TDictCall, TRange
 from Inc.Util     import Num
-from Core.ExecApi import TExecApi
+from Inc.Import   import TDynImport
 
 
 class TDeviceBase(object):
@@ -24,14 +24,29 @@ class TDeviceBase(object):
         self.HasParam   = False
         self.Actions    = {}
 
+        self.Exec       = self._ImportExecApi()
         self.Param      = TDictParam()
-        self.Exec       = TExecApi(self)
-
         self.ExtParam   = TDictCall()
         self.ExtParam['Parameter'] = self.ExtParameter
         self.ExtParam['Action']    = self.ExtAction
         self.ExtParam['Start']     = self.Exec.Parse
         self.ExtParam['Finish']    = self.Exec.Parse
+
+    def _ImportExecApi(self):
+        FileName  = 'Plugin/Lib/ExecApi.py'
+        ClassName = 'TExecApi'
+
+        # load dynamic trick for 'nuitka' compiler
+        Import = TDynImport()
+        Import.ParseFile(FileName)
+        TClass = Import.GetInstance(ClassName)
+        if (TClass):
+            Result = TClass(self)
+        else:
+            Log.Print(1, 'w', self.__class__.__name__, '_ImportExecApi()', 'Extension class %s not found in %s' % (ClassName, FileName))
+            from Core.ExecParse import TExecParse
+            Result = TExecParse(self)
+        return Result
 
     @property
     def Options(self):
@@ -93,7 +108,6 @@ class TDeviceBase(object):
         pass
 
     def GetProvider(self):
-        Msg = Log.Print(1, 'e', self.__class__.__name__, 'GetProvider()', 'Not implemented')
         raise NotImplementedError(Msg)
 
 

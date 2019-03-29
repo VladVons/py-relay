@@ -28,32 +28,45 @@ class TDynImport():
     def Clear(self):
         self.Classes.clear()
 
-    def AddClass(self, aClassName, aModule, aPath = './'):
+    def AddClass(self, aClassName, aModule, aPath):
         Data = self.Classes.get(aClassName)
         if (Data):
             Msg = Log.Print(1, 'e', self.__class__.__name__, 'AddClass()', 'Class %s already exists in' % aClassName, Data)
             raise Exception(Msg)
 
-        self.Classes[aClassName] = {'Module':aModule, 'Path': aPath}
-        if (aPath not in sys.path):
+        self.Classes[aClassName] = {'Module': aModule, 'Path': aPath}
+        if (aPath and (aPath not in sys.path)):
             sys.path.insert(0, aPath)
 
-    def ParseDir(self, aDir = '.'):
+    def ParseFile(self, aFileName):
+        Result = 0
+        if (not os.path.exists(aFileName)):
+            return Result
+
+        Root, Name = os.path.split(aFileName)
+        Base = os.path.splitext(Name)[0]
+
+        with open(aFileName, 'r') as File:
+            Lines = File.readlines()
+
+        for Line in Lines:
+            if ('class ' in Line):
+                Data = re.search('(class\s+)(.+)\(', Line)
+                if (Data):
+                    Result += 1
+                    ClassName = Data.group(2)
+                    self.AddClass(ClassName, Base, Root)
+                    # print('--- FilePath, line, ClassName', FilePath, Line, ClassName)
+        return Result
+
+
+    def ParseDir(self, aDir):
         for Root, Dirs, Files in os.walk(aDir):
             for File in Files:
                 FilePath = Root + '/' + File
-                FileName, FileExt = os.path.splitext(File)
+                FileExt  = os.path.splitext(File)[1]
                 if (FileExt == '.py'):
-                    hFile = open(FilePath, "r")
-                    Lines = hFile.readlines()
-                    hFile.close()
-                    for Line in Lines:
-                        if ('class ' in Line):
-                            Data = re.search('(class\s+)(.+)\(', Line)
-                            if (Data):
-                                ClassName = Data.group(2)
-                                self.AddClass(ClassName, FileName, Root)
-                                #print('--- FilePath, line, ClassName', FilePath, Line, ClassName)
+                    self.ParseFile(FilePath)
 
     def GetAttr(self, aClassName, aModuleName):
         Module = __import__(aModuleName)
@@ -67,5 +80,5 @@ class TDynImport():
             Module = self.Classes[aClassName]['Module']
             Result = self.GetAttr(aClassName, Module)
         else:
-            Result = globals()[aClassName]
+            Result = globals().get(aClassName)
         return Result

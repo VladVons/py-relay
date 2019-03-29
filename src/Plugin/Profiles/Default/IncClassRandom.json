@@ -28,8 +28,9 @@
             "Descr":"Random generator static",
             "Parameter":{"Begin":15, "End":25, "Periodic": 1},
             "Triggers":[
-                {"Enable":false, "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.SetIf('$WriteConsole2')"},
-                {"Enable":true,  "If":"self.Value < self.Thermostat(20, 1)", "Then":"self.SetIf('$WriteConsole2')"}
+                {"Enable":false,  "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.SetIf('$WriteConsole2')"},
+                {"Enable":false,  "If":"self.Value < self.Thermostat(20, 1)", "Then":"self.SetIf('$WriteConsole2')"},
+                {"Enable":true,   "If":"self.Value < 20", "Then":"self.SetIf('$WriteConsole2')"}
             ]
         },
         {

@@ -60,8 +60,10 @@ def SaveToFileFromList(aName, aList):
         for Line in aList:
             File.write(Line)
 
-def GetCoreName(aPath):
-    return os.path.splitext(os.path.basename(aPath))[0]
+def SplitName(aFullPath):
+    Root, Name = os.path.split(aFullPath)
+    Base, Ext  = os.path.splitext(Name)
+    return [Root, Name, Base, Ext]
 
 def ChangeExt(aPath, aExt):
     return os.path.splitext(aPath)[0] + aExt

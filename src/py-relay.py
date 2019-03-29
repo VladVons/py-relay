@@ -45,7 +45,9 @@ class TMain():
         self.DbDict    = None
 
         self.TimeStart = int(time.time())
-        self.AppName   = FS.GetCoreName(__file__)
+
+        Parts = FS.SplitName(__file__)
+        self.AppName = Parts[2]
 
         self.Protect   = TProtect()
         self.Options   = self.ParseOptions()
