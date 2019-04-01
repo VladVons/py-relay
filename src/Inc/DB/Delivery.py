@@ -38,15 +38,15 @@ class TDelivery():
         if (Size < self.MaxFail):
             self.PushItem(aData)
             if (Size % 100 == 0):
-                Log.Print(1, 'i', self.__class__.__name__, 'AddFail)', 'Records %d' % Size)
+                Log.PrintDbg(1, 'i', 'Records %d' % Size)
         else:
-            Log.Print(1, 'w', self.__class__.__name__, 'AddFail)', 'Max records reached %d' % self.MaxFail)
+            Log.PrintDbg(1, 'w', 'Max records reached %d' % self.MaxFail)
 
     def _Send(self, aData):
         if (self.Sender):
             return self.Sender(aData)
         else:
-            Msg = Log.Print(1, 'e', self.__class__.__name__, '_Send()', 'Empty sender')
+            Msg = Log.PrintDbg(1, 'e', 'Empty sender')
             raise NotImplementedError(Msg)
 
     def Send(self, aData):

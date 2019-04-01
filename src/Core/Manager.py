@@ -33,7 +33,7 @@ class TLoadConf():
         FilePath = self.Path(aFile)
         Result = FS.LoadFromFileToStr(FilePath)
         if (not Result):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'File()', 'Cant load file %s' % (FilePath))
+            Msg = Log.PrintDbg(1, 'e', 'Cant load file %s' % (FilePath))
             raise Exception(Msg)
         return Result
 
@@ -44,18 +44,18 @@ class TLoadConf():
         self.DictReplace.Data = EditorConf.Section.KeyList()
 
     def Conf(self, aFile):
-        # Log.Print(1, 'i', self.__class__.__name__, 'Conf()', 'Load file %s' % aFile)
+        Log.PrintDbg(3, 'i', 'Load file %s' % aFile)
 
         Data = self.File(aFile)
         try:
             Data = json.loads(Data)
         except Exception as E:
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'Conf()', 'File %s' % (aFile), E)
+            Msg = Log.PrintDbg(1, 'e', 'File %s' % (aFile), E)
             raise Exception(Msg)
 
         Result = self.DictReplace.ParseVar(Data)
         if (self.DictReplace.Err):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'Conf()', 'Unknown macros %s' % self.DictReplace.Err)
+            Msg = Log.PrintDbg(1, 'e', 'Unknown macros %s' % self.DictReplace.Err)
             raise ValueError(Msg)
         return Result
 
@@ -69,7 +69,7 @@ class TSec():
         self.Data.clear()
 
     def Load(self, aData):
-        Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Not implemented')
+        Msg = Log.PrintDbg(1, 'e', 'Load()', 'Not implemented')
         raise NotImplementedError(Msg)
 
 
@@ -96,6 +96,16 @@ class TSecRun(TSec):
         TSec.__init__(self, aParent)
         self.InClass = None
 
+    def __del__(self):
+        pass
+
+    def DoFunc(self, aFunc):
+        Items = self.Parent.SecClass.Data
+        for Item in Items:
+            Class = Items.get(Item)
+            Func = getattr(Class, aFunc)
+            Func()
+
     def Add(self, aData, aKey):
         Class = self.Parent.SecClass.Parse(aData, None)
         if (Class):
@@ -104,7 +114,7 @@ class TSecRun(TSec):
             self.Data[aKey].append(Class)
 
     def Load(self, aData):
-        Keys  = ['Init', 'Start', 'Loop', 'Finish']
+        Keys  = ['Start', 'Loop', 'Finish']
         Arr.CheckDif(aData.keys(), Keys)
 
         for Key in Keys:
@@ -119,14 +129,16 @@ class TSecRun(TSec):
                 Class.Post(None, 0, None)
 
     def Run(self):
-        Log.Print(2, 'i', self.__class__.__name__, 'Run()')
+        Log.PrintDbg(2, 'i')
+
+        self.DoFunc('DoStart')
 
         Items = self.Data.get('Start')
         self.PostAll(Items)
 
         Items = self.Data.get('Loop')
         if (Items):
-            Log.Print(2, 'i', self.__class__.__name__, 'Run() Loop')
+            Log.PrintDbg(2, 'i', 'Loop')
 
             self.InRun = True
             try:
@@ -140,11 +152,11 @@ class TSecRun(TSec):
             finally:
                 self.Stop()
         else:
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'Run()', 'Run->Loop section is empty')
+            Msg = Log.PrintDbg(1, 'e', 'Run->Loop section is empty')
             raise Exception(Msg)
 
     def Stop(self):
-        Log.Print(1, 'i', self.__class__.__name__, 'Stop()', 'Alias %s' % self.InClass.Alias)
+        Log.PrintDbg(1, 'i', 'Alias %s' % self.InClass.Alias)
 
         if (self.InRun):
             self.InRun = False
@@ -152,14 +164,11 @@ class TSecRun(TSec):
             Items = self.Data.get('Finish')
             self.PostAll(Items)
 
-            Obj = self.Parent.SecClass.Data
-            for Item in Obj:
-                Class = Obj.get(Item)
-                Class.DoFinish()
+            self.DoFunc('DoFinish')
 
 
 class TSecAction(TSec):
-    def Load(self, aData):
+    def Add(self, aData, aDict):
         Keys = ['OnError', 'OnValue', 'OnRange', 'OnLoop', 'OnAvg']
         for Item in aData:
             Arr.CheckDif(Item.keys(), Keys)
@@ -168,7 +177,10 @@ class TSecAction(TSec):
                 if (Data):
                     Class = self.Parent.SecClass.Parse(Data, None)
                     if (Class):
-                        self.Data[Key] = Class
+                        aDict[Key] = Class
+
+    def Load(self, aData):
+        self.Add(aData, self.Data)
 
 
 class TSecDefault(TSec):
@@ -235,7 +247,7 @@ class TSecClass(TSec):
     def AddClass(self, aClass):
         # print("aAlias", aAlias, "aClass", aClass)
         if (self.GetClass(aClass.Alias)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'AddClass()', 'Alias already exists %s' % aClass.Alias)
+            Msg = Log.PrintDbg(1, 'e', 'Alias already exists %s' % aClass.Alias)
             raise Exception(Msg)
 
         if (self.OnClass):
@@ -264,7 +276,7 @@ class TSecClass(TSec):
                 return None
 
             if (aParent and (aParent.Alias == ClassRef)):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'Cross link detected %s' % ClassRef)
+                Msg = Log.PrintDbg(1, 'e', 'Cross link detected %s' % ClassRef)
                 raise Exception(Msg)
 
             Result = self.GetClass(ClassRef)
@@ -273,24 +285,24 @@ class TSecClass(TSec):
                 if (Data):
                     Result = self.Parse(Data, aParent)
                 else:
-                    Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'ClassRef `%s` not found in %s' % (ClassRef, ParentInfo))
+                    Msg = Log.PrintDbg(1, 'e', 'ClassRef `%s` not found in %s' % (ClassRef, ParentInfo))
                     raise Exception(Msg)
         # normalclass
         else:
             Alias = aData.get('Alias')
             if (not Alias):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'Alias is empty in Class %s' % ClassName)
+                Msg = Log.PrintDbg(1, 'e', 'Alias is empty in Class %s' % ClassName)
                 raise Exception(Msg)
 
             if (not Enable):
                 if (aParent):
-                    Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'Alias %s disabled but used by %s' % (Alias, ParentInfo))
+                    Msg = Log.PrintDbg(1, 'e', 'Alias %s disabled but used by %s' % (Alias, ParentInfo))
                     raise Exception(Msg)
                 return None
 
             ClassName = aData.get('Class')
             if (not ClassName):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Parse()', 'Keyword `Class` is empty')
+                Msg = Log.PrintDbg(1, 'e', 'Keyword `Class` is empty')
                 raise Exception(Msg)
 
             ModuleName = aData.get('Module')
@@ -301,10 +313,10 @@ class TSecClass(TSec):
                 # TClass = globals()[ClassName]
                 TClass = self.Import.GetInstance(ClassName)
                 if (TClass is None):
-                    Log.Print(1, 'x', self.__class__.__name__, 'Parse()', 'Cant load class %s->%s' % (ParentInfo, ClassName))
+                    Log.PrintDbg(1, 'x', 'Cant load class %s->%s' % (ParentInfo, ClassName))
                     sys.exit(1)
 
-            Log.Print(1, 'i', self.__class__.__name__, 'Parse()', 'Load %s->%s (%s)' % (ParentInfo, Alias, TClass.__name__))
+            Log.PrintDbg(1, 'i', 'Load %s->%s (%s)' % (ParentInfo, Alias, TClass.__name__))
             Result = TClass(aParent)
             Result.Alias = Alias
             Result.Descr = aData.get('Descr')
@@ -316,7 +328,7 @@ class TSecClass(TSec):
                 for Key in aData.keys():
                     if (Key not in ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment']):
                         Result.ExtParam(Key, aData.get(Key), {'Parent': self})
-                Result.DoStart()
+                #Result.DoStart()
 
         return Result
 
@@ -344,7 +356,7 @@ class TManager():
         self.StartTimeVirt = int(aValue)
 
     def Load(self, aData):
-        Log.Print(2, 'i', self.__class__.__name__, 'Load()')
+        Log.PrintDbg(2, 'i')
 
         self.Init()
 
@@ -361,9 +373,9 @@ class TManager():
                 if (Data):
                     Obj.Load(Data)
                 else:
-                    Log.Print(1, 'w', self.__class__.__name__, 'Load()', 'Empty section %s' % Key)
+                    Log.PrintDbg(1, 'w', 'Empty section %s' % Key)
             else:
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Load()', 'Cant find method %s' % Name)
+                Msg = Log.PrintDbg(1, 'e', 'Cant find method %s' % Name)
                 raise Exception(Msg)
 
         #self.SecClass.SetParam('Sleep_1', 'Time', 5)
@@ -380,7 +392,7 @@ class TManager():
         elif (aMode == 'Unused'):
             Unused = self.SecClass.GetUnused()
             for Item in Unused:
-                Log.Print(1, 'w', self.__class__.__name__, 'Info()', 'Alias %s not used' % Item)
+                Log.PrintDbg(1, 'w', 'Alias %s not used' % Item)
         elif (aMode == 'Total'):
             Arr = {}
             Arr['Class']  = len(self.SecClass.Data)
@@ -388,11 +400,11 @@ class TManager():
             Arr['Loop']   = len(self.SecRun.Data.get('Loop', []))
             Obj.Dump(Arr)
         else:
-            Log.Print(1, 'w', self.__class__.__name__, 'Info()', 'Unknown option %s' % aMode)
+            Log.PrintDbg(1, 'w', 'Unknown option %s' % aMode)
         print('')
 
     def LoadFile(self, aFile):
-        Log.Print(1, 'i', self.__class__.__name__, 'LoadFile()', '%s%s' % (self.LoadConf.Dir, aFile))
+        Log.PrintDbg(1, 'i', '%s%s' % (self.LoadConf.Dir, aFile))
 
         self.File = aFile
         Data = self.LoadConf.Conf(aFile)

@@ -38,7 +38,7 @@ class TProviderI2C_Relay_8574(TProviderI2C):
             Check  = self.ReadByte()
             if (aValue == Check):
                 break
-            Log.Print(1, 'w', self.__class__.__name__, 'Set()', 'Error writing Valee: %s, Check: %s' % (aValue, Check))
+            Log.PrintDbg(1, 'w', 'Error writing Valee: %s, Check: %s' % (aValue, Check))
         return Result
 
     def Set(self, aCaller, aValue):

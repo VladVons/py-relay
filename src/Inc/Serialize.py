@@ -65,7 +65,7 @@ class TSerialize():
             aObj
             self.Data[aName] = aObj
         except NameError as E:
-            Log.Print(1, 'x', self.__class__.__name__, 'AddObj()', E.message)
+            Log.PrintDbg(1, 'x', E.message)
 
     def FindObj(self, aModule, aName, aGlobal = True):
         try:
@@ -117,7 +117,7 @@ class TSerialize():
                         if (self.CasheObj):
                             self.Data[Path] = Result
                 if (not Result):
-                    self.LastError = Log.Print(1, 'e', self.__class__.__name__, 'GetObj()', 'No object %s found in %s ' % (Item, Path))
+                    self.LastError = Log.PrintDbg(1, 'e', 'No object %s found in %s ' % (Item, Path))
                     break
         return Result
 
@@ -128,7 +128,7 @@ class TSerialize():
             else:
                 Result = aObj()
         except Exception as E:
-            self.LastError = Log.Print(1, 'x', self.__class__.__name__, 'CallObj()', E.message)
+            self.LastError = Log.PrintDbg(1, 'x', E.message)
             Result = None
         return Result
 
@@ -152,7 +152,7 @@ class TSerialize():
             if (ObjType in ["instancemethod", "function"]):
                 Result = self.CallObj(Obj, aArgs)
             else:
-                Result = Log.Print(1, 'e', self.__class__.__name__, 'CallObj()', 'Object %s is not callable type %s' % (aFuncName, ObjType))
+                Result = Log.PrintDbg(1, 'e', 'Object %s is not callable type %s' % (aFuncName, ObjType))
         else:
             Result = self.LastError
         return Result
@@ -196,7 +196,7 @@ class TSerialize():
                 Node = json.loads(aData)
             except Exception as E:
                 Node   = None
-                Result = Log.Print(1, 'x', self.__class__.__name__, 'Decode()', E.message)
+                Result = Log.PrintDbg(1, 'x', E.message)
 
             if (Node):
                 Type = Node.get("Type")
@@ -209,7 +209,7 @@ class TSerialize():
                 elif (Type == "Prop"):
                     Result = self.GetObj(Name)
                 else:
-                    Result = Log.Print(1, 'e', self.__class__.__name__, 'Decode()', 'Unknown type %s' % (Type))
+                    Result = Log.PrintDbg(1, 'e', 'Unknown type %s' % (Type))
         return Result
 
     def DecodeFuncName(self, aData):

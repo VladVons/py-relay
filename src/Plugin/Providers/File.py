@@ -18,7 +18,7 @@ class TProviderFile(TProvider):
         self.File = aFile
 
         if (not os.path.exists(aFile)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__,'__init__()', 'File not found %s' % aFile)
+            Msg = Log.PrintDbg(1, 'e', 'File not found %s' % aFile)
             raise Exception(Msg)
 
 
@@ -42,7 +42,7 @@ class TProviderFile_Write(TProvider):
 
 
         if (not FS.IsFileWrite(aFile)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__,'__init__()', 'Cant write to %s' % aFile)
+            Msg = Log.PrintDbg(1, 'e', 'Cant write to %s' % aFile)
             raise Exception(Msg)
 
     def Write(self, aData):

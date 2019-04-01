@@ -62,7 +62,7 @@ class TControlGrafana(TControl):
         self.Param.LoadPattern(aParam)
 
         if (not Net.CheckHostPort(self.Param.Host, MySQL_Port)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'DoParameter()', 'Cant connect to host %s:%s' % (self.Param.Host, MySQL_Port))
+            Msg = Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (self.Param.Host, MySQL_Port))
             #raise Exception(Msg)
 
         self.MySQL = TDbDictMySQL()
@@ -88,7 +88,7 @@ class TControlGrafana(TControl):
             Value = float(aCaller.Value)
         except Exception as E:
             Value = 0
-            Log.Print(1, 'e', self.__class__.__name__, '_Set()', E)
+            Log.PrintDbg(1, 'e', E)
 
         if (self.UpdateDelay.Check(CAlias, Value)):
             self.UpdateDelay.Update(CAlias)
@@ -107,7 +107,7 @@ class TControlGrafana(TControl):
 
                 Result = True
             except Exception as E:
-                Log.Print(1, 'e', self.__class__.__name__, 'Send()', E)
+                Log.PrintDbg(1, 'e', E)
             finally:
                 self.MySQL.Close()
         return Result
@@ -124,7 +124,7 @@ class TSensorGrafana(TSensor):
         self.Param.LoadPattern(aParam)
 
         if (not Net.CheckHostPort(self.Param.Host, MySQL_Port)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'DoParameter()', 'Cant connect to host %s:%s' % (self.Param.Host, MySQL_Port))
+            Msg = Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (self.Param.Host, MySQL_Port))
             #raise Exception(Msg)
 
         self.MySQL = TDbDictMySQL()
@@ -138,12 +138,12 @@ class TSensorGrafana(TSensor):
                 self.MySQL.Connect()
                 Data = self.MySQL.GetLast('Modified')
             except Exception as E:
-                Log.Print(1, 'e', self.__class__.__name__, '_Get()', E)
+                Log.PrintDbg(1, 'e', E)
                 Data = None
             finally:
                 self.MySQL.Close()
 
             if (Data):
                 Result = int((datetime.datetime.now() - Data[0]).total_seconds())
-            #Log.Print(1, 'i', self.__class__.__name__, '_Get()', 'Diff: %s, LastUpdate: %s' % (Diff, self.Param.LastUpdate))
+            #Log.PrintDbg(3, 'i', 'Diff: %s, LastUpdate: %s' % (Diff, self.Param.LastUpdate))
         return Result

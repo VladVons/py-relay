@@ -40,11 +40,11 @@ class TBaseRange():
             Off = self._Adjust(Range.get('Off'))
 
             if (not On):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'SetRanges()', 'On is empty')
+                Msg = Log.PrintDbg(1, 'e', 'On is empty')
                 raise ValueError(Msg)
 
             if (not Off):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'SetRanges()', 'Off is empty')
+                Msg = Log.PrintDbg(1, 'e', 'Off is empty')
                 raise ValueError(Msg)
 
             self._Load(On, Off)
@@ -97,13 +97,13 @@ class TTimeRange(TBaseRange):
 
     def _Load(self, aOn, aOff):
         if (aOn >= aOff):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, '_Load()', '(On %s) is greater then (Off %s)' % (aOn, aOff))
+            Msg = Log.PrintDbg(1, 'e', '(On %s) is greater then (Off %s)' % (aOn, aOff))
             raise ValueError(Msg)
 
         if (self.Ranges):
             LastOff = self.Ranges[-1][1]
             if (aOn < LastOff):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, '_Load()', '(On %s) is less then last (Off %s)' % (aOn, LastOff))
+                Msg = Log.PrintDbg(1, 'e', '(On %s) is less then last (Off %s)' % (aOn, LastOff))
                 raise ValueError(Msg)
 
         self.AddRange(aOn, aOff)

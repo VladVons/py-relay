@@ -24,7 +24,7 @@ class TControlLoop(TControl):
         self.Param.LoadPattern(aParam)
 
     def _Set(self, aCaller, aValue):
-        Log.Print(3, 'i', self.__class__.__name__, '_Set()', 'Alias %s' % (self.Alias))
+        Log.PrintDbg(3, 'i', 'Alias %s' % (self.Alias))
 
         if (aValue == True):
             ServerApi = THTTPServerApi(self.Param.Port, self.Manager, aCaller)

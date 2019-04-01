@@ -82,7 +82,7 @@ class TAvg():
 
     def Add(self, aValue):
         if (not type(aValue).__name__ in ['int', 'float']):
-            Log.Print(1, 'w', self.__class__.__name__, 'Add()', 'Value is not digital %s' % aValue)
+            Log.PrintDbg(1, 'w', 'Value is not digital %s' % aValue)
             aValue = Str.ToFloat(aValue)
 
         self.Direction = aValue - self.GetAvg()

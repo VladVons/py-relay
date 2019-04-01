@@ -37,11 +37,11 @@ class TRange():
 
     def _Check(self, aRange):
         if (type(aRange).__name__ != 'list'): 
-            Msg = Log.Print(1, 'e', self.__class__.__name__, '_Check()', 'Value %s must be a list' % (aRange))
+            Msg = Log.PrintDbg(1, 'e', 'Value %s must be a list' % (aRange))
             raise Exception(Msg)
 
         if (aRange[0] > aRange[1]):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, '_Check()', 'Min `%s` is grater than Max `%s`' % (aRange[0], aRange[1]))
+            Msg = Log.PrintDbg(1, 'e', 'Min `%s` is grater than Max `%s`' % (aRange[0], aRange[1]))
             raise Exception(Msg)
 
     def Get(self, aKey):
@@ -72,7 +72,7 @@ class TRange():
         self._Check(aRangeDst)
 
         if (aValue < aRangeSrc[0]) or (aValue > aRangeSrc[1]):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'Ratio()', 'Value %s is out of range %s' % (aValue, aRangeSrc))
+            Msg = Log.PrintDbg(1, 'e', 'Value %s is out of range %s' % (aValue, aRangeSrc))
             raise Exception(Msg)
 
         Ratio  = float(aRangeDst[1] - aRangeDst[0]) / float(aRangeSrc[1] - aRangeSrc[0])
@@ -97,7 +97,7 @@ class TRange():
     def PerCentSafe(self, aKey, aPC):
         Range = [0, 100]
         if (aPC < Range[0]) or (aPC > Range[1]):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'PerCentSafe()', 'Value %s is out of range %s' % (aPC, Range))
+            Msg = Log.PrintDbg(1, 'e', 'Value %s is out of range %s' % (aPC, Range))
             raise Exception(Msg)
         return self.PerCent(aKey, aPC)
 
@@ -107,7 +107,7 @@ class TDictCall(dict):
         if (callable(aValue)):
             dict.__setitem__(self, aKey, aValue)
         else:
-            Msg = Log.Print(1, 'e', self.__class__.__name__, '__setitem__()', 'Function %s is not callable' %  (aValue))
+            Msg = Log.PrintDbg(1, 'e', 'Function %s is not callable' %  (aValue))
             raise ValueError(Msg)
 
     def __call__(self, aKey, aParam, aData = {}):
@@ -115,7 +115,7 @@ class TDictCall(dict):
         if (Func):
             return Func(aKey, aParam, aData)
         else:
-            Msg = Log.Print(1, 'e', self.__class__.__name__, '__call__()', 'Key %s not found' % (aKey))
+            Msg = Log.PrintDbg(1, 'e', 'Key %s not found' % (aKey))
             raise NotImplementedError(Msg)
 
 
@@ -146,8 +146,10 @@ class TDictParam():
     def SetAttr(self, aKey, aValue):
         if (self.OnLoad):
             aValue = self.OnLoad(aKey, aValue)
-        Log.Print(3, 'i', self.__class__.__name__, 'SetAttr()', 'Key: %s, Value: %s' % (aKey, aValue))
+        Log.PrintDbg(3, 'i', 'Key: %s, Value: %s' % (aKey, aValue))
+        Result = self.GetAttr(aKey)
         setattr(self, aKey, aValue)
+        return Result
 
     def Load(self, aParam, aAll = True):
         for Key in aParam:
@@ -170,7 +172,7 @@ class TDictParam():
             Default = Pattern.get(Key)
             Param   = aParam.get(Key, Default)
             if ( (Default == TDictParam.Required) and (Param == TDictParam.Required) ):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'LoadPattern()', 'Key %s is required in %s' % (Key, Obj.GetTreeAsStr(aParam, 2)))
+                Msg = Log.PrintDbg(1, 'e', 'Key %s is required in %s' % (Key, Obj.GetTreeAsStr(aParam, 2)))
                 raise Exception(Msg)
 
             self.SetAttr(Key, Param)
@@ -178,7 +180,7 @@ class TDictParam():
 
     def LoadFile(self, aName, aPattern = {}):
         if (not os.path.isfile(aName)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'LoadFile)', 'File not found %s' % aName)
+            Msg = Log.PrintDbg(1, 'e', 'File not found %s' % aName)
             raise Exception(Msg)
 
         EditorConf = TEditorConf()

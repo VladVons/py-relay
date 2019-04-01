@@ -55,5 +55,5 @@ class TControlSendMail(TControl):
             Server.sendmail(self.Param.User, self.Param.MailTo, Msg)
             Server.close()
         except smtplib.SMTPAuthenticationError as E:
-            Log.Print(1, 'x', self.__class__.__name__, 'Send()', 'Authentication error', E)
+            Log.PrintDbg(1, 'x', 'Authentication error', E)
 

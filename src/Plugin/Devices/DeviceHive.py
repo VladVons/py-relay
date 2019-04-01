@@ -39,7 +39,7 @@ def CheckHostPort(aHost):
         Host = Arr.path
     Port = 80
     if (not Net.CheckHostPort(Host, Port)):
-        Msg = Log.Print(1, 'e', __name__, 'CheckHostPort()', 'Cant connect to host %s:%s' % (Host, Port))
+        Msg = Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (Host, Port))
         #raise Exception(Msg)
 
 

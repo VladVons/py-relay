@@ -40,10 +40,10 @@ class TDbSQL():
                 self.Conn.commit()
             except Exception as E:
                 #self.Conn.rollback()
-                Log.Print(1, 'x', self.__class__.__name__, 'Exec(()', E)
+                Log.PrintDbg(1, 'x', E)
                 Result = None
         else:
-            Msg = Log.Print(1, 'x', self.__class__.__name__, 'Exec(()', 'No DB connected')
+            Msg = Log.PrintDbg(1, 'x', 'No DB connected')
             raise Exception(Msg)
         return Result
 

@@ -8,10 +8,11 @@ Description:
 
 import time
 #
-from Inc.Log      import Log
-from Inc.Param    import TDictParam, TDictCall, TRange
-from Inc.Util     import Num
-from Inc.Import   import TDynImport
+from Inc.Log        import Log
+from Inc.Param      import TDictParam, TDictCall, TRange
+from Inc.Util       import Num
+from Core.ExecParse import TExecParse
+from Inc.Import     import TDynImport
 
 
 class TDeviceBase(object):
@@ -24,7 +25,10 @@ class TDeviceBase(object):
         self.HasParam   = False
         self.Actions    = {}
 
-        self.Exec       = self._ImportExecApi()
+        self.Exec = TExecParse(self)
+        Api = self._ImportExecApi()
+        self.Exec.SetApi(Api)
+
         self.Param      = TDictParam()
         self.ExtParam   = TDictCall()
         self.ExtParam['Parameter'] = self.ExtParameter
@@ -33,8 +37,8 @@ class TDeviceBase(object):
         self.ExtParam['Finish']    = self.Exec.Parse
 
     def _ImportExecApi(self):
-        FileName  = 'Plugin/Lib/ExecApi.py'
-        ClassName = 'TExecApi'
+        FileName  = 'Plugin/Lib/ExecApiEx.py'
+        ClassName = 'TExecApiEx'
 
         # load dynamic trick for 'nuitka' compiler
         Import = TDynImport()
@@ -43,9 +47,9 @@ class TDeviceBase(object):
         if (TClass):
             Result = TClass(self)
         else:
-            Log.Print(1, 'w', self.__class__.__name__, '_ImportExecApi()', 'Extension class %s not found in %s' % (ClassName, FileName))
-            from Core.ExecParse import TExecParse
-            Result = TExecParse(self)
+            Log.PrintDbg(1, 'w', 'Extension class %s not found in %s' % (ClassName, FileName))
+            from Core.ExecApi import TExecApi
+            Result = TExecApi(self)
         return Result
 
     @property
@@ -56,7 +60,7 @@ class TDeviceBase(object):
         return aData.get('Parent').Parse(aParam, self)
 
     def ExtAction(self, aKey, aParam, aData):
-        self.Manager.AddAction(aParam, self.Actions)
+        self.Manager.SecAction.Add(aParam, self.Actions)
 
     def ExtParameter(self, aKey, aParam, aData):
         if (aParam and aParam.get('ClassRef')):
@@ -101,7 +105,7 @@ class TDeviceBase(object):
                 OnActionClass.Post(self, aValue, {'Key': aKey})
 
     def DoParameter(self, aParam):
-        Msg = Log.Print(1, 'e', self.__class__.__name__, 'DoParameter()', 'Not implemented')
+        Msg = Log.PrintDbg(1, 'e', 'Not implemented')
         raise NotImplementedError(Msg)
 
     def DoParameterExit(self):
@@ -127,7 +131,15 @@ class TDevice(TDeviceBase):
         self.Avg = Num.TAvg()
         #self.Avg.Enable = False
 
-        Pattern = {'Enable': True, 'Periodic': 1, 'Delay': 0, 'Debug': False, 'AllValue': False, 'Refresh': 3600, 'OnValue': True, 'MaxErr': 5, 'ForceLog': False}
+        Pattern = {'Enable':    True,
+                    'Periodic': 1,
+                    'Delay':    0,
+                    'Debug':    False,
+                    'AllValue': False,
+                    'Refresh':  3600,
+                    'OnValue':  True,
+                    'MaxErr':   5,
+                    'ForceLog': False}
         self.Param.AddDefPattern(Pattern)
 
         self.ExtParam['Checks']   = self.Exec.Parse
@@ -150,7 +162,7 @@ class TDevice(TDeviceBase):
         pass
 
     def Post(self, aCaller, aValue, aData = None):
-        Log.Print(3, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
+        Log.PrintDbg(3, 'i', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
         if (self.Options.DebugAlias):
             Msg = Log.Format(1, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
             Log.PrintTo(Msg)
@@ -161,18 +173,18 @@ class TDevice(TDeviceBase):
             self.Manager.SecRun.InClass = self
 
             if (self.Param.ForceLog):
-                Log.Print(0, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
+                Log.PrintDbg(0, 'i', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
 
             if (self.DoPostBegin(aCaller, aValue, aData)):
                 if (self.Exec.Conditions('Checks')):
                     Result = self.DoPost(aCaller, aValue, aData)
 
             if (self.Param.Debug):
-                Log.Print(1, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s, Result:%s' % (self.Alias, self.GetAlias(aCaller), aValue, Result))
+                Log.PrintDbg(1, 'i', 'Alias:%s, CAlias:%s, Value:%s, Result:%s' % (self.Alias, self.GetAlias(aCaller), aValue, Result))
         return Result
 
     def SetValue(self, aValue):
-        Log.Print(3, 'i', self.__class__.__name__, 'SetValue()', 'Alias %s, Value %s' % (self.Alias, aValue))
+        Log.PrintDbg(3, 'i', 'Alias %s, Value %s' % (self.Alias, aValue))
 
         if (not self.CheckValue(aValue)):
             self.Exec.Conditions('Triggers')
@@ -202,12 +214,12 @@ class TDevice(TDeviceBase):
             if (self.MaxErr < 0):
                 self.Value  = 0
                 if (self.MaxErr % self.Param.MaxErr == 0):
-                    Log.Print(1, 'i', self.__class__.__name__, 'CheckValue()', 'Invalid value. Alias: %s, Value: None' % (self.Alias))
+                    Log.PrintDbg(1, 'i', 'Invalid value. Alias: %s, Value: None' % (self.Alias))
                     self.Action('OnError', self.Value)
             return False
 
         if (not self.Range.Check(self.Key, aValue)):
-            Log.Print(1, 'i', self.__class__.__name__, 'CheckValue()', 'Invalid range. Alias: %s, Value: %s' % (self.Alias, aValue))
+            Log.PrintDbg(1, 'i', 'Invalid range. Alias: %s, Value: %s' % (self.Alias, aValue))
             self.Action('OnRange', aValue)
             return False
 
@@ -239,7 +251,7 @@ class TSensor(TDevice):
                 Result = self.Provider.Get()
             return self.Round(Result)
         else:
-            Msg = Log.Print(1, 'x', self.__class__.__name__, '_Get()', 'Alias %s. No `Provider` assigned' % (self.Alias))
+            Msg = Log.PrintDbg(1, 'x', 'Alias %s. No `Provider` assigned' % (self.Alias))
             raise NotImplementedError(Msg)
 
     def Round(self, aValue):
@@ -257,7 +269,7 @@ class TSensor(TDevice):
                 Result = Num.RoundPart(Value, self.Param.Round)
             except:
                 Result = None
-                Log.Print(1, 'x', self.__class__.__name__, 'Round()', 'Alias: %s, Value: %s' % (self.Alias, aValue))
+                Log.PrintDbg(1, 'x', 'Alias: %s, Value: %s' % (self.Alias, aValue))
         return Result
 
 
@@ -280,7 +292,7 @@ class TRelay(TDevice):
         if (self.Provider):
             self.Provider.Set(aCaller, int(aValue) ^ self.Param.Invert)
         else:
-            Msg = Log.Print(1, 'x', self.__class__.__name__, '_Set()', 'Alias %s. No `Provider` assigned' % (self.Alias))
+            Msg = Log.PrintDbg(1, 'x', 'Alias %s. No `Provider` assigned' % (self.Alias))
             raise NotImplementedError(Msg)
 
     def _Get(self):

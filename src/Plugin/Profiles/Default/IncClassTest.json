@@ -9,7 +9,7 @@
                 {"Enable":false, "If":"self.InHour('08:14', '08:15')"}
             ],
             "Triggers":[
-                {"Enable":true, "Always":"self.SetValue('$WriteLog', self.Value and (not self.InHours([['07:08', '07:09'], ['19:55', '19:56']])))"}
+                {"Enable":true, "Always":"self.ASetValue('$WriteLog', self.Value and (not self.InHours([['07:08', '07:09'], ['19:55', '19:56']])))"}
             ]
         },
         {

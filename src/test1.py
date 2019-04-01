@@ -202,4 +202,15 @@ def MemRecurs(aDepth, aStr):
 #s1 = TProviderFile_CPULoad('/proc/loadavg')
 #print(s1.Get())
 
-MemRecurs(0, "1")
+#L1 = ['1',2,'3',4,'5',6,7]
+#L2 = [2,4,6,8, 7, '3']
+#print(list(set(L1) - set(L2)))
+
+import re
+T1 = "self.Api('$WriteConsole2').ASetValue(self.if)"
+S  = "If"
+R  = "self.If"
+#S  = "SetValue"
+#R  = "self.SetValue"
+T2 = re.sub(r"\b%s\b" % S , R, T1)
+print(T2)

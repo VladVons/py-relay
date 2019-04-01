@@ -60,7 +60,7 @@ class TMain():
         Log.AddEcho(TLogConsole())
 
         FileLog = self.Options.FileLog
-        if (not os.access(FileLog, os.W_OK)):
+        if (not FS.IsFileWrite(FileLog)):
             FileLog = '%s.log' % self.AppName
         Log.AddEcho(TLogFile(FileLog))
 
@@ -104,7 +104,7 @@ class TMain():
                     if (not Dir in sys.path):
                         sys.path.append(Dir)
                 else:
-                    Log.Print(1, 'w', self.__class__.__name__, 'Init()', 'PkgPath not found %s' % Dir)
+                    Log.PrintDbg(1, 'w', 'PkgPath not found %s' % Dir)
 
     def ParseOptions(self):
         Usage = 'usage: %prog [options] arg'
@@ -156,7 +156,7 @@ class TMain():
 
     def GlobalUnhandledExceptionHook(self, aType, aValue, aTraceback):
         Msg = traceback.format_exception(aType, aValue, aTraceback)
-        Log.Print(1, 'x', self.__class__.__name__, 'GlobalUnhandledExceptionHook()', 'Unhandled error %s' % Msg)
+        Log.PrintDbg(1, 'x', 'Unhandled error %s' % Msg)
 
     def KeyboardSignalHook(self, aSignal, aFrame):
         # multiThread calls ???
@@ -174,7 +174,7 @@ class TMain():
         StartTime = self.DbDict.Get('StartTime')
         if (StartTime):
             Result = Str.ConvertTo(StartTime)
-            Log.Print(1, 'i', self.__class__.__name__, 'GetUptime()', 'StartTime restored to %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(Result)))
+            Log.PrintDbg(1, 'i', 'StartTime restored to %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(Result)))
         else:
             Result = int(time.time())
             self.DbDict.Set('StartTime', Result)
@@ -197,15 +197,15 @@ class TMain():
                 # ToDo type
                 except:
                     InfoWeb = None
-                    Log.Print(1, 'x', self.__class__.__name__, 'CheckUpdate()', 'Parse error %s', Url.lower())
+                    Log.PrintDbg(1, 'x', 'Parse error %s', Url.lower())
 
                 if (InfoWeb):
                     if (InfoWeb['Software'] > InfoLoc['Software']):
-                        Log.Print(1, 'i', self.__class__.__name__, 'CheckUpdate()', 'New software version is available %s' % InfoWeb['Software'])
+                        Log.PrintDbg(1, 'i', 'New software version is available %s' % InfoWeb['Software'])
                         #self.LCD.Print('New software', InfoWeb['Software'])
 
                     if (InfoWeb['Hardware'] > InfoLoc['Hardware']):
-                        Log.Print(1, 'i', self.__class__.__name__, 'CheckUpdate()', 'New hardware version is available %s' %  InfoWeb['Hardware'])
+                        Log.PrintDbg(1, 'i', 'New hardware version is available %s' %  InfoWeb['Hardware'])
                         #self.LCD.Print('New hardware', InfoWeb['Software'])
 
     def _CallBack_OnValue(self, aObj, aValue):
@@ -236,7 +236,7 @@ class TMain():
 
     '''
     def Stop(self, aReason):
-        Log.Print(1, 'i', self.__class__.__name__, 'Stop()', aReason)
+        Log.PrintDbg(1, 'i', aReason)
         #self.LCD.Print('Stop', aReason)
 
         if (self.Manager):

@@ -39,7 +39,7 @@ class TSensorRandomEx(TSensorRange):
     # Custom handler example
     def DoOnValue(self, aValue):
         #TRelayThreadRead.DoOnValue(self, aValue)
-        Log.Print(1, 'i', self.__class__.__name__, 'DoOnValue()', 'Alias: %s, Descr: %s, Value: %s' % (self.Alias, self.Descr, self.Value))
+        Log.PrintDbg(1, 'i', 'Alias: %s, Descr: %s, Value: %s' % (self.Alias, self.Descr, self.Value))
 
         #Root = self.GetRoot()
         ## print to LCD

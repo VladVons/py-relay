@@ -68,7 +68,7 @@ class TProviderPzem(TProvider):
     def __init__(self, aPort):
         self.Obj = TPzem_004(aPort, 9600)
         if (not self.Obj.IsReady()):
-            Log.Print(1, 'w', self.__class__.__name__, '__init__()', 'Device not detected')
+            Log.PrintDbg(1, 'w', 'Device not detected')
 
     def Read(self, aNotUsed):
         Result = {}

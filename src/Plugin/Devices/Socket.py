@@ -28,7 +28,7 @@ class TSensorSocket_Echo(TSensorThreadRead):
         self.Provider.TimeOut = 1
         Data = self.Provider.Get()
         if (not Data):
-            Msg = Log.Print(1, 'i', self.__class__.__name__, 'DoParameter()', 'Connection error. Alias:%s, Host:%s, Port:%s' % (self.Alias, self.Param.Host, self.Param.Port))
+            Msg = Log.PrintDbg(1, 'i', 'Connection error. Alias:%s, Host:%s, Port:%s' % (self.Alias, self.Param.Host, self.Param.Port))
             raise Exception(Msg)
 
         self.CreateThread()

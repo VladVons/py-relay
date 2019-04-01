@@ -27,7 +27,7 @@ class TProvider():
         try:
             Result = self.Read(aValue)
         except Exception as E:
-            Log.Print(1, 'x', self.__class__.__name__, '_ReadWithExcept()', aValue, E)
+            Log.PrintDbg(1, 'x', aValue, E)
             Result = None
         return Result
 
@@ -39,7 +39,7 @@ class TProvider():
                 Result2 = self._ReadWithExcept(aValue)
                 #print('---x1', Result, Result2)
                 if (Result != Result2):
-                    Log.Print(1, 'e', self.__class__.__name__, 'ReadTry()', 'Diff values %s and %s ' % (Result, Result2))
+                    Log.PrintDbg(1, 'e', 'Diff values %s and %s ' % (Result, Result2))
                 else:
                     break
         return Result
@@ -49,19 +49,19 @@ class TProvider():
             Result = self.Write(aValue)
         except Exception as E:
             Result = None
-            Log.Print(1, 'x', self.__class__.__name__, 'WriteTry()', aValue, E)
+            Log.PrintDbg(1, 'x', aValue, E)
         return Result
 
     def Read(self, aValue):
-        Msg = Log.Print(1, 'x', self.__class__.__name__, 'Read()', 'Not implemented')
+        Msg = Log.PrintDbg(1, 'x', 'Not implemented')
         raise NotImplementedError(Msg)
 
     def Write(self, aValue):
-        Msg = Log.Print(1, 'x', self.__class__.__name__, 'Write()', 'Not implemented')
+        Msg = Log.PrintDbg(1, 'x', 'Not implemented')
         raise NotImplementedError(Msg)
 
     def Get(self):
-        Msg = Log.Print(1, 'x', self.__class__.__name__, 'Get()', 'Not implemented')
+        Msg = Log.PrintDbg(1, 'x', 'Not implemented')
         raise NotImplementedError(Msg)
 
     def GetKey(self, aKey):

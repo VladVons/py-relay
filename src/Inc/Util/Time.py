@@ -23,7 +23,7 @@ def CharToSec(aChar, aValue):
     Ratios = {'S':1, 'M':60, 'H':3600, 'd':86400, 'w':86400 * 7, 'm':86400 * 30, 'y':86400 * 365}
     Ratio  = Ratios.get(aChar)
     if (not Ratio):
-        Msg = Log.Print(1, 'e', __name__, 'CharToSec()', 'Unknown char %s' % aChar)
+        Msg = Log.PrintDbg(1, 'e', 'Unknown char %s' % aChar)
         raise ValueError(Msg)
     return Ratio * aValue
 
@@ -40,7 +40,7 @@ def StrToSec(aValue):
 
         if (Digit and Letter):
             if ( (not Letter in 'SMHdwmy') or (not Digit.isdigit()) ):
-                Msg = Log.Print(1, 'e', __name__, 'CharToSec()', 'Value error %s%s' % (Digit, Letter))
+                Msg = Log.PrintDbg(1, 'e', 'Value error %s%s' % (Digit, Letter))
                 raise ValueError(Msg)
             Result += CharToSec(Letter, int(Digit))
     return Result
@@ -67,7 +67,7 @@ def RangeDecorator(aFunc):
 
 def CheckRange(aValue, aMin, aMax):
     if (aMin > aMax):
-        Msg = Log.Print(1, 'e', __name__, 'CheckRange()', 'Min %s is greater than Max %s' % (aMin, aMax))
+        Msg = Log.PrintDbg(1, 'e', 'Min %s is greater than Max %s' % (aMin, aMax))
         raise ValueError(Msg)
     return (aValue >= aMin) and (aValue <= aMax)
  

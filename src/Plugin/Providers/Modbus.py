@@ -24,7 +24,7 @@ class TProviderModbusRTU(TProvider):
         try:
             self.Obj = minimalmodbus.Instrument(aPort, self.Address)
         except Exception as E:
-            Msg = Log.Print(1, 'x', self.__class__.__name__, '__init__()', E)
+            Msg = Log.PrintDbg(1, 'x', E)
             raise Exception(Msg)
 
     def Read(self, aNotUsed):

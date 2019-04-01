@@ -23,10 +23,10 @@ class TExecParse(TExec):
         return self.Keys.get(aKey, {})
 
     def ExtractAlias(self, aData):
-        Allow = self.Cond + ['Enable', 'Label']
+        Allow = self.Cond + ['Enable', 'Label', 'ClassRef']
         Diff = set(aData.keys()) - set(Allow)
         if (Diff):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'ExtractAlias()', 'Unknown key %s in %s' % (str(Diff), Obj.GetTreeAsStr(aData)))
+            Msg = Log.PrintDbg(1, 'e', 'Unknown key %s in %s' % (str(Diff), Obj.GetTreeAsStr(aData)))
             raise Exception(Msg)
 
         Result = []
@@ -46,6 +46,9 @@ class TExecParse(TExec):
 
     def Parse(self, aKey, aParam, aData):
         for Item in aParam:
+            if (not Item.get('Enable', True)):
+                continue
+
             Aliases = self.ExtractAlias(Item)
             if (Aliases):
                 Item['Alias'] = Aliases
@@ -55,6 +58,11 @@ class TExecParse(TExec):
 
             if (not aKey in self.Keys):
                 self.Keys[aKey] = []
+
+            if (Item.get('ClassRef')):
+                self.Parent._LoadClass(Item, aData)
+                Item['Always'] = "APost('$%s')" % Item.get('ClassRef')
+                del Item['ClassRef']
 
             Item['Result'] = TExecResult()
             self.Keys[aKey].append(Item)
@@ -76,6 +84,6 @@ class TExecParse(TExec):
                         Result &= bool(self.CurResult.If)
 
             if (self.BreakLabel):
-                Msg = Log.Print(1, 'e', self.__class__.__name__, 'Conditions()', 'Unknown Label %s in %s' % (self.BreakLabel, self.Parent.Alias))
+                Msg = Log.PrintDbg(1, 'e', 'Unknown Label %s in %s' % (self.BreakLabel, self.Parent.Alias))
                 raise Exception(Msg)
         return Result

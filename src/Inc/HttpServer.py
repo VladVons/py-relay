@@ -28,7 +28,7 @@ class THTTPServer():
         pass
 
     def Run(self):
-        Log.Print(1, 'i', self.__class__.__name__, 'Run()', 'Listening %s:%s' % (self.Bind, str(self.Port)))
+        Log.PrintDbg(1, 'i', 'Listening %s:%s' % (self.Bind, str(self.Port)))
 
         Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         Sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

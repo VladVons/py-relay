@@ -31,5 +31,5 @@ class TControlSleep(TControl):
         self.Param.LoadPattern(aParam)
 
     def _Set(self, aCaller, aValue):
-        #Log.Print(1, 'i', self.__class__.__name__, '_Set()', 'Alias %s' % (self.Alias))
+        #Log.PrintDbg(1, 'i', 'Alias %s' % (self.Alias))
         time.sleep(self.Param.Time)

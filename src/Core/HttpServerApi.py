@@ -42,7 +42,7 @@ class TWeb():
     def GetClass(self, aAlias):
         Class = self.Parent.Manager.SecClass.GetClass(aAlias)
         if (not Class):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'GetClass()', 'Alias not found %s' % aAlias)
+            Msg = Log.PrintDbg(1, 'e', 'Alias not found %s' % aAlias)
             self.Parent.AddData(Msg)
         return Class
 
@@ -106,7 +106,7 @@ class THTTPServerApi(THTTPServer):
         if (not self.LoadFile(Path)):
             CheckErr = self.Check(Path, Query)
             if (CheckErr):
-                Log.Print(1, 'e', self.__class__.__name__, 'DoGet()', CheckErr)
+                Log.PrintDbg(1, 'e', CheckErr)
 
                 self.AddHead(404)
                 self.AddMime('*.html')

@@ -32,7 +32,7 @@ class TProtect():
             StrInfo = self.Crypt.Decode(aData)
             self.Info = json.loads(StrInfo)
         except:
-            Log.Print(1, 'x', self.__class__.__name__, 'LoadKeyStr()', 'Error parsing license data')
+            Log.PrintDbg(1, 'x', 'Error parsing license data')
 
     def LoadKeyFile(self, aFile):
         Result = FS.FileExists(aFile)
@@ -40,11 +40,11 @@ class TProtect():
             Data = FS.LoadFromFileToStr(aFile)
             self.LoadKeyStr(Data)
         else:
-            Log.Print(1, 'e', self.__class__.__name__, 'LoadKeyFile()', 'License file not exists %s' % (KeyFile))
+            Log.PrintDbg(1, 'e', 'License file not exists %s' % (KeyFile))
         return Result
 
     def Check(self):
         Result = (self.GetSerial() == self.Info.get('Hard'))
         if (not Result):
-            Log.Print(1, 'e', self.__class__.__name__, 'Check()', 'Hardware key mismatch')
+            Log.PrintDbg(1, 'e', 'Hardware key mismatch')
         return Result

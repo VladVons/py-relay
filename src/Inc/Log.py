@@ -8,7 +8,9 @@ Description:
 
 
 import time
+import inspect
 import os
+
 
 __all__ = ['TLog', 'Log', 'TLogConsole', 'TLogFile']
 
@@ -81,6 +83,13 @@ class TLog():
             for Echo in self.Echoes:
                 Echo.Write(Result)
         return Result
+
+    def PrintDbg(self, aLevel, aType, *aParam):
+        Prev = inspect.stack()[1]
+        File = os.path.split(Prev[1])[1]
+        Str  = "File: %s, Line: %s, Method: %s" % (File, Prev[2], Prev[3])
+        return self.Print(aLevel, aType, Str, aParam)
+
 
     def PrintTo(self, aMsg, aToEcho = 0):
         Echoes = len(self.Echoes)

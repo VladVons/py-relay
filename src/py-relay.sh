@@ -15,6 +15,7 @@ Log()
 OnStart()
 {
   echo "set all channels off"
+  #i2cdetect -y 1
   i2cset -y 1 0x25 255
 }
 

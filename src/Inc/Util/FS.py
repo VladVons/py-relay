@@ -17,7 +17,7 @@ def FindFile(aDirs, aFiles, aSubDir = False):
         for Root, Folders, Files in os.walk(Dir):
             for File1 in aFiles:
                 for File2 in Files:
-                    if (File1 in File2):
+                    if (File1 and File1 in File2):
                         Result.append(Root + '/' + File2)
         if (not aSubDir):
             break

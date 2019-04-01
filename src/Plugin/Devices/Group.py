@@ -18,7 +18,7 @@ PkgConf = {
 
 class TDeviceGroup(TDevice):
     def DoPostBegin(self, aCaller, aValue, aData):
-        #Log.Print(3, 'i', self.__class__.__name__, 'DoPost()', 'Alias %s, CAlias %s, Value %s' % (self.Alias, aCaller.Alias, aValue))
+        #Log.PrintDbg(3, 'i', 'Alias %s, CAlias %s, Value %s' % (self.Alias, aCaller.Alias, aValue))
 
         self.Value = aValue
 
@@ -71,7 +71,7 @@ class TSensorGroupAvg(TSensorGroup):
                 Class = self.Manager.SecClass.GetClass(Alias)
                 Diff = round(Result / Class.Value, 2)
                 if (Diff > self.Param.Diff):
-                    Log.Print(1, 'w', self.__class__.__name__, '_Get()', 'Too much diff %s. Alias %s in %s' % (Diff, self.Alias, Class.Alias))
+                    Log.PrintDbg(1, 'w', 'Too much diff %s. Alias %s in %s' % (Diff, self.Alias, Class.Alias))
                     self.Action('OnError', Class.Value)
         return Result
 

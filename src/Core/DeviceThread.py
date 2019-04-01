@@ -20,7 +20,7 @@ class TSensorThreadRead(TSensor):
 
     def CreateThread(self):
         if (not self.Provider):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'CreateThread()', 'Alias %s. No `Provider` assigned' % (self.Alias))
+            Msg = Log.PrintDbg(1, 'e', 'Alias %s. No `Provider` assigned' % (self.Alias))
             raise NotImplementedError(Msg)
 
         self.Thread   = TThreadReadList(self._ReadCallBack)
@@ -47,7 +47,7 @@ class TProviderThreadRead(TDeviceBase):
 
     def CreateThread(self):
         if (not self.Provider):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'CreateThread()', 'Alias %s. Not `Provider` assigned' % (self.Alias))
+            Msg = Log.PrintDbg(1, 'e', 'Alias %s. Not `Provider` assigned' % (self.Alias))
             raise NotImplementedError(Msg)
 
         self.Thread = TThreadReadList(self._ReadCallBack)

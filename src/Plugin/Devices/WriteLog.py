@@ -67,25 +67,25 @@ class TControlWriteConsole(TControlWrite):
 
 class TControlWriteLog(TControlWrite):
     def _Set(self, aCaller, aValue):
-        Log.Print(1, 'i', self.__class__.__name__, '_Set()', self.Format(aCaller))
+        Log.PrintDbg(1, 'i', self.Format(aCaller))
 
 
 class TControlWriteFile(TControlWrite):
     def __init__(self, aParent):
         TControlWrite.__init__(self, aParent)
 
-        Pattern = {'File': TDictParam.Required}
+        Pattern = {'File': TDictParam.Required, 'Mode': 'a+'}
         self.Param.AddDefPattern(Pattern)
 
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
 
         if (not FS.IsFileWrite(self.Param.File)):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, '_Set()', 'Cant write file %s' % self.Param.File)
+            Msg = Log.PrintDbg(1, 'e', 'Cant write file %s' % self.Param.File)
             raise Exception(Msg)
 
     def _Set(self, aCaller, aValue):
-        with open(self.Param.File, "a+") as File:
+        with open(self.Param.File, self.Param.Mode) as File:
             Data = self.Format(aCaller)
             File.write(Data + '\n')
 
@@ -94,7 +94,7 @@ class TControl_WatchDog(TControlWriteFile):
     def __init__(self, aParent):
         TControlWriteFile.__init__(self, aParent)
 
-        Pattern = {'File': '/var/log/py-relay/py-relay.wd.log', 'Periodic': 60, 'Refresh': 60}
+        Pattern = {'File': '/var/log/py-relay/py-relay.wd.log', 'Mode':'w+', 'Periodic': 60, 'Refresh': 60}
         self.Param.AddDefPattern(Pattern)
 
     def Format(self, aNotUsed):

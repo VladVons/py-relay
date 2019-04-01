@@ -8,8 +8,8 @@
             "Triggers":[
                 {"Enable":false, "Always":"self.File('DH2.py')"},
                 {"Enable":true, "If":"self.Value > 20", "Then":"self.Break('Test')"},
-                {"Enable":true, "Always":"self.SetValue('$WriteConsoleRand', 1000)"},
-                {"Enable":true, "Label":"Test", "If":"self.Value > 15", "Then":"if self.CountIf > 10: self.SetIf('$WriteLog')"}
+                {"Enable":true, "Always":"self.ASetValue('$WriteConsoleRand', 1000)"},
+                {"Enable":true, "Label":"Test", "If":"self.Value > 15", "Then":"if self.CountIf > 10: self.ASetIf('$WriteLog')"}
             ]
         },
         {
@@ -18,8 +18,8 @@
             "Descr":"Random generator with None value",
             "Parameter":{"Begin":10, "End":100},
             "Triggers":[
-                {"Enable":false, "If":"self.Error",      "Always":"self.SetValue('$WriteConsole3', 111); self.Break()"},
-                {"Enable":false, "If":"self.Value < 40", "Always":"self.SetIf('$WriteConsole2')"}
+                {"Enable":false, "If":"self.Error",      "Always":"self.ASetValue('$WriteConsole3', 111); self.Break()"},
+                {"Enable":false, "If":"self.Value < 40", "Always":"self.ASetIf('$WriteConsole2')"}
             ]
         },
         {
@@ -28,9 +28,12 @@
             "Descr":"Random generator static",
             "Parameter":{"Begin":15, "End":25, "Periodic": 1},
             "Triggers":[
-                {"Enable":false,  "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.SetIf('$WriteConsole2')"},
-                {"Enable":false,  "If":"self.Value < self.Thermostat(20, 1)", "Then":"self.SetIf('$WriteConsole2')"},
-                {"Enable":true,   "If":"self.Value < 20", "Then":"self.SetIf('$WriteConsole2')"}
+                {"Enable":false,  "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.ASetIf('$WriteConsole2')"},
+                {"Enable":false,  "If":"self.Value < self.Thermostat(20, 1)", "Then":"self.ASetIf('$WriteConsole2')"},
+
+                {"Enable":false,  "If":"self.Value < 17", "Then":"self.Api('$WriteConsole2').SetValue(self.If)"},
+                {"Enable":false,   "If":"self.Value < 17", "Then":"self.ASetIf('$WriteConsole2')"},
+                {"Enable":false,   "If":"self.Value < 17", "Then":"self.ASetIf('$WriteConsole2')"}
             ]
         },
         {
@@ -43,7 +46,7 @@
             "Alias":"SensorCycleInc",
             "Parameter":{"Begin":15, "End":25},
             "Triggers":[
-                {"Enable":true, "If":"self.Thermostat(20, 1)", "Always":"self.SetIf('$WriteConsole2')"}
+                {"Enable":true, "If":"self.Thermostat(20, 1)", "Always":"self.ASetIf('$WriteConsole2')"}
             ]
         },
         {
@@ -51,7 +54,11 @@
             "Alias":"SensorCycleDec",
             "Parameter":{"Begin":15, "End":25},
             "Triggers":[
-                {"Enable":true, "If":"self.Thermostat(20)", "Always":"self.SetIf('$WriteConsole2')"}
+                {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.ASetIf('$WriteConsole2')"},
+                {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.ASetIf('$WriteConsole2')"},
+                {"Enable":true,   "If":"Thermostat(17)", "Always":"ASetIf('$WriteConsole2')"},
+                {"Enable":false , "If":"Thermostat(20)", "Always":"SetParam('Periodic', 5)"},
+                {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.Api('$WriteConsole2').SetValue(self.If)"}
             ]
         },
         {
@@ -60,19 +67,19 @@
             "Descr":"Random",
             "Parameter":{"Begin":11, "End":31},
             "Action":[
-                {"OnValue": {"Enable":false,  "ClassRef":"WriteConsole1"}}
+                {"OnValue": {"Enable":false,  "ClassRef":"WriteConsoleFinish"}}
             ],
             "Start":[
-                {"Enable":false,  "Always":"self.SetValue('$WriteConsoleStart',1000)"}
+                {"Enable":false,  "Always":"self.ASetValue('$WriteConsoleStart',1000)"}
             ],
             "Checks":[
                 {"Enable":false,  "If":"self.GetValue('$Random_1000_3000') > 2500"}
             ],
             "Triggers":[
-                {"Enable":true, "If":"self.Value > 28", "Then":"self.SetIf('$WriteConsole1')"}
+                {"Enable":false, "If":"self.Value > 28", "Then":"self.ASetIf('$WriteConsole1')"}
             ],
             "Finish":[
-                {"Enable":false,  "Always":"self.SetValue('$WriteConsoleFinish',2000)"}
+                {"Enable":false,  "Always":"self.ASetValue('$WriteConsoleFinish',2000)"}
             ]
         }
     ]

@@ -1,18 +1,16 @@
 {
     "Run":{
-        "Init":[
-        ],
         "Start":[
             {"Enable":true,   "ClassRef":"GroupOnStart"}
         ],
         "Loop":[
             {"Enable":true,  "ClassRef":"Sleep_1"},
-            {"Enable":false,  "ClassRef":"WatchDog"},
-            {"Enable":false, "ClassRef":"FileSizeLog"},
-            {"Enable":false, "ClassRef":"Sensor_CPULoad"},
-            {"Enable":false, "ClassRef":"Sensor_CPUTemp"},
-            {"Enable":true,  "ClassRef":"Random_15_25"},
-            {"Enable":false, "ClassRef":"SensorUptimeSys"},
+            {"Enable":true,  "ClassRef":"WatchDog"},
+            {"Enable":true,  "ClassRef":"GroupRaspi"},
+            {"Enable":false,  "ClassRef":"FileSizeLog"},
+            {"Enable":false,  "ClassRef":"Sensor_CPULoad"},
+            {"Enable":false , "ClassRef":"Sensor_CPUTemp"},
+            {"Enable":false,  "ClassRef":"SensorUptimeSys"},
 
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
@@ -21,6 +19,7 @@
             {"Enable":false, "ClassRef":"DH1_Sensor_Humid"},
             {"Enable":false, "ClassRef":"SensorTRD_Humid"},
             {"Enable":false, "ClassRef":"SensorTRDF_2"},
+            {"Enable":false, "ClassRef":"RandomEx_11_31"},
             {"Enable":false, "ClassRef":"SensorCycleDec"}
         ],
         "Finish":[
@@ -53,29 +52,37 @@
             "Class":"TDeviceGroup",
             "Alias":"GroupOnValue",
             "Checks": [
-                {"Enable":true,   "Always":"self.SetValue('$WriteConsole')"},
-                {"Enable":false,  "Always":"self.SetValue('$WriteConsole2')"},
-                {"Enable":false,  "Always":"self.SetValue('$Grafana')"}
+                {"Enable":true,   "Always":"ASetValue('$WriteConsole')"},
+                {"Enable":false,  "Always":"self.ASetValue('$WriteConsole2')"},
+                {"Enable":false,  "Always":"self.ASetValue('$Grafana')"}
             ]
         },
         {
             "Class":"TDeviceGroup",
             "Alias":"GroupOnStart",
             "Checks": [
-                {"Enable":false,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
+                {"Enable":false,  "Always":"self.ASetValue('$DH1_Relay_A', 0)"}
             ]
         },
         {
             "Class":"TDeviceGroup",
             "Alias":"GroupOnFinish",
             "Checks": [
-                {"Enable":false,  "Always":"self.SetValue('$DH1_Relay_A', 0)"}
+                {"Enable":false,  "Always":"self.ASetValue('$DH1_Relay_A', 0)"}
             ]
         },
         {
             "Class":"TControlSleep",
             "Alias":"Sleep_1",
             "Parameter":{"Time":1}
+        },
+        {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsoleStart"
+        },
+        {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsoleFinish"
         }
     ]
 }

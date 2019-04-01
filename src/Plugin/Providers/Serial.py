@@ -54,7 +54,7 @@ class TSerial:
                 Result = None
             return Result
         else:
-            Msg = Log.Print(1, 'x', self.__class__.__name__, 'Send()', 'Err')
+            Msg = Log.PrintDbg(1, 'x', 'Err')
             raise Exception(Msg)
 
 

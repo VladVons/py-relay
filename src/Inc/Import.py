@@ -31,7 +31,7 @@ class TDynImport():
     def AddClass(self, aClassName, aModule, aPath):
         Data = self.Classes.get(aClassName)
         if (Data):
-            Msg = Log.Print(1, 'e', self.__class__.__name__, 'AddClass()', 'Class %s already exists in' % aClassName, Data)
+            Msg = Log.PrintDbg(1, 'e', 'Class %s already exists in' % aClassName, Data)
             raise Exception(Msg)
 
         self.Classes[aClassName] = {'Module': aModule, 'Path': aPath}
