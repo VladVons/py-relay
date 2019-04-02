@@ -18,7 +18,7 @@ print Sun.Visible()
 try:
     import ephem
 except Exception as E:
-    print(__file__, E, 'pip install ephem')
+    print(__file__, E, 'apt install python-ephem')
 #
 import datetime
 

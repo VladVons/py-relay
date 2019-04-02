@@ -20,6 +20,7 @@ Install()
   apt install python-mysqldb
   apt install python-crypto
   apt install python-ephem
+  apt install python-psutil
 
   ##  python minimal installer
   apt install libpython2.7 

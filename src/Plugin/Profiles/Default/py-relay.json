@@ -11,6 +11,7 @@
             {"Enable":false, "ClassRef":"Sensor_CPULoad"},
             {"Enable":false, "ClassRef":"Sensor_CPUTemp"},
             {"Enable":false, "ClassRef":"SensorUptimeSys"},
+            {"Enable":true,  "ClassRef":"Sensor_CPU_Usage"},
 
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
@@ -20,7 +21,7 @@
             {"Enable":false, "ClassRef":"SensorTRD_Humid"},
             {"Enable":false, "ClassRef":"SensorTRDF_2"},
             {"Enable":false, "ClassRef":"RandomEx_11_31"},
-            {"Enable":true,  "ClassRef":"SensorCycleDec"}
+            {"Enable":false, "ClassRef":"SensorCycleDec"}
         ],
         "Finish":[
             {"Enable":false,   "ClassRef":"GroupOnFinish"}

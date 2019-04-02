@@ -66,15 +66,6 @@ class TSensorFile_CPU_Load(TSensor):
         self.Provider = TProviderFile_CPULoad(self.Param.File)
 
 
-#class TSensorFile_CPU_Usage(TSensor):
-#    def __init__(self, aParent):
-#        TSensor.__init__(self, aParent)
-##
-#        Pattern = {'File': '/proc/loadavg'}
-#        self.Param.AddDefPattern(Pattern)
-#        self.Provider = TProviderFile_CPULoad(self.Param.File)
-
-
 class TSensorFile_Size(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)

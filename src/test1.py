@@ -226,6 +226,7 @@ def MemRecurs(aDepth, aStr):
 #r = read_cpu_usage()
 #print(r)
 
-import os
-CPU_Pct=str(round(float(os.popen('''grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage }' ''').readline()),2))
-print("CPU Usage = " + CPU_Pct)
+import psutil
+#p1 = psutil.cpu_percent()
+p1 = psutil.cpu_percent(interval = 0.3)
+print(p1)
