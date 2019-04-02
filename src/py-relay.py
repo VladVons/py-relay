@@ -38,7 +38,10 @@ from Core.Manager     import TManager
 from Api              import Version
 
 
-cAppName = FS.SplitName(__file__)[2]
+
+FInfo = FS.SplitName(__file__)
+cDirName = FInfo[0]
+cAppName = FInfo[2]
 
 
 class TMain():
