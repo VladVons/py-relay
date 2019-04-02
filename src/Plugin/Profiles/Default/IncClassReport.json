@@ -28,6 +28,10 @@
         },
         {
             "Class":"TControlWriteConsole",
+            "Alias":"WriteConsole1"
+        },
+        {
+            "Class":"TControlWriteConsole",
             "Alias":"WriteConsole2"
         },
         {

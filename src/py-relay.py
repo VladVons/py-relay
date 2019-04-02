@@ -38,6 +38,9 @@ from Core.Manager     import TManager
 from Api              import Version
 
 
+cAppName = FS.SplitName(__file__)[2]
+
+
 class TMain():
     def __init__(self):
         self.Manager   = None
@@ -46,22 +49,21 @@ class TMain():
 
         self.TimeStart = int(time.time())
 
-        Parts = FS.SplitName(__file__)
-        self.AppName = Parts[2]
-
         self.Protect   = TProtect()
         self.Options   = self.ParseOptions()
         self.Init()
 
     def Init(self):
-        Obj.Dump(Version())
+        Info = Version()
+        Info['AppName'] = cAppName
+        Obj.Dump(Info)
         print('')
 
         Log.AddEcho(TLogConsole())
 
         FileLog = self.Options.FileLog
         if (not FS.IsFileWrite(FileLog)):
-            FileLog = '%s.log' % self.AppName
+            FileLog = '%s.log' % cAppName
         Log.AddEcho(TLogFile(FileLog))
 
         if (self.Options.GetAttr('Options')):
@@ -72,7 +74,7 @@ class TMain():
             print('Serial', self.Protect.GetSerial())
             sys.exit(1)
 
-        KeyFile = self.AppName + '.key'
+        KeyFile = cAppName + '.key'
         if (not self.Protect.LoadKeyFile(KeyFile)):
             sys.exit(1)
         #if (not self.Protect.Check()):
@@ -129,15 +131,15 @@ class TMain():
             'ExceptionHook': False,
             'CheckUpdate':   False,
             'DebugAlias':    False,
-            'FileConf':      self.AppName + '.json',
-            'FileMacros':    self.AppName + '.conf',
-            'FileDb':        self.AppName + '.db',
-            'FileLog':       '/var/log/%s/%s.log' % (self.AppName, self.AppName),
+            'FileConf':      cAppName + '.json',
+            'FileMacros':    cAppName + '.conf',
+            'FileDb':        cAppName + '.db',
+            'FileLog':       '/var/log/%s/%s.log' % (cAppName, cAppName),
             'PkgPath':       ''
         }
 
         Result = TDictParam()
-        ConfFile = self.AppName + '.conf'
+        ConfFile = cAppName + '.conf'
         if (FS.FileExists(ConfFile)):
             Result.LoadFile(ConfFile, Pattern)
         else:
@@ -184,12 +186,12 @@ class TMain():
         #DivisionZerro = 2/0
 
         InfoLoc = Version()
-        #self.LCD.Print('App', self.AppName)
+        #self.LCD.Print('App', cAppName)
         #self.LCD.Print('Software', InfoLoc['Software'])
         #self.LCD.Print('Hardware', InfoLoc['Hardware'])
 
         if (Net.CheckInterface('eth0')):
-            Url  = InfoLoc.get('Homepage') + '/' + self.AppName + '/version.json' 
+            Url  = InfoLoc.get('Homepage') + '/' + cAppName + '/version.json'
             Data = Net.GetHttpData(Url.lower())
             if (Data):
                 try:
@@ -223,7 +225,7 @@ class TMain():
 
         self.IsRun = True
         self.Manager = TManager(self, self.GetProfilePath(''))
-        self.Manager.OnClass = self._CallBack_OnClass
+        self.Manager.SecClass.OnClass = self._CallBack_OnClass
         self.Manager.SetStartTimeVirt(self.GetUptime())
         self.Manager.LoadConf.Macros(self.Options.FileMacros)
         self.Manager.LoadFile(self.Options.FileConf)
@@ -248,7 +250,7 @@ if (__name__ == '__main__'):
     def SetExitHandler(aFunc):
         #prctl.prctl(prctl.NAME, 'py-relay')
         #prctl.prctl(prctl.PDEATHSIG, signal.SIGTERM)
-        prctl.set_name('py-relay')
+        prctl.set_name(cAppName)
         prctl.set_pdeathsig(signal.SIGINT)
 
         signal.signal(signal.SIGTERM, aFunc)

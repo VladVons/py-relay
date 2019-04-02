@@ -48,7 +48,7 @@ class TSensorFile_W1DS(TSensorThreadFile):
 
 
 #--- SensorFile
-class TSensorFile_CPUTemp(TSensor):
+class TSensorFile_CPU_Temp(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 
@@ -57,13 +57,22 @@ class TSensorFile_CPUTemp(TSensor):
         self.Provider = TProviderFile_CPUTemp(self.Param.File)
 
 
-class TSensorFile_CPULoad(TSensor):
+class TSensorFile_CPU_Load(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 
         Pattern = {'File': '/proc/loadavg'}
         self.Param.AddDefPattern(Pattern)
         self.Provider = TProviderFile_CPULoad(self.Param.File)
+
+
+#class TSensorFile_CPU_Usage(TSensor):
+#    def __init__(self, aParent):
+#        TSensor.__init__(self, aParent)
+##
+#        Pattern = {'File': '/proc/loadavg'}
+#        self.Param.AddDefPattern(Pattern)
+#        self.Provider = TProviderFile_CPULoad(self.Param.File)
 
 
 class TSensorFile_Size(TSensor):

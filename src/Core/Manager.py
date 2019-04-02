@@ -187,21 +187,34 @@ class TSecDefault(TSec):
     def __init__(self, aParent):
         TSec.__init__(self, aParent)
 
+        self.Keys = ['Parameter', 'Action']
+
     def Load(self, aData):
-        Keys = ['Enable', 'Class', 'Parameter']
+        Keys = ['Enable', 'Class'] + self.Keys
         for Item in aData:
             Arr.CheckDif(Item.keys(), Keys)
             if (Item.get('Enable', True)):
                 Name = Item.get('Class')
-                self.Data[Name] = Item.get('Parameter')
+                for Key in self.Keys:
+                    Value = Item.get(Key)
+                    if (Value):
+                        if (Key not in self.Data):
+                            self.Data[Key] = {}
+                        self.Data[Key][Name] = Value
 
-    def SetClassParam(self, aClass):
-        Name  = aClass.__class__.__name__
-        Param = self.Data.get(Name)
-        if (Param):
-            Arr.CheckDif(Param, aClass.Param.DefPattern)
-            aClass.Param.AddDefPattern(Param)
+    def GetSect(self, aSect, aClass, aDef = {}):
+        Name   = aClass.__class__.__name__
+        Result = self.Data.get(aSect, aDef)
+        if (Result):
+            Result = Result.get(Name, aDef)
+        return Result
 
+    def GetClassKeys(self, aClass):
+        Result = []
+        for Key in self.Keys:
+            if (self.GetSect(Key, aClass)):
+                Result.append(Key)
+        return Result
 
 class TSecClass(TSec):
     def __init__(self, aParent):
@@ -325,7 +338,9 @@ class TSecClass(TSec):
             # print('->_CreateClass', 'Alias', Result.Alias, 'Class', aClassName)
 
             if (Result):
-                for Key in aData.keys():
+                Def  = self.Parent.SecDefault.GetClassKeys(Result)
+                Keys = Arr.Combine(aData.keys(), Def)
+                for Key in Keys:
                     if (Key not in ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment']):
                         Result.ExtParam(Key, aData.get(Key), {'Parent': self})
                 #Result.DoStart()
@@ -335,9 +350,8 @@ class TSecClass(TSec):
 
 class TManager():
     def __init__(self, aParent, aDir):
-        self.Parent    = aParent
-
-        self.LoadConf   = TLoadConf(aDir)
+        self.Parent   = aParent
+        self.LoadConf = TLoadConf(aDir)
 
         self.StartTimeVirt = time.time()
         self.StartTimeReal = time.time()
@@ -358,7 +372,8 @@ class TManager():
     def Load(self, aData):
         Log.PrintDbg(2, 'i')
 
-        self.Init()
+        #self.SecClass.OnClass miss?
+        #self.Init()
 
         Keys = ['Include', 'Default', 'Run', 'Action']
         Arr.CheckDif(aData.keys(), Keys + ['Class'])

@@ -206,11 +206,26 @@ def MemRecurs(aDepth, aStr):
 #L2 = [2,4,6,8, 7, '3']
 #print(list(set(L1) - set(L2)))
 
-import re
-T1 = "self.Api('$WriteConsole2').ASetValue(self.if)"
-S  = "If"
-R  = "self.If"
-#S  = "SetValue"
-#R  = "self.SetValue"
-T2 = re.sub(r"\b%s\b" % S , R, T1)
-print(T2)
+#from Inc.Util.Num import CheckBit, SetBit
+#Bit = 1
+#Str = '0b10000011'
+#Digit = int(Str, 2)
+#Digit = SetBit(Digit, Bit, not True)
+#print(Bit, Digit, Str, "{0:b}".format(Digit))
+
+#Str = '0b10001011'
+#Digit = int(Str, 2)
+#for i in range(8):
+#    r1 = CheckBit(Digit, i)
+#    print(Str, Digit, i, r1)
+
+#import psutil
+#def read_cpu_usage(stat_path='/proc/stat'):
+#    with open(stat_path) as stat_file:
+#        return sum(float(time) for time in next(stat_file).split()[1:])
+#r = read_cpu_usage()
+#print(r)
+
+import os
+CPU_Pct=str(round(float(os.popen('''grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage }' ''').readline()),2))
+print("CPU Usage = " + CPU_Pct)

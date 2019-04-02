@@ -2,10 +2,13 @@
    "Default":[
         {
             "Enable":true,
-            "Class":"TSensorRandomNone",
+            "Class":"TSensorCycleDec",
             "Parameter": {
-                "None": 10, "MaxErr": 2
-            }
-        }
+                "MaxErr": 2, "Periodic": 3
+            },
+            "Action":[
+                {"OnValue": {"Enable":true,  "ClassRef":"WriteConsole3"}}
+            ]
+         }
     ]
 }

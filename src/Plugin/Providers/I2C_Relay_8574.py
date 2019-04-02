@@ -29,6 +29,11 @@ class TProviderI2C_Relay_8574(TProviderI2C):
         self.Mirror = aMirror
         #self.ReadConfirm = True
 
+    def Mirror(self, aValue):
+        if (self.Mirror):
+            aValue = Num.MirrorBit(aValue)
+        return aValue
+
     def WriteCheck(self, aValue):
         MaxCnt = 3
         for Cnt in range(MaxCnt):
@@ -44,14 +49,12 @@ class TProviderI2C_Relay_8574(TProviderI2C):
     def Set(self, aCaller, aValue):
         PrevValue = self.Get()
         Value     = Num.SetBit(PrevValue, self.Command, bool(aValue))
-        if (self.Mirror):
-            Value = Num.MirrorBit(Value)
+        Value     = self.Mirror(Value)    
         #print('--1', self.Address, self.Command, "{0:b}".format(PrevValue), "{0:b}".format(Value), aValue)
         return self.WriteCheck(Value)
 
     def Get(self):
         Time.DelayMiliSec(self.Delay)
         Result = self.ReadByte()
-        if (self.Mirror):
-            Result = Num.MirrorBit(Result)
+        Result = self.Mirror(Result)    
         return Result

@@ -60,13 +60,18 @@ class TDeviceBase(object):
         return aData.get('Parent').Parse(aParam, self)
 
     def ExtAction(self, aKey, aParam, aData):
+        if (aParam is None):
+            aParam = self.Manager.SecDefault.GetSect('Action', self, [])
         self.Manager.SecAction.Add(aParam, self.Actions)
 
     def ExtParameter(self, aKey, aParam, aData):
         if (aParam and aParam.get('ClassRef')):
             self._LoadClass(aParam, aData)
-        self.Manager.SecDefault.SetClassParam(self)
+
+        Def = self.Manager.SecDefault.GetSect('Parameter', self, {})
+        aParam.update(Def)
         self.DoParameter(aParam)
+
         self.DoParameterExit()
         self.HasParam = True
 

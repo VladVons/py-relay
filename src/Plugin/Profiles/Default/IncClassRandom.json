@@ -56,7 +56,7 @@
             "Triggers":[
                 {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.ASetIf('$WriteConsole2')"},
                 {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.ASetIf('$WriteConsole2')"},
-                {"Enable":true,   "If":"Thermostat(17)", "Always":"ASetIf('$WriteConsole2')"},
+                {"Enable":true,   "If":"Thermostat(17)", "Always":"ASetIf('$WriteConsole1')"},
                 {"Enable":false , "If":"Thermostat(20)", "Always":"SetParam('Periodic', 5)"},
                 {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.Api('$WriteConsole2').SetValue(self.If)"}
             ]

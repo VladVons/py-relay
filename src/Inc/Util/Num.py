@@ -16,6 +16,10 @@ from Inc.Util import Str
 
 
 
+def CheckBit(aValue, aIdx):
+    Mask = 1 << aIdx
+    return aValue & Mask != 0
+
 def SetBit(aValue, aIdx, aSet = True):
     Mask = 1 << aIdx
     if (aSet):
@@ -34,7 +38,12 @@ def MirrorBit(aValue, aWidth = 8):
     return Result
 
 def RoundPart(aValue, aPart = 0.25):
-    return round(math.floor(float(aValue) / aPart) * aPart, 3)
+    if (aValue == 0):
+        Result = 0.0
+    else:
+        Parted = float(aValue) / aPart
+        Result = round(math.floor(Parted) * aPart, 3)
+    return Result
 
 def Clamp(aMin, aMax, aValue):
     return max(aMin, min(aValue, aMax))
@@ -133,6 +142,7 @@ class TUpdateDelay():
             Result = True
 
         return Result
+
 
 # Dvornitsky V.
 class TFadeWave():
