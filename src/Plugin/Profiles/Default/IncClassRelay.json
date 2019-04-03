@@ -1,0 +1,19 @@
+{
+    "Class":[
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_1",
+            "Parameter":{"Bus":1, "Address":37, "Command": 0}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_2",
+            "Parameter":{"Bus":1, "Address":37, "Command": 1}
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Alias":"IRelay_8",
+            "Parameter":{"Bus":1, "Address":37, "Command": 7}
+        }
+    ]
+}

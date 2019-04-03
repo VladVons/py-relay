@@ -11,7 +11,7 @@
             {"Enable":false, "ClassRef":"Sensor_CPULoad"},
             {"Enable":false, "ClassRef":"Sensor_CPUTemp"},
             {"Enable":false, "ClassRef":"SensorUptimeSys"},
-            {"Enable":true,  "ClassRef":"Sensor_CPU_Usage"},
+            {"Enable":false, "ClassRef":"Sensor_CPU_Usage"},
 
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
@@ -21,7 +21,7 @@
             {"Enable":false, "ClassRef":"SensorTRD_Humid"},
             {"Enable":false, "ClassRef":"SensorTRDF_2"},
             {"Enable":false, "ClassRef":"RandomEx_11_31"},
-            {"Enable":false, "ClassRef":"SensorCycleDec"}
+            {"Enable":true,  "ClassRef":"SensorCycleDec"}
         ],
         "Finish":[
             {"Enable":false,   "ClassRef":"GroupOnFinish"}
@@ -34,8 +34,9 @@
         {"Enable":true,  "File":"IncClassRandom.json"},
         {"Enable":false, "File":"IncClassTimer.json"},
         {"Enable":true,  "File":"IncClassReport.json"},
-        {"Enable":true,  "File":"IncClassSolar.json"},
-        {"Enable":true,  "File":"IncClassDh1.json"},
+        {"Enable":false, "File":"IncClassSolar.json"},
+        {"Enable":true,  "File":"IncClassRelay.json"},
+        {"Enable":false, "File":"IncClassDh1.json"},
         {"Enable":true,  "File":"IncClassRasPi.json"}
     ],
     "Action":[
