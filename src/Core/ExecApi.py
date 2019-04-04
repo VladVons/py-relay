@@ -16,10 +16,10 @@ class TExecApi():
         self.Device  = aParent
         self.Exec    = aParent.Exec
 
-    def Api(self, aAlias):
-        return self.AClass(aAlias).Exec
+    def xApi(self, aAlias):
+        return self.xClass(aAlias).Exec
 
-    def AClass(self, aAlias):
+    def xClass(self, aAlias):
         Class = self.Device.Manager.SecClass.GetClass(aAlias[1:])
         #print('---', aAlias, Class.Parent.Value)
         if (not Class):
@@ -27,67 +27,66 @@ class TExecApi():
             raise Exception(Msg)
         return Class
 
-    def APost(self, aAlias, aValue = 0):
+    def xPost(self, aAlias, aValue = 0):
         # Not a good idea pass a value via class property ???
         if (self.Exec.Caller):
             Caller = self.Exec.Caller
         else:
             Caller = self.Device
 
-        Class = self.AClass(aAlias)
+        Class = self.xClass(aAlias)
         return Class.Post(Caller, aValue)
 
-    def Break(self, aLabel = 'EXIT'):
+    def xBreak(self, aLabel = 'EXIT'):
         self.Exec.BreakLabel = aLabel
 
-    def File(self, aName):
+    def xFile(self, aName):
         Data   = self.Device.Manager.LoadConf.File(aName)
-        Result = self.Scrypt(Data)
+        Result = self.Exec.Scrypt(Data)
         return Result
 
     @property
-    def Uptime(self):
+    def xUptime(self):
         return self.Device.GetUptime()
 
     @property
-    def Direction(self):
+    def xDirection(self):
         return self.Device.Direction
 
     @property
-    def Error(self):
+    def xError(self):
         return self.Device.MaxErr < 0
 
     @property
-    def Value(self):
+    def xValue(self):
         return self.Device.Value
 
-    def SetValue(self, aValue):
-        print('---1', aValue)
+    def xSetValue(self, aValue):
         self.Device.SetValue(aValue)
 
-    def SetParam(self, aKey, aValue):
+    def xSetParam(self, aKey, aValue):
         self.Device.Param.SetAttr(aKey, aValue)
 
     @property
-    def If(self):
+    def xIf(self):
         return self.Exec.CurResult.If
 
     @property
-    def CountIf(self):
+    def xCountIf(self):
         return self.Exec.CurResult.CountIf
 
     #---
 
-    def ASetPerCent(self, aAlias, aValue):
+    def xSetPerCent(self, aAlias, aValue):
         Value = self.Device.Range.PerCentSafe(None, aValue)
-        self.APost(aAlias, Value)
+        self.xPost(aAlias, Value)
 
-    def ASetRatio(self, aAlias):
-        Class = self.AClass(aAlias)
-        Value = self.Device.Range.Ratio(None, self.Value, Class.Range.Get(None))
-        self.APost(aAlias, Value)
+    def xSetRatio(self, aAlias):
+        Class = self.xClass(aAlias)
+        Value = self.Device.Range.Ratio(None, self.xValue, Class.Range.Get(None))
+        self.xPost(aAlias, Value)
 
-    def ASetRatioEx(self, aAlias, aMin, aMax):
-        Class = self.AClass(aAlias)
-        Value = self.Device.Range.RatioEx(None, self.Value, Class.Range.Get(None), [aMin, aMax])
-        self.APost(aAlias, Value)
+    def xSetRatioEx(self, aAlias, aMin, aMax):
+        Class = self.xClass(aAlias)
+        Value = self.Device.Range.RatioEx(None, self.xValue, Class.Range.Get(None), [aMin, aMax])
+        self.xPost(aAlias, Value)

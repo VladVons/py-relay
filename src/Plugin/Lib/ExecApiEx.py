@@ -15,65 +15,65 @@ from Core.ExecApi import TExecApi
 
 class TExecApiEx(TExecApi):
     ## --- inherited
-    #def Break(self, aLabel = 'EXIT'):
-    #def Class(self, aAlias):
-    #def Api(self, aAlias):
-    #def File(self, aName):
-    #def Uptime(self):
-    #def Direction(self):
-    #def Error(self):
-    #def Value(self):
-    #def If(self):
-    #def CountIf(self):
-    #def SetParam(self, aKey, aValue):
+    #def xBreak(self, aLabel = 'EXIT'):
+    #def xClass(self, aAlias):
+    #def xApi(self, aAlias):
+    #def xFile(self, aName):
+    #def xUptime(self):
+    #def xDirection(self):
+    #def xError(self):
+    #def xValue(self):
+    #def xIf(self):
+    #def xCountIf(self):
+    #def xSetParam(self, aKey, aValue):
 
 
-    def ASetValue(self, aAlias, aValue = None):
+    def xSetValue(self, aAlias, aValue = None):
         if (aValue is None):
-            aValue = self.Value
-        self.APost(aAlias, aValue)
+            aValue = self.xValue
+        self.xPost(aAlias, aValue)
 
-    def ASetIf(self, aAlias, aInvert = False):
-        self.APost(aAlias, self.If ^ aInvert)
+    def xSetIf(self, aAlias, aInvert = False):
+        self.xPost(aAlias, self.xIf ^ aInvert)
 
-    def Sleep(self, aValue):
+    def xSleep(self, aValue):
         time.sleep(aValue)
 
-    def Thermostat(self, aBase, aDif = 1, aValue = None):
+    def xThermostat(self, aBase, aDif = 1, aValue = None):
         if (aValue is None):
-            aValue = self.Value
+            aValue = self.xValue
 
         if (aDif > 0):
-            Result = (aValue < aBase) or (self.Direction > 0 and aValue < aBase + aDif)
+            Result = (aValue < aBase) or (self.xDirection > 0 and aValue < aBase + aDif)
         else:
-            Result = (aValue > aBase) or (self.Direction < 0 and aValue > aBase + aDif)
+            Result = (aValue > aBase) or (self.xDirection < 0 and aValue > aBase + aDif)
         return Result
 
-    def InValue(self, aBegin, aEnd, aValue = None):
+    def xInValue(self, aBegin, aEnd, aValue = None):
         if (aValue is None):
-            aValue = self.Value
+            aValue = self.xValue
         return Time.CheckRange(aValue, aBegin, aEnd)
 
-    def InUptime(self, aBegin = '0S', aEnd = '10y'):
+    def xInUptime(self, aBegin = '0S', aEnd = '10y'):
         Sec1 = Time.StrToSec(aBegin)
         Sec2 = Time.StrToSec(aEnd)
-        Now  = self.Uptime
+        Now  = self.xUptime
         return Time.CheckRange(Now, Sec1, Sec2)
 
-    def InHour(self, aBegin = '00:00:00', aEnd = '23:59:59'):
+    def xInHour(self, aBegin = '00:00:00', aEnd = '23:59:59'):
         Sec1 = Time.TimeToSec(aBegin)
         Sec2 = Time.TimeToSec(aEnd)
         Now  = Time.TimeToSec(datetime.datetime.now().strftime('%H:%M:%S'))
         return Time.CheckRange(Now, Sec1, Sec2)
 
     @Time.RangeDecorator
-    def InValues(self, aRange):
-        return self.InValue(aRange[0], aRange[1])
+    def xInValues(self, aRange):
+        return self.xInValue(aRange[0], aRange[1])
 
     @Time.RangeDecorator
-    def InUptimes(self, aRange):
-        return self.InUptime(aRange[0], aRange[1])
+    def xInUptimes(self, aRange):
+        return self.xInUptime(aRange[0], aRange[1])
 
     @Time.RangeDecorator
-    def InHours(self, aRange):
-        return self.InHour(aRange[0], aRange[1])
+    def xInHours(self, aRange):
+        return self.xInHour(aRange[0], aRange[1])

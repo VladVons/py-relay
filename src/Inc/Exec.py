@@ -41,7 +41,7 @@ class TExec():
             Items  = dir(self.apix)
             for Item in Items:
                 if (Item in aScrypt) and (Prefix + Item not in aScrypt):
-                    aScrypt = re.sub(r"\b%s\b" % Item, Prefix + Item, aScrypt)
+                    aScrypt = re.sub(r'\b%s\b' % Item, Prefix + Item, aScrypt)
         return aScrypt
 
     @property
