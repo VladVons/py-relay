@@ -62,6 +62,7 @@ class TExecApi():
         return self.Device.Value
 
     def SetValue(self, aValue):
+        print('---1', aValue)
         self.Device.SetValue(aValue)
 
     def SetParam(self, aKey, aValue):

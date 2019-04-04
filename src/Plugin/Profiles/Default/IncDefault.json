@@ -9,6 +9,10 @@
             "Action":[
                 {"OnValue": {"Enable":true,  "ClassRef":"WriteConsole3"}}
             ]
-         }
-    ]
+        },
+        {
+            "Class":"TRelayI2C_Relay_8574",
+            "Parameter":{"Invert": true, "Mirror": true}
+        }
+   ]
 }

@@ -23,22 +23,16 @@ from Inc.Util import Num, Time
 from .I2C     import TProviderI2C
 
 class TProviderI2C_Relay_8574(TProviderI2C):
-    def __init__(self, aBus, aAddress, aCommand, aMirror = False):
+    def __init__(self, aBus, aAddress, aCommand):
         TProviderI2C.__init__(self, aBus, aAddress, aCommand)
-        self.Delay  = 50
-        self.Mirror = aMirror
+        self.Delay   = 50
         #self.ReadConfirm = True
-
-    def Mirror(self, aValue):
-        if (self.Mirror):
-            aValue = Num.MirrorBit(aValue)
-        return aValue
 
     def WriteCheck(self, aValue):
         MaxCnt = 3
         for Cnt in range(MaxCnt):
             Time.DelayMiliSec(self.Delay)
-            Result = self.WriteTry(aValue)
+            Result = self.WriteByte(aValue)
             Time.DelayMiliSec(self.Delay)
             Check  = self.ReadByte()
             if (aValue == Check):
@@ -47,14 +41,20 @@ class TProviderI2C_Relay_8574(TProviderI2C):
         return Result
 
     def Set(self, aCaller, aValue):
-        PrevValue = self.Get()
-        Value     = Num.SetBit(PrevValue, self.Command, bool(aValue))
-        Value     = self.Mirror(Value)    
-        #print('--1', self.Address, self.Command, "{0:b}".format(PrevValue), "{0:b}".format(Value), aValue)
-        return self.WriteCheck(Value)
+        Result = True
+
+        aValue = bool(aValue)
+        State  = self.Get()
+        if (State != aValue):
+            Byte  = self.ReadByte()
+            Value = Num.SetBit(Byte, self.Command, aValue)
+            #print('--1', self.Address, self.Command, "{0:b}".format(Byte), "{0:b}".format(Value), aValue)
+            Result = self.WriteCheck(Value)
+        return Result
 
     def Get(self):
         Time.DelayMiliSec(self.Delay)
-        Result = self.ReadByte()
-        Result = self.Mirror(Result)    
+        Byte = self.ReadByte()
+        #Log.PrintDbg(1, 'i', 'Get Vale: {0:b}'.format(Byte))
+        Result = Num.CheckBit(Byte, self.Command)
         return Result

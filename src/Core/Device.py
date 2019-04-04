@@ -283,7 +283,7 @@ class TRelay(TDevice):
         # super().__init__(aParent) # __need 3.5
         TDevice.__init__(self, aParent)
 
-        Pattern = {'State':False, 'Invert':False}
+        Pattern = {'State': False, 'Invert': False}
         self.Param.AddDefPattern(Pattern)
 
         self.Range.Set(None, [0, 1])

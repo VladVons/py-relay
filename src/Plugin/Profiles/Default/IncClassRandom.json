@@ -7,9 +7,9 @@
             "Parameter":{"Begin":10, "End":30},
             "Triggers":[
                 {"Enable":false, "Always":"self.File('DH2.py')"},
-                {"Enable":true, "If":"self.Value > 20", "Then":"self.Break('Test')"},
-                {"Enable":true, "Always":"self.ASetValue('$WriteConsoleRand', 1000)"},
-                {"Enable":true, "Label":"Test", "If":"self.Value > 15", "Then":"if self.CountIf > 10: self.ASetIf('$WriteLog')"}
+                {"Enable":false, "If":"self.Value > 20", "Then":"self.Break('Test')"},
+                {"Enable":true, "Always":"self.ASetValue('$WriteConsoleRand', )"},
+                {"Enable":false, "Label":"Test", "If":"self.Value > 15", "Then":"if self.CountIf > 10: self.ASetIf('$WriteLog')"}
             ]
         },
         {
@@ -28,9 +28,9 @@
             "Descr":"Random generator static",
             "Parameter":{"Begin":15, "End":25, "Periodic": 1},
             "Triggers":[
+                {"Enable":true,   "If":"Value < 20", "Always":"ASetIf('$IRelay_2')"},
                 {"Enable":false,  "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.ASetIf('$WriteConsole2')"},
                 {"Enable":false,  "If":"self.Value < self.Thermostat(20, 1)", "Then":"self.ASetIf('$WriteConsole2')"},
-
                 {"Enable":false,  "If":"self.Value < 17", "Then":"self.Api('$WriteConsole2').SetValue(self.If)"},
                 {"Enable":false,   "If":"self.Value < 17", "Then":"self.ASetIf('$WriteConsole2')"},
                 {"Enable":false,   "If":"self.Value < 17", "Then":"self.ASetIf('$WriteConsole2')"}
@@ -56,7 +56,7 @@
             "Triggers":[
                 {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.ASetIf('$WriteConsole2')"},
                 {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.ASetIf('$WriteConsole2')"},
-                {"Enable":true,   "If":"Thermostat(20)", "Always":"ASetIf('$IRelay_2')"},
+                {"Enable":true,   "If":"Value < 20", "Always":"ASetIf('$IRelay_2')"},
                 {"Enable":false,  "If":"Thermostat(20)", "Always":"ASetIf('$WriteConsole1')"},
                 {"Enable":false , "If":"Thermostat(20)", "Always":"SetParam('Periodic', 5)"},
                 {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.Api('$WriteConsole2').SetValue(self.If)"}

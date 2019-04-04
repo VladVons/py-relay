@@ -10,3 +10,4 @@ WORKDIR="/usr/lib/py-relay"
 SCRYPT="py-relay.sh"
 
 USER="root"
+LOG=/var/log/py-relay/py-relay.sh.log

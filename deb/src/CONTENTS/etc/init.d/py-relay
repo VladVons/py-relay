@@ -16,7 +16,7 @@
 
 NAME="py-relay"
 DESCR="Some description $NAME"
-PIDFILE="/var/run/$NAME.pid"
+PIDFILE1="/var/run/$NAME.pid"
 USER="root"
 
 # Read default configuration variable
@@ -25,6 +25,8 @@ SCRYPT="py-relay.sh"
 WORKDIR="/usr/lib/$NAME"
 ARGS=""
 DEFAULT="/etc/default/$NAME"
+LOG="/var/log/py-relay/$NAME.sh.log"
+
 if [ -r $DEFAULT ] ; then
   . $DEFAULT
 fi
@@ -39,11 +41,13 @@ DAEMON="$WORKDIR/$SCRYPT"
 #test -x $SCRYPT || exit 0
 . /lib/lsb/init-functions
 
+
+echo "$0->$1" >> $LOG
 case "$1" in
   start)
     if [ $ENABLED = 1 ]; then
       log_daemon_msg "Starting $NAME $DAEMON $ARGS"
-      start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --chuid $USER --chdir $WORKDIR --exec $DAEMON -- $ARGS
+      start-stop-daemon --start --background --pidfile $PIDFILE1 --make-pidfile --chuid $USER --chdir $WORKDIR --exec $DAEMON -- $ARGS
       log_end_msg $?
     else
       log_daemon_msg "Disabled by $DEFAULT"
@@ -51,7 +55,7 @@ case "$1" in
     ;;
   stop)
     log_daemon_msg "Stopping $NAME "
-    start-stop-daemon --stop --pidfile $PIDFILE --verbose --oknodo --retry=TERM/30/KILL/5
+    start-stop-daemon --stop --pidfile $PIDFILE1 --verbose --oknodo --retry=TERM/30/KILL/5
     log_end_msg $?
     ;;
   restart)
@@ -61,7 +65,7 @@ case "$1" in
     ;;
   status)
     log_action_msg "Status $DAEMON"
-    status_of_proc -p $PIDFILE "$DAEMON"
+    status_of_proc -p $PIDFILE1 "$DAEMON"
     ;;
   *)
     echo $DESCR

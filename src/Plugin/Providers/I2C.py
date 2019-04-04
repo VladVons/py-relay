@@ -25,11 +25,13 @@ class TProviderI2C(TProvider):
     def Read(self, aCommand):
         return self.Bus.read_i2c_block_data(self.Address, aCommand)
 
-    def ReadByte(self):
-        Result = self.Bus.read_byte(self.Address)
-        #print('--- ReadByte()', Result)
-        return Result
-
     def Write(self, aCommand):
         #print('--- WriteByte()', aCommand)
         self.Bus.write_byte_data(self.Address, 0, aCommand)
+
+    def ReadByte(self):
+        Result = self.Bus.read_byte(self.Address)
+        return Result
+
+    def WriteByte(self, aCommand):
+        self.Bus.write_byte(self.Address, aCommand)
