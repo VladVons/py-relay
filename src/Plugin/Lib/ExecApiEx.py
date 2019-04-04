@@ -16,7 +16,7 @@ from Core.ExecApi import TExecApi
 class TExecApiEx(TExecApi):
     ## --- inherited
     #def xBreak(self, aLabel = 'EXIT'):
-    #def xClass(self, aAlias):
+    #def xAClass(self, aAlias):
     #def xApi(self, aAlias):
     #def xFile(self, aName):
     #def xUptime(self):
@@ -28,13 +28,13 @@ class TExecApiEx(TExecApi):
     #def xSetParam(self, aKey, aValue):
 
 
-    def xSetValue(self, aAlias, aValue = None):
+    def xASetValue(self, aAlias, aValue = None):
         if (aValue is None):
             aValue = self.xValue
-        self.xPost(aAlias, aValue)
+        self.xAPost(aAlias, aValue)
 
-    def xSetIf(self, aAlias, aInvert = False):
-        self.xPost(aAlias, self.xIf ^ aInvert)
+    def xASetIf(self, aAlias, aInvert = False):
+        self.xAPost(aAlias, self.xIf ^ aInvert)
 
     def xSleep(self, aValue):
         time.sleep(aValue)

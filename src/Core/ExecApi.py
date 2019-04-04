@@ -17,9 +17,9 @@ class TExecApi():
         self.Exec    = aParent.Exec
 
     def xApi(self, aAlias):
-        return self.xClass(aAlias).Exec
+        return self.xAClass(aAlias).Exec
 
-    def xClass(self, aAlias):
+    def xAClass(self, aAlias):
         Class = self.Device.Manager.SecClass.GetClass(aAlias[1:])
         #print('---', aAlias, Class.Parent.Value)
         if (not Class):
@@ -27,14 +27,14 @@ class TExecApi():
             raise Exception(Msg)
         return Class
 
-    def xPost(self, aAlias, aValue = 0):
+    def xAPost(self, aAlias, aValue = 0):
         # Not a good idea pass a value via class property ???
         if (self.Exec.Caller):
             Caller = self.Exec.Caller
         else:
             Caller = self.Device
 
-        Class = self.xClass(aAlias)
+        Class = self.xAClass(aAlias)
         return Class.Post(Caller, aValue)
 
     def xBreak(self, aLabel = 'EXIT'):
@@ -77,16 +77,16 @@ class TExecApi():
 
     #---
 
-    def xSetPerCent(self, aAlias, aValue):
+    def xASetPerCent(self, aAlias, aValue):
         Value = self.Device.Range.PerCentSafe(None, aValue)
-        self.xPost(aAlias, Value)
+        self.xAPost(aAlias, Value)
 
-    def xSetRatio(self, aAlias):
-        Class = self.xClass(aAlias)
+    def xASetRatio(self, aAlias):
+        Class = self.xAClass(aAlias)
         Value = self.Device.Range.Ratio(None, self.xValue, Class.Range.Get(None))
-        self.xPost(aAlias, Value)
+        self.xAPost(aAlias, Value)
 
-    def xSetRatioEx(self, aAlias, aMin, aMax):
-        Class = self.xClass(aAlias)
+    def xASetRatioEx(self, aAlias, aMin, aMax):
+        Class = self.xAClass(aAlias)
         Value = self.Device.Range.RatioEx(None, self.xValue, Class.Range.Get(None), [aMin, aMax])
-        self.xPost(aAlias, Value)
+        self.xAPost(aAlias, Value)
