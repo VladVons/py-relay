@@ -18,15 +18,20 @@ class TExecApiEx(TExecApi):
     #def xBreak(self, aLabel = 'EXIT'):
     #def xAClass(self, aAlias):
     #def xApi(self, aAlias):
+    #def xAPost(self, aAlias, aValue = 0):
     #def xFile(self, aName):
     #def xUptime(self):
     #def xDirection(self):
     #def xError(self):
     #def xValue(self):
     #def xIf(self):
-    #def xCountIf(self):
+    #def xCntIf(self):
+    #def xCntPost(self):
     #def xSetParam(self, aKey, aValue):
 
+
+    def xAGetValue(self, aAlias, aDef):
+        self.xAPost(aAlias, aValue)
 
     def xASetValue(self, aAlias, aValue = None):
         if (aValue is None):

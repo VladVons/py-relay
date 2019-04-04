@@ -11,8 +11,14 @@
             ]
         },
         {
+            "Enable":true,
             "Class":"TRelayI2C_Relay_8574",
-            "Parameter":{"Invert": true, "Mirror": true}
+            "Parameter":{"Invert": true, "Mirror": false}
+        },
+        {
+            "Enable":true,
+            "Class":"TSensorProvider",
+            "Parameter":{"Refresh":600, "Round": 0.5}
         }
    ]
 }

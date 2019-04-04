@@ -6,10 +6,10 @@
             "Descr":"Random generator",
             "Parameter":{"Begin":10, "End":30},
             "Triggers":[
-                {"Enable":false, "Always":"self.File('DH2.py')"},
-                {"Enable":false, "If":"self.Value > 20", "Then":"self.Break('Test')"},
-                {"Enable":true, "Always":"self.ASetValue('$WriteConsoleRand', )"},
-                {"Enable":false, "Label":"Test", "If":"self.Value > 15", "Then":"if self.CountIf > 10: self.ASetIf('$WriteLog')"}
+                {"Enable":false, "Always":"xFile('DH2.py')"},
+                {"Enable":false, "If":"xValue > 20", "Then":"xBreak('Test')"},
+                {"Enable":true,  "Always":"xASetValue('$WriteConsoleRand')"},
+                {"Enable":false, "Label":"Test", "If":"xValue > 15", "Then":"if xCntIf > 10: xASetIf('$WriteLog')"}
             ]
         },
         {
@@ -18,8 +18,8 @@
             "Descr":"Random generator with None value",
             "Parameter":{"Begin":10, "End":100},
             "Triggers":[
-                {"Enable":false, "If":"self.Error",      "Always":"self.ASetValue('$WriteConsole3', 111); self.Break()"},
-                {"Enable":false, "If":"self.Value < 40", "Always":"self.ASetIf('$WriteConsole2')"}
+                {"Enable":false, "If":"xError",      "Always":"xASetValue('$WriteConsole3', 111); xBreak()"},
+                {"Enable":false, "If":"xValue < 40", "Always":"xASetIf('$WriteConsole2')"}
             ]
         },
         {
@@ -28,12 +28,12 @@
             "Descr":"Random generator static",
             "Parameter":{"Begin":15, "End":25, "Periodic": 1},
             "Triggers":[
-                {"Enable":true,   "If":"Value < 20", "Always":"ASetIf('$IRelay_2')"},
-                {"Enable":false,  "If":"self.Value < self.Class('$SensorTRDF_2').Value", "Always":"self.ASetIf('$WriteConsole2')"},
-                {"Enable":false,  "If":"self.Value < self.Thermostat(20, 1)", "Then":"self.ASetIf('$WriteConsole2')"},
-                {"Enable":false,  "If":"self.Value < 17", "Then":"self.Api('$WriteConsole2').SetValue(self.If)"},
-                {"Enable":false,   "If":"self.Value < 17", "Then":"self.ASetIf('$WriteConsole2')"},
-                {"Enable":false,   "If":"self.Value < 17", "Then":"self.ASetIf('$WriteConsole2')"}
+                {"Enable":false,  "If":"xValue < 20", "Always":"xASetIf('$IRelay_2')"},
+                {"Enable":false,  "If":"xValue < xAClass('$SensorTRDF_2').xValue", "Always":"xASetIf('$WriteConsole2')"},
+                {"Enable":false,  "If":"xValue < xThermostat(20, 1)", "Then":"xASetIf('$WriteConsole2')"},
+                {"Enable":false,  "If":"xValue < 17", "Then":"xApi('$WriteConsole2').xSetValue(xIf)"},
+                {"Enable":false,  "If":"xValue < 17", "Then":"xASetIf('$WriteConsole2')"},
+                {"Enable":false,  "If":"xValue < 17", "Then":"xASetIf('$WriteConsole2')"}
             ]
         },
         {
@@ -46,7 +46,7 @@
             "Alias":"SensorCycleInc",
             "Parameter":{"Begin":15, "End":25},
             "Triggers":[
-                {"Enable":true, "If":"self.Thermostat(20, 1)", "Always":"self.ASetIf('$WriteConsole2')"}
+                {"Enable":true, "If":"xThermostat(20, 1)", "Always":"xASetIf('$WriteConsole2')"}
             ]
         },
         {
@@ -54,12 +54,12 @@
             "Alias":"SensorCycleDec",
             "Parameter":{"Begin":15, "End":25},
             "Triggers":[
-                {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.ASetIf('$WriteConsole2')"},
-                {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.ASetIf('$WriteConsole2')"},
-                {"Enable":true,   "If":"Value < 20", "Always":"ASetIf('$IRelay_2')"},
-                {"Enable":false,  "If":"Thermostat(20)", "Always":"ASetIf('$WriteConsole1')"},
-                {"Enable":false , "If":"Thermostat(20)", "Always":"SetParam('Periodic', 5)"},
-                {"Enable":false,  "If":"self.Thermostat(20)", "Always":"self.Api('$WriteConsole2').SetValue(self.If)"}
+                {"Enable":false,  "If":"xThermostat(20)", "Always":"xASetIf('$WriteConsole2')"},
+                {"Enable":false,  "If":"xThermostat(20)", "Always":"xASetIf('$WriteConsole2')"},
+                {"Enable":true,   "If":"xValue < 20",     "Always":"xASetIf('$IRelay_2')"},
+                {"Enable":false,  "If":"xThermostat(20)", "Always":"xASetIf('$WriteConsole1')"},
+                {"Enable":false , "If":"xThermostat(20)", "Always":"xSetParam('Periodic', 5)"},
+                {"Enable":false,  "If":"xThermostat(20)", "Always":"xApi('$WriteConsole2').xSetValue(xIf)"}
             ]
         },
         {
@@ -71,16 +71,16 @@
                 {"OnValue": {"Enable":false,  "ClassRef":"WriteConsoleFinish"}}
             ],
             "Start":[
-                {"Enable":false,  "Always":"self.ASetValue('$WriteConsoleStart',1000)"}
+                {"Enable":false,  "Always":"xASetValue('$WriteConsoleStart',1000)"}
             ],
             "Checks":[
-                {"Enable":false,  "If":"self.GetValue('$Random_1000_3000') > 2500"}
+                {"Enable":false,  "If":"xApi('$Random_1000_3000').xValue > 2500"}
             ],
             "Triggers":[
-                {"Enable":false, "If":"self.Value > 28", "Then":"self.ASetIf('$WriteConsole1')"}
+                {"Enable":false, "If":"xValue > 28", "Then":"xASetIf('$WriteConsole1')"}
             ],
             "Finish":[
-                {"Enable":false,  "Always":"self.ASetValue('$WriteConsoleFinish',2000)"}
+                {"Enable":false,  "Always":"xASetValue('$WriteConsoleFinish', 2000)"}
             ]
         }
     ]

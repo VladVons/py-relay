@@ -2,12 +2,12 @@
 Custom scrypt example
 Variable `Result` returns a result 
 '''
-
-State = (self.Value > 20)
-#self.SetValue('$DH2_Relay_A', int(State))
-#self.SetValue('$DH2_Relay_B', int(not State))
+api   = self.apix
+State = (api.xValue > 20)
+#api.xASetValue('$DH2_Relay_A', int(State))
+#api.xASetValue('$DH2_Relay_B', int(not State))
 
 if (State):
-    print('---1', 'Errors %s, Posts %s' % (self.Parent.ErrCnt, self.Parent.PostCnt))
+    print('---1', 'Errors %s, Posts %s' % (api.Parent.ErrCnt, api.Parent.PostCnt))
 
 Result = State

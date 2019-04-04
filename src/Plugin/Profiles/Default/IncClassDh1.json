@@ -15,7 +15,7 @@
             "Class":"TSensorProvider",
             "Alias":"DH1_Sensor_Humid",
             "Descr":"Street_SH",
-            "Parameter":{"ClassRef":"DH1_Provider", "Tag":"humidity", "Refresh":600, "Round": 0.5}
+            "Parameter":{"ClassRef":"DH1_Provider", "Tag":"humidity"}
         }
     ]
 }

@@ -11,8 +11,8 @@
             "Parameter":{"Unit":"S"}
         },
         {
-            "Class":"TSensorFile_CPUTemp",
-            "Alias":"Sensor_CPUTemp"
+            "Class":"TSensorFile_CPU_Temp",
+            "Alias":"Sensor_CPU_Temp"
         },
         {
             "Class":"TSensorPsUtil_CPU_Usage",

@@ -4,7 +4,7 @@
             "Class":"TSensorCheckInternet",
             "Alias":"CheckInternet",
             "Triggers":[
-                {"Enable":true, "If":"self.Value", "Always":"self.ASetIf('$DH5_Relay_B')"}
+                {"Enable":true, "If":"xValue", "Always":"xASetIf('$DH5_Relay_B')"}
             ]
         },
         {
@@ -12,8 +12,8 @@
             "Alias":"CheckHost",
             "Parameter":{"Host":"192.168.2.104", "Port":80},
             "Triggers":[
-                {"Enable":false, "If":"self.Value", "Then":"self.ASetValue('$DH5_Relay_B', self.Parent.PostCnt % 2 == 0)"},
-                {"Enable":true, "Always":"self.ASetIf('$DH5_Relay_B')"}
+                {"Enable":false, "If":"xValue", "Then":"xASetValue('$DH5_Relay_B', xCntPost % 2 == 0)"},
+                {"Enable":true,  "Always":"xASetIf('$DH5_Relay_B')"}
             ]
         }
     ]

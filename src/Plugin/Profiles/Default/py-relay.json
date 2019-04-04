@@ -5,13 +5,15 @@
         ],
         "Loop":[
             {"Enable":true,  "ClassRef":"Sleep_1"},
-            {"Enable":false, "ClassRef":"WatchDog"},
+            {"Enable":true,  "ClassRef":"WatchDog"},
             {"Enable":false, "ClassRef":"GroupRaspi"},
-            {"Enable":false, "ClassRef":"FileSizeLog"},
-            {"Enable":false, "ClassRef":"Sensor_CPULoad"},
-            {"Enable":false, "ClassRef":"Sensor_CPUTemp"},
-            {"Enable":false, "ClassRef":"SensorUptimeSys"},
-            {"Enable":false, "ClassRef":"Sensor_CPU_Usage"},
+            {"Enable":true,  "ClassRef":"FileSizeLog"},
+            {"Enable":true,  "ClassRef":"Sensor_CPU_Load"},
+            {"Enable":true, "ClassRef":"Sensor_CPU_Usage"},
+            {"Enable":true,  "ClassRef":"Sensor_CPU_Temp"},
+            {"Enable":true,  "ClassRef":"SensorUptimeSys"},
+            {"Enable":false,  "ClassRef":"Random_15_25"},
+            {"Enable":false, "ClassRef":"SensorCycleDec"},
 
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
@@ -19,10 +21,7 @@
             {"Enable":false, "ClassRef":"SensorSun"},
             {"Enable":false, "ClassRef":"DH1_Sensor_Humid"},
             {"Enable":false, "ClassRef":"SensorTRD_Humid"},
-            {"Enable":false, "ClassRef":"SensorTRDF_2"},
-            {"Enable":false, "ClassRef":"RandomEx_11_31"},
-            {"Enable":true,  "ClassRef":"Random_15_25"},
-            {"Enable":false, "ClassRef":"SensorCycleDec"}
+            {"Enable":false, "ClassRef":"SensorTRDF_2"}
         ],
         "Finish":[
             {"Enable":false,   "ClassRef":"GroupOnFinish"}
@@ -55,30 +54,25 @@
             "Class":"TDeviceGroup",
             "Alias":"GroupOnValue",
             "Checks": [
-                {"Enable":true,   "Always":"ASetValue('$WriteConsole')"},
-                {"Enable":false,  "Always":"self.ASetValue('$WriteConsole2')"},
-                {"Enable":false,  "Always":"self.ASetValue('$Grafana')"}
+                {"Enable":true,   "Always":"xASetValue('$WriteConsole')"},
+                {"Enable":false,  "Always":"xASetValue('$WriteConsole2')"},
+                {"Enable":false,  "Always":"xASetValue('$Grafana')"}
             ]
         },
         {
             "Class":"TDeviceGroup",
             "Alias":"GroupOnStart",
             "Checks": [
-                {"Enable":true, "Always":"ASetValue('$IRelay_1', 0)"},
-                {"Enable":true, "Always":"ASetValue('$IRelay_2', 0)"},
-                {"Enable":true, "Always":"ASetValue('$IRelay_3', 0)"},
-                {"Enable":true, "Always":"ASetValue('$IRelay_4', 0)"},
-                {"Enable":true, "Always":"ASetValue('$IRelay_5', 0)"},
-                {"Enable":true, "Always":"ASetValue('$IRelay_6', 0)"},
-                {"Enable":true, "Always":"ASetValue('$IRelay_7', 0)"},
-                {"Enable":true, "Always":"ASetValue('$IRelay_8', 0)"}
+                {"Enable":false, "Always":"xASetValue('$IRelay_1', 0)"},
+                {"Enable":false, "Always":"xASetValue('$IRelay_2', 0)"},
+                {"Enable":false, "Always":"xASetValue('$IRelay_3', 0)"}
             ]
         },
         {
             "Class":"TDeviceGroup",
             "Alias":"GroupOnFinish",
             "Checks": [
-                {"Enable":false,  "Always":"self.ASetValue('$DH1_Relay_A', 0)"}
+                {"Enable":false,  "Always":"xASetValue('$DH1_Relay_A', 0)"}
             ]
         },
         {

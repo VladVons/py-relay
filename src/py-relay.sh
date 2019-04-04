@@ -70,9 +70,9 @@ Start()
     if [ $(uname -m) == "armv7l" ]; then 
         OnStart
 
-        CheckShutdown &
-        PID=$!
-        echo "PID CheckShutdown: $PID"
+        #CheckShutdown &
+        #PID=$!
+        #echo "PID CheckShutdown: $PID"
     fi
 
     #./py-relay.bin

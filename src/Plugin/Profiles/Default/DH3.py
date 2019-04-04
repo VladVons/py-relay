@@ -3,11 +3,12 @@ Custom scrypt example
 Variable `Result` returns a result 
 '''
 
-State = (self.apix.Value < 40)
-self.apix.SetValue('$DH3_Relay_A', int(State))
-self.apix.SetValue('$DH3_Relay_B', int(not State))
+api = self.apix
+State = (api.xValue < 40)
+api.xASetValue('$DH3_Relay_A', int(State))
+api.xASetValue('$DH3_Relay_B', int(not State))
 
-if (self.apix.Value < 30):
-    print('---1', 'Errors %s, Posts %s' % (self.apix.Device.ErrCnt, self.apix.Device.PostCnt))
+if (api.xValue < 30):
+    print('---1', 'Errors %s, Posts %s' % (api.Device.ErrCnt, api.Device.PostCnt))
 
 Result = State

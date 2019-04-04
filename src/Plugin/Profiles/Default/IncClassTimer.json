@@ -6,7 +6,7 @@
             "Descr":"Day light",
             "Parameter":{"Ranges":[{ "On":"02:00", "Off": "18:00"}]},
             "Triggers":[
-                {"Enable":true, "Always":"self.ASetValue('$IRelay_1')"}
+                {"Enable":true, "Always":"xASetValue('$IRelay_1')"}
             ]
         },
         {
@@ -15,10 +15,10 @@
             "Descr":"Air",
             "Parameter":{"Ranges":[{"On":"3S", "Off": "3S"}]},
             "Checks":[
-                {"Enable":false, "If":"self.InHour('08:14', '08:15')"}
+                {"Enable":false, "If":"xInHour('08:14', '08:15')"}
             ],
             "Triggers":[
-                {"Enable":true, "Always":"self.ASetValue('$WriteLog', self.Value and (not self.InHours([['07:08', '07:09'], ['19:55', '19:56']])))"}
+                {"Enable":true, "Always":"xASetValue('$WriteLog', xValue and (not xInHours([['07:08', '07:09'], ['19:55', '19:56']])))"}
             ]
         },
         {
@@ -32,7 +32,7 @@
                 { "On":"22:30", "Off": "22:31"}
             ], "Refresh":2},
             "Triggers":[
-                {"Enable":false, "Always":"self.ASetValue('$IRelay_4')"}
+                {"Enable":false, "Always":"xASetValue('$IRelay_4')"}
             ]
         },
         {

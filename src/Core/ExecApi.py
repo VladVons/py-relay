@@ -72,8 +72,12 @@ class TExecApi():
         return self.Exec.CurResult.If
 
     @property
-    def xCountIf(self):
+    def xCntIf(self):
         return self.Exec.CurResult.CountIf
+
+    @property
+    def xCntPost(self):
+        return self.Device.PostCnt
 
     #---
 

@@ -52,7 +52,7 @@ class TSensorFile_CPU_Temp(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 
-        Pattern = {'File': '/sys/class/thermal/thermal_zone0/temp'}
+        Pattern = {'File': '/sys/class/thermal/thermal_zone0/temp', 'Round': 1}
         self.Param.AddDefPattern(Pattern)
         self.Provider = TProviderFile_CPUTemp(self.Param.File)
 
