@@ -10,6 +10,8 @@ Description:
 import time
 import inspect
 import os
+#
+from Inc.Util import Obj
 
 
 __all__ = ['TLog', 'Log', 'TLogConsole', 'TLogFile']
@@ -42,7 +44,7 @@ class TLog():
         self.Echoes   = []
         self.OnPrint  = None
         self.Tail     = ''
-        self.DateFmt  = '%Y-%m-%d %H:%M:%S'
+        self.DateFmt  = '%Y-%m-%d %H.%M.%S'
 
     def AddEcho(self, aEcho):
         if (not isinstance(aEcho, TLogEcho)):
@@ -50,30 +52,12 @@ class TLog():
 
         self.Echoes.append(aEcho)
 
-    def _Parse(self, *aParam):
-        List = []
-        Dict = {}
-        for Param in aParam:
-            if (type(Param) == dict):
-                Dict.update(Param)
-            else:
-                List.append(Param)
-        return List, Dict
-
     def Format(self, aLevel, aType, *aParam):
-        List, Dict = self._Parse(aParam)
-
-        Str = '%s, %s, Level:%d, Type:%s, List:%s'
-        Arr = [self.Cnt, time.strftime(self.DateFmt), aLevel, aType, list(List)]
-        if (Dict):
-            Arr.append(Dict)
-            Str += ', Dict:%s'
+        Data   = Obj.TupleToStr(aParam)
+        Result = 'N:%s, D:%s, L:%d, T:%s, M:%s' % (self.Cnt, time.strftime(self.DateFmt), aLevel, aType, Data)
 
         if (self.Tail):
-            Arr.append(self.Tail)
-            Str += ', Tail:%s'
-
-        Result = Str % tuple(Arr)
+            Result += ', %s' % self.Tail
         return Result
 
     def Print(self, aLevel, aType, *aParam):
@@ -85,11 +69,12 @@ class TLog():
         return Result
 
     def PrintDbg(self, aLevel, aType, *aParam):
-        Prev = inspect.stack()[1]
-        File = os.path.split(Prev[1])[1]
-        Str  = "File: %s, Line: %s, Method: %s" % (File, Prev[2], Prev[3])
+        Prev   = inspect.stack()[1]
+        File   = os.path.split(Prev[1])[1]
+        Method = Prev[3]
+        Line   = Prev[2]
+        Str    = '%s->%s(%s)' % (File, Method, Line)
         return self.Print(aLevel, aType, Str, aParam)
-
 
     def PrintTo(self, aMsg, aToEcho = 0):
         Echoes = len(self.Echoes)

@@ -52,6 +52,7 @@ class TMain():
 
         self.TimeStart = int(time.time())
 
+        Log.AddEcho(TLogConsole())
         self.Protect   = TProtect()
         self.Options   = self.ParseOptions()
         self.Init()
@@ -62,12 +63,11 @@ class TMain():
         Obj.Dump(Info)
         print('')
 
-        Log.AddEcho(TLogConsole())
-
         FileLog = self.Options.FileLog
         if (not FS.IsFileWrite(FileLog)):
             FileLog = '%s.log' % cAppName
         Log.AddEcho(TLogFile(FileLog))
+        Log.SetTail('PID:%s' % os.getpid())
 
         if (self.Options.GetAttr('Options')):
             print(self.Options.GetVars())

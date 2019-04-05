@@ -26,6 +26,18 @@ def GetAttr(aClass, aName):
         Result = None
     return Result
 
+def TupleToStr(aValue):
+    Result = []
+
+    Type = type(aValue)
+    if (Type is tuple):
+        for Value in aValue:
+            Data = TupleToStr(Value)
+            Result.extend(Data)
+    else:
+        Result.append('%s' % aValue)
+    return Result
+
 def GetTree(aValue, aPrefix = '', aDepth = 99):
     Result = []
 
