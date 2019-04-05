@@ -93,6 +93,9 @@ GitClone()
 
 GitFromSrvMissed()
 {
+  git fetch --all
+  git reset --hard origin/$Branch
+  #
   git ls-files -d | xargs git checkout --
 }
 
