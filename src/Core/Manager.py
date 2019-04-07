@@ -95,6 +95,7 @@ class TSecRun(TSec):
     def __init__(self, aParent):
         TSec.__init__(self, aParent)
         self.InClass = None
+        self.InRun   = False
 
     def __del__(self):
         pass
@@ -156,7 +157,8 @@ class TSecRun(TSec):
             raise Exception(Msg)
 
     def Stop(self):
-        Log.PrintDbg(1, 'i', 'Alias %s' % self.InClass.Alias)
+        if (self.InClass):
+            Log.PrintDbg(1, 'i', 'Alias %s' % self.InClass.Alias)
 
         if (self.InRun):
             self.InRun = False
@@ -397,6 +399,9 @@ class TManager():
 
     def Run(self):
         self.SecRun.Run()
+
+    def Stop(self):
+        self.SecRun.Stop()
 
     def Info(self, aMode):
         if (aMode == 'Attrs'):

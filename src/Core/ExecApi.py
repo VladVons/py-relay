@@ -17,7 +17,7 @@ class TExecApi():
         self.Exec    = aParent.Exec
 
     def xApi(self, aAlias):
-        return self.xAClass(aAlias).Exec
+        return self.xAClass(aAlias).Exec.apix
 
     def xAClass(self, aAlias):
         Class = self.Device.Manager.SecClass.GetClass(aAlias[1:])

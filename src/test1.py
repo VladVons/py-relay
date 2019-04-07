@@ -200,33 +200,28 @@ def MemRecurs(aDepth, aStr):
 
 #from Plugin.Providers.File import TProviderFile_CPULoad
 #s1 = TProviderFile_CPULoad('/proc/loadavg')
-#print(s1.Get())
 
-#L1 = ['1',2,'3',4,'5',6,7]
-#L2 = [2,4,6,8, 7, '3']
-#print(list(set(L1) - set(L2)))
+def RegExp():
+    import re
+    Prefix  = 'self.'
+    Item    = 'xValue'
+    StrIn   = 'xValue and xValue and (My().xValue) and (xValue) and (xValue2)'
+    StrOut = re.sub(r'\bxValue\b|\bxValue2\b', Prefix + Item, StrIn)
+    print(StrIn)
+    print(StrOut)
 
-#from Inc.Util.Num import CheckBit, SetBit
-#Bit = 1
-#Str = '0b10000011'
-#Digit = int(Str, 2)
-#Digit = SetBit(Digit, Bit, not True)
-#print(Bit, Digit, Str, "{0:b}".format(Digit))
 
-#Str = '0b10001011'
-#Digit = int(Str, 2)
-#for i in range(8):
-#    r1 = CheckBit(Digit, i)
-#    print(Str, Digit, i, r1)
+#from watchdog.observers import Observer
 
-#import psutil
-#def read_cpu_usage(stat_path='/proc/stat'):
-#    with open(stat_path) as stat_file:
-#        return sum(float(time) for time in next(stat_file).split()[1:])
-#r = read_cpu_usage()
-#print(r)
+import pyinotify
 
-import psutil
-#p1 = psutil.cpu_percent()
-p1 = psutil.cpu_percent(interval = 0.3)
-print(p1)
+def onChange(ev):
+    #if (ev.maskname == 'IN_CLOSE_WRITE'):
+    print(ev.pathname, ev.maskname)
+
+
+wm = pyinotify.WatchManager()
+#wm.add_watch('/mnt/hdd/data1/temp', pyinotify.ALL_EVENTS, rec=True)
+wm.add_watch('/mnt/hdd/data1/temp', pyinotify.IN_MODIFY, onChange)
+notifier = pyinotify.Notifier(wm, timeout = 1)
+notifier.loop()

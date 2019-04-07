@@ -91,7 +91,7 @@ GitClone()
 }
 
 
-GitFromSrvMissed()
+GitFromServMissed()
 {
   git fetch --all
   git reset --hard origin/$Branch
@@ -180,13 +180,13 @@ Help()
 
 clear
 case $1 in
-    Clean)              "$1"        "$2" "$3" ;;
-    GitAuth)            "$1"        "$2" "$3" ;;
-    GitCreate)          "$1"        "$2" "$3" ;;
-    GitToServ|t)        GitToServ   "$2" "$3" ;;
-    GitFromServ|f)      GitFromServ "$2" "$3" ;;
-    GitFromSrvMissed)   "$1"        "$2" "$3" ;;
-    GitClone)           "$1"        "$2" "$3" ;;
-    *)                  Help ;;
+    Clean)               "$1"        "$2" "$3" ;;
+    GitAuth)             "$1"        "$2" "$3" ;;
+    GitCreate)           "$1"        "$2" "$3" ;;
+    GitToServ|t)         GitToServ   "$2" "$3" ;;
+    GitFromServ|f)       GitFromServ "$2" "$3" ;;
+    GitFromServMissed|m) GitFromSrvMissed "$2" "$3" ;;
+    GitClone)            "$1"        "$2" "$3" ;;
+    *)                   Help ;;
 esac
 

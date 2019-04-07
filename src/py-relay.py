@@ -8,6 +8,7 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
+
 try:
     import prctl
 except:
@@ -47,12 +48,12 @@ cAppName = FInfo[2]
 class TMain():
     def __init__(self):
         self.Manager   = None
-        self.Values    = {}
         self.DbDict    = None
 
         self.TimeStart = int(time.time())
 
         Log.AddEcho(TLogConsole())
+
         self.Protect   = TProtect()
         self.Options   = self.ParseOptions()
         self.Init()
@@ -239,23 +240,19 @@ class TMain():
 
         self.Manager.Run()
 
-    '''
     def Stop(self, aReason):
-        Log.PrintDbg(1, 'i', aReason)
+        Log.PrintDbg(1, 'i', 'Reason %s' % aReason)
         #self.LCD.Print('Stop', aReason)
 
         if (self.Manager):
             self.Manager.Stop()
-    '''
+
 
 if (__name__ == '__main__'):
     # kill all threads on SIGTERM via 'service relay stop'
     def SetExitHandler(aFunc):
-        #prctl.prctl(prctl.NAME, 'py-relay')
-        #prctl.prctl(prctl.PDEATHSIG, signal.SIGTERM)
         prctl.set_name(cAppName)
         prctl.set_pdeathsig(signal.SIGINT)
-
         signal.signal(signal.SIGTERM, aFunc)
 
     def OnExit(aSignal, func=None):
@@ -267,7 +264,7 @@ if (__name__ == '__main__'):
         SetExitHandler(OnExit)
         Main.Run()
     except KeyboardInterrupt:
-        #Main.Stop('Ctrl-C')
-        pass
+        Log.Print(1, 'i', __name__, 'Ctrl-C')
     finally:
+        Main.Stop('Finally')
         Log.Print(1, 'i', __name__, 'Finish')

@@ -31,7 +31,7 @@
                 {"Enable":false,  "If":"xValue < 20", "Always":"xASetIf('$IRelay_2')"},
                 {"Enable":false,  "If":"xValue < xAClass('$SensorTRDF_2').xValue", "Always":"xASetIf('$WriteConsole2')"},
                 {"Enable":false,  "If":"xValue < xThermostat(20, 1)", "Then":"xASetIf('$WriteConsole2')"},
-                {"Enable":false,  "If":"xValue < 17", "Then":"xApi('$WriteConsole2').xSetValue(xIf)"},
+                {"Enable":true,   "If":"xValue < 25", "Then":"xApi('$WriteConsole2').xSetValue(xIf)"},
                 {"Enable":false,  "If":"xValue < 17", "Then":"xASetIf('$WriteConsole2')"},
                 {"Enable":false,  "If":"xValue < 17", "Then":"xASetIf('$WriteConsole2')"}
             ]

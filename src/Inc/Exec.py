@@ -40,8 +40,10 @@ class TExec():
             Prefix = 'self.apix.'
             Items  = dir(self.apix)
             for Item in Items:
-                if (Item in aScrypt) and (Prefix + Item not in aScrypt):
+                if (Item in aScrypt):
                     aScrypt = re.sub(r'\b%s\b' % Item, Prefix + Item, aScrypt)
+            # ToDo problem with MyFunc().xFunc
+            aScrypt = aScrypt.replace('.' + Prefix, '.')
         return aScrypt
 
     @property

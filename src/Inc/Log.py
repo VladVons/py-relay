@@ -49,15 +49,11 @@ class TLog():
     def AddEcho(self, aEcho):
         if (not isinstance(aEcho, TLogEcho)):
             raise ValueError('Class %s must be inherited from TLogEcho' % aEcho)
-
         self.Echoes.append(aEcho)
 
     def Format(self, aLevel, aType, *aParam):
         Data   = Obj.TupleToStr(aParam)
-        Result = 'N:%s, D:%s, L:%d, T:%s, M:%s' % (self.Cnt, time.strftime(self.DateFmt), aLevel, aType, Data)
-
-        if (self.Tail):
-            Result += ', %s' % self.Tail
+        Result = 'N:%s, D:%s, L:%d, T:%s, M:%s %s' % (self.Cnt, time.strftime(self.DateFmt), aLevel, aType, Data, self.Tail)
         return Result
 
     def Print(self, aLevel, aType, *aParam):
