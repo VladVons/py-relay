@@ -14,11 +14,17 @@ http://toly.github.io/blog/2014/02/13/parallelism-in-one-line/
 '''
 
 import time
-import datetime
 import multiprocessing
 
 #import os
 #os.path.dirname(multiprocessing.__file__)
+
+
+def CreateThread(aTarget, aArgs):
+    Process = multiprocessing.Process(target = aTarget, args = aArgs)
+    Process.daemon = True
+    Process.start()
+    time.sleep(0.3)
 
 
 class TThreadRead():

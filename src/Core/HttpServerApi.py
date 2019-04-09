@@ -24,11 +24,12 @@ try:
     from yattag import Doc 
 except Exception as E: 
     print(__file__, E, 'pip install yattag')
+
 #
 from Inc.Log        import Log
 from Inc.Util       import FS
 from Inc.Serialize  import TSerialize
-from Inc.HttpServer import THTTPServer
+from Inc.HttpServer import TSockServer
 from Inc.Param      import TDictReplace
 
 
@@ -71,12 +72,11 @@ class TWeb():
             self.Parent.AddData(str(Class._Get()))
 
 
-class THTTPServerApi(THTTPServer):
-    def __init__(self, aPort, aManager, aDevices):
+class THttpServerApi(TSockServer):
+    def __init__(self, aPort, aManager):
         THTTPServer.__init__(self, aPort)
 
         self.Manager = aManager
-        self.Devices = aDevices
         self.Dir     = None
 
         self.Dict = TDictReplace()
@@ -154,6 +154,11 @@ class THTTPServerApi(THTTPServer):
             if (not aQuery.get(Param)):
                 return 'Missed key: %s' % Param
         return ''
+
+class THttpServerThread():
+    def __RunThreadConn(self, aConn, aAddress):
+        SockSession = TSockSession(self, aConn, aAddress)
+        SockSession.Run()
 
 
 #aUrl  = '/device/set?alias=DH1_Relay_A&value=1'

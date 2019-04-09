@@ -35,8 +35,9 @@ from Inc.DB           import TDbDictSQLite
 from Inc.Util         import Obj, FS, Net, Str
 from Inc.Param        import TDictParam
 from Inc.Protect      import TProtect
-from Core.Manager     import TManager
 from Api              import Version
+from Core.Manager     import TManager
+from Core.HttpServerApi import THttpServerApi
 
 
 
@@ -133,6 +134,7 @@ class TMain():
 
             # misc conf
             'ExceptionHook': False,
+            'ApiPort':       None,
             'CheckUpdate':   False,
             'DebugAlias':    False,
             'FileConf':      cAppName + '.json',
@@ -237,6 +239,11 @@ class TMain():
         if (self.Options.Info):
             self.Info()
             sys.exit()
+
+        if (self.Options.ApiPort):
+            ServerApi = THttpServerApi(self.Options.ApiPort, self.Manager)
+            #ServerApi.Dir = self.Param.Dir
+            ServerApi.Run()
 
         self.Manager.Run()
 

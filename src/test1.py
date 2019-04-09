@@ -18,46 +18,6 @@ print (Result._Get())
 #print(sys.path)
 '''
 
-#from Plugin.Providers.MHZ19 import TProviderMHZ19
-#Pzem = TProviderMHZ19('/dev/ttyUSB0')
-
-#from Plugin.Providers.DeviceHive import TDeviceHiveESP, TProviderDeviceHive_MHZ19
-#Data = [0xB4, 0xC0, 0xA8, 0x01, 0x01, 0x00, 0x1E]
-#DataStr = base64.encodestring(Data)
-
-#DataStr = "\xB4\xC0\xA8\x01\x01\x00\x1E"
-#DataStr = "\xB0\xC0\xA8\x01\x01\x00\x1A"
-
-#DataStr = base64.b64encode(DataStr)
-#DataStr = bytes(Data)
-#DataStr = json.dumps(Data)
-#print(DataStr)
-#base64EncodedStr = base64.b64encode(DataStr)
-#print(base64EncodedStr)
-
-#DH = TDeviceHiveESP('dh9.local')
-#Data = DH.CmdUartRead(9600, DataStr)
-#print(Data)
-
-#print('Data', Data)
-
-#DH = TProviderDeviceHive_MHZ19('dh9.local')
-#while(1):
-#    Data = DH.Get()
-#    print('Data', Data)
-#    time.sleep(1)
-
-
-#sys.path.append('/usr/lib/python2.7/dist-packages')
-#for i in sys.path:
-#    print(i)
-
-#import MySQLdb
-#import radiotray
-
-
-
-
 def Pzem():
     from Plugin.Providers.Pzem import TProviderPzem
     Pzem = TProviderPzem('/dev/ttyUSB0')
@@ -167,40 +127,6 @@ def MemRecurs(aDepth, aStr):
         print('---1', Obj.Get())
         time.sleep(1)
 
-
-#Relay_One(1, 0x25, 1)
-#Relay_LCD()
-#Telegram()
-#TimerRange()
-
-#from Plugin.Devices.Timer import TSensorTimeRangeDay
-#Obj = TSensorTimeRangeDay(None)
-#print(Obj.Param.DefPattern)
-
-#from Plugin.Devices.Sleep import TControlSleep
-#Obj = TControlSleep(None)
-#print(Obj.Param.DefPattern)
-
-#from Plugin.Providers.UpsNut import TProviderUpsNut
-#Obj = TProviderUpsNut('MyUPS1')
-#Data = Obj.Read(None)
-#print(Data)
-
-
-#from Plugin.Providers.Telegram import TProviderTelegram
-#Telegram = TProviderTelegram('482131719:AAHRZnIq-RsfNyF2LvaSIm028vGHgSv60dI', ['423099610'])
-#Telegram.Write('Hello-21')
-
-
-#for Item in sys.path:
-#    if (Item.endswith('packages')):
-#        print(Item)
-
-#print("helo")
-
-#from Plugin.Providers.File import TProviderFile_CPULoad
-#s1 = TProviderFile_CPULoad('/proc/loadavg')
-
 def RegExp():
     import re
     Prefix  = 'self.'
@@ -211,17 +137,26 @@ def RegExp():
     print(StrOut)
 
 
-#from watchdog.observers import Observer
+def NitifyFS():
+    import pyinotify
 
-import pyinotify
-
-def onChange(ev):
-    #if (ev.maskname == 'IN_CLOSE_WRITE'):
-    print(ev.pathname, ev.maskname)
+    def onChange(ev):
+        #if (ev.maskname == 'IN_CLOSE_WRITE'):
+        print(ev.pathname, ev.maskname)
 
 
-wm = pyinotify.WatchManager()
-#wm.add_watch('/mnt/hdd/data1/temp', pyinotify.ALL_EVENTS, rec=True)
-wm.add_watch('/mnt/hdd/data1/temp', pyinotify.IN_MODIFY, onChange)
-notifier = pyinotify.Notifier(wm, timeout = 1)
-notifier.loop()
+    wm = pyinotify.WatchManager()
+    #wm.add_watch('/mnt/hdd/data1/temp', pyinotify.ALL_EVENTS, rec=True)
+    wm.add_watch('/mnt/hdd/data1/temp', pyinotify.IN_MODIFY, onChange)
+    notifier = pyinotify.Notifier(wm, timeout = 1)
+    notifier.loop()
+
+
+def HTTP():
+    from Core.HttpServerApi import THttpServerApi
+    ServerApi = THTTPServerApi(8888, self.Manager, None)
+    ServerApi.Timeout = self.Param.Timeout
+    ServerApi.Dir     = self.Param.Dir
+    ServerApi.Run()
+
+

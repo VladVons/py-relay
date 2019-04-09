@@ -32,7 +32,6 @@ def SockReceive(aConn, aBufSize):
                 break
         else:
             break
-
     return Result
 
 def GetLocalIP():
