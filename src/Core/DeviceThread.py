@@ -8,7 +8,6 @@ Description: Access slow devices using thread
 '''
 
 from Inc.Log      import Log
-from Inc.Param    import TDictParam, TDictCall, TRange
 from Inc.Thread   import TThreadReadList
 from Core.Device  import TSensor, TDeviceBase
 
@@ -23,7 +22,7 @@ class TSensorThreadRead(TSensor):
             Msg = Log.PrintDbg(1, 'e', 'Alias %s. No `Provider` assigned' % (self.Alias))
             raise NotImplementedError(Msg)
 
-        self.Thread   = TThreadReadList(self._ReadCallBack)
+        self.Thread = TThreadReadList(self._ReadCallBack)
         self.Thread.Periodic = self.Param.Periodic
         self.Thread._SetData(self._ReadCallBack())
         self.Thread.Create()

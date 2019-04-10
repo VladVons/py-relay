@@ -29,8 +29,9 @@ except Exception as E:
 from Inc.Log        import Log
 from Inc.Util       import FS
 from Inc.Serialize  import TSerialize
-from Inc.HttpServer import TSockServer
 from Inc.Param      import TDictReplace
+from Inc.HttpServer import TSockServer, TConnSessionHttp
+from Inc.Thread     import CreateThread, TThreadPipe
 
 
 class TWeb():
@@ -40,8 +41,14 @@ class TWeb():
         self.Serialize = TSerialize()
         self.Serialize.AddModule('Api')
 
+    def ProcessThreadQueue(self, aData):
+        ThreadPipe = self.Parent.Parent.ThreadPipe
+        if (ThreadPipe):
+            aData = ThreadPipe.ThreadSend(aData)
+        return aData
+
     def GetClass(self, aAlias):
-        Class = self.Parent.Manager.SecClass.GetClass(aAlias)
+        Class = self.Parent.Parent.Manager.SecClass.GetClass(aAlias)
         if (not Class):
             Msg = Log.PrintDbg(1, 'e', 'Alias not found %s' % aAlias)
             self.Parent.AddData(Msg)
@@ -69,32 +76,59 @@ class TWeb():
     def UrlDeviceGet(self, aParam):
         Class = self.GetClass(aParam.get('alias'))
         if (Class):
-            self.Parent.AddData(str(Class._Get()))
+            Data = self.ProcessThreadQueue(aParam)
+            self.Parent.AddData(str(Data))
 
 
-class THttpServerApi(TSockServer):
-    def __init__(self, aPort, aManager):
-        THTTPServer.__init__(self, aPort)
+class TConnSessionApp(TConnSessionHttp):
+    def __init__(self, aParent):
+        TConnSessionHttp.__init__(self, aParent)
 
-        self.Manager = aManager
-        self.Dir     = None
-
+        self.Dir     = ''
+        self.Manager = None
         self.Dict = TDictReplace()
 
         Web = TWeb(self)
         self.UrlPattern = {
-            '/':            {'func': Web.UrlIndex,     'param': []},
-            '/favicon.ico': {'func': Web.UrlIndex,     'param': []},
-            '/api':         {'func': Web.UrlApi,       'param': ['method']},
-            '/device/set':  {'func': Web.UrlDeviceSet, 'param': ['alias', 'value']},
-            '/device/get':  {'func': Web.UrlDeviceGet, 'param': ['alias']}
+            '/': {'func': Web.UrlIndex, 'param': []},
+            '/favicon.ico': {'func': Web.UrlIndex, 'param': []},
+            '/api': {'func': Web.UrlApi, 'param': ['method']},
+            '/device/set': {'func': Web.UrlDeviceSet, 'param': ['alias', 'value']},
+            '/device/get': {'func': Web.UrlDeviceGet, 'param': ['alias']}
         }
 
-    def DoTimeout(self):
-        self.Manager.PostAll(self.Devices)
+    def LoadFile(self, aPath):
+        Path = os.getcwd() + '/' + self.Dir + aPath
+        Data = FS.LoadFromFileToStr(Path)
+        Result = (Data is not  None)
+        if (Result):
+            self.AddHead(200)
+            self.AddMime(Path)
+            self.AddData('')
+            self.AddData(self.Dict.Parse(Data))
+            #self.AddData(Data)
+        return Result
 
     def DoPost(self, aUrl, aData):
         print(aUrl, aData)
+
+    def Check(self, aPath, aQuery):
+        Pattern = self.UrlPattern.get(aPath)
+        if (not Pattern):
+            return 'Path not found: %s' % aPath
+
+        Params = Pattern.get('param')
+        for Query in aQuery:
+            if (Query not in Params):
+                return 'Unknown key: %s' % Query
+
+            if (not aQuery.get(Query)):
+                return 'Empty key: %s' % Query
+
+        for Param in Params:
+            if (not aQuery.get(Param)):
+                return 'Missed key: %s' % Param
+        return ''
 
     def DoGet(self, aUrl):
         self.Dict.Clear()
@@ -125,41 +159,37 @@ class THttpServerApi(TSockServer):
                 Func(Query)
             #print(self.GetData())
 
-    def LoadFile(self, aPath):
-        Path = os.getcwd() + '/' + self.Dir + aPath
-        Data = FS.LoadFromFileToStr(Path)
-        Result = (Data is not  None)
-        if (Result):
-            self.AddHead(200)
-            self.AddMime(Path)
-            self.AddData('')
-            self.AddData(self.Dict.Parse(Data))
-            #self.AddData(Data)
-        return Result
 
-    def Check(self, aPath, aQuery):
-        Pattern = self.UrlPattern.get(aPath)
-        if (not Pattern):
-            return 'Path not found: %s' % aPath
+class TThreadPipeApi(TThreadPipe):
+    Cnt = 0
 
-        Params = Pattern.get('param')
-        for Query in aQuery:
-            if (Query not in Params):
-                return 'Unknown key: %s' % Query
+    # we are in main process with parameters
+    def DoReceive(self, aData):
+        self.Cnt += 1
+        aData = [self.Cnt, 'Hello', aData]
+        return aData
 
-            if (not aQuery.get(Query)):
-                return 'Empty key: %s' % Query
 
-        for Param in Params:
-            if (not aQuery.get(Param)):
-                return 'Missed key: %s' % Param
-        return ''
+class THttpServerApi(TSockServer):
+    def __init__(self, aPort):
+        TSockServer.__init__(self, aPort)
 
-class THttpServerThread():
-    def __RunThreadConn(self, aConn, aAddress):
-        SockSession = TSockSession(self, aConn, aAddress)
-        SockSession.Run()
+        #self.Timeout = 1
+        self.Manager  = None
+        self.Dir      = 'Plugin/Web'
+        self.Conn     = TConnSessionApp(self)
 
+    def DoAccept(self, aConn, aAddr):
+        self.Conn.Dir = self.Dir
+        self.Conn.Handle(aConn)
+
+    def Exec(self, aThread):
+        if (aThread):
+            self.ThreadPipe = TThreadPipeApi()
+            self.Manager.SecRun.ThreadPipe = self.ThreadPipe
+            CreateThread(self.Run)
+        else:
+            self.Run()
 
 #aUrl  = '/device/set?alias=DH1_Relay_A&value=1'
 #ServerApi.DoGet(aUrl)

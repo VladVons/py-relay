@@ -16,44 +16,34 @@ from Inc.Thread import CreateThread
 
 
 class TConnSession():
-    def __init__(self, aParent, aConn, aAddress):
+    def __init__(self, aParent):
         self.Parent   = aParent
-        self.Conn     = aConn
-        self.Address  = aAddress
-
         self.BuffSize = 4096
         self.Data     = []
-
-    def __del__(self):
-        self.Close()
+        self.Conn     = None
 
     def DoReceive(self):
         Msg = Log.PrintDbg(1, 'e', 'Not implemented')
         raise NotImplementedError(Msg)
 
-    def Close(self):
-        if (self.Conn):
-            self.Conn.close()
-        self.Conn = None
-
     def Receive(self):
-        return Net.SockReceive(self.Conn, self.BuffSize)
+        Result = Net.SockReceive(self.Conn, self.BuffSize)
+        return Result
 
     def Send(self, aData):
         return self.Conn.sendall(aData)
 
-    def Run(self):
-        Log.PrintDbg(1, 'i', 'Start session')
+    def Handle(self, aConn):
+        Log.PrintDbg(3, 'i', 'Start session')
+        self.Conn = aConn
         try:
-            while True:
-                #time.sleep(0.1)
-                self.Data = []
-                Data = self.Receive()
-                if (Data):
-                    Data = self.DoReceive(Data)
-                    self.Send(Data)
-                else:
-                    break
+            self.Data = []
+            Data = self.Receive()
+            if (Data):
+                Data = self.DoReceive(Data)
+                self.Send(Data)
+        except socket.timeout:
+            self.Parent.DoTimeout()
         except Exception as E:
             Msg = Log.PrintDbg(1, 'x', '%s' % (E.message))
             self.Send(Msg)
@@ -131,12 +121,16 @@ class TSockServer():
         self.Bind = ''
         self.Timeout = None
 
-    def _ConnThread(self, aConn, aAddress):
-        ConnSession = TConnSession(self, aConn, aAddress)
-        ConnSession.Run()
+    def DoAccept(self, aConn, aAddr):
+        Msg = Log.PrintDbg(1, 'e', 'Not implemented')
+        raise NotImplementedError(Msg)
+
+    #def _ConnThread(self, aConn, aAddress):
+    #    ConnSession = TConnSession(self, aConn, aAddress)
+    #    ConnSession.Run()
 
     def Run(self):
-        Log.PrintDbg(1, 'i', 'Listening %s:%s' % (self.Bind, str(self.Port)))
+        Log.PrintDbg(1, 'i', 'Connection on %s:%s' % (self.Bind, str(self.Port)))
 
         Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         Sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -146,16 +140,19 @@ class TSockServer():
         try:
             self.IsRun = True
             while (self.IsRun):
+                Conn = None
                 try:
                     Conn, Addr  = Sock.accept()
                     Conn.settimeout(self.Timeout)
 
                     #CreateThread(self._ConnThread, [Conn, Addr])
 
-                    ConnSession = TConnSessionHttp(self, Conn, Addr)
-                    ConnSession.Run()
+                    self.DoAccept(Conn, Addr)
                 except socket.timeout:
                     self.DoTimeout()
+                finally:
+                    if (Conn):
+                        Conn.close()
         finally:
             Sock.close()
 

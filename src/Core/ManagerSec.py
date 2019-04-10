@@ -10,7 +10,7 @@ Description:
 import sys
 #
 from Inc.Log        import Log
-from Inc.Util       import Obj, FS, Arr
+from Inc.Util       import Arr
 
 # for nuitka compiler
 #from Plugin.Devices import *
@@ -26,7 +26,7 @@ class TSec():
         self.Data.clear()
 
     def Load(self, aData):
-        Msg = Log.PrintDbg(1, 'e', 'Load()', 'Not implemented')
+        Msg = Log.PrintDbg(1, 'e', 'Not implemented')
         raise NotImplementedError(Msg)
 
 
@@ -53,9 +53,8 @@ class TSecRun(TSec):
         TSec.__init__(self, aParent)
         self.InClass = None
         self.InRun   = False
-
-    def __del__(self):
-        pass
+        self.OnPost  = None
+        self.ThreadPipe = None
 
     def DoFunc(self, aFunc):
         Items = self.Parent.SecClass.Data
@@ -81,10 +80,17 @@ class TSecRun(TSec):
                 for Item in aData.get(Key):
                     self.Add(Item, Key)
 
-    def PostAll(self, aClass):
-        if (aClass):
-            for Class in aClass:
+    def PostAll(self, aClasses):
+        if (aClasses):
+            for Class in aClasses:
                 Class.Post(None, 0, None)
+
+            if (self.OnPost):
+                self.OnPost(self)
+
+            # handle http thread
+            if (self.ThreadPipe):
+                self.ThreadPipe.MainReceive()
 
     def Run(self):
         Log.PrintDbg(2, 'i')
@@ -110,7 +116,7 @@ class TSecRun(TSec):
             finally:
                 self.Stop()
         else:
-            Msg = Log.PrintDbg(1, 'e', 'Run->Loop section is empty')
+            Msg = Log.PrintDbg(1, 'e', 'Loop section is empty')
             raise Exception(Msg)
 
     def Stop(self):

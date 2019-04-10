@@ -241,9 +241,9 @@ class TMain():
             sys.exit()
 
         if (self.Options.ApiPort):
-            ServerApi = THttpServerApi(self.Options.ApiPort, self.Manager)
-            #ServerApi.Dir = self.Param.Dir
-            ServerApi.Run()
+            HttpServer = THttpServerApi(self.Options.ApiPort)
+            HttpServer.Manager = self.Manager
+            HttpServer.Exec(True)
 
         self.Manager.Run()
 

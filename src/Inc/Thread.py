@@ -20,11 +20,32 @@ import multiprocessing
 #os.path.dirname(multiprocessing.__file__)
 
 
-def CreateThread(aTarget, aArgs):
+def CreateThread(aTarget, aArgs = []):
     Process = multiprocessing.Process(target = aTarget, args = aArgs)
     Process.daemon = True
     Process.start()
     time.sleep(0.3)
+    return Process
+
+
+class TThreadPipe():
+    def __init__(self):
+        self.Pipe = multiprocessing.Pipe()
+
+    def DoReceive(self, aData):
+        Msg = Log.PrintDbg(1, 'e', 'Not implemented')
+        raise NotImplementedError(Msg)
+
+    def MainReceive(self):
+        if (self.Pipe[0].poll()):
+            Data = self.Pipe[0].recv()
+            Data = self.DoReceive(Data)
+            self.Pipe[0].send(Data)
+
+    def ThreadSend(self, aData):
+        self.Pipe[1].send(aData)
+        aData = self.Pipe[1].recv()
+        return aData
 
 
 class TThreadRead():
@@ -33,9 +54,7 @@ class TThreadRead():
         self.Periodic = 1
 
     def Create(self):
-        process = multiprocessing.Process(target = self._Run, args = [])
-        process.daemon = True
-        process.start()
+        CreateThread(self._Run)
 
     # Thread 
     def _Run(self):
@@ -47,12 +66,14 @@ class TThreadRead():
             time.sleep(self.Periodic)
 
     def _SetData(self, aData):
-        pass
+        Msg = Log.PrintDbg(1, 'e', 'Not implemented')
+        raise NotImplementedError(Msg)
 
 
 class TThreadReadPipe(TThreadRead):
     def __init__(self, aObjRead):
         TThreadRead.__init__(self, aObjRead)
+
         self.PipeParent, self.PipeChild = multiprocessing.Pipe()
 
     # Method called from outside a thread
@@ -66,6 +87,7 @@ class TThreadReadPipe(TThreadRead):
 class TThreadReadQueue(TThreadRead):
     def __init__(self, aObjRead):
         TThreadRead.__init__(self, aObjRead)
+
         self.Queue  = multiprocessing.Queue()
         self.MinQueue = 1
         self.MaxQueue = 4
@@ -90,6 +112,7 @@ class TThreadReadQueue(TThreadRead):
 class TThreadReadList(TThreadRead):
     def __init__(self, aObjRead):
         TThreadRead.__init__(self, aObjRead)
+
         self.Data = multiprocessing.Manager().list([0, 1])
         self.Data[0] = None
 
@@ -102,3 +125,4 @@ class TThreadReadList(TThreadRead):
         self.Data[0] = aData
         #self.Data[1] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         #print('---------set', self.Data[0], self.Data[1])
+

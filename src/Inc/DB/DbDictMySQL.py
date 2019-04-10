@@ -20,6 +20,7 @@ except:
 from Inc.DB.DbDict  import TDbDict
 from Inc.Log import Log
 
+
 class TDbDictMySQL(TDbDict):
     def SetSource(self, aHost, aUser, aPassw, aDB, aTable):
         self.Dict  = aTable

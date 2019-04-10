@@ -12,7 +12,6 @@ if sender returns false than Delivery collects unsent data to a buffer and tryie
 
 import json
 import sqlite3
-
 #
 from Inc.Log import Log
 from Inc.DB  import TDbSQL

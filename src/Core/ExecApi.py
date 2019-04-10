@@ -6,8 +6,6 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
-import re
-#
 from Inc.Log  import Log
 
 
