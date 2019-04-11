@@ -75,16 +75,23 @@ def GetTree(aObj, aPrefix = '', aDepth = 99):
                 Data = GetTree(Obj, aPrefix, aDepth - 1)
                 Result.extend(Data)
         else:
-            Result.append({'Key': aPrefix, 'Value': aObj})
+            Data = {'Key': aPrefix, 'Value': aObj}
+            Result.append(Data)
     return Result
 
-def GetTreeAsStr(aObj, aDepth = 99):
-    Result = ''
-    Items  = GetTree(aObj, '', aDepth)
+
+def GetTreeAsList(aObj):
+    Result = []
+    Items  = GetTree(aObj)
     if (Items):
         for Item in Items:
-            Result += '{}={}; '.format(Item['Key'], Item['Value'])
+            Result.append('{}={}; '.format(Item['Key'], Item['Value']))
     return Result
+
+
+def GetTreeAsStr(aObj):
+    Data = GetTreeAsList(aObj)
+    return '\r\n'.join(Data)
 
 
 def Dump(aValue, aDepth = 99):

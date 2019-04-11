@@ -11,6 +11,7 @@ print os.path.abspath(urllib.__file__)
 https://www.programcreek.com/python/example/98644/yattag.Doc
 '''
 
+
 import os
 import time
 
@@ -31,6 +32,7 @@ from Inc.Serialize  import TSerialize
 from Inc.Param      import TDictReplace
 from Inc.HttpServer import TSockServer, TConnSessionHttp
 from Inc.Thread     import CreateThread, TThreadPipe
+from Api.Misc       import Version
 
 
 def DeviceTree(aObj, aStr = ''):
@@ -84,6 +86,13 @@ class TWeb():
         Str = doc.getvalue()
         self.Parent.AddData(Str)
 
+    def HtmlAsArr(self, aArr):
+        self.Html('<br>\r\n'.join(aArr))
+
+    def UrlVersion(self, aParam):
+        Arr = Obj.GetTreeAsList(Version())
+        self.HtmlAsArr(Arr)
+
     def UrlApi(self, aParam):
         DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
         DataOut = self.Serialize.DecodeToStr(DataIn)
@@ -98,8 +107,7 @@ class TWeb():
         for Item in Items:
             Str = DeviceTree(Items[Item])
             Arr.append('%s, %s' % (len(Arr) + 1, Str))
-        Str = '<br>\r\n'.join(Arr)
-        self.Html(Str)
+        self.HtmlAsArr(Arr)
 
     def UrlDeviceSet(self, aParam):
         Class = self.GetClass(aParam.get('alias'))
@@ -126,6 +134,7 @@ class TConnSessionApp(TConnSessionHttp):
             '/':                {'func': self.Web.UrlIndex,     'param': []},
             '/favicon.ico':     {'func': self.Web.UrlIndex,     'param': []},
             '/api':             {'func': self.Web.UrlApi,       'param': ['method']},
+            '/version':         {'func': self.Web.UrlVersion,   'param': []},
             '/classlist':       {'func': self.Web.UrlClassList, 'param': []},
             '/device/setvalue': {'func': self.Web.UrlDeviceSet, 'param': ['alias', 'value']},
             '/device/getvalue': {'func': self.Web.UrlDeviceGet, 'param': ['alias']}
@@ -191,7 +200,10 @@ class TConnSessionApp(TConnSessionHttp):
                 self.AddMime('*.html')
                 self.AddData('')
                 Func = self.UrlPattern.get(Path).get('func')
-                Func(Query)
+                try:
+                    Func(Query)
+                except Exception as E:
+                    Log.PrintDbg(1, 'x', E)
             # print(self.GetData())
 
 
