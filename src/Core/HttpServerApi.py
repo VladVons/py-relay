@@ -24,14 +24,34 @@ try:
     from yattag import Doc 
 except Exception as E: 
     print(__file__, E, 'pip install yattag')
-
 #
 from Inc.Log        import Log
-from Inc.Util       import FS
+from Inc.Util       import FS, Obj
 from Inc.Serialize  import TSerialize
 from Inc.Param      import TDictReplace
 from Inc.HttpServer import TSockServer, TConnSessionHttp
 from Inc.Thread     import CreateThread, TThreadPipe
+
+
+def DeviceTree(aObj, aStr = ''):
+    if (aObj.Parent):
+        aStr += DeviceTree(aObj.Parent) + '->'
+    aStr += aObj.Alias
+    return aStr
+
+
+class TThreadPipeApi(TThreadPipe):
+    Cnt = 0
+
+    # we are in main process with parameters
+    def DoReceive(self, aParent, aData):
+        self.Cnt += 1
+        Alias = aData.get('alias')
+        Class = aParent.Parent.SecClass.GetClass(Alias)
+        if (Class):
+            Value = Class.Exec.apix.xValue
+        aData = [self.Cnt, 'Hello', Value, aData]
+        return aData
 
 
 class TWeb():
@@ -54,19 +74,32 @@ class TWeb():
             self.Parent.AddData(Msg)
         return Class
 
-    def UrlApi(self, aParam):
-        DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
-        DataOut = self.Serialize.DecodeToStr(DataIn)
-
+    def Html(self, aBody):
         doc, tag, text = Doc().tagtext()
         doc.asis('<!DOCTYPE html>')
         with tag('html'):
             with tag('body'):
-                text(DataOut)
-        self.Parent.AddData(doc.getvalue())
+                #text(aBody)
+                doc.asis(aBody)
+        Str = doc.getvalue()
+        self.Parent.AddData(Str)
+
+    def UrlApi(self, aParam):
+        DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
+        DataOut = self.Serialize.DecodeToStr(DataIn)
+        self.Html(DataOut)
 
     def UrlIndex(self, aParam):
         pass
+
+    def UrlClassList(self, aParam):
+        Arr = []
+        Items = self.Parent.Parent.Manager.SecClass.Data
+        for Item in Items:
+            Str = DeviceTree(Items[Item])
+            Arr.append('%s, %s' % (len(Arr) + 1, Str))
+        Str = '<br>\r\n'.join(Arr)
+        self.Html(Str)
 
     def UrlDeviceSet(self, aParam):
         Class = self.GetClass(aParam.get('alias'))
@@ -86,27 +119,29 @@ class TConnSessionApp(TConnSessionHttp):
 
         self.Dir     = ''
         self.Manager = None
-        self.Dict = TDictReplace()
+        self.Dict    = TDictReplace()
 
-        Web = TWeb(self)
+        self.Web = TWeb(self)
         self.UrlPattern = {
-            '/': {'func': Web.UrlIndex, 'param': []},
-            '/favicon.ico': {'func': Web.UrlIndex, 'param': []},
-            '/api': {'func': Web.UrlApi, 'param': ['method']},
-            '/device/set': {'func': Web.UrlDeviceSet, 'param': ['alias', 'value']},
-            '/device/get': {'func': Web.UrlDeviceGet, 'param': ['alias']}
+            '/':                {'func': self.Web.UrlIndex,     'param': []},
+            '/favicon.ico':     {'func': self.Web.UrlIndex,     'param': []},
+            '/api':             {'func': self.Web.UrlApi,       'param': ['method']},
+            '/classlist':       {'func': self.Web.UrlClassList, 'param': []},
+            '/device/setvalue': {'func': self.Web.UrlDeviceSet, 'param': ['alias', 'value']},
+            '/device/getvalue': {'func': self.Web.UrlDeviceGet, 'param': ['alias']}
         }
 
     def LoadFile(self, aPath):
+        Result = False
         Path = os.getcwd() + '/' + self.Dir + aPath
         Data = FS.LoadFromFileToStr(Path)
-        Result = (Data is not  None)
-        if (Result):
+        if (Data):
             self.AddHead(200)
             self.AddMime(Path)
             self.AddData('')
             self.AddData(self.Dict.Parse(Data))
             #self.AddData(Data)
+            Result = True
         return Result
 
     def DoPost(self, aUrl, aData):
@@ -146,7 +181,7 @@ class TConnSessionApp(TConnSessionHttp):
                 self.AddMime('*.html')
                 self.AddData('Date: ' + time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime()))
                 self.AddData('Server: Simple-Python-HTTP-Server')
-                #self.AddData('Connection: close')
+                # self.AddData('Connection: close')
                 self.AddData('')
 
                 self.Dict.AddKey('CheckErr', CheckErr)
@@ -157,24 +192,14 @@ class TConnSessionApp(TConnSessionHttp):
                 self.AddData('')
                 Func = self.UrlPattern.get(Path).get('func')
                 Func(Query)
-            #print(self.GetData())
-
-
-class TThreadPipeApi(TThreadPipe):
-    Cnt = 0
-
-    # we are in main process with parameters
-    def DoReceive(self, aData):
-        self.Cnt += 1
-        aData = [self.Cnt, 'Hello', aData]
-        return aData
+            # print(self.GetData())
 
 
 class THttpServerApi(TSockServer):
     def __init__(self, aPort):
         TSockServer.__init__(self, aPort)
 
-        #self.Timeout = 1
+        # self.Timeout = 1
         self.Manager  = None
         self.Dir      = 'Plugin/Web'
         self.Conn     = TConnSessionApp(self)
@@ -191,5 +216,5 @@ class THttpServerApi(TSockServer):
         else:
             self.Run()
 
-#aUrl  = '/device/set?alias=DH1_Relay_A&value=1'
-#ServerApi.DoGet(aUrl)
+# aUrl  = '/device/set?alias=DH1_Relay_A&value=1'
+# ServerApi.DoGet(aUrl)

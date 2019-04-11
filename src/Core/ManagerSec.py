@@ -13,7 +13,7 @@ from Inc.Log        import Log
 from Inc.Util       import Arr
 
 # for nuitka compiler
-#from Plugin.Devices import *
+# from Plugin.Devices import *
 from Inc.Import     import TDynImport
 
 
@@ -66,7 +66,7 @@ class TSecRun(TSec):
     def Add(self, aData, aKey):
         Class = self.Parent.SecClass.Parse(aData, None)
         if (Class):
-            if (not aKey in self.Data):
+            if (aKey not in self.Data):
                 self.Data[aKey] = []
             self.Data[aKey].append(Class)
 
@@ -90,7 +90,7 @@ class TSecRun(TSec):
 
             # handle http thread
             if (self.ThreadPipe):
-                self.ThreadPipe.MainReceive()
+                self.ThreadPipe.MainReceive(self)
 
     def Run(self):
         Log.PrintDbg(2, 'i')
@@ -206,7 +206,7 @@ class TSecClass(TSec):
             for Item in Items:
                 Alias  = Item.get('Alias')
                 Enable = Item.get('Enable', True)
-                if (not self.Parent.SecClass.GetClass(Alias) and Enable):
+                if (Enable and (not self.Parent.SecClass.GetClass(Alias))):
                     Result.append(Alias)
         return Result
 
@@ -242,16 +242,15 @@ class TSecClass(TSec):
     def Parse(self, aData, aParent):
         Result = None
 
+        PAlias = ''
         if (aParent):
-            ParentInfo = aParent.Alias
-        else:
-            ParentInfo = ''
+            PAlias = aParent.Alias
 
-        Enable = aData.get('Enable', True)
+        Enable   = aData.get('Enable', True)
         ClassRef = aData.get('ClassRef')
         if (ClassRef):
             if (not Enable):
-                return None
+                return Result
 
             if (aParent and (aParent.Alias == ClassRef)):
                 Msg = Log.PrintDbg(1, 'e', 'Cross link detected %s' % ClassRef)
@@ -263,25 +262,25 @@ class TSecClass(TSec):
                 if (Data):
                     Result = self.Parse(Data, aParent)
                 else:
-                    Msg = Log.PrintDbg(1, 'e', 'ClassRef `%s` not found in %s' % (ClassRef, ParentInfo))
+                    Msg = Log.PrintDbg(1, 'e', 'ClassRef `%s` not found in %s' % (ClassRef, PAlias))
                     raise Exception(Msg)
         # normalclass
         else:
-            Alias = aData.get('Alias')
-            if (not Alias):
-                Msg = Log.PrintDbg(1, 'e', 'Alias is empty in Class %s' % ClassName)
-                raise Exception(Msg)
-
-            if (not Enable):
-                if (aParent):
-                    Msg = Log.PrintDbg(1, 'e', 'Alias %s disabled but used by %s' % (Alias, ParentInfo))
-                    raise Exception(Msg)
-                return None
-
             ClassName = aData.get('Class')
             if (not ClassName):
                 Msg = Log.PrintDbg(1, 'e', 'Keyword `Class` is empty')
                 raise Exception(Msg)
+
+            Alias = aData.get('Alias')
+            if (not Alias):
+                Msg = Log.PrintDbg(1, 'e', 'Keyword `Alias` is empty in `Class` %s' % (ClassName))
+                raise Exception(Msg)
+
+            if (not Enable):
+                if (aParent):
+                    Msg = Log.PrintDbg(1, 'e', 'Alias %s disabled but used by %s' % (Alias, PAlias))
+                    raise Exception(Msg)
+                return None
 
             ModuleName = aData.get('Module')
             if (ModuleName):
@@ -291,10 +290,10 @@ class TSecClass(TSec):
                 # TClass = globals()[ClassName]
                 TClass = self.Import.GetInstance(ClassName)
                 if (TClass is None):
-                    Log.PrintDbg(1, 'x', 'Cant load class %s->%s' % (ParentInfo, ClassName))
+                    Log.PrintDbg(1, 'x', 'Cant load class %s->%s' % (PAlias, ClassName))
                     sys.exit(1)
 
-            Log.PrintDbg(1, 'i', 'Load %s->%s (%s)' % (ParentInfo, Alias, TClass.__name__))
+            Log.PrintDbg(1, 'i', 'Load %s->%s (%s)' % (PAlias, Alias, TClass.__name__))
             Result = TClass(aParent)
             Result.Alias = Alias
             Result.Descr = aData.get('Descr')
@@ -309,5 +308,4 @@ class TSecClass(TSec):
                     if (Key not in ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment']):
                         Result.ExtParam(Key, aData.get(Key), {'Parent': self})
                 #Result.DoStart()
-
         return Result

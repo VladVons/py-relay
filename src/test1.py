@@ -160,3 +160,43 @@ def HTTP():
     ServerApi.Run()
 
 
+class TClassB():
+    def MethodA(self):
+        print('TClassB-MethodA')
+
+
+class TClassA():
+    TClassB = TClassB()
+
+    def __init__(self):
+        self.Var1 = 'Hello'
+        self.ClassC = self.TClassC()
+
+    class TClassC():
+        def MethodA(self):
+            print('TClassC-MethodA')
+            #rint('Var1', self.Var1)
+
+    def MethodA(self):
+        print('TClassA-MethodA')
+        self.TClassB.MethodA()
+        self.ClassC.MethodA()
+
+ClassA = TClassA()
+#ClassA.MethodA()
+#ClassA.TClassB.MethodA()
+
+from Inc.Util import Obj
+Obj.Dump(ClassA)
+Obj.GetAttr(ClassA, '123')
+
+
+#print(0, Obj.IsClass(TClassA))
+#print(1, Obj.IsClass(ClassA))
+#print(2, Obj.IsClass(1))
+#print(3, Obj.IsClass('str'))
+#print(4, Obj.IsClass([1,2,3]))
+#print(5, Obj.IsClass([1,2,3]))
+#print(6, Obj.IsClass({'1':'one'}))
+#print(7, Obj.IsClass((1,2,3)))
+

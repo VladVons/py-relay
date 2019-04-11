@@ -32,16 +32,18 @@ class TThreadPipe():
     def __init__(self):
         self.Pipe = multiprocessing.Pipe()
 
-    def DoReceive(self, aData):
+    def DoReceive(self, aParent, aData):
         Msg = Log.PrintDbg(1, 'e', 'Not implemented')
         raise NotImplementedError(Msg)
 
-    def MainReceive(self):
+    # receive data from thread to main process
+    def MainReceive(self, aParent):
         if (self.Pipe[0].poll()):
             Data = self.Pipe[0].recv()
-            Data = self.DoReceive(Data)
+            Data = self.DoReceive(aParent, Data)
             self.Pipe[0].send(Data)
 
+    # send data from thread to main process
     def ThreadSend(self, aData):
         self.Pipe[1].send(aData)
         aData = self.Pipe[1].recv()

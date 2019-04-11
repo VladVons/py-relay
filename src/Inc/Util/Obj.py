@@ -6,8 +6,22 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
+#import types
+#import inspect
+
+
 def GetName(aObj):
     return aObj.__class__.__name__
+
+# ?
+def IsClass(aObj):
+    Result = hasattr(aObj, '__dict__')
+    if (Result):
+        try:
+            aObj.__class__.__name__
+        except AttributeError:
+            Result = False
+    return Result
 
 def GetClassInstancePath(aInstance, aPath = '', aDepth = 99):
     Instance = aInstance.__bases__
@@ -21,8 +35,7 @@ def GetClassPath(aClass):
 def GetAttr(aClass, aName):
     try:
         Result = getattr(aClass, aName)
-    # ToDo type
-    except:
+    except AttributeError:
         Result = None
     return Result
 
@@ -38,36 +51,41 @@ def TupleToStr(aValue):
         Result.append('%s' % aValue)
     return Result
 
-def GetTree(aValue, aPrefix = '', aDepth = 99):
+def GetTree(aObj, aPrefix = '', aDepth = 99):
     Result = []
 
-    if (aDepth > 0): 
-        Type = type(aValue).__name__
+    if (aDepth > 0):
+        Type = type(aObj).__name__
         if (Type == 'instance'):
-            for Key in dir(aValue):
-                Result.extend(GetTree(getattr(aValue, Key), aPrefix + '/' + Key, aDepth - 1))
+            for Key in dir(aObj):
+                Data = GetTree(getattr(aObj, Key), aPrefix + '/' + Key, aDepth - 1)
+                Result.extend(Data)
 
-            for Key in vars(aValue):
-                Result.extend(GetTree(getattr(aValue, Key), aPrefix + '/' + Key, aDepth - 1))
+            for Key in vars(aObj):
+                Data = GetTree(getattr(aObj, Key), aPrefix + '/' + Key, aDepth - 1)
+                Result.extend(Data)
         elif (Type in ['instancemethod', 'function']):
-            Result.append( {'Key':aPrefix, 'Value':'()'} )
+            Result.append({'Key': aPrefix, 'Value': '()'})
         elif (Type == 'dict'):
-            for Key in aValue:
-                Result.extend(GetTree(aValue[Key], aPrefix + '/' + Key, aDepth - 1))
+            for Key in aObj:
+                Data = GetTree(aObj[Key], aPrefix + '/' + Key, aDepth - 1)
+                Result.extend(Data)
         elif (Type == 'list'):
-            for Value in aValue:
-                Result.extend(GetTree(Value, aPrefix, aDepth - 1))
+            for Obj in aObj:
+                Data = GetTree(Obj, aPrefix, aDepth - 1)
+                Result.extend(Data)
         else:
-            Result.append( {'Key':aPrefix, 'Value': aValue} )
+            Result.append({'Key': aPrefix, 'Value': aObj})
     return Result
 
-def GetTreeAsStr(aValue, aDepth = 99):
+def GetTreeAsStr(aObj, aDepth = 99):
     Result = ''
-    Items  = GetTree(aValue, '', aDepth)
+    Items  = GetTree(aObj, '', aDepth)
     if (Items):
         for Item in Items:
             Result += '{}={}; '.format(Item['Key'], Item['Value'])
     return Result
+
 
 def Dump(aValue, aDepth = 99):
     Items = GetTree(aValue, '', aDepth)
