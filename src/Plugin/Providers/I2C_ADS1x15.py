@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.11.10
@@ -13,9 +13,8 @@ sudo pip install Adafruit-ADS1x15
 
 Example:
 https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/ads1015-slash-ads1115
-'''
+"""
 
-import os
 
 try:
     import Adafruit_ADS1x15

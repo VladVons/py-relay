@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.03.06
@@ -9,7 +9,7 @@ import os
 print os.path.abspath(urllib.__file__)
 
 https://www.programcreek.com/python/example/98644/yattag.Doc
-'''
+"""
 
 
 import os
@@ -24,7 +24,7 @@ except:
 try: 
     from yattag import Doc 
 except Exception as E: 
-    print(__file__, E, 'pip install yattag')
+    print(__file__, E, 'apt pip install yattag')
 #
 from Inc.Log        import Log
 from Inc.Util       import FS, Obj
@@ -37,8 +37,8 @@ from Api.Misc       import Version
 
 def DeviceTree(aObj, aStr = ''):
     if (aObj.Parent):
-        aStr += DeviceTree(aObj.Parent) + '->'
-    aStr += aObj.Alias
+        aStr += DeviceTree(aObj.Parent) + ' -> '
+    aStr += 'Alias:%s, Class:%s, Descr:%s' % (aObj.Alias, Obj.GetName(aObj), aObj.Descr)
     return aStr
 
 
@@ -89,9 +89,19 @@ class TWeb():
     def HtmlAsArr(self, aArr):
         self.Html('<br>\r\n'.join(aArr))
 
+    def HtmlPattern(self, aFile, aDict):
+        Data = FS.LoadFromFileToStr(self.Parent.Dir + '/' + aFile)
+
+        self.DictRepl = TDictReplace()
+        self.DictRepl.AddKeys(aDict)
+        Data = self.DictRepl.Parse(Data)
+
+        self.Parent.AddData(Data)
+
     def UrlVersion(self, aParam):
         Arr = Obj.GetTreeAsList(Version())
-        self.HtmlAsArr(Arr)
+        Param = {'cTitle': 'Version', 'cBody': '<br>\r\n'.join(Arr)}
+        self.HtmlPattern('index.tpl', Param)
 
     def UrlApi(self, aParam):
         DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
@@ -99,7 +109,10 @@ class TWeb():
         self.Html(DataOut)
 
     def UrlIndex(self, aParam):
-        pass
+        Arr = []
+        Arr.append()
+        Param = {'cTitle': 'Index', 'cBody': '<br>\r\n'.join(Arr)}
+        self.HtmlPattern('index.tpl', Param)
 
     def UrlClassList(self, aParam):
         Arr = []
@@ -107,7 +120,9 @@ class TWeb():
         for Item in Items:
             Str = DeviceTree(Items[Item])
             Arr.append('%s, %s' % (len(Arr) + 1, Str))
-        self.HtmlAsArr(Arr)
+
+        Param = {'cTitle': 'Class list', 'cBody': '<br>\r\n'.join(Arr)}
+        self.HtmlPattern('index.tpl', Param)
 
     def UrlDeviceSet(self, aParam):
         Class = self.GetClass(aParam.get('alias'))
@@ -118,8 +133,9 @@ class TWeb():
         Class = self.GetClass(aParam.get('alias'))
         if (Class):
             Data = self.ProcessThreadQueue(aParam)
-            self.Parent.AddData(str(Data))
 
+            Param = {'cTitle': 'Device value', 'cBody': Data}
+            self.HtmlPattern('index.tpl', Param)
 
 class TConnSessionApp(TConnSessionHttp):
     def __init__(self, aParent):

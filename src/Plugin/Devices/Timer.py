@@ -1,10 +1,10 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.10.15
 License:     GNU, see LICENSE for more details
 Description:
-'''
+"""
 
 from Inc.Param    import TDictParam
 from Core.Device  import TSensor
@@ -47,7 +47,7 @@ class TSensorTimeRangeDayFadeWave(TSensorTimeRange):
     def SetProvider(self):
         self.Provider = TProviderTimeRangeDayFadeWave(self.Param.Ranges, self.Param.Min, self.Param.Max)
 
-'''
+"""
 has no ReadTry() ?
 class TSensorTimeRangeCycleDirect(TSensor):
     def __init__(self, aParent):
@@ -63,4 +63,4 @@ class TSensorTimeRangeCycleDirect(TSensor):
 
     def _Get(self):
         return self.Obj.Get()
-'''
+"""

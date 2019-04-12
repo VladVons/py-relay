@@ -1,10 +1,11 @@
-'''.
+""".
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.03.20
 License:     GNU, see LICENSE for more details
 Description:
-'''
+"""
+
 
 import time
 import datetime
@@ -31,7 +32,10 @@ class TExecApiEx(TExecApi):
 
 
     def xAGetValue(self, aAlias, aDef):
-        self.xAPost(aAlias, aValue)
+        Result = self.xApi(aAlias).xValue
+        if (Result is None):
+            Result = aDef
+        return Result
 
     def xASetValue(self, aAlias, aValue = None):
         if (aValue is None):

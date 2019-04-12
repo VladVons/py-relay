@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.11.09
@@ -11,13 +11,12 @@ https://docs.python.org/3/library/multiprocessing.html#sharing-state-between-pro
 https://www.programcreek.com/python/example/17493/multiprocessing.Pipe
 #
 http://toly.github.io/blog/2014/02/13/parallelism-in-one-line/
-'''
+"""
 
 import time
 import multiprocessing
-
-#import os
-#os.path.dirname(multiprocessing.__file__)
+#
+from Inc.Log        import Log
 
 
 def CreateThread(aTarget, aArgs = []):

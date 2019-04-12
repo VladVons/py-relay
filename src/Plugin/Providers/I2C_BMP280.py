@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.11.10
@@ -10,7 +10,7 @@ I2C atmosphere pressure sensor
 Install:
 #sudo pip install adafruit-bmp
 sudo pip install Adafruit-BMP
-'''
+"""
 
 import os
 #

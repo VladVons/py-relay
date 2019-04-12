@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.10.28
@@ -6,7 +6,7 @@ License:     GNU, see LICENSE for more details
 
 Description:
 control APC UPS voltage
-'''
+"""
 
 try:
     from apcaccess import status
@@ -14,7 +14,7 @@ except Exception as E:
     print(__file__, E, 'pip install apcaccess')
 
 
-from Inc.Log   import Log
+#from Inc.Log   import Log
 from Inc.Util  import Str
 from .Provider import TProvider
 

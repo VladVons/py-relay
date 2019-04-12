@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.04.12
@@ -13,7 +13,7 @@ Help:
 https://www.wunderground.com/weather/api/d/docs
 https://www.wunderground.com/weather/api/d/docs?d=resources/code-samples
 http://api.wunderground.com/api/380d2c36ad44e4e5/conditions/q/CA/San_Francisco.json
-'''
+"""
 
 import json 
 import datetime

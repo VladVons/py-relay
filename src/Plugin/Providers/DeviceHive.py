@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.02.16
@@ -8,7 +8,7 @@ Help:
 https://github.com/devicehive/esp8266-firmware/blob/develop/DeviceHiveESP8266.md
 
 Description:
-'''
+"""
 
 
 import json

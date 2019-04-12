@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.10.15
@@ -14,7 +14,7 @@ Args    = ['Hello']
 DataIn  = Serialize.EncodeFunc('DummyMethod', *Args)
 DataOut = Serialize.Decode(DataIn)
 print(DataOut)
-'''
+"""
 
 import json
 import re

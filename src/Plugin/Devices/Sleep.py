@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.03.03
@@ -6,7 +6,7 @@ License:     GNU, see LICENSE for more details
 
 Description:
 Sleep process for timeout in seconds 
-'''
+"""
 
 import time
 #

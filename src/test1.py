@@ -154,9 +154,8 @@ def NitifyFS():
 
 def HTTP():
     from Core.HttpServerApi import THttpServerApi
-    ServerApi = THTTPServerApi(8888, self.Manager, None)
-    ServerApi.Timeout = self.Param.Timeout
-    ServerApi.Dir     = self.Param.Dir
+    ServerApi = THttpServerApi(8888)
+    ServerApi.Timeout = 1
     ServerApi.Run()
 
 

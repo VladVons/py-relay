@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2019.01.03
@@ -13,7 +13,7 @@ Example:
 Obj = TProviderUpsNut('MyUPS')
 Data = Obj.Read(None)
 print(Data.get('Voltage'))
-'''
+"""
 
 try:
     from nut2 import PyNUTClient

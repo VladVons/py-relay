@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.04.04
@@ -12,7 +12,7 @@ Sun = TSun('49.553516', '25.594767')
 print Sun.Angle()
 print Sun.Visible()
 
-'''
+"""
 
 
 try:

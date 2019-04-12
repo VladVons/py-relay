@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.04.25
@@ -12,7 +12,7 @@ Rx->Tx
 Init:
 dmesg | egrep --color 'serial|tty'
 usermod -a -G dialout pi
-'''
+"""
 
 from Inc.Log   import Log
 from .Provider import TProvider

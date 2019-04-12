@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.04.25
@@ -21,7 +21,7 @@ sensor = TPzem_004('/dev/serial0')
 if (sensor.IsReady()):
     print("Reading voltage")
     print(sensor.GetVoltage())
-'''
+"""
 
 from Inc.Log   import Log
 from .Provider import TProvider

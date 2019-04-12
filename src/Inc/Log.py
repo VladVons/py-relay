@@ -1,10 +1,10 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.10.15
 License:     GNU, see LICENSE for more details
 Description:
-'''
+"""
 
 
 import time

@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.10.20
@@ -10,7 +10,7 @@ Import.ParseDir('Plugin/Devices')
 Import.GetInstance(ClassName)
 TClass = Import.GetInstance(ClassName)
 Result = TClass(None)
-'''
+"""
 
 import os
 import sys

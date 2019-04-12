@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.11.04
@@ -15,7 +15,7 @@ Rows    = 4
 Obj     = TProviderI2C_LCD_8574(Bus, Address, Cols, Rows)
 Obj.CursorTo(0,0)
 Obj.PrintLn('Hello world')
-'''
+"""
 
 from Inc.Util        import Time
 from .I2C            import TProviderI2C

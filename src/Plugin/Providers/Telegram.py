@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.04.06
@@ -12,7 +12,8 @@ https://legacy.gitbook.com/book/groosha/telegram-bot-lessons/details
 /newbot py-relay
 user:PyRelayBot
 https://api.telegram.org/bot<YourToken>/getUpdates
-'''
+"""
+
 
 import json 
 import datetime

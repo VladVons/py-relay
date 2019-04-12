@@ -1,12 +1,12 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.10.15
 License:     GNU, see LICENSE for more details
 Description:
-'''
+"""
 
-'''
+"""
 Another implementation^
 srom string import Template
 
@@ -15,8 +15,7 @@ html = 'qqq $greeting www'
 
 html1 = Template(html).substitute(**locals())
 print(html1)
-
-'''
+"""
 
 
 import re
@@ -236,6 +235,9 @@ class TDictReplace():
 
     def AddKey(self, aKey, aValue):
         self.Data[aKey] = aValue
+
+    def AddKeys(self, aDict):
+        self.Data.update(aDict)
 
     def Replace(self, aStr, aFind, aRepl):
         return aStr.replace(self.Prefix + aFind + self.Sufix, aRepl)

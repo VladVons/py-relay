@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.11.10
@@ -12,7 +12,8 @@ Bus     = 1
 Address = 35
 Obj     = TProviderI2C_BH1750(Bus, Address)
 Value   = Obj.Get()
-'''
+"""
+
 
 import os
 

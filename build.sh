@@ -17,7 +17,7 @@ Version: $Ver
 Architecture: $Platform
 Section: IoT
 Priority: optional
-Depends: libpython2.7, python-prctl, python-crypto
+Depends: libpython2.7, python-prctl, python-crypto, python-yattag
 Suggests: python-pip
 Recommends: python-mysqldb, python-smbus, python-ephem, monit
 Maintainer: Vladimir Vons <VladVons@gmail.com>

@@ -11,7 +11,7 @@ import hashlib
 import sys
 import os
 #
-from Inc.Util import FS
+from Inc.Util import FS, Net
 
 def ExecM(aCmd, aMsg = ""):
     print("Exec in:", aCmd, aMsg)

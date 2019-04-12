@@ -1,4 +1,4 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.02.25
@@ -22,7 +22,7 @@ ORDER BY
 #delete from Dict where Item like '%DH3_Sensor_Temper%' and CAST(Data as DECIMAL(10,2)) < 16
 #select * from Dict where Item like '%Humid%'  ORDER BY Modified DESC LIMIT 50
 #select * from Dict where Created <> Modified ORDER BY Modified LIMIT 50
-'''
+"""
 
 import datetime
 #

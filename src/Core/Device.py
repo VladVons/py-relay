@@ -1,10 +1,10 @@
-'''
+"""
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2017.10.15
 License:     GNU, see LICENSE for more details
 Description: 
-'''
+"""
 
 import time
 #
@@ -92,7 +92,6 @@ class TDeviceBase(object):
     def DoFinish(self):
         self.Exec.Conditions('Finish')
 
-    # @staticmethod
     def IsInRecursion(self, aOnClass, aClass):
         while aClass:
             if (aOnClass == aClass):
@@ -117,7 +116,7 @@ class TDeviceBase(object):
         pass
 
     def GetProvider(self):
-        raise NotImplementedError(Msg)
+        raise NotImplementedError('')
 
 
 class TDevice(TDeviceBase):
