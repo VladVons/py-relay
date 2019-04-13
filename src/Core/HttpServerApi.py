@@ -89,12 +89,14 @@ class TWeb():
     def HtmlAsArr(self, aArr):
         self.Html('<br>\r\n'.join(aArr))
 
-    def HtmlPattern(self, aFile, aDict):
+    def HtmlPattern(self, aFile, aDict = {}):
         DReplace = TDictReplace()
         DReplace.AddKeys(aDict)
 
+        FilePath = self.Parent.GetFilePath(aFile)
+
         DBlock = TDictBlock()
-        Data = FS.LoadFromFileToStr(self.Parent.GetFilePath(aFile))
+        Data = FS.LoadFromFileToStr(FilePath)
         DBlock.Parse(Data)
         Files = DBlock.GetKeys('File')
         if (Files):
@@ -105,23 +107,11 @@ class TWeb():
                 DReplace.AddKey(Key, Value)
 
             Extender = Files[0].split()[1]
-            Data = FS.LoadFromFileToStr(self.Parent.Dir + '/' + Extender)
+            FilePath = self.Parent.GetFilePath(Extender)
+            Data = FS.LoadFromFileToStr(FilePath)
 
         Data = DReplace.Parse(Data)
         self.Parent.AddData(Data)
-
-    def UrlVersion(self, aParam):
-        Arr = Obj.GetTreeAsList(Version())
-        Param = {'cTitle': 'Version', 'cBody': '<br>\r\n'.join(Arr)}
-        self.HtmlPattern('/layout.tpl', Param)
-
-    def UrlApi(self, aParam):
-        DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
-        DataOut = self.Serialize.DecodeToStr(DataIn)
-        self.Html(DataOut)
-
-    def UrlIndex(self, aParam):
-        self.HtmlPattern('/index.tpl', {})
 
     def UrlClassList(self, aParam):
         Arr = []
@@ -132,6 +122,16 @@ class TWeb():
 
         Param = {'cTitle': 'Class list', 'cBody': '<br>\r\n'.join(Arr)}
         self.HtmlPattern('/layout.tpl', Param)
+
+    def UrlVersion(self, aParam):
+        Arr = Obj.GetTreeAsList(Version())
+        Param = {'cTitle': 'Version', 'cBody': '<br>\r\n'.join(Arr)}
+        self.HtmlPattern('/layout.tpl', Param)
+
+    def UrlApi(self, aParam):
+        DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
+        DataOut = self.Serialize.DecodeToStr(DataIn)
+        self.Html(DataOut)
 
     def UrlDeviceSet(self, aParam):
         Class = self.GetClass(aParam.get('alias'))
@@ -146,6 +146,7 @@ class TWeb():
             Param = {'cTitle': 'Device value', 'cBody': Data}
             self.HtmlPattern('index.tpl', Param)
 
+
 class TConnSessionApp(TConnSessionHttp):
     def __init__(self, aParent):
         TConnSessionHttp.__init__(self, aParent)
@@ -156,8 +157,6 @@ class TConnSessionApp(TConnSessionHttp):
 
         self.Web = TWeb(self)
         self.UrlPattern = {
-            '/':                {'func': self.Web.UrlIndex,     'param': []},
-            '/favicon.ico':     {'func': self.Web.UrlIndex,     'param': []},
             '/api':             {'func': self.Web.UrlApi,       'param': ['method']},
             '/version':         {'func': self.Web.UrlVersion,   'param': []},
             '/classlist':       {'func': self.Web.UrlClassList, 'param': []},
@@ -167,23 +166,18 @@ class TConnSessionApp(TConnSessionHttp):
 
     def GetFilePath(self, aPath):
         if (not FS.FileExists(aPath)):
-            aPath = os.getcwd() + '/' + self.Dir + aPath
+            aPath = self.Dir + aPath
             if (not FS.FileExists(aPath)):
                 aPath = None
         return aPath
 
-    def LoadFile(self, aPath):
-        Result = False
-        Path = self.GetFilePath(aPath)
-        Data = FS.LoadFromFileToStr(Path)
-        if (Data):
-            self.AddHead(200)
-            self.AddMime(Path)
-            self.AddData('')
-            self.AddData(self.Dict.Parse(Data))
-            #self.AddData(Data)
-            Result = True
-        return Result
+    def Head(self, aCode, aMime = '*.html'):
+        self.AddHead(aCode)
+        self.AddMime(aMime)
+        self.AddData('Date: %s' % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime()))
+        self.AddData('Server: Simple-Python-HTTP-Server')
+        # self.AddData('Connection: close')
+        self.AddData('')
 
     def DoPost(self, aUrl, aData):
         print(aUrl, aData)
@@ -213,37 +207,31 @@ class TConnSessionApp(TConnSessionHttp):
         Path  = Url.path
         Query = dict(urlparse.parse_qsl(Url.query, 1))
 
+        if (Path == '/'):
+            Path = '/index.tpl'
+
         FilePath = self.GetFilePath(Path)
         if (FilePath):
             Ext = FS.SplitName(FilePath)[3]
             if (Ext == '.tpl'):
-                werqw
-                self.Web.HtmlPattern(Path, {})
+                self.Head(200)
+                self.Web.HtmlPattern(Path)
             else:
-                self.LoadFile(FilePath)
+                self.Head(200, Path)
+                Data = FS.LoadFromFileToStr(FilePath)
+                self.AddData(Data)
         else:
             CheckErr = self.Check(Path, Query)
             if (CheckErr):
                 Log.PrintDbg(1, 'e', CheckErr)
-
-                self.AddHead(404)
-                self.AddMime('*.html')
-                self.AddData('Date: ' + time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime()))
-                self.AddData('Server: Simple-Python-HTTP-Server')
-                # self.AddData('Connection: close')
-                self.AddData('')
-
+                self.Head(404)
                 self.Dict.AddKey('CheckErr', CheckErr)
-                self.LoadFile('/page_404.tpl')
+                self.Web.HtmlPattern('/page_404.tpl')
             else:
-                self.AddHead(200)
-                self.AddMime('*.html')
-                self.AddData('')
+                self.Head(200)
                 Func = self.UrlPattern.get(Path).get('func')
-                try:
-                    Func(Query)
-                except Exception as E:
-                    Log.PrintDbg(1, 'x', E)
+                Func(Query)
+        pass
 
 
 class THttpServerApi(TSockServer):

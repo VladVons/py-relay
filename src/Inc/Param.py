@@ -291,7 +291,7 @@ class TDictBlock():
         if (aData is None):
             return
 
-        Pattern = '\\' + self.Prefix + '(\w+\s[\w\.]+)' + self.Sufix
+        Pattern = '\\' + self.Prefix + '(\w+\s[\w\./]+)' + self.Sufix
         Items1 = re.findall(Pattern, aData, re.S)
         for Item1 in Items1:
             BlockBeg = '\\' + self.Prefix + Item1 + self.Sufix
