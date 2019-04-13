@@ -1,9 +1,9 @@
 Package: py-relay
-Version: 1.0-30
+Version: 1.0-34
 Architecture: amd64
 Section: IoT
 Priority: optional
-Depends: libpython2.7, python-prctl, python-crypto
+Depends: libpython2.7, python-prctl, python-crypto, python-yattag
 Suggests: python-pip
 Recommends: python-mysqldb, python-smbus, python-ephem, monit
 Maintainer: Vladimir Vons <VladVons@gmail.com>
