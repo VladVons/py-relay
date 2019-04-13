@@ -38,6 +38,9 @@ def GetPart(aStr, aIdx, aDelim = ','):
     else:
         return ''
 
+def IsStr(aStr):
+    return (aStr) and (type(aStr).__name__ in ['str', 'unicode'])
+
 def IsFloat(aStr):
     return re.match("^\d+?[\.\,]\d+?$", aStr) != None
 

@@ -29,7 +29,7 @@ except Exception as E:
 from Inc.Log        import Log
 from Inc.Util       import FS, Obj
 from Inc.Serialize  import TSerialize
-from Inc.Param      import TDictReplace
+from Inc.Param      import TDictReplace, TDictBlock
 from Inc.HttpServer import TSockServer, TConnSessionHttp
 from Inc.Thread     import CreateThread, TThreadPipe
 from Api.Misc       import Version
@@ -90,18 +90,30 @@ class TWeb():
         self.Html('<br>\r\n'.join(aArr))
 
     def HtmlPattern(self, aFile, aDict):
-        Data = FS.LoadFromFileToStr(self.Parent.Dir + '/' + aFile)
+        DReplace = TDictReplace()
+        DReplace.AddKeys(aDict)
 
-        self.DictRepl = TDictReplace()
-        self.DictRepl.AddKeys(aDict)
-        Data = self.DictRepl.Parse(Data)
+        DBlock = TDictBlock()
+        Data = FS.LoadFromFileToStr(self.Parent.GetFilePath(aFile))
+        DBlock.Parse(Data)
+        Files = DBlock.GetKeys('File')
+        if (Files):
+            Blocks = DBlock.GetKeys('Block')
+            for Block in Blocks:
+                Key   = Block.split()[1]
+                Value = DBlock.Get('Block', Key).strip()
+                DReplace.AddKey(Key, Value)
 
+            Extender = Files[0].split()[1]
+            Data = FS.LoadFromFileToStr(self.Parent.Dir + '/' + Extender)
+
+        Data = DReplace.Parse(Data)
         self.Parent.AddData(Data)
 
     def UrlVersion(self, aParam):
         Arr = Obj.GetTreeAsList(Version())
         Param = {'cTitle': 'Version', 'cBody': '<br>\r\n'.join(Arr)}
-        self.HtmlPattern('index.tpl', Param)
+        self.HtmlPattern('/layout.tpl', Param)
 
     def UrlApi(self, aParam):
         DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
@@ -109,10 +121,7 @@ class TWeb():
         self.Html(DataOut)
 
     def UrlIndex(self, aParam):
-        Arr = []
-        Arr.append()
-        Param = {'cTitle': 'Index', 'cBody': '<br>\r\n'.join(Arr)}
-        self.HtmlPattern('index.tpl', Param)
+        self.HtmlPattern('/index.tpl', {})
 
     def UrlClassList(self, aParam):
         Arr = []
@@ -122,7 +131,7 @@ class TWeb():
             Arr.append('%s, %s' % (len(Arr) + 1, Str))
 
         Param = {'cTitle': 'Class list', 'cBody': '<br>\r\n'.join(Arr)}
-        self.HtmlPattern('index.tpl', Param)
+        self.HtmlPattern('/layout.tpl', Param)
 
     def UrlDeviceSet(self, aParam):
         Class = self.GetClass(aParam.get('alias'))
@@ -156,9 +165,16 @@ class TConnSessionApp(TConnSessionHttp):
             '/device/getvalue': {'func': self.Web.UrlDeviceGet, 'param': ['alias']}
         }
 
+    def GetFilePath(self, aPath):
+        if (not FS.FileExists(aPath)):
+            aPath = os.getcwd() + '/' + self.Dir + aPath
+            if (not FS.FileExists(aPath)):
+                aPath = None
+        return aPath
+
     def LoadFile(self, aPath):
         Result = False
-        Path = os.getcwd() + '/' + self.Dir + aPath
+        Path = self.GetFilePath(aPath)
         Data = FS.LoadFromFileToStr(Path)
         if (Data):
             self.AddHead(200)
@@ -197,7 +213,15 @@ class TConnSessionApp(TConnSessionHttp):
         Path  = Url.path
         Query = dict(urlparse.parse_qsl(Url.query, 1))
 
-        if (not self.LoadFile(Path)):
+        FilePath = self.GetFilePath(Path)
+        if (FilePath):
+            Ext = FS.SplitName(FilePath)[3]
+            if (Ext == '.tpl'):
+                werqw
+                self.Web.HtmlPattern(Path, {})
+            else:
+                self.LoadFile(FilePath)
+        else:
             CheckErr = self.Check(Path, Query)
             if (CheckErr):
                 Log.PrintDbg(1, 'e', CheckErr)
@@ -220,7 +244,6 @@ class TConnSessionApp(TConnSessionHttp):
                     Func(Query)
                 except Exception as E:
                     Log.PrintDbg(1, 'x', E)
-            # print(self.GetData())
 
 
 class THttpServerApi(TSockServer):

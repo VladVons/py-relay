@@ -50,10 +50,10 @@ class TDeviceHive():
 
 class TDeviceHiveOrig(TDeviceHive):
     def CmdReadDHT22(self, aPin):
-        return self.Send('/api/devices/dht22/read', {'pin': aPin}, 3, 0.3)
+        return self.Send('/api/devices/dht22/read', {'pin': aPin}, 1, 0.3)
 
     def CmdReadDS18B20(self, aPin):
-        return self.Send('/api/devices/ds18b20/read', {'pin': aPin}, 3, 0.5)
+        return self.Send('/api/devices/ds18b20/read', {'pin': aPin}, 1, 0.5)
 
     def CmdReadMHZ19(self):
         return self.Send('/api/devices/mhz19/read')

@@ -150,11 +150,14 @@ class TSockServer():
                     self.DoAccept(Conn, Addr)
                 except socket.timeout:
                     self.DoTimeout()
+                except Exception as E:
+                    Log.PrintDbg(1, 'x', E)
                 finally:
                     if (Conn):
                         Conn.close()
         finally:
             Sock.close()
+            Log.PrintDbg(1, 'i', 'Finish')
 
     def DoTimeout(self):
         pass

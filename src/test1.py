@@ -181,13 +181,13 @@ class TClassA():
         self.TClassB.MethodA()
         self.ClassC.MethodA()
 
-ClassA = TClassA()
+#ClassA = TClassA()
 #ClassA.MethodA()
 #ClassA.TClassB.MethodA()
 
-from Inc.Util import Obj
-Obj.Dump(ClassA)
-Obj.GetAttr(ClassA, '123')
+#from Inc.Util import Obj
+#Obj.Dump(ClassA)
+#Obj.GetAttr(ClassA, '123')
 
 
 #print(0, Obj.IsClass(TClassA))
@@ -199,3 +199,48 @@ Obj.GetAttr(ClassA, '123')
 #print(6, Obj.IsClass({'1':'one'}))
 #print(7, Obj.IsClass((1,2,3)))
 
+
+import re
+
+Text = """
+  $<file ttt.txt>
+
+  $<block b1>
+    asdf
+    1234
+    5678
+  $</block b1>
+
+  $<block b2> asdf$</block b2>
+
+1234
+1234
+"""
+
+#Pattern = '\$<(\w+\s[\w\.]+)>'
+#q1 = re.findall(Pattern, Text, re.S)
+#print(q1)
+
+q1 = re.findall('\$<block ttt>(.*?)\$</block ttt>', Text, re.S)
+#print(q1)
+
+from Inc.Param import TDictBlock
+Block = TDictBlock()
+Block.Parse(Text)
+#print(Block.Data)
+print(Block.GetKeys('block'))
+
+
+#print(Block.Get('block', 'b2'))
+
+#aScrypt = re.sub(r'\b%s\b' % Item, Prefix + Item, aScrypt)
+
+#for match in q1:
+#    print(tr.contents)
+
+
+#ReCompile = re.compile(r"^(.+)\n((?:\n.+)+)", re.MULTILINE)
+#ReCompile = re.compile(r"^(.+)(?:\n|\r\n?)((?:(?:\n|\r\n?).+)+)", re.MULTILINE)
+#for match in ReCompile.finditer(Text):
+#    title, sequence = match.groups()
+#    print(title, sequence)

@@ -216,11 +216,8 @@ class TDictReplace():
     def ClearUnknown(self):
         self.Err = []
 
-    def IsStr(self, aData):
-        return (aData) and (type(aData).__name__ in ['str', 'unicode']) 
-
     def HasPrefix(self, aData):
-        return ( (self.IsStr(aData)) and (aData.find(self.Prefix) != -1) )
+        return ( (Str.IsStr(aData)) and (aData.find(self.Prefix) != -1) )
 
     def GetMatch(self, aData):
         if (self.HasPrefix(aData)):
@@ -228,7 +225,6 @@ class TDictReplace():
         else:
             Result = []
         return Result
-
 
     def GetKey(self, aKey, aDef = ''):
         return self.Data.get(aKey, aDef)
@@ -283,3 +279,32 @@ class TDictReplace():
         else:
             aData = self.ParseTo(aData)
         return aData
+
+
+class TDictBlock():
+    def __init__(self, aPrefix = "$<", aSufix = ">"):
+        self.Data = {}
+        self.Prefix = aPrefix
+        self.Sufix  = aSufix
+
+    def Parse(self, aData):
+        if (aData is None):
+            return
+
+        Pattern = '\\' + self.Prefix + '(\w+\s[\w\.]+)' + self.Sufix
+        Items1 = re.findall(Pattern, aData, re.S)
+        for Item1 in Items1:
+            BlockBeg = '\\' + self.Prefix + Item1 + self.Sufix
+            BlockEnd = '\\' + self.Prefix + '/' + Item1 + self.Sufix
+            Pattern = BlockBeg + '(.*?)' + BlockEnd
+            Items2 = re.findall(Pattern, aData, re.S)
+            if (Items2):
+                self.Data[Item1] = Items2[0]
+            else:
+                self.Data[Item1] = ''
+
+    def Get(self, aSection, aBlock):
+        return self.Data.get(aSection + ' ' + aBlock)
+
+    def GetKeys(self, aFilter = ''):
+        return Arr.Filter(self.Data, aFilter)
