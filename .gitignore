@@ -8,6 +8,5 @@ Profiles/Client
 __pycache__
 py-relay.build
 py-relay.dist
-Web
 .idea
 local
