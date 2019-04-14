@@ -9,9 +9,12 @@ Description:
 
 import socket
 import mimetypes
+import time
 #
 from Inc.Log    import Log
 from Inc.Util   import Net
+from Inc.Util   import FS
+
 from Inc.Thread import CreateThread
 
 
@@ -50,6 +53,10 @@ class TConnSession():
 
 
 class TConnSessionHttp(TConnSession):
+    def __init__(self, aParent):
+        TConnSession.__init__(self, aParent)
+        self.RootDir  = 'Plugin/Web'
+
     def DoReceive(self, aData):
         Header  = self.GetHeader(aData)
         Path    = Header.get('Path')
@@ -104,6 +111,21 @@ class TConnSessionHttp(TConnSession):
                 elif (len(Pair) == 2):
                     Result[Pair[0]] = Pair[1]
         return Result
+
+    def Head(self, aCode, aMime = '*.html'):
+        self.AddHead(aCode)
+        self.AddMime(aMime)
+        self.AddData('Date: %s' % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime()))
+        self.AddData('Server: Simple-Python-HTTP-Server')
+        # self.AddData('Connection: close')
+        self.AddData('')
+
+    def GetFilePath(self, aPath):
+        if (not FS.FileExists(aPath)):
+            aPath = self.RootDir + aPath
+            if (not FS.FileExists(aPath)):
+                aPath = None
+        return aPath
 
     def DoGet(self, aUrl):
         pass

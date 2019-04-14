@@ -1,7 +1,7 @@
 """
 Copyright:   (c) 2017, Vladimir Vons, UA
 Author:      Vladimir Vons <VladVons@gmail.com>
-Created:     2018.03.06
+Created:     2018.06.06
 License:     GNU, see LICENSE for more details
 Description:
 
@@ -11,9 +11,6 @@ print os.path.abspath(urllib.__file__)
 https://www.programcreek.com/python/example/98644/yattag.Doc
 """
 
-
-import os
-import time
 
 try:
     import urlparse
@@ -25,7 +22,8 @@ try:
     from yattag import Doc 
 except Exception as E: 
     print(__file__, E, 'apt pip install yattag')
-#
+
+
 from Inc.Log        import Log
 from Inc.Util       import FS, Obj
 from Inc.Serialize  import TSerialize
@@ -151,7 +149,6 @@ class TConnSessionApp(TConnSessionHttp):
     def __init__(self, aParent):
         TConnSessionHttp.__init__(self, aParent)
 
-        self.Dir     = ''
         self.Manager = None
         self.Dict    = TDictReplace()
 
@@ -163,21 +160,6 @@ class TConnSessionApp(TConnSessionHttp):
             '/device/setvalue': {'func': self.Web.UrlDeviceSet, 'param': ['alias', 'value']},
             '/device/getvalue': {'func': self.Web.UrlDeviceGet, 'param': ['alias']}
         }
-
-    def GetFilePath(self, aPath):
-        if (not FS.FileExists(aPath)):
-            aPath = self.Dir + aPath
-            if (not FS.FileExists(aPath)):
-                aPath = None
-        return aPath
-
-    def Head(self, aCode, aMime = '*.html'):
-        self.AddHead(aCode)
-        self.AddMime(aMime)
-        self.AddData('Date: %s' % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime()))
-        self.AddData('Server: Simple-Python-HTTP-Server')
-        # self.AddData('Connection: close')
-        self.AddData('')
 
     def DoPost(self, aUrl, aData):
         print(aUrl, aData)
@@ -240,11 +222,9 @@ class THttpServerApi(TSockServer):
 
         # self.Timeout = 1
         self.Manager  = None
-        self.Dir      = 'Plugin/Web'
         self.Conn     = TConnSessionApp(self)
 
     def DoAccept(self, aConn, aAddr):
-        self.Conn.Dir = self.Dir
         self.Conn.Handle(aConn)
 
     def Exec(self, aThread):

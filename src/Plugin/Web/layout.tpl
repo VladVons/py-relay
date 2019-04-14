@@ -2,10 +2,11 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/style.css?q=3.2" type="text/css">
-    <title>$<cTitle></title>
+    <title>py-relay Oster IoT</title>
   </head>
 
   <body>
+    <img src="image/OsterIoT.png" width="100" height="100" alt="Oster IoT">
     <div id="content">
         $<cBody>
     </div>
