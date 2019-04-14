@@ -221,26 +221,31 @@ Text = """
 #q1 = re.findall(Pattern, Text, re.S)
 #print(q1)
 
-q1 = re.findall('\$<block ttt>(.*?)\$</block ttt>', Text, re.S)
+#q1 = re.findall('\$<block ttt>(.*?)\$</block ttt>', Text, re.S)
 #print(q1)
 
-from Inc.Param import TDictBlock
-Block = TDictBlock()
-Block.Parse(Text)
-#print(Block.Data)
-print(Block.GetKeys('block'))
+#from Inc.Param import TDictBlock
+#Block = TDictBlock()
+#Block.Parse(Text)
+##print(Block.Data)
+#print(Block.GetKeys('block'))
 
+import os
+from yattag import Doc 
 
-#print(Block.Get('block', 'b2'))
+aPath = './Api'
+Root,Folders, Files = next(os.walk(aPath))
+Folders.sort()
+Files.sort()
 
-#aScrypt = re.sub(r'\b%s\b' % Item, Prefix + Item, aScrypt)
-
-#for match in q1:
-#    print(tr.contents)
-
-
-#ReCompile = re.compile(r"^(.+)\n((?:\n.+)+)", re.MULTILINE)
-#ReCompile = re.compile(r"^(.+)(?:\n|\r\n?)((?:(?:\n|\r\n?).+)+)", re.MULTILINE)
-#for match in ReCompile.finditer(Text):
-#    title, sequence = match.groups()
-#    print(title, sequence)
+doc, tag, text, line = Doc().ttl()
+with tag('table'):
+    with tag('tr'):
+        for Folder in Folders:
+            with tag('td'):
+                line('a', Folder, href = Root + '/' + Folder)
+                doc.stag('br')
+        for File in Files:
+            with tag('td'):
+                line('a', File, href = Root + '/' + File)
+print(doc.getvalue())

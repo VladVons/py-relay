@@ -35,7 +35,7 @@ from Inc.DB           import TDbDictSQLite
 from Inc.Util         import Obj, FS, Net, Str
 from Inc.Param        import TDictParam
 from Inc.Protect      import TProtect
-from Api              import Version
+from Api              import Misc
 from Core.Manager     import TManager
 from Core.HttpServerApi import THttpServerApi
 
@@ -60,7 +60,7 @@ class TMain():
         self.Init()
 
     def Init(self):
-        Info = Version()
+        Info = Misc.Version()
         Info['AppName'] = cAppName
         Obj.Dump(Info)
         print('')

@@ -110,23 +110,23 @@ class TManager():
         self.SecRun.Stop()
 
     def Info(self, aMode):
+        Result = {}
         if (aMode == 'Attrs'):
-            Arr = {}
             for Item in self.SecClass.Data:
-                Arr[Item] = self.SecClass.Data[Item].Param.GetAttrs()
-            Obj.Dump(Arr)
+                Result[Item] = self.SecClass.Data[Item].Param.GetAttrs()
         elif (aMode == 'Unused'):
-            Unused = self.SecClass.GetUnused()
-            for Item in Unused:
-                Log.PrintDbg(1, 'w', 'Alias %s not used' % Item)
+            Result = self.SecClass.GetUnused()
         elif (aMode == 'Total'):
-            Arr = {}
-            Arr['Class']  = len(self.SecClass.Data)
-            Arr['Unused'] = len(self.SecClass.GetUnused())
-            Arr['Loop']   = len(self.SecRun.Data.get('Loop', []))
-            Obj.Dump(Arr)
-        else:
-            Log.PrintDbg(1, 'w', 'Unknown option %s' % aMode)
+            Result['Class']  = len(self.SecClass.Data)
+            Result['Unused'] = len(self.SecClass.GetUnused())
+            Result['Loop']   = len(self.SecRun.Data.get('Loop', []))
+            Result['Profile']   = self.LoadConf.Dir
+            Result['UptimeApp'] = int(time.time() - self.StartTimeReal)
+        return Result
+
+    def InfoDump(self, aMode):
+        Arr = self.Info(aMode)
+        Obj.Dump(Arr)
         print('')
 
     def LoadFile(self, aFile):
@@ -136,8 +136,8 @@ class TManager():
         Data = self.LoadConf.Conf(aFile)
         self.Load(Data)
 
-        self.Info('Unused')
-        self.Info('Total')
+        self.InfoDump('Unused')
+        self.InfoDump('Total')
 
     def Reload(self):
         self.LoadFile(self.File)

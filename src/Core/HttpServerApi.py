@@ -12,6 +12,9 @@ https://www.programcreek.com/python/example/98644/yattag.Doc
 """
 
 
+import os
+
+
 try:
     import urlparse
 except:
@@ -30,7 +33,7 @@ from Inc.Serialize  import TSerialize
 from Inc.Param      import TDictReplace, TDictBlock
 from Inc.HttpServer import TSockServer, TConnSessionHttp
 from Inc.Thread     import CreateThread, TThreadPipe
-from Api.Misc       import Version
+from Api            import Misc
 
 
 def DeviceTree(aObj, aStr = ''):
@@ -57,9 +60,32 @@ class TThreadPipeApi(TThreadPipe):
 class TWeb():
     def __init__(self, aParent):
         self.Parent = aParent
+        self.Layout = '/layout.tpl'
 
         self.Serialize = TSerialize()
         self.Serialize.AddModule('Api')
+
+    def UrlApi(self, aParam):
+        DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
+        DataOut = self.Serialize.DecodeToStr(DataIn)
+        self.Html(DataOut)
+
+    def UrlDeviceSet(self, aParam):
+        Class = self.GetClass(aParam.get('alias'))
+        if (Class):
+            Class._Set(self, aParam.get('value'))
+
+    def UrlDeviceGet(self, aParam):
+        Class = self.GetClass(aParam.get('alias'))
+        if (Class):
+            Data = self.ProcessThreadQueue(aParam)
+
+            Param = {'cTitle': 'Device value', 'cBody': Data}
+            self.HtmlPattern('index.tpl', Param)
+
+    @property
+    def Manager(self):
+        return self.Parent.Parent.Manager
 
     def ProcessThreadQueue(self, aData):
         ThreadPipe = self.Parent.Parent.ThreadPipe
@@ -68,7 +94,7 @@ class TWeb():
         return aData
 
     def GetClass(self, aAlias):
-        Class = self.Parent.Parent.Manager.SecClass.GetClass(aAlias)
+        Class = self.Manager.SecClass.GetClass(aAlias)
         if (not Class):
             Msg = Log.PrintDbg(1, 'e', 'Alias not found %s' % aAlias)
             self.Parent.AddData(Msg)
@@ -91,7 +117,7 @@ class TWeb():
         DReplace = TDictReplace()
         DReplace.AddKeys(aDict)
 
-        FilePath = self.Parent.GetFilePath(aFile)
+        FilePath = self.Parent.GetRootPath(aFile)
 
         DBlock = TDictBlock()
         Data = FS.LoadFromFileToStr(FilePath)
@@ -105,13 +131,14 @@ class TWeb():
                 DReplace.AddKey(Key, Value)
 
             Extender = Files[0].split()[1]
-            FilePath = self.Parent.GetFilePath(Extender)
+            FilePath = self.Parent.GetRootPath(Extender)
             Data = FS.LoadFromFileToStr(FilePath)
 
         Data = DReplace.Parse(Data)
         self.Parent.AddData(Data)
+        print(Data)
 
-    def UrlClassList(self, aParam):
+    def UrlGetClasses(self, aParam):
         Arr = []
         Items = self.Parent.Parent.Manager.SecClass.Data
         for Item in Items:
@@ -119,30 +146,47 @@ class TWeb():
             Arr.append('%s, %s' % (len(Arr) + 1, Str))
 
         Param = {'cTitle': 'Class list', 'cBody': '<br>\r\n'.join(Arr)}
-        self.HtmlPattern('/layout.tpl', Param)
+        self.HtmlPattern(self.Layout, Param)
 
-    def UrlVersion(self, aParam):
-        Arr = Obj.GetTreeAsList(Version())
+    def UrlGetVersion(self, aParam):
+        Arr = Misc.Version()
+        Arr.update(self.Manager.Info('Total'))
+
+        Arr = Obj.GetTreeAsList(Arr)
         Param = {'cTitle': 'Version', 'cBody': '<br>\r\n'.join(Arr)}
-        self.HtmlPattern('/layout.tpl', Param)
+        self.HtmlPattern(self.Layout, Param)
 
-    def UrlApi(self, aParam):
-        DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
-        DataOut = self.Serialize.DecodeToStr(DataIn)
-        self.Html(DataOut)
+    def UrlGetProfile(self, aParam):
+        Arr = self.Manager.Info('Total')
+        Path = '/' + Arr.get('Profile', '')
+        Path = Path.replace('/Plugin', '')
+        self.Parent.Redirect(Path)
 
-    def UrlDeviceSet(self, aParam):
-        Class = self.GetClass(aParam.get('alias'))
-        if (Class):
-            Class._Set(self, aParam.get('value'))
+    def HtmlDir(self, aPath, aFullPath):
+        Root, Folders, Files = next(os.walk(aFullPath))
+        Folders.sort()
+        Files.sort()
 
-    def UrlDeviceGet(self, aParam):
-        Class = self.GetClass(aParam.get('alias'))
-        if (Class):
-            Data = self.ProcessThreadQueue(aParam)
+        doc, tag, text, line = Doc().ttl()
+        with tag('table'):
+            Pos = aPath.rfind('/')
+            if (Pos > 0):
+                PrevDir = aPath[:Pos]
+                with tag('tr'):
+                    with tag('td'):
+                        line('a', '..', href = PrevDir)
 
-            Param = {'cTitle': 'Device value', 'cBody': Data}
-            self.HtmlPattern('index.tpl', Param)
+            for Folder in Folders:
+                with tag('tr'):
+                    with tag('td'):
+                        line('a', Folder, href = aPath + '/' + Folder)
+            for File in Files:
+                with tag('tr'):
+                    with tag('td'):
+                            line('a', File, href = aPath + '/' + File)
+        Data = doc.getvalue()
+        Param = {'cTitle': 'HtmlDir', 'cBody': Data}
+        self.HtmlPattern(self.Layout, Param)
 
 
 class TConnSessionApp(TConnSessionHttp):
@@ -154,11 +198,12 @@ class TConnSessionApp(TConnSessionHttp):
 
         self.Web = TWeb(self)
         self.UrlPattern = {
-            '/api':             {'func': self.Web.UrlApi,       'param': ['method']},
-            '/version':         {'func': self.Web.UrlVersion,   'param': []},
-            '/classlist':       {'func': self.Web.UrlClassList, 'param': []},
-            '/device/setvalue': {'func': self.Web.UrlDeviceSet, 'param': ['alias', 'value']},
-            '/device/getvalue': {'func': self.Web.UrlDeviceGet, 'param': ['alias']}
+            '/api':              {'func': self.Web.UrlApi,         'param': ['method']},
+            '/get/version':      {'func': self.Web.UrlGetVersion,  'param': []},
+            '/get/classes':      {'func': self.Web.UrlGetClasses,  'param': []},
+            '/get/profile':      {'func': self.Web.UrlGetProfile,  'param': []},
+            '/get/device-value': {'func': self.Web.UrlDeviceGet,   'param': ['alias']},
+            '/set/device-value': {'func': self.Web.UrlDeviceSet,   'param': ['alias', 'value']}
         }
 
     def DoPost(self, aUrl, aData):
@@ -192,16 +237,20 @@ class TConnSessionApp(TConnSessionHttp):
         if (Path == '/'):
             Path = '/index.tpl'
 
-        FilePath = self.GetFilePath(Path)
-        if (FilePath):
-            Ext = FS.SplitName(FilePath)[3]
-            if (Ext == '.tpl'):
+        FilePath = self.GetRootPath(Path)
+        if (FS.FileExists(FilePath)):
+            if (os.path.isdir(FilePath)):
                 self.Head(200)
-                self.Web.HtmlPattern(Path)
+                self.Web.HtmlDir(Path, FilePath)
             else:
-                self.Head(200, Path)
-                Data = FS.LoadFromFileToStr(FilePath)
-                self.AddData(Data)
+                Ext = FS.SplitName(FilePath)[3]
+                if (Ext == '.tpl'):
+                    self.Head(200)
+                    self.Web.HtmlPattern(Path)
+                else:
+                    self.Head(200, Path)
+                    Data = FS.LoadFromFileToStr(FilePath)
+                    self.AddData(Data)
         else:
             CheckErr = self.Check(Path, Query)
             if (CheckErr):

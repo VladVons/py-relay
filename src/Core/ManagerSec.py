@@ -181,6 +181,7 @@ class TSecDefault(TSec):
                 Result.append(Key)
         return Result
 
+
 class TSecClass(TSec):
     def __init__(self, aParent):
         TSec.__init__(self, aParent)

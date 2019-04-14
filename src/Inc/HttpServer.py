@@ -56,6 +56,16 @@ class TConnSessionHttp(TConnSession):
     def __init__(self, aParent):
         TConnSession.__init__(self, aParent)
         self.RootDir  = 'Plugin/Web'
+        self.MimePic  = ['jpg', 'jpeg', 'png', 'gif', 'ico']
+
+    def _Headers(self,  aCode):
+        Codes = {
+                200: 'OK',
+                302: 'Redirect',
+                400: 'Bad request',
+                404: 'Not found'
+        }
+        return 'HTTP/1.1 %d %s' % (aCode, Codes.get(aCode))
 
     def DoReceive(self, aData):
         Header  = self.GetHeader(aData)
@@ -78,22 +88,22 @@ class TConnSessionHttp(TConnSession):
     def AddData(self, aData):
         self.Data.append(aData)
 
+    def InsData(self, aData, aIdx = -1):
+        if (len(self.Data) > 0) and (self.Data[-1] == ''):
+            self.Data.insert(aIdx, aData)
+        else:
+            self.Data.append(aData)
+        pass
+
     def AddHead(self, aCode):
-        self.AddData(self._Headers(aCode))
+        Data = self._Headers(aCode)
+        self.AddData(Data)
 
     def AddMime(self, aUrl, aDef = 'text/html'):
         MimeType = mimetypes.guess_type(aUrl)[0]
         if (not MimeType):
             MimeType = aDef
         self.AddData('Content-Type: ' + MimeType)
-
-    def _Headers(self,  aCode):
-        Codes = {
-                200: 'OK',
-                400: 'Bad Request',
-                404: 'Not Found'
-        }
-        return 'HTTP/1.1 %d %s' % (aCode, Codes.get(aCode))
 
     def GetHeader(self, aData):
         Result = {}
@@ -120,12 +130,12 @@ class TConnSessionHttp(TConnSession):
         # self.AddData('Connection: close')
         self.AddData('')
 
-    def GetFilePath(self, aPath):
-        if (not FS.FileExists(aPath)):
-            aPath = self.RootDir + aPath
-            if (not FS.FileExists(aPath)):
-                aPath = None
-        return aPath
+    def Redirect(self, aPath):
+        self.InsData('Location: %s' % aPath)
+        self.Data[0] = self.Data[0].replace('200', '302')
+
+    def GetRootPath(self, aPath):
+        return self.RootDir + aPath
 
     def DoGet(self, aUrl):
         pass
