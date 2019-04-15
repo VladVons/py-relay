@@ -9,7 +9,7 @@
             {"Enable":false, "ClassRef":"GroupRaspi"},
             {"Enable":false,  "ClassRef":"FileSizeLog"},
             {"Enable":false,  "ClassRef":"Sensor_CPU_Load"},
-            {"Enable":true,  "ClassRef":"Sensor_CPU_Usage"},
+            {"Enable":false,  "ClassRef":"Sensor_CPU_Usage"},
             {"Enable":false,  "ClassRef":"Sensor_CPU_Temp"},
             {"Enable":false,  "ClassRef":"SensorUptimeSys"},
             {"Enable":true,  "ClassRef":"Random_15_25"},

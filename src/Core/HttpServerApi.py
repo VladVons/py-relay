@@ -13,6 +13,7 @@ https://www.programcreek.com/python/example/98644/yattag.Doc
 
 
 import os
+import time
 
 
 try:
@@ -34,13 +35,7 @@ from Inc.Param      import TDictReplace, TDictBlock
 from Inc.HttpServer import TSockServer, TConnSessionHttp
 from Inc.Thread     import CreateThread, TThreadPipe
 from Api            import Misc
-
-
-def DeviceTree(aObj, aStr = ''):
-    if (aObj.Parent):
-        aStr += DeviceTree(aObj.Parent) + ' -> '
-    aStr += 'Alias:%s, Class:%s, Descr:%s' % (aObj.Alias, Obj.GetName(aObj), aObj.Descr)
-    return aStr
+from Core           import HttpProc
 
 
 class TThreadPipeApi(TThreadPipe):
@@ -83,7 +78,6 @@ class TWeb():
             Param = {'cTitle': 'Device value', 'cBody': Data}
             self.HtmlPattern('index.tpl', Param)
 
-
     @property
     def Manager(self):
         return self.Parent.Parent.Manager
@@ -95,14 +89,8 @@ class TWeb():
         return aData
 
     def Html(self, aBody):
-        doc, tag, text = Doc().tagtext()
-        doc.asis('<!DOCTYPE html>')
-        with tag('html'):
-            with tag('body'):
-                #text(aBody)
-                doc.asis(aBody)
-        Str = doc.getvalue()
-        self.Parent.AddData(Str)
+        Data = HttpProc.Html(aBody)
+        self.Parent.AddData(Data)
 
     def HtmlAsArr(self, aArr):
         self.Html('<br>\r\n'.join(aArr))
@@ -136,7 +124,7 @@ class TWeb():
         Arr = []
         Items = self.Parent.Parent.Manager.SecClass.Data
         for Item in Items:
-            Str = DeviceTree(Items[Item])
+            Str = HttpProc.DeviceTree(Items[Item])
             Arr.append('%s, %s' % (len(Arr) + 1, Str))
 
         Param = {'cTitle': 'Class list', 'cBody': '<br>\r\n'.join(Arr)}
@@ -157,28 +145,7 @@ class TWeb():
         self.Parent.Redirect(Path)
 
     def HtmlDir(self, aPath, aFullPath):
-        Root, Folders, Files = next(os.walk(aFullPath))
-        Folders.sort()
-        Files.sort()
-
-        doc, tag, text, line = Doc().ttl()
-        with tag('table'):
-            Pos = aPath.rfind('/')
-            if (Pos > 0):
-                PrevDir = aPath[:Pos]
-                with tag('tr'):
-                    with tag('td'):
-                        line('a', '..', href = PrevDir)
-
-            for Folder in Folders:
-                with tag('tr'):
-                    with tag('td'):
-                        line('a', Folder, href = aPath + '/' + Folder)
-            for File in Files:
-                with tag('tr'):
-                    with tag('td'):
-                            line('a', File, href = aPath + '/' + File)
-        Data = doc.getvalue()
+        Data  = HttpProc.HtmlDir(aPath, aFullPath)
         Param = {'cTitle': 'HtmlDir', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
@@ -193,11 +160,11 @@ class TConnSessionApp(TConnSessionHttp):
         self.Web = TWeb(self)
         self.UrlPattern = {
             '/api':              {'func': self.Web.UrlApi,         'param': ['method']},
-            '/get/version':      {'func': self.Web.UrlGetVersion,  'param': []},
-            '/get/classes':      {'func': self.Web.UrlGetClasses,  'param': []},
-            '/get/profile':      {'func': self.Web.UrlGetProfile,  'param': []},
-            '/get/device-value': {'func': self.Web.UrlDeviceGet,   'param': ['alias']},
-            '/set/device-value': {'func': self.Web.UrlDeviceSet,   'param': ['alias', 'value']}
+            '/get/app/version':  {'func': self.Web.UrlGetVersion,  'param': []},
+            '/get/app/classes':  {'func': self.Web.UrlGetClasses,  'param': []},
+            '/get/app/profile':  {'func': self.Web.UrlGetProfile,  'param': []},
+            '/get/dev/value':    {'func': self.Web.UrlDeviceGet,   'param': ['alias']},
+            '/set/dev/value':    {'func': self.Web.UrlDeviceSet,   'param': ['alias', 'value']}
         }
 
     def DoPost(self, aUrl, aData):
