@@ -1,5 +1,5 @@
 Package: py-relay
-Version: 1.0-34
+Version: 1.0-35
 Architecture: amd64
 Section: IoT
 Priority: optional

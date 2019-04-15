@@ -38,13 +38,17 @@ Deb()
 
   DirApp="$DirDeb/usr/lib/$Name"
   mkdir -p $DirApp
+  echo "Dst is $DirApp"
 
   MakeDebControl
 
   cp -R deb/src/CONTENTS/* $DirDeb
   cp -R deb/src/DEBIAN $DirDeb
   cp -R $DirSrc/$Name.{bin,sh,conf,key} $DirApp
+
   cp -R $DirSrc/Plugin $DirApp
+  find $DirApp/Plugin/Devices   -type f | grep -v -f Need_Devices.lst | xargs rm
+  find $DirApp/Plugin/Providers -type f | grep -v -f Need_Providers.lst | xargs rm
 
   rm -f $DirDeb.deb
   dpkg-deb --build $DirDeb

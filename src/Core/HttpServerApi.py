@@ -83,6 +83,7 @@ class TWeb():
             Param = {'cTitle': 'Device value', 'cBody': Data}
             self.HtmlPattern('index.tpl', Param)
 
+
     @property
     def Manager(self):
         return self.Parent.Parent.Manager
@@ -92,13 +93,6 @@ class TWeb():
         if (ThreadPipe):
             aData = ThreadPipe.ThreadSend(aData)
         return aData
-
-    def GetClass(self, aAlias):
-        Class = self.Manager.SecClass.GetClass(aAlias)
-        if (not Class):
-            Msg = Log.PrintDbg(1, 'e', 'Alias not found %s' % aAlias)
-            self.Parent.AddData(Msg)
-        return Class
 
     def Html(self, aBody):
         doc, tag, text = Doc().tagtext()
