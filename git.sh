@@ -185,7 +185,7 @@ case $1 in
     GitCreate)           "$1"        "$2" "$3" ;;
     GitToServ|t)         GitToServ   "$2" "$3" ;;
     GitFromServ|f)       GitFromServ "$2" "$3" ;;
-    GitFromServMissed|m) GitFromSrvMissed "$2" "$3" ;;
+    GitFromServMissed|m) GitFromServMissed "$2" "$3" ;;
     GitClone)            "$1"        "$2" "$3" ;;
     *)                   Help ;;
 esac
