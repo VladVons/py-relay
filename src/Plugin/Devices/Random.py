@@ -65,26 +65,3 @@ class TSensorRandomNone(TSensorRange):
         if (Div < self.Param.None):
             Result = None
         return Result
-
-
-class TSensorCycleInc(TSensorRange):
-    def DoParameter(self, aParam):
-        self.Param.LoadPattern(aParam)
-        self.Count = self.Param.Begin
-
-    def _Get(self):
-        self.Count += 1
-        if (self.Count > self.Param.End):
-            self.Count = self.Param.Begin
-        return self.Count
-
-class TSensorCycleDec(TSensorRange):
-    def DoParameter(self, aParam):
-        self.Param.LoadPattern(aParam)
-        self.Count = self.Param.End
-
-    def _Get(self):
-        self.Count -= 1
-        if (self.Count < self.Param.Begin):
-            self.Count = self.Param.End
-        return self.Count

@@ -77,12 +77,12 @@ class TSerializeObj():
         except NameError as E:
             Log.PrintDbg(1, 'x', E.message)
 
-    def GetProp(self, aName):
-        Obj = self.GetObj(aProp)
-        if (Obj):
-          return Obj
+    def FindObj(self, aObj, aName):
+        if (hasattr(aObj, aName)):
+            Result = getattr(aObj, aName)
         else:
-          return self.LastError
+            Result = globals().get(aName)
+        return Result
 
     def GetObj(self, aName):
         if (aName in self.Data):
@@ -98,15 +98,10 @@ class TSerializeObj():
             if (Path in self.Data):
                 Result = self.Data[Path]
             else:
-                if (hasattr(Result, Item)):
-                    Result = getattr(Result, Item)
+                Result = self.FindObj(Result, Item)
+                if (Result):
                     self.Data[Path] = Result
                 else:
-                    Result = globals().get(Item)
-                    if (Result):
-                        self.Data[Path] = Result
-
-                if (not Result):
                     self.LastError = Log.PrintDbg(1, 'e', 'No object %s found in %s ' % (Item, Path))
                     break
         return Result
@@ -135,13 +130,13 @@ class TSerialize(TSerializeObj):
     def CallFunc(self, aFuncName, aArgs = []):
         Arr = self.SplitFunc(aFuncName)
         if (Arr):
-            aFuncName = Arr["Name"]
-            aArgs     = Arr["Arg"].replace("'", "").split(",")
+            aFuncName = Arr['Name']
+            aArgs     = Arr['Arg'].replace("'", '').split(',')
 
         Obj = self.GetObj(aFuncName)
         if (Obj):
             ObjType = type(Obj).__name__
-            if (ObjType in ["instancemethod", "function"]):
+            if (ObjType in ['instancemethod', 'function']):
                 Result = self.CallObj(Obj, aArgs)
             else:
                 Result = Log.PrintDbg(1, 'e', 'Object %s is not callable type %s' % (aFuncName, ObjType))
@@ -151,23 +146,22 @@ class TSerialize(TSerializeObj):
 
     @staticmethod
     def CEncodeData(aData):
-        return json.dumps({"Data": aData})
+        return json.dumps({'Data': aData})
 
     def EncodeData(self, aData):
         return TSerialize.CEncodeData(aData)
 
     def EncodeFuncAuth(self, aUser, aPassw):
-        return self.EncodeFunc("AuthUser", aUser, aPassw)
+        return self.EncodeFunc('AuthUser', aUser, aPassw)
 
     def EncodeFunc(self, aFuncName, *aArgs):
-        if (len(aArgs) == 0):
-            Data = {"Type": "Func", "Name": aFuncName}
-        else:
-            Data = {"Type": "Func", "Name": aFuncName, "Arg": aArgs}
+        Data = {'Type': 'Func', 'Name': aFuncName}
+        if (len(aArgs) > 0):
+            Data['Arg'] = aArgs
         return json.dumps(Data)
 
     def EncodeProp(self, aPropName):
-        Data = {"Type": "Prop", "Name": aPropName}
+        Data = {'Type': 'Prop', 'Name': aPropName}
         return json.dumps(Data)
 
     def DecodeToStr(self, aData):
@@ -184,14 +178,14 @@ class TSerialize(TSerializeObj):
                 Result = Log.PrintDbg(1, 'x', E.message)
 
             if (Node):
-                Type = Node.get("Type")
-                Name = Node.get("Name")
-                if (Type == "Func"):
-                    if ("Arg" in Node):
-                        Result = self.CallFunc(Name, Node.get("Arg"))
+                Type = Node.get('Type')
+                Name = Node.get('Name')
+                if (Type == 'Func'):
+                    if ('Arg' in Node):
+                        Result = self.CallFunc(Name, Node.get('Arg'))
                     else:
                         Result = self.CallFunc(Name)
-                elif (Type == "Prop"):
+                elif (Type == 'Prop'):
                     Result = self.GetObj(Name)
                 else:
                     Result = Log.PrintDbg(1, 'e', 'Unknown type %s' % (Type))
@@ -199,13 +193,11 @@ class TSerialize(TSerializeObj):
 
     def DecodeFuncName(self, aData):
         Result = ''
-
         Node = json.loads(aData)
         if (Node['Type'] == 'Func'):
-            Result = Node.get("Name")
-
+            Result = Node.get('Name')
         return Result
 
     def DecodeFuncArg(self, aData):
         Node = json.loads(aData)
-        return Node.get("Arg")
+        return Node.get('Arg')

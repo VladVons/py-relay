@@ -13,8 +13,6 @@ https://www.programcreek.com/python/example/98644/yattag.Doc
 
 
 import os
-import time
-
 
 try:
     import urlparse
@@ -29,8 +27,7 @@ except Exception as E:
 
 
 from Inc.Log        import Log
-from Inc.Util       import FS, Obj
-from Inc.Serialize  import TSerializeObj
+from Inc.Util       import FS
 from Inc.Param      import TDictReplace, TDictBlock
 from Inc.HttpServer import TSockServer, TConnSessionHttp
 from Inc.Thread     import CreateThread, TThreadPipe
@@ -137,32 +134,39 @@ class TWeb():
         self.Parent.Redirect(Path)
 
     def HtmlDir(self, aPath, aFullPath):
-        Arr  = HttpProc.HtmlDir(aPath, aFullPath)
+        Arr   = HttpProc.HtmlDir(aPath, aFullPath)
         Data  = HttpProc.HtmlTable(['Name', 'Size', 'Date'], Arr)
         Param = {'cTitle': 'HtmlDir', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
     def UrlDeviceGet(self, aParam):
-        Arr = self.ProcessThreadQueue(aParam)
-        Data  = HttpProc.HtmlTable(['Alias', 'Value'], Arr.items())
+        Dict = self.ProcessThreadQueue(aParam)
+        Arr  = Dict.items()
+        Arr.sort()
+        Data  = HttpProc.HtmlTable(['Alias', 'Value'], Arr)
         Param = {'cTitle': 'Device value', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
     def UrlDevicesGet(self, aParam):
-        Arr = self.ProcessThreadQueue(aParam)
-        Data  = HttpProc.HtmlTable(['Alias', 'Value'], Arr.items())
+        Dict = self.ProcessThreadQueue(aParam)
+        Arr  = Dict.items()
+        Arr.sort()
+        Data  = HttpProc.HtmlTable(['Alias', 'Value'], Arr)
         Param = {'cTitle': 'Device value', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
     def UrlGetClasses(self, aParam):
         Arr = self.ProcessThreadQueue(aParam)
+        Arr.sort()
         Data  = HttpProc.HtmlTable(['Alias', 'Class', 'Descr'], Arr)
         Param = {'cTitle': 'Aliases', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
     def UrlGetVersion(self, aParam):
-        Arr = self.ProcessThreadQueue(aParam)
-        Data  = HttpProc.HtmlTable(['Name', 'Value'], Arr.items())
+        Dict = self.ProcessThreadQueue(aParam)
+        Arr = Dict.items()
+        Arr.sort()
+        Data  = HttpProc.HtmlTable(['Name', 'Value'], Arr)
         Param = {'cTitle': 'Version', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
@@ -262,6 +266,3 @@ class THttpServerApi(TSockServer):
             CreateThread(self.Run)
         else:
             self.Run()
-
-# aUrl  = '/device/set?alias=DH1_Relay_A&value=1'
-# ServerApi.DoGet(aUrl)

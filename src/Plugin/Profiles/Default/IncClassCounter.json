@@ -1,0 +1,14 @@
+{
+    "Class":[
+        {
+            "Class":"TSensorCounterInc",
+            "Alias":"CounterInc",
+            "Parameter":{"Begin":0, "End":10, "Cycle": true}
+        },
+        {
+            "Class":"TSensorCounterDec",
+            "Alias":"CounterDec",
+            "Parameter":{"Begin":100, "End":0}
+        }
+    ]
+}
