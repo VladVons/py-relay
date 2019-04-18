@@ -12,7 +12,7 @@
     </div>
 
     <div id="footer" class="app-footer">
-        <a href="http://oster.com.ua/py-relay">py-relay (c) Oster IoT</a>
+        <a href="https://www.facebook.com/OsterInternetOfThings">Oster IoT</a>
     </div>
   </body>
 

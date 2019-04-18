@@ -30,7 +30,7 @@ except Exception as E:
 
 from Inc.Log        import Log
 from Inc.Util       import FS, Obj
-from Inc.Serialize  import TSerialize
+from Inc.Serialize  import TSerializeObj
 from Inc.Param      import TDictReplace, TDictBlock
 from Inc.HttpServer import TSockServer, TConnSessionHttp
 from Inc.Thread     import CreateThread, TThreadPipe
@@ -39,28 +39,50 @@ from Core           import HttpProc
 
 
 class TThreadPipeApi(TThreadPipe):
-    Cnt = 0
+    def __init__(self):
+        TThreadPipe.__init__(self)
+
+        self.Cnt = 0
+        self.PathProc = {
+            '/get/app/version': self.GetVersion,
+            '/get/app/classes': self.GetClasses,
+            '/get/dev/values':  self.GetValues,
+            '/get/dev/value':   self.GetValue,
+            '/set/dev/value':   self.GetVersion
+        }
+
+
+    def GetVersion(self, aManager, aData):
+        Result = Misc.Version()
+        Result.update(aManager.Info('Total'))
+        return Result
+
+    def GetValue(self, aManager, aData):
+        Alias = aData.get('alias')
+        return aManager.SecClass.GetAliasVar([Alias], 'Value')
 
     def GetValues(self, aManager, aData):
-        pass
+        return aManager.SecClass.GetAliasVar([], 'Value')
+
+    def GetClasses(self, aManager, aData):
+        Result = []
+        for Item in aManager.SecClass.GetAliases():
+            Class = aManager.SecClass.GetClass(Item)
+            Result.append([Class.Alias, Class.__class__.__name__, Class.Descr])
+        return Result
 
     # we are in main process with parameters
     def DoReceive(self, aManager, aData):
         self.Cnt += 1
-        Alias = aData.get('alias')
-        return aManager.SecClass.GetAliasVar([], 'Value')
-
-        aData = [self.Cnt, 'Hello', Value, aData]
-        return aData
+        Func = self.PathProc.get(aData['path'])
+        Result = Func(aManager, aData)
+        return Result
 
 
 class TWeb():
     def __init__(self, aParent):
         self.Parent = aParent
         self.Layout = '/layout.tpl'
-
-        self.Serialize = TSerialize()
-        self.Serialize.AddModule('Api')
 
     def ProcessThreadQueue(self, aData):
         ThreadPipe = self.Parent.Parent.ThreadPipe
@@ -109,13 +131,6 @@ class TWeb():
         self.Parent.AddData(Data)
         print(Data)
 
-    def UrlGetVersion(self, aParam):
-        Arr = Misc.Version()
-        Arr.update(self.Manager.Info('Total'))
-        Data  = HttpProc.HtmlTable(['Name', 'Value'], Arr.items())
-        Param = {'cTitle': 'Version', 'cBody': Data}
-        self.HtmlPattern(self.Layout, Param)
-
     def UrlGetProfile(self, aParam):
         Arr = self.Manager.Info('Total')
         Path = '/' + Arr.get('Profile', '')
@@ -141,15 +156,15 @@ class TWeb():
         self.HtmlPattern(self.Layout, Param)
 
     def UrlGetClasses(self, aParam):
-        Arr = []
-        Items = self.Parent.Parent.Manager.SecClass.Data
-        for Item in Items:
-            Arr.append([])
+        Arr = self.ProcessThreadQueue(aParam)
+        Data  = HttpProc.HtmlTable(['Alias', 'Class', 'Descr'], Arr)
+        Param = {'cTitle': 'Aliases', 'cBody': Data}
+        self.HtmlPattern(self.Layout, Param)
 
-            Str = HttpProc.DeviceTree(Items[Item])
-            Arr.append('%s, %s' % (len(Arr) + 1, Str))
-
-        Param = {'cTitle': 'Class list', 'cBody': '<br>\r\n'.join(Arr)}
+    def UrlGetVersion(self, aParam):
+        Arr = self.ProcessThreadQueue(aParam)
+        Data  = HttpProc.HtmlTable(['Name', 'Value'], Arr.items())
+        Param = {'cTitle': 'Version', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
     def UrlDeviceSet(self, aParam):
@@ -160,9 +175,8 @@ class TConnSessionApp(TConnSessionHttp):
     def __init__(self, aParent):
         TConnSessionHttp.__init__(self, aParent)
 
-        self.Manager = None
-
         self.Web = TWeb(self)
+        self.Manager = None
         self.UrlPattern = {
             '/get/app/version':  {'func': self.Web.UrlGetVersion,  'param': []},
             '/get/app/classes':  {'func': self.Web.UrlGetClasses,  'param': []},

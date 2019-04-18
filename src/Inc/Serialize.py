@@ -49,34 +49,26 @@ class TDummyClass():
         return 'Result: ' + aMsg
 
 
-class TSerialize():
+class TSerializeObj():
     def __init__(self):
+        self.Data  = {}
+        self.Delim = '.'
+        self.LastError = ''
+
         # if TRUE some class variable must be cleared with Purge()
         self.CasheObj = False
 
-        self.Clear()
-        self.Delim     = '.'
-        self.Module    = None
-
     def Clear(self):
-        self.Data = {}
+        self.Data.clear()
         self.LastError = ''
-
-    def Purge(self, aName):
-        Result = 0
-        Data = {}
-        for Item in self.Data:
-            if (Item.startswith(aName)):
-                Result += 1
-            else:
-                Data[Item] = self.Data[Item]
-        self.Data = Data
-        return Result
 
     def AddModule(self, aName):
         Last = aName.split(self.Delim)[-1]
         __import__(aName)
         globals()[Last] = sys.modules[aName]
+
+    def AddClass(self, aObj):
+        self.AddObj(aObj.__class__.__name__, aObj)
 
     def AddObj(self, aName, aObj):
         try:
@@ -85,8 +77,12 @@ class TSerialize():
         except NameError as E:
             Log.PrintDbg(1, 'x', E.message)
 
-    def AddClass(self, aObj):
-        self.AddObj(aObj.__class__.__name__, aObj)
+    def GetProp(self, aName):
+        Obj = self.GetObj(aProp)
+        if (Obj):
+          return Obj
+        else:
+          return self.LastError
 
     def GetObj(self, aName):
         if (aName in self.Data):
@@ -126,6 +122,8 @@ class TSerialize():
             Result = None
         return Result
 
+
+class TSerialize(TSerializeObj):
     def SplitFunc(self, aFuncStr):
         # recognize string "ClassName.FuncName('Param')"
         Match = re.match("(?P<Name>[\w\.]+)\((?P<Arg>.*)\)", aFuncStr)
@@ -150,13 +148,6 @@ class TSerialize():
         else:
             Result = self.LastError
         return Result
-
-    def GetProp(self, aPropName):
-        Obj = self.GetObj(aPropName)
-        if (Obj):
-          return Obj
-        else:
-          return self.LastError
 
     @staticmethod
     def CEncodeData(aData):
