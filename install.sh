@@ -130,6 +130,9 @@ RaspiImg()
   ## --- ssh enable 
   #update-rc.d ssh enable 
   #update-rc.d ssh defaults
+
+  # LCD display driver
+  #https://github.com/goodtft/LCD-show
 }
 
 clear

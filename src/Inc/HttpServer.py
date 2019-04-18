@@ -25,6 +25,9 @@ class TConnSession():
         self.Data     = []
         self.Conn     = None
 
+    def Clear(self):
+        self.Data = []
+
     def DoReceive(self):
         Msg = Log.PrintDbg(1, 'e', 'Not implemented')
         raise NotImplementedError(Msg)
@@ -40,16 +43,13 @@ class TConnSession():
         Log.PrintDbg(3, 'i', 'Start session')
         self.Conn = aConn
         try:
-            self.Data = []
+            self.Clear()
             Data = self.Receive()
             if (Data):
                 Data = self.DoReceive(Data)
                 self.Send(Data)
         except socket.timeout:
             self.Parent.DoTimeout()
-        except Exception as E:
-            Msg = Log.PrintDbg(1, 'x', '%s' % (E.message))
-            self.Send(Msg)
 
 
 class TConnSessionHttp(TConnSession):
@@ -67,10 +67,11 @@ class TConnSessionHttp(TConnSession):
         }
         return 'HTTP/1.1 %d %s' % (aCode, Codes.get(aCode))
 
-    def DoReceive(self, aData):
+    def DoReceiveEx(self, aData):
         Header  = self.GetHeader(aData)
         Path    = Header.get('Path')
         Command = Header.get('Command')
+
         if (Command == 'GET'):
             self.DoGet(Path)
         elif (Command == 'POST'):
@@ -80,6 +81,14 @@ class TConnSessionHttp(TConnSession):
         else:
             #aData = "HTTP/1.1 404 Not Found\r\n"
             pass
+
+    def DoReceive(self, aData):
+        try:
+            self.DoReceiveEx(aData)
+        except Exception as E:
+            Msg = Log.PrintDbg(1, 'x', '%s' % (E.message))
+            self.Head(200)
+            self.AddData(Msg)
         return self.GetData()
 
     def GetData(self):
@@ -93,7 +102,6 @@ class TConnSessionHttp(TConnSession):
             self.Data.insert(aIdx, aData)
         else:
             self.Data.append(aData)
-        pass
 
     def AddHead(self, aCode):
         Data = self._Headers(aCode)
@@ -123,12 +131,13 @@ class TConnSessionHttp(TConnSession):
         return Result
 
     def Head(self, aCode, aMime = '*.html'):
-        self.AddHead(aCode)
-        self.AddMime(aMime)
-        self.AddData('Date: %s' % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime()))
-        self.AddData('Server: Simple-Python-HTTP-Server')
-        # self.AddData('Connection: close')
-        self.AddData('')
+        if (not self.Data):
+            self.AddHead(aCode)
+            self.AddMime(aMime)
+            self.AddData('Date: %s' % time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime()))
+            self.AddData('Server: Simple-Python-HTTP-Server')
+            # self.AddData('Connection: close')
+            self.AddData('')
 
     def Redirect(self, aPath):
         self.InsData('Location: %s' % aPath)

@@ -90,7 +90,7 @@ class TSecRun(TSec):
 
             # handle http thread
             if (self.ThreadPipe):
-                self.ThreadPipe.MainReceive(self)
+                self.ThreadPipe.MainReceive(self.Parent)
 
     def Run(self):
         Log.PrintDbg(2, 'i')
@@ -191,6 +191,36 @@ class TSecClass(TSec):
         self.Import = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
 
+    def _DecorGetAliasVar(aFunc):
+        def Wrapper(self, aArrAlias, aVar):
+            if (not aArrAlias):
+                aArrAlias = self.GetAliases()
+
+            Result = {}
+            for Alias in aArrAlias:
+                Class = self.GetClass(Alias)
+                if (Class):
+                    Result[Alias] = aFunc(self, Alias, aVar)
+                else:
+                    Result[Alias] = None
+            return Result
+        return Wrapper
+
+    @_DecorGetAliasVar
+    def GetAliasParam(self, aAlias, aVar):
+        Class = self.GetClass(aAlias)
+        return Class.Param.GetAttr(aVar)
+
+    @_DecorGetAliasVar
+    def GetAliasVar(self, aAlias, aVar):
+        Obj = self.GetClass(aAlias)
+        for Var in aVar.split('.'):
+            if (hasattr(Obj, Var)):
+                Obj = getattr(Obj, Var)
+            else:
+                return None
+        return Obj
+
     def SetParam(self, aAlias, aParam, aValue):
         Result = None
         Class  = self.GetClass(aAlias)
@@ -222,6 +252,9 @@ class TSecClass(TSec):
 
     def GetClass(self, aAlias):
         return self.Data.get(aAlias)
+
+    def GetAliases(self):
+        return self.Data.keys()
 
     def AddClass(self, aClass):
         # print("aAlias", aAlias, "aClass", aClass)

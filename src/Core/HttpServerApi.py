@@ -41,13 +41,15 @@ from Core           import HttpProc
 class TThreadPipeApi(TThreadPipe):
     Cnt = 0
 
+    def GetValues(self, aManager, aData):
+        pass
+
     # we are in main process with parameters
-    def DoReceive(self, aParent, aData):
+    def DoReceive(self, aManager, aData):
         self.Cnt += 1
         Alias = aData.get('alias')
-        Class = aParent.Parent.SecClass.GetClass(Alias)
-        if (Class):
-            Value = Class.Exec.apix.xValue
+        return aManager.SecClass.GetAliasVar([], 'Value')
+
         aData = [self.Cnt, 'Hello', Value, aData]
         return aData
 
@@ -60,33 +62,19 @@ class TWeb():
         self.Serialize = TSerialize()
         self.Serialize.AddModule('Api')
 
-    def UrlApi(self, aParam):
-        DataIn  = self.Serialize.EncodeFunc(aParam.get('method'), *[])
-        DataOut = self.Serialize.DecodeToStr(DataIn)
-        self.Html(DataOut)
-
-    def UrlDeviceSet(self, aParam):
-        Class = self.GetClass(aParam.get('alias'))
-        if (Class):
-            Class._Set(self, aParam.get('value'))
-
-    def UrlDeviceGet(self, aParam):
-        Class = self.GetClass(aParam.get('alias'))
-        if (Class):
-            Data = self.ProcessThreadQueue(aParam)
-
-            Param = {'cTitle': 'Device value', 'cBody': Data}
-            self.HtmlPattern('index.tpl', Param)
-
-    @property
-    def Manager(self):
-        return self.Parent.Parent.Manager
-
     def ProcessThreadQueue(self, aData):
         ThreadPipe = self.Parent.Parent.ThreadPipe
         if (ThreadPipe):
             aData = ThreadPipe.ThreadSend(aData)
         return aData
+
+    @property
+    def Manager(self):
+        return self.Parent.Parent.Manager
+
+    @property
+    def Classes(self):
+        return self.Parent.Parent.Manager.SecClass.Data
 
     def Html(self, aBody):
         Data = HttpProc.Html(aBody)
@@ -110,7 +98,8 @@ class TWeb():
             for Block in Blocks:
                 Key   = Block.split()[1]
                 Value = DBlock.Get('Block', Key).strip()
-                DReplace.AddKey(Key, Value)
+                if (Key not in aDict) :
+                    DReplace.AddKey(Key, Value)
 
             Extender = Files[0].split()[1]
             FilePath = self.Parent.GetRootPath(Extender)
@@ -120,22 +109,11 @@ class TWeb():
         self.Parent.AddData(Data)
         print(Data)
 
-    def UrlGetClasses(self, aParam):
-        Arr = []
-        Items = self.Parent.Parent.Manager.SecClass.Data
-        for Item in Items:
-            Str = HttpProc.DeviceTree(Items[Item])
-            Arr.append('%s, %s' % (len(Arr) + 1, Str))
-
-        Param = {'cTitle': 'Class list', 'cBody': '<br>\r\n'.join(Arr)}
-        self.HtmlPattern(self.Layout, Param)
-
     def UrlGetVersion(self, aParam):
         Arr = Misc.Version()
         Arr.update(self.Manager.Info('Total'))
-
-        Arr = Obj.GetTreeAsList(Arr)
-        Param = {'cTitle': 'Version', 'cBody': '<br>\r\n'.join(Arr)}
+        Data  = HttpProc.HtmlTable(['Name', 'Value'], Arr.items())
+        Param = {'cTitle': 'Version', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
     def UrlGetProfile(self, aParam):
@@ -145,9 +123,37 @@ class TWeb():
         self.Parent.Redirect(Path)
 
     def HtmlDir(self, aPath, aFullPath):
-        Data  = HttpProc.HtmlDir(aPath, aFullPath)
+        Arr  = HttpProc.HtmlDir(aPath, aFullPath)
+        Data  = HttpProc.HtmlTable(['Name', 'Size', 'Date'], Arr)
         Param = {'cTitle': 'HtmlDir', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
+
+    def UrlDeviceGet(self, aParam):
+        Arr = self.ProcessThreadQueue(aParam)
+        Data  = HttpProc.HtmlTable(['Alias', 'Value'], Arr.items())
+        Param = {'cTitle': 'Device value', 'cBody': Data}
+        self.HtmlPattern(self.Layout, Param)
+
+    def UrlDevicesGet(self, aParam):
+        Arr = self.ProcessThreadQueue(aParam)
+        Data  = HttpProc.HtmlTable(['Alias', 'Value'], Arr.items())
+        Param = {'cTitle': 'Device value', 'cBody': Data}
+        self.HtmlPattern(self.Layout, Param)
+
+    def UrlGetClasses(self, aParam):
+        Arr = []
+        Items = self.Parent.Parent.Manager.SecClass.Data
+        for Item in Items:
+            Arr.append([])
+
+            Str = HttpProc.DeviceTree(Items[Item])
+            Arr.append('%s, %s' % (len(Arr) + 1, Str))
+
+        Param = {'cTitle': 'Class list', 'cBody': '<br>\r\n'.join(Arr)}
+        self.HtmlPattern(self.Layout, Param)
+
+    def UrlDeviceSet(self, aParam):
+        pass
 
 
 class TConnSessionApp(TConnSessionHttp):
@@ -155,42 +161,18 @@ class TConnSessionApp(TConnSessionHttp):
         TConnSessionHttp.__init__(self, aParent)
 
         self.Manager = None
-        self.Dict    = TDictReplace()
 
         self.Web = TWeb(self)
         self.UrlPattern = {
-            '/api':              {'func': self.Web.UrlApi,         'param': ['method']},
             '/get/app/version':  {'func': self.Web.UrlGetVersion,  'param': []},
             '/get/app/classes':  {'func': self.Web.UrlGetClasses,  'param': []},
             '/get/app/profile':  {'func': self.Web.UrlGetProfile,  'param': []},
+            '/get/dev/values':   {'func': self.Web.UrlDevicesGet,  'param': []},
             '/get/dev/value':    {'func': self.Web.UrlDeviceGet,   'param': ['alias']},
             '/set/dev/value':    {'func': self.Web.UrlDeviceSet,   'param': ['alias', 'value']}
         }
 
-    def DoPost(self, aUrl, aData):
-        print(aUrl, aData)
-
-    def Check(self, aPath, aQuery):
-        Pattern = self.UrlPattern.get(aPath)
-        if (not Pattern):
-            return 'Path not found: %s' % aPath
-
-        Params = Pattern.get('param')
-        for Query in aQuery:
-            if (Query not in Params):
-                return 'Unknown key: %s' % Query
-
-            if (not aQuery.get(Query)):
-                return 'Empty key: %s' % Query
-
-        for Param in Params:
-            if (not aQuery.get(Param)):
-                return 'Missed key: %s' % Param
-        return ''
-
     def DoGet(self, aUrl):
-        self.Dict.Clear()
-
         Url   = urlparse.urlparse(aUrl)
         Path  = Url.path
         Query = dict(urlparse.parse_qsl(Url.query, 1))
@@ -217,13 +199,35 @@ class TConnSessionApp(TConnSessionHttp):
             if (CheckErr):
                 Log.PrintDbg(1, 'e', CheckErr)
                 self.Head(404)
-                self.Dict.AddKey('CheckErr', CheckErr)
-                self.Web.HtmlPattern('/page_404.tpl')
+                self.Web.HtmlPattern('/page_404.tpl', {'cErr': CheckErr})
             else:
                 self.Head(200)
-                Func = self.UrlPattern.get(Path).get('func')
+                Pattern = self.UrlPattern.get(Path)
+                Func    = Pattern.get('func')
+                Query['path'] = Path
                 Func(Query)
         pass
+
+    def DoPost(self, aUrl, aData):
+        print(aUrl, aData)
+
+    def Check(self, aPath, aQuery):
+        Pattern = self.UrlPattern.get(aPath)
+        if (not Pattern):
+            return 'Path not found: %s' % aPath
+
+        Params = Pattern.get('param')
+        for Query in aQuery:
+            if (Query not in Params):
+                return 'Unknown key: %s' % Query
+
+            if (not aQuery.get(Query)):
+                return 'Empty key: %s' % Query
+
+        for Param in Params:
+            if (not aQuery.get(Param)):
+                return 'Missed key: %s' % Param
+        return ''
 
 
 class THttpServerApi(TSockServer):
@@ -231,8 +235,9 @@ class THttpServerApi(TSockServer):
         TSockServer.__init__(self, aPort)
 
         # self.Timeout = 1
-        self.Manager  = None
-        self.Conn     = TConnSessionApp(self)
+        self.Manager    = None
+        self.ThreadPipe = None
+        self.Conn       = TConnSessionApp(self)
 
     def DoAccept(self, aConn, aAddr):
         self.Conn.Handle(aConn)

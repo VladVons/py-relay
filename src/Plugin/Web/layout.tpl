@@ -6,7 +6,7 @@
   </head>
 
   <body>
-    <img src="/image/OsterIoT.png" width="100" height="100" alt="Oster IoT">
+    <a href="/"><img src="/image/OsterIoT.png" width="100" height="100" alt="Oster IoT"></a>
     <div id="content">
         $<cBody>
     </div>

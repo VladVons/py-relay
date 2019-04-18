@@ -1,9 +1,6 @@
 $<File /layout.tpl>
 
 $<Block cBody>
-Page not found 
+Page not found<br> 
+$<cErr>
 $</Block cBody>
-
-$<Block cTitle>
-Page not found 1
-$</Block cTitle>

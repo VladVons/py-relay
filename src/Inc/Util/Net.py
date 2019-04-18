@@ -24,7 +24,7 @@ from Inc.Util import FS
 
 
 def SockReceive(aConn, aBufSize):
-    Result = ""
+    Result = ''
     while True:
         Data = aConn.recv(aBufSize)
         if (Data):

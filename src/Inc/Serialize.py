@@ -7,10 +7,24 @@ License:     GNU, see LICENSE for more details
 Description:
 encode adn decode serilization with JSON
 
+class TClass1():
+    def Test1(self):
+        print('Test1')
+        return 'MyTest1'
+
 Serialize = TSerialize()
-Serialize.AddModule('Api') # add Apy.py
+
+Class1 = TClass1()
+Serialize.AddClass(Class1)
+Data  = Serialize.CallFunc('TClass1.Test1')
+print(Data)
+
+Serialize.AddModule('Api.Misc')
+DataIn  = Serialize.CallFunc('Misc.Version')
+print(DataIn)
 
 Args    = ['Hello']
+DataIn  = Serialize.CallFunc('DummyMethod')
 DataIn  = Serialize.EncodeFunc('DummyMethod', *Args)
 DataOut = Serialize.Decode(DataIn)
 print(DataOut)
@@ -18,17 +32,20 @@ print(DataOut)
 
 import json
 import re
+import sys
+import importlib
 #
 from Inc.Log import Log
 
+
 # just for test 
 def DummyMethod(aMsg = 'This is DummyMethod'):
-    print(aMsg)
+    print('DummyMethod()', aMsg)
     return 'Result: ' + aMsg
 
-class DummyClass():
+class TDummyClass():
     def DummyMethod(self, aMsg = 'This is class DummyClass.DummyMethod'):
-        print(aMsg)
+        print('TDummyClass.DummyMethod()', aMsg)
         return 'Result: ' + aMsg
 
 
@@ -57,65 +74,42 @@ class TSerialize():
         return Result
 
     def AddModule(self, aName):
-        self.Module = __import__(aName)
+        Last = aName.split(self.Delim)[-1]
+        __import__(aName)
+        globals()[Last] = sys.modules[aName]
 
     def AddObj(self, aName, aObj):
         try:
-            #globals()[aName]()
             aObj
             self.Data[aName] = aObj
         except NameError as E:
             Log.PrintDbg(1, 'x', E.message)
 
-    def FindObj(self, aModule, aName, aGlobal = True):
-        try:
-            # search in module scope
-            Result = getattr(aModule, aName)
-        except:
-            Result = None
-
-            if (aGlobal):
-                try:
-                    # search in global scope
-                    Result = globals()[aName]
-                except:
-                    Result = None
-        return Result
+    def AddClass(self, aObj):
+        self.AddObj(aObj.__class__.__name__, aObj)
 
     def GetObj(self, aName):
-        #print("GetObj", aName)
         if (aName in self.Data):
             return self.Data[aName]
 
         self.LastError = ''
-        Result = None
         Path   = ''
+        Result = None
         Items  = aName.strip().split(self.Delim)
-        Len    = len(Items)
-        for i in range(Len):
-            Item = Items[i]
-            Char = ("" if (Path == "") else self.Delim)
+        for Item in Items:
+            Char = ('' if (Path == '') else self.Delim)
             Path += Char + Item
-
             if (Path in self.Data):
                 Result = self.Data[Path]
             else:
-                # stand alone Method
-                if (Len == 1):
-                    Result = self.FindObj(self.Module, Item)
+                if (hasattr(Result, Item)):
+                    Result = getattr(Result, Item)
+                    self.Data[Path] = Result
                 else:
-                    if (i == 0):
-                        # create class instance
-                        Result = self.FindObj(self.Module, Item)()
-
-                        # Class constructor alwys in cache
+                    Result = globals().get(Item)
+                    if (Result):
                         self.Data[Path] = Result
-                    else:
-                        # class Method/Property
-                        Result = self.FindObj(Result, Item, False)
 
-                        if (self.CasheObj):
-                            self.Data[Path] = Result
                 if (not Result):
                     self.LastError = Log.PrintDbg(1, 'e', 'No object %s found in %s ' % (Item, Path))
                     break
@@ -213,10 +207,10 @@ class TSerialize():
         return Result
 
     def DecodeFuncName(self, aData):
-        Result = ""
+        Result = ''
 
         Node = json.loads(aData)
-        if (Node["Type"] == "Func"):
+        if (Node['Type'] == 'Func'):
             Result = Node.get("Name")
 
         return Result
