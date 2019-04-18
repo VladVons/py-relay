@@ -2,12 +2,16 @@ _init__.py
 DeviceHive.py
 Grafana.py
 Group.py
+File.py
 I2C_Relay_8574.py
+Random.py
 SensorProvider.py
 Sleep.py
 Solar.py
+Stop.py
 Telegram.py
 Timer.py
 UpsApc.py
+UpsNut.py
 Uptime.py
 WriteLog.py

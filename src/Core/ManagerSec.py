@@ -88,7 +88,7 @@ class TSecRun(TSec):
             if (self.OnPost):
                 self.OnPost(self)
 
-            # handle http thread
+            # check if something comes from thread
             if (self.ThreadPipe):
                 self.ThreadPipe.MainReceive(self.Parent)
 

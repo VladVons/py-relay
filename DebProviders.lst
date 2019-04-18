@@ -1,9 +1,12 @@
 __init__.py
 DeviceHive.py
+File.py
 I2C.py
 I2C_Relay_8574.py
 Provider.py
+Random.py
 Solar.py
 Telegram.py
 Timer.py
 UpsApc.py
+UpsNut.py

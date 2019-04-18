@@ -11,13 +11,6 @@ def DeviceTree(aObj, aStr = ''):
     aStr += 'Alias:%s, Class:%s, Descr:%s' % (aObj.Alias, Obj.GetName(aObj), aObj.Descr)
     return aStr
 
-def DeviceTree(aObj, aStr = ''):
-    if (aObj.Parent):
-        aStr += DeviceTree(aObj.Parent) + ' -> '
-    aStr += 'Alias:%s, Class:%s, Descr:%s' % (aObj.Alias, Obj.GetName(aObj), aObj.Descr)
-    return aStr
-
-
 def Html(aBody):
     doc, tag, text = Doc().tagtext()
     doc.asis('<!DOCTYPE html>')

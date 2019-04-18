@@ -129,7 +129,6 @@ class TWeb():
 
         Data = DReplace.Parse(Data)
         self.Parent.AddData(Data)
-        print(Data)
 
     def UrlGetProfile(self, aParam):
         Arr = self.Manager.Info('Total')
