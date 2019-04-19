@@ -11,15 +11,6 @@ def DeviceTree(aObj, aStr = ''):
     aStr += 'Alias:%s, Class:%s, Descr:%s' % (aObj.Alias, Obj.GetName(aObj), aObj.Descr)
     return aStr
 
-def Html(aBody):
-    doc, tag, text = Doc().tagtext()
-    doc.asis('<!DOCTYPE html>')
-    with tag('html'):
-        with tag('body'):
-            # text(aBody)
-            doc.asis(aBody)
-    return doc.getvalue()
-
 
 def HtmlDir(aPath, aFullPath):
     Root, Folders, Files = next(os.walk(aFullPath))

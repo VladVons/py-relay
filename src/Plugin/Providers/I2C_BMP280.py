@@ -19,7 +19,7 @@ try:
 except Exception as E:
     print(__file__, E, 'pip install Adafruit-BMP')
 #
-from .Provider import TProvider
+from ._Common import TProvider
 
 
 class TProviderI2C_BMP280(TProvider):

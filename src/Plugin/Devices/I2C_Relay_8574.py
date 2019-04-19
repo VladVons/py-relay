@@ -9,8 +9,8 @@ Description:
 """
 
 from Inc.Log          import Log
-from Inc.Param            import TDictParam
-from Core.Device          import TRelay
+from Inc.Param        import TDictParam
+from Plugin.Devices._Common import TRelay
 from Plugin.Providers.I2C_Relay_8574  import TProviderI2C_Relay_8574
 
 

@@ -16,7 +16,7 @@ Value   = Obj.Set()
 import subprocess
 #
 from  Inc.Util import Str
-from .Provider import TProvider
+from ._Common  import TProvider
 
 
 class TProviderShellExec(TProvider):

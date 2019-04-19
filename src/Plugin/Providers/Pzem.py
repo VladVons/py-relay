@@ -24,7 +24,7 @@ if (sensor.IsReady()):
 """
 
 from Inc.Log   import Log
-from .Provider import TProvider
+from ._Common  import TProvider
 from .Serial   import TSerial
 
 

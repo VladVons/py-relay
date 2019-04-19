@@ -27,7 +27,7 @@ except Exception as E:
 
 
 from Inc.Log        import Log
-from Inc.Util       import FS
+from Inc.Util       import FS, Arr, Obj
 from Inc.Param      import TDictReplace, TDictBlock
 from Inc.HttpServer import TSockServer, TConnSessionHttp
 from Inc.Thread     import CreateThread, TThreadPipe
@@ -41,13 +41,13 @@ class TThreadPipeApi(TThreadPipe):
 
         self.Cnt = 0
         self.PathProc = {
-            '/get/app/version': self.GetVersion,
-            '/get/app/classes': self.GetClasses,
-            '/get/dev/values':  self.GetValues,
-            '/get/dev/value':   self.GetValue,
-            '/set/dev/value':   self.GetVersion
+            '/get/app/version':  self.GetVersion,
+            '/get/app/classes':  self.GetClasses,
+            '/get/dev/values':   self.GetValues,
+            '/get/dev/values-f': self.GetValuesF,
+            '/get/dev/value':    self.GetValue,
+            '/set/dev/value':    self.SetValue
         }
-
 
     def GetVersion(self, aManager, aData):
         Result = Misc.Version()
@@ -61,12 +61,26 @@ class TThreadPipeApi(TThreadPipe):
     def GetValues(self, aManager, aData):
         return aManager.SecClass.GetAliasVar([], 'Value')
 
+    def GetValuesF(self, aManager, aData):
+        Alias = aData.get('alias')
+        Aliases = aManager.SecClass.GetAliases()
+        Aliases = Arr.ListFilter(Aliases, Alias)
+        return aManager.SecClass.GetAliasVar(Aliases, 'Value')
+
     def GetClasses(self, aManager, aData):
         Result = []
         for Item in aManager.SecClass.GetAliases():
             Class = aManager.SecClass.GetClass(Item)
             Result.append([Class.Alias, Class.__class__.__name__, Class.Descr])
         return Result
+
+    def SetValue(self, aManager, aData):
+        Alias = aData.get('alias')
+        Value = aData.get('value')
+        Class = aManager.SecClass.GetClass(Alias)
+        Path  = Obj.GetClassPath(Class)
+        if ('TControl' in Path):
+            return aManager.SecClass.SetAliasVar([Alias], 'Value', Value)
 
     # we are in main process with parameters
     def DoReceive(self, aManager, aData):
@@ -81,26 +95,15 @@ class TWeb():
         self.Parent = aParent
         self.Layout = '/layout.tpl'
 
+    @property
+    def Manager(self):
+        return self.Parent.Parent.Manager
+
     def ProcessThreadQueue(self, aData):
         ThreadPipe = self.Parent.Parent.ThreadPipe
         if (ThreadPipe):
             aData = ThreadPipe.ThreadSend(aData)
         return aData
-
-    @property
-    def Manager(self):
-        return self.Parent.Parent.Manager
-
-    @property
-    def Classes(self):
-        return self.Parent.Parent.Manager.SecClass.Data
-
-    def Html(self, aBody):
-        Data = HttpProc.Html(aBody)
-        self.Parent.AddData(Data)
-
-    def HtmlAsArr(self, aArr):
-        self.Html('<br>\r\n'.join(aArr))
 
     def HtmlPattern(self, aFile, aDict = {}):
         DReplace = TDictReplace()
@@ -127,50 +130,44 @@ class TWeb():
         Data = DReplace.Parse(Data)
         self.Parent.AddData(Data)
 
-    def UrlGetProfile(self, aParam):
-        Arr = self.Manager.Info('Total')
-        Path = '/' + Arr.get('Profile', '')
+    def QueueTable(self, aParam, aTitle, aColumns):
+        Data = self.ProcessThreadQueue(aParam)
+        if (type(Data) is dict):
+            Data  = Data.items()
+        Data.sort()
+        Data  = HttpProc.HtmlTable(aColumns, Data)
+        Param = {'cTitle': aTitle, 'cBody': Data}
+        self.HtmlPattern(self.Layout, Param)
+
+    def UrlGetDevValue(self, aParam):
+        self.QueueTable(aParam, 'Device value', ['Alias', 'Value'])
+
+    def UrlGetDevValues(self, aParam):
+        self.QueueTable(aParam, 'Devices value', ['Alias', 'Value'])
+
+    def UrlGetDevValuesF(self, aParam):
+        self.QueueTable(aParam, 'Devices value', ['Alias', 'Value'])
+
+    def UrlGetAppClasses(self, aParam):
+        self.QueueTable(aParam, 'Aliases', ['Alias', 'Class', 'Descr'])
+
+    def UrlGetAppVersion(self, aParam):
+        self.QueueTable(aParam, 'Version', ['Name', 'Value'])
+
+    def UrlGetAppProfile(self, aParam):
+        Data = self.Manager.Info('Total')
+        Path = '/' + Data.get('Profile', '')
         Path = Path.replace('/Plugin', '')
         self.Parent.Redirect(Path)
 
     def HtmlDir(self, aPath, aFullPath):
-        Arr   = HttpProc.HtmlDir(aPath, aFullPath)
-        Data  = HttpProc.HtmlTable(['Name', 'Size', 'Date'], Arr)
+        Data  = HttpProc.HtmlDir(aPath, aFullPath)
+        Data  = HttpProc.HtmlTable(['Name', 'Size', 'Date'], Data)
         Param = {'cTitle': 'HtmlDir', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
-    def UrlDeviceGet(self, aParam):
-        Dict = self.ProcessThreadQueue(aParam)
-        Arr  = Dict.items()
-        Arr.sort()
-        Data  = HttpProc.HtmlTable(['Alias', 'Value'], Arr)
-        Param = {'cTitle': 'Device value', 'cBody': Data}
-        self.HtmlPattern(self.Layout, Param)
-
-    def UrlDevicesGet(self, aParam):
-        Dict = self.ProcessThreadQueue(aParam)
-        Arr  = Dict.items()
-        Arr.sort()
-        Data  = HttpProc.HtmlTable(['Alias', 'Value'], Arr)
-        Param = {'cTitle': 'Device value', 'cBody': Data}
-        self.HtmlPattern(self.Layout, Param)
-
-    def UrlGetClasses(self, aParam):
-        Arr = self.ProcessThreadQueue(aParam)
-        Arr.sort()
-        Data  = HttpProc.HtmlTable(['Alias', 'Class', 'Descr'], Arr)
-        Param = {'cTitle': 'Aliases', 'cBody': Data}
-        self.HtmlPattern(self.Layout, Param)
-
-    def UrlGetVersion(self, aParam):
-        Dict = self.ProcessThreadQueue(aParam)
-        Arr = Dict.items()
-        Arr.sort()
-        Data  = HttpProc.HtmlTable(['Name', 'Value'], Arr)
-        Param = {'cTitle': 'Version', 'cBody': Data}
-        self.HtmlPattern(self.Layout, Param)
-
-    def UrlDeviceSet(self, aParam):
+    def UrlSetDevValue(self, aParam):
+        Data = self.ProcessThreadQueue(aParam)
         pass
 
 
@@ -181,12 +178,13 @@ class TConnSessionApp(TConnSessionHttp):
         self.Web = TWeb(self)
         self.Manager = None
         self.UrlPattern = {
-            '/get/app/version':  {'func': self.Web.UrlGetVersion,  'param': []},
-            '/get/app/classes':  {'func': self.Web.UrlGetClasses,  'param': []},
-            '/get/app/profile':  {'func': self.Web.UrlGetProfile,  'param': []},
-            '/get/dev/values':   {'func': self.Web.UrlDevicesGet,  'param': []},
-            '/get/dev/value':    {'func': self.Web.UrlDeviceGet,   'param': ['alias']},
-            '/set/dev/value':    {'func': self.Web.UrlDeviceSet,   'param': ['alias', 'value']}
+            '/get/app/version':  {'func': self.Web.UrlGetAppVersion,  'param': []},
+            '/get/app/classes':  {'func': self.Web.UrlGetAppClasses,  'param': []},
+            '/get/app/profile':  {'func': self.Web.UrlGetAppProfile,  'param': []},
+            '/get/dev/values':   {'func': self.Web.UrlGetDevValues,   'param': []},
+            '/get/dev/values-f': {'func': self.Web.UrlGetDevValuesF,  'param': ['alias']},
+            '/get/dev/value':    {'func': self.Web.UrlGetDevValue,    'param': ['alias']},
+            '/set/dev/value':    {'func': self.Web.UrlSetDevValue,    'param': ['alias', 'value']}
         }
 
     def DoGet(self, aUrl):

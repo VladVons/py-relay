@@ -9,7 +9,7 @@ Description:
 Example:
 """
 
-from .Provider import TProviderHTTP
+from ._Common import TProviderHTTP
 
 
 class TProviderHTTP_MyIP(TProviderHTTP):

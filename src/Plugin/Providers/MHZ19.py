@@ -15,8 +15,8 @@ usermod -a -G dialout pi
 """
 
 from Inc.Log   import Log
-from .Provider import TProvider
 from .Serial   import TSerial
+from ._Common  import TProvider
 
 
 class TMHZ19(TSerial):

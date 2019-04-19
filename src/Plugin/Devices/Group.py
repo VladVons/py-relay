@@ -8,7 +8,7 @@ Description:
 
 
 from Inc.Log     import Log
-from Core.Device import TRelay, TSensor, TDevice
+from Core.Device import TSensor, TDevice
 
 
 PkgConf = {

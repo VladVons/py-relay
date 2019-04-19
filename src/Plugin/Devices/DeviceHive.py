@@ -6,13 +6,11 @@ License:     GNU, see LICENSE for more details
 Description:
 """
 
-from Inc.Log          import Log
-from Inc.Param        import TDictParam
-from Inc.Util         import Net
+from Inc.Log     import Log
+from Inc.Param   import TDictParam
+from Inc.Util    import Net
+from Plugin.Devices._Common import TRelay
 
-from Core.Device import (
-    TRelay
-)
 
 from Core.DeviceThread import (
     TSensorThreadRead, 

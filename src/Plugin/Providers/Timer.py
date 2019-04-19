@@ -206,7 +206,7 @@ class TTimeRangeDayFadeWave(TTimeRangeDay):
 
 
 #---
-from .Provider import TProvider
+from ._Common import TProvider
 
 class TProviderTimeRangeBase(TProvider):
     def __init__(self, aRanges):

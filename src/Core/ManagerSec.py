@@ -10,7 +10,7 @@ Description:
 import sys
 #
 from Inc.Log        import Log
-from Inc.Util       import Arr
+from Inc.Util       import Arr, Obj
 
 # for nuitka compiler
 # from Plugin.Devices import *
@@ -191,43 +191,30 @@ class TSecClass(TSec):
         self.Import = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
 
-    def _DecorGetAliasVar(aFunc):
-        def Wrapper(self, aArrAlias, aVar):
+    def _DecorAliasesVar(aFunc):
+        def Wrapper(self, aArrAlias, aVar, aValue = None):
             if (not aArrAlias):
                 aArrAlias = self.GetAliases()
 
             Result = {}
-            for Alias in aArrAlias:
+            for Idx, Alias in enumerate(aArrAlias):
                 Class = self.GetClass(Alias)
                 if (Class):
-                    Result[Alias] = aFunc(self, Alias, aVar)
+                    Result[Alias] = aFunc(self, Alias, aVar, aValue)
                 else:
                     Result[Alias] = None
             return Result
         return Wrapper
 
-    @_DecorGetAliasVar
-    def GetAliasParam(self, aAlias, aVar):
+    @_DecorAliasesVar
+    def GetAliasVar(self, aAlias, aVar, aValueNotUsed):
         Class = self.GetClass(aAlias)
-        return Class.Param.GetAttr(aVar)
+        return Obj.GetAttr(Class, aVar)
 
-    @_DecorGetAliasVar
-    def GetAliasVar(self, aAlias, aVar):
-        Obj = self.GetClass(aAlias)
-        for Var in aVar.split('.'):
-            if (hasattr(Obj, Var)):
-                Obj = getattr(Obj, Var)
-            else:
-                return None
-        return Obj
-
-    def SetParam(self, aAlias, aParam, aValue):
-        Result = None
-        Class  = self.GetClass(aAlias)
-        if (Class and Class.Param.HasAttr(aParam)):
-            Class.Param.SetAttr(aParam, aValue)
-            Result = Class.Param.GetAttr(aParam)
-        return Result
+    @_DecorAliasesVar
+    def SetAliasVar(self, aAlias, aVar, aValue):
+        Class = self.GetClass(aAlias)
+        return Obj.SetAttr(Class, aVar, aValue)
 
     def GetUnused(self):
         Result = []

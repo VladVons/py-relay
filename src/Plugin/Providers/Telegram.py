@@ -76,7 +76,7 @@ class TTelegram():
 
 #---
 
-from .Provider import TProvider
+from ._Common import TProvider
 
 class TProviderTelegram(TProvider):
     def __init__(self, aToken, aChatIds):

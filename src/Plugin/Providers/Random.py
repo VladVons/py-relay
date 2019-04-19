@@ -16,7 +16,7 @@ Value   = Obj.Get()
 
 import random
 #
-from .Provider import TProvider
+from ._Common import TProvider
 
 
 class TProviderRandom(TProvider):

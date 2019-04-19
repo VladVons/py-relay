@@ -8,7 +8,7 @@ Description:
 
 from Inc.Log          import Log
 from Inc.SocketClient import TSockClientTCPJson, TSockClientUDPJson
-from .Provider        import TProvider
+from ._Common         import TProvider
 
 
 class TSerialize():

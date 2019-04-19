@@ -34,13 +34,12 @@ def FindNodeDef(aNode, aPath, aDef):
     else:
         return Node
 
-def Filter(aNode, aRegEx):
+def ListFilter(aNode, aRegEx):
     Result = []
     if (aNode):
         for Item in aNode:
             if (Item != '' and re.match(aRegEx, Item)):
                 Result.append(Item)
-
     return Result
 
 def Find(aList, aData):

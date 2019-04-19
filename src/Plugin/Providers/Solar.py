@@ -69,7 +69,7 @@ class TMoon(TSolar):
 
 
 #---
-from .Provider import TProvider
+from ._Common import TProvider
 
 
 class TProviderSolar(TProvider):

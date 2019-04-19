@@ -8,7 +8,7 @@ Description:
 
 from Inc.Param             import TDictParam
 from Core.DeviceThread     import TSensorThreadRead
-from Core.Device           import TSensor, TControl
+from Core.Device           import TSensor
 
 from Plugin.Providers.File import (
     TProviderFile_CPUTemp, 

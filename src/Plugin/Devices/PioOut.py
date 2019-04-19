@@ -6,9 +6,9 @@ License:     GNU, see LICENSE for more details
 Description:
 """
 
-from Inc.Param        import TDictParam
-from Core.Device      import TRelay
+from Inc.Param import TDictParam
 from Plugin.Providers.PioOut import TProviderPioOut
+from Plugin.Devices._Common import TRelay
 
 
 class TRelayPioOut(TRelay):

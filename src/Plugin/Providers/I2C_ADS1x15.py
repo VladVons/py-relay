@@ -21,7 +21,7 @@ try:
 except Exception as E:
     print(__file__, E, 'pip install wheel', 'pip install Adafruit-ADS1x15')
 #
-from .Provider      import TProvider
+from ._Common      import TProvider
 
 
 class TProviderI2C_ADS1x15(TProvider):

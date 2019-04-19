@@ -277,15 +277,10 @@ class TSensor(TDevice):
         return Result
 
 
-class TRelay(TDevice):
+class TControl(TDevice):
     def __init__(self, aParent):
-        # super().__init__(aParent) # __need 3.5
         TDevice.__init__(self, aParent)
-
-        Pattern = {'State': False, 'Invert': False}
-        self.Param.AddDefPattern(Pattern)
-
-        self.Range.Set(None, [0, 1])
+        self.Range.SetMirror(None, 999999)
 
     def DoPost(self, aCaller, aValue, aData):
         self._Set(aCaller, aValue)
@@ -294,17 +289,10 @@ class TRelay(TDevice):
 
     def _Set(self, aCaller, aValue):
         if (self.Provider):
-            self.Provider.Set(aCaller, int(aValue) ^ self.Param.Invert)
+            self.Provider.Set(aCaller, aValue)
         else:
             Msg = Log.PrintDbg(1, 'x', 'Alias %s. No `Provider` assigned' % (self.Alias))
             raise NotImplementedError(Msg)
 
     def _Get(self):
-        Value = int(self.Provider.Get())
-        return Value ^ self.Param.Invert
-
-
-class TControl(TRelay):
-    def __init__(self, aParent):
-        TRelay.__init__(self, aParent)
-        self.Range.SetMirror(None, 999999)
+        return self.Provider.Get()

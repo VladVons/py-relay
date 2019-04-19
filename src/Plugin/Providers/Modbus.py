@@ -13,7 +13,7 @@ except Exception as E:
     print(__file__, E, 'pip install minimalmodbus')
 #
 from Inc.Log   import Log
-from .Provider import TProvider
+from ._Common  import TProvider
 
 
 class TProviderModbusRTU(TProvider):

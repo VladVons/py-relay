@@ -307,4 +307,4 @@ class TDictBlock():
         return self.Data.get(aSection + ' ' + aBlock)
 
     def GetKeys(self, aFilter = ''):
-        return Arr.Filter(self.Data, aFilter)
+        return Arr.ListFilter(self.Data, aFilter)

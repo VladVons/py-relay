@@ -24,7 +24,7 @@ try:
 except Exception as E:
     print(__file__, E, 'pip install Adafruit_Python_DHT')
 #
-from .Provider import TProvider
+from ._Common import TProvider
 
 
 class TProviderDHT(TProvider):

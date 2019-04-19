@@ -14,7 +14,7 @@ try:
 except Exception as E:
     print(__file__, E, 'apt-get install python-smbus')
 #
-from .Provider import TProvider
+from ._Common import TProvider
 
 
 class TProviderI2C(TProvider):

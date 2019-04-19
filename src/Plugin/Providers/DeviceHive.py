@@ -16,7 +16,7 @@ import time
 import base64
 
 #
-from .Provider import TProvider
+from ._Common  import TProvider
 from Inc.Log   import Log
 from Inc.Util  import Net
 

@@ -22,7 +22,7 @@ except Exception as E:
 
 
 from Inc.Log   import Log
-from .Provider import TProvider
+from ._Common  import TProvider
 
 
 class TProviderUpsNut(TProvider):

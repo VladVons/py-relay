@@ -16,7 +16,7 @@ except Exception as E:
 
 #from Inc.Log   import Log
 from Inc.Util  import Str
-from .Provider import TProvider
+from ._Common import TProvider
 
 
 class TProviderUpsApc(TProvider):

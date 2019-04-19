@@ -2,43 +2,13 @@
     "Class":[
         {
             "Class":"TRelayI2C_Relay_8574",
-            "Alias":"IRelay_1",
+            "Alias":"IRelay_A1",
             "Parameter":{"Bus":1, "Address":37, "Command": 0}
         },
         {
             "Class":"TRelayI2C_Relay_8574",
-            "Alias":"IRelay_2",
+            "Alias":"IRelay_A2",
             "Parameter":{"Bus":1, "Address":37, "Command": 1}
-        },
-        {
-            "Class":"TRelayI2C_Relay_8574",
-            "Alias":"IRelay_3",
-            "Parameter":{"Bus":1, "Address":37, "Command": 2}
-        },
-        {
-            "Class":"TRelayI2C_Relay_8574",
-            "Alias":"IRelay_4",
-            "Parameter":{"Bus":1, "Address":37, "Command": 3}
-        },
-        {
-            "Class":"TRelayI2C_Relay_8574",
-            "Alias":"IRelay_5",
-            "Parameter":{"Bus":1, "Address":37, "Command": 4}
-        },
-        {
-            "Class":"TRelayI2C_Relay_8574",
-            "Alias":"IRelay_6",
-            "Parameter":{"Bus":1, "Address":37, "Command": 5}
-        },
-        {
-            "Class":"TRelayI2C_Relay_8574",
-            "Alias":"IRelay_7",
-            "Parameter":{"Bus":1, "Address":37, "Command": 6}
-        },
-        {
-            "Class":"TRelayI2C_Relay_8574",
-            "Alias":"IRelay_8",
-            "Parameter":{"Bus":1, "Address":37, "Command": 7}
         }
     ]
 }

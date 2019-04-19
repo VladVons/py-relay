@@ -32,6 +32,25 @@ def GetClassInstancePath(aInstance, aPath = '', aDepth = 99):
 def GetClassPath(aClass):
     return GetClassInstancePath(aClass.__class__)
 
+def GetAttr(aObj, aVarPath, aDelim = '.'):
+    for VarName in aVarPath.split(aDelim):
+        if (hasattr(aObj, VarName)):
+            aObj = getattr(aObj, VarName)
+        else:
+            return None
+        return aObj
+
+def SetAttr(aObj, aVarPath, aValue, aDelim = '.'):
+    for VarName in aVarPath.split(aDelim):
+        if (hasattr(aObj, VarName)):
+            LastObj = aObj
+            aObj = getattr(aObj, VarName)
+        else:
+            return None
+    setattr(LastObj, VarName, aValue)
+    return aObj
+
+
 def GetAttr(aClass, aName):
     try:
         Result = getattr(aClass, aName)

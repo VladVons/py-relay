@@ -19,7 +19,7 @@ import json
 import datetime
 #
 from Inc.Util import Net
-from .Provider import TProvider
+from ._Common import TProvider
 
 
 class TProviderWeatherToday(TProvider):

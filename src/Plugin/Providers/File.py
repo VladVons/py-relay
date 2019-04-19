@@ -10,7 +10,7 @@ import os
 #
 from Inc.Log   import Log
 from Inc.Util  import FS, Str
-from .Provider import TProvider
+from ._Common  import TProvider
 
 
 class TProviderFile(TProvider):

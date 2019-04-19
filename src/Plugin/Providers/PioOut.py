@@ -18,7 +18,7 @@ try:
 except Exception as E:
     print(__file__, E)
 #
-from .Provider import TProvider
+from ._Common import TProvider
 
 
 class TProviderPio(TProvider):
