@@ -23,7 +23,7 @@
             {"Enable":false, "ClassRef":"DH1_Sensor_Humid"},
             {"Enable":false, "ClassRef":"SensorTRD_Humid"},
             {"Enable":false, "ClassRef":"SensorTRDF_2"},
-            {"Enable":true,  "ClassRef":"IRelay_A1"}
+            {"Enable":false, "ClassRef":"IRelay_A1"}
         ],
         "Finish":[
             {"Enable":false,   "ClassRef":"GroupOnFinish"}

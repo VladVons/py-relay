@@ -11,7 +11,7 @@ class TRelay(TControl):
         self.Range.Set(None, [0, 1])
 
     def _Set(self, aCaller, aValue):
-        Value = bool(aValue) ^ self.Param.Invert
+        Value = aValue ^ self.Param.Invert
         TControl._Set(self, aCaller, Value)
 
     def _Get(self):

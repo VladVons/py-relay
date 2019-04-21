@@ -8,14 +8,14 @@ Description:
 
 import time
 #
-from Inc.Log        import Log
-from Inc.Param      import TDictParam, TDictCall, TRange
-from Inc.Util       import Num
-from Core.ExecParse import TExecParse
-from Inc.Import     import TDynImport
+from Inc.Log         import Log
+from Inc.Param       import TDictParam, TDictCall, TRange
+from Inc.Util        import Num
+from Core.ExecParse  import TExecParse
+from Inc.Import      import TDynImport
 
 
-class TDeviceBase(object):
+class TDeviceParse(object):
     def __init__(self, aParent):
         self.Parent     = aParent
         self.Manager    = None
@@ -119,9 +119,9 @@ class TDeviceBase(object):
         raise NotImplementedError('')
 
 
-class TDevice(TDeviceBase):
+class TDevice(TDeviceParse):
     def __init__(self, aParent):
-        TDeviceBase.__init__(self, aParent)
+        TDeviceParse.__init__(self, aParent)
 
         self.LastChange = 0
         self.Value      = 0

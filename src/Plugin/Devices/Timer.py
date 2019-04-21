@@ -49,7 +49,7 @@ class TSensorTimeRangeDayFadeWave(TSensorTimeRange):
 
 """
 has no ReadTry() ?
-class TSensorTimeRangeCycleDirect(TSensor):
+class TSensorTimeRangeCycleDirect{TSensor}:
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 

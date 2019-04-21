@@ -79,8 +79,8 @@ class TThreadPipeApi(TThreadPipe):
         Value = aData.get('value')
         Class = aManager.SecClass.GetClass(Alias)
         Path  = Obj.GetClassPath(Class)
-        if ('TControl' in Path):
-            return aManager.SecClass.SetAliasVar([Alias], 'Value', Value)
+        #if ('TControl' in Path):
+        return aManager.SecClass.SetAliasVar([Alias], 'Value', Value)
 
     # we are in main process with parameters
     def DoReceive(self, aManager, aData):

@@ -16,25 +16,41 @@ import os
 import sys
 import re
 #
-from Inc.Log import Log
+from Inc.Log  import Log
+from Inc.Util import Obj
 
 
 # nuitka --module Manager.py 
 # from XXX import *
 class TDynImport():
     def __init__(self):
-        self.Classes = {}
+        self.Data = {}
 
     def Clear(self):
-        self.Classes.clear()
+        self.Data.clear()
+
+    def GetInherited(self, aInvert = False):
+        Tree = []
+        for Item in self.Data:
+            TClass = self.GetInstance(Item)
+            Path = Obj.GetClassInstancePath(TClass)
+            Tree.append(Path)
+
+        Result = []
+        for Item in Tree:
+            Last = Item.split('/')[-1]
+            if any(Item + '/' in S for S in Tree) ^ aInvert:
+                #Tree.remove(Item)
+                Result.append(Last)
+        return Result
 
     def AddClass(self, aClassName, aModule, aPath):
-        Data = self.Classes.get(aClassName)
+        Data = self.Data.get(aClassName)
         if (Data):
             Msg = Log.PrintDbg(1, 'e', 'Class %s already exists in' % aClassName, Data)
             raise Exception(Msg)
 
-        self.Classes[aClassName] = {'Module': aModule, 'Path': aPath}
+        self.Data[aClassName] = {'Module': aModule, 'Path': aPath}
         if (aPath and (aPath not in sys.path)):
             sys.path.insert(0, aPath)
 
@@ -59,7 +75,6 @@ class TDynImport():
                     # print('--- FilePath, line, ClassName', FilePath, Line, ClassName)
         return Result
 
-
     def ParseDir(self, aDir):
         for Root, Dirs, Files in os.walk(aDir):
             for File in Files:
@@ -76,8 +91,8 @@ class TDynImport():
     def GetInstance(self, aClassName, aModuleName = ''):
         if (aModuleName):
             Result = self.FromModule(aClassName, aModuleName)
-        elif (aClassName in self.Classes):
-            Module = self.Classes[aClassName]['Module']
+        elif (aClassName in self.Data):
+            Module = self.Data[aClassName]['Module']
             Result = self.GetAttr(aClassName, Module)
         else:
             Result = globals().get(aClassName)

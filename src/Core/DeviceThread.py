@@ -9,7 +9,7 @@ Description: Access slow devices using thread
 
 from Inc.Log      import Log
 from Inc.Thread   import TThreadReadList
-from Core.Device  import TSensor, TDeviceBase
+from Core.Device  import TSensor, TDeviceParse
 
 
 class TSensorThreadRead(TSensor):
@@ -37,9 +37,9 @@ class TSensorThreadRead(TSensor):
 
 
 # === Read slow devices.
-class TProviderThreadRead(TDeviceBase):
+class TProviderThreadRead(TDeviceParse):
     def __init__(self, aParent):
-        TDeviceBase.__init__(self, aParent)
+        TDeviceParse.__init__(self, aParent)
         self.Thread = None
 
         self.Param.AddDefPattern({'Periodic': 1})
