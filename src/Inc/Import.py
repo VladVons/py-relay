@@ -36,12 +36,12 @@ class TDynImport():
             Path = Obj.GetClassInstancePath(TClass)
             Tree.append(Path)
 
-        Result = []
+        Result = {}
         for Item in Tree:
             Last = Item.split('/')[-1]
             if any(Item + '/' in S for S in Tree) ^ aInvert:
                 #Tree.remove(Item)
-                Result.append(Last)
+                Result[Last] = Item
         return Result
 
     def AddClass(self, aClassName, aModule, aPath):

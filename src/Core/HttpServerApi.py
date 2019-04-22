@@ -49,6 +49,19 @@ class TThreadPipeApi(TThreadPipe):
             '/set/dev/value':    self.SetValue
         }
 
+    def GetDevices(self, aManager, aData):
+        Base   = '/object/TDeviceParse/'
+        Import = aManager.SecClass.Import
+        Items  = Import.GetInherited(True)
+        Result = []
+        for Item in Items:
+            Dict = Import.Data[Item]
+            Inherit = Items[Item]
+            if (Base in Inherit):
+                Inherit = Inherit.replace(Base, '').replace('/' + Item, '')
+                Result.append([Item, Dict['Path'], Dict['Module'], Inherit])
+        return Result
+
     def GetVersion(self, aManager, aData):
         Result = Misc.Version()
         Result.update(aManager.Info('Total'))
@@ -96,8 +109,8 @@ class TWeb():
         self.Layout = '/layout.tpl'
 
     @property
-    def Manager(self):
-        return self.Parent.Parent.Manager
+    def Server(self):
+        return self.Parent.Parent
 
     def ProcessThreadQueue(self, aData):
         ThreadPipe = self.Parent.Parent.ThreadPipe
@@ -155,7 +168,7 @@ class TWeb():
         self.QueueTable(aParam, 'Version', ['Name', 'Value'])
 
     def UrlGetAppProfile(self, aParam):
-        Data = self.Manager.Info('Total')
+        Data = self.Server.Manager.Info('Total')
         Path = '/' + Data.get('Profile', '')
         Path = Path.replace('/Plugin', '')
         self.Parent.Redirect(Path)
@@ -164,6 +177,13 @@ class TWeb():
         Data  = HttpProc.HtmlDir(aPath, aFullPath)
         Data  = HttpProc.HtmlTable(['Name', 'Size', 'Date'], Data)
         Param = {'cTitle': 'HtmlDir', 'cBody': Data}
+        self.HtmlPattern(self.Layout, Param)
+
+    def UrlGetAppDevices(self, aParam):
+        Data = self.Server.ThreadPipe.GetDevices(self.Server.Manager, aParam)
+        Data.sort()
+        Data  = HttpProc.HtmlTable(['TClass', 'Path', 'Module', 'Inherit'], Data)
+        Param = {'cTitle': 'Devices', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
     def UrlSetDevValue(self, aParam):
@@ -179,6 +199,7 @@ class TConnSessionApp(TConnSessionHttp):
         self.Manager = None
         self.UrlPattern = {
             '/get/app/version':  {'func': self.Web.UrlGetAppVersion,  'param': []},
+            '/get/app/devices':  {'func': self.Web.UrlGetAppDevices,  'param': []},
             '/get/app/classes':  {'func': self.Web.UrlGetAppClasses,  'param': []},
             '/get/app/profile':  {'func': self.Web.UrlGetAppProfile,  'param': []},
             '/get/dev/values':   {'func': self.Web.UrlGetDevValues,   'param': []},
