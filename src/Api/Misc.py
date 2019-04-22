@@ -19,7 +19,7 @@ def Version():
     Result = {
         "Now":       time.strftime('%Y-%m-%d %H:%M:%S'),
         "vDate":     '2019.04.18',
-        "vSoftware": '1.0.36',
+        "vSoftware": '1.0.37',
         "Hardware":  '1.0.2',
         "Author":    'Volodymyr Vons, VladVons@gmail.com, UA',
         "Homepage":  'http://oster.com.ua/software',
