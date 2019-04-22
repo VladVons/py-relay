@@ -14,7 +14,8 @@
             {"Enable":false,  "ClassRef":"SensorUptimeSys"},
             {"Enable":false,  "ClassRef":"Random_15_25"},
             {"Enable":false,  "ClassRef":"Random_15_25"},
-            {"Enable":true,   "ClassRef":"CounterInc"},
+            {"Enable":false,  "ClassRef":"CounterInc"},
+            {"Enable":true,   "ClassRef":"SensorTRDFW_Humid"},
 
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
@@ -35,7 +36,7 @@
         {"Enable":true,  "File":"IncClassGroup.json"},
         {"Enable":true,  "File":"IncClassCounter.json"},
         {"Enable":true,  "File":"IncClassRandom.json"},
-        {"Enable":false, "File":"IncClassTimer.json"},
+        {"Enable":true,  "File":"IncClassTimer.json"},
         {"Enable":true,  "File":"IncClassReport.json"},
         {"Enable":false, "File":"IncClassSolar.json"},
         {"Enable":true,  "File":"IncClassRelay.json"},

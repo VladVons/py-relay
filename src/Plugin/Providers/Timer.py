@@ -164,11 +164,12 @@ class TTimeRangeYear(TTimeRange):
 
 
 class TTimeRangeDayFadeWave(TTimeRangeDay):
-    def __init__(self, aMin = -10, aMax = 10):
+    def __init__(self, aMin = -10, aMax = 10, aInvert = False):
         TTimeRangeDay.__init__(self)
         self.Min = aMin
         self.Max = aMax
         self.Mid = (aMin + aMax) / 2
+        self.Invert = aInvert
 
     def SetRanges(self, aRanges):
         TTimeRangeDay.SetRanges(self, aRanges)
@@ -196,12 +197,13 @@ class TTimeRangeDayFadeWave(TTimeRangeDay):
         for i in range(Len):
             On, Off = self.RangesSec[i]
             if ((Now >= On) and (Now < Off)):
-                if (i % 2 == 0):
+                if (i % 2 == 0) ^ self.Invert:
                     self.FadeW = Num.TFadeWave(On, Off, self.Mid, self.Max)
                 else:
                     self.FadeW = Num.TFadeWave(On, Off, self.Mid, self.Min)
-                    self.FadeW.Night = True
-                return round(self.FadeW.Get(Now), 2)
+                    self.FadeW.SetNight(True)
+                Result = round(self.FadeW.Get(Now), 2)
+                return Result
         return self.Mid
 
 
@@ -232,10 +234,11 @@ class TProviderTimeRangeDay(TProviderTimeRangeBase):
 
 
 class TProviderTimeRangeDayFadeWave(TProviderTimeRangeBase):
-    def __init__(self, aRanges, aMin, aMax):
+    def __init__(self, aRanges, aMin, aMax, aInvert):
         self.Min = aMin
         self.Max = aMax
+        self.Invert = aInvert
         TProviderTimeRangeBase.__init__(self, aRanges)
 
     def SetObj(self):
-        return TTimeRangeDayFadeWave(self.Min, self.Max)
+        return TTimeRangeDayFadeWave(self.Min, self.Max, self.Invert)

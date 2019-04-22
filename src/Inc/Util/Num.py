@@ -147,16 +147,20 @@ class TUpdateDelay():
 # Dvornitsky V.
 class TFadeWave():
     def __init__(self, aStarSec, aFinishSec, aStartVal, aPeakVal):
-        self._offsetX = aStarSec;
-        self._scaleX  = aFinishSec - aStarSec;
-        self._offsetY = aStartVal;
-        self._scaleY  = math.fabs(aPeakVal - aStartVal);
+        self._offsetX = aStarSec
+        self._scaleX  = aFinishSec - aStarSec
+        self._offsetY = aStartVal
+        self._scaleY  = math.fabs(aPeakVal - aStartVal)
 
-        self.Night    = False;
+        self.Night    = False
+
+    def SetNight(self, aValue):
+        self.Night = aValue
 
     def Get(self, aCurSec):
-        x = aCurSec - self._offsetX;
-        rad = x * math.pi / self._scaleX;
+        x = aCurSec - self._offsetX
+        rad = x * math.pi / self._scaleX
         if (self.Night):
             rad += math.pi
-        return (math.sin(rad) * self._scaleY) + self._offsetY;
+        Result = (math.sin(rad) * self._scaleY) + self._offsetY
+        return Result

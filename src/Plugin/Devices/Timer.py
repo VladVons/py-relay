@@ -41,11 +41,11 @@ class TSensorTimeRangeDayFadeWave(TSensorTimeRange):
     def __init__(self, aParent):
         TSensorTimeRange.__init__(self, aParent)
 
-        Pattern = {'Min': TDictParam.Required, 'Max': TDictParam.Required}
+        Pattern = {'Min': TDictParam.Required, 'Max': TDictParam.Required, 'Invert': False}
         self.Param.AddDefPattern(Pattern)
 
     def SetProvider(self):
-        self.Provider = TProviderTimeRangeDayFadeWave(self.Param.Ranges, self.Param.Min, self.Param.Max)
+        self.Provider = TProviderTimeRangeDayFadeWave(self.Param.Ranges, self.Param.Min, self.Param.Max, self.Param.Invert)
 
 """
 has no ReadTry() ?

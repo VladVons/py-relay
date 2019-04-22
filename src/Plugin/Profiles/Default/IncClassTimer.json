@@ -46,6 +46,18 @@
             "Alias":"SensorTRDF_2",
             "Descr":"Day temp wave",
             "Parameter":{"Ranges":[{ "On":"10:45", "Off": "11:00"}], "Min": 15, "Max": 25}
+        },
+        {
+            "Class":"TSensorTimeRangeDayFadeWave",
+            "Alias":"SensorTRDFW_Humid",
+            "Descr":"Day humid wave",
+            "Parameter": {
+                "Ranges":[
+                    { "On":"$<cDayOn>", "Off": "$<cDayOff>"}
+                ],
+                "Min": "$<cMatoch2_HumidMin>", "Max": "$<cMatoch2_HumidMax>",
+                "Invert": true
+            }
         }
     ]
 }
