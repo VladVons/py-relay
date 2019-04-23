@@ -21,7 +21,7 @@ import time
 #
 from Inc.Log   import Log
 from Inc.Util  import Time
-from Inc.Util  import Num
+from Inc.Util  import Num, Arr
 
 
 class TBaseRange():
@@ -33,21 +33,36 @@ class TBaseRange():
     def AddRange(self, aOn, aOff):
         self.Ranges.append([aOn, aOff])
 
-    def SetRanges(self, aRanges):
+    # [ [1, 5], [10, 12], [30, 50] ]
+    def SetRangeList(self, aRanges):
         self.Ranges = []
         for Range in aRanges:
-            On  = self._Adjust(Range.get('On'))
-            Off = self._Adjust(Range.get('Off'))
+            Len = len(Range)
+            if (Len != 2):
+                Msg = Log.PrintDbg(1, 'e', 'Range size must be 2. Got %s' % (Len))
+                raise ValueError(Msg)
 
+            On  = self._Adjust(Range[0])
+            Off = self._Adjust(Range[1])
+            self._Load(On, Off)
+
+    # [ {'On':1, 'Off':5}, {'On':10, 'Off':12} ]
+    def SetRanges(self, aRanges):
+        List = []
+        for Range in aRanges:
+            Arr.CheckDif(Range.keys(), ['On', 'Off'])
+
+            On  = Range.get('On')
             if (not On):
                 Msg = Log.PrintDbg(1, 'e', 'On is empty')
                 raise ValueError(Msg)
 
+            Off = Range.get('Off')
             if (not Off):
                 Msg = Log.PrintDbg(1, 'e', 'Off is empty')
                 raise ValueError(Msg)
-
-            self._Load(On, Off)
+            List.append([On, Off])
+        self.SetRangeList(List)
 
     def GetUptime(self):
         return int(time.time())

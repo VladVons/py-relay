@@ -63,5 +63,5 @@ def CheckDif(aValue1, aValue2):
     Diff = set(aValue1) - set(aValue2)
     if (Diff):
         print(aValue2)
-        Msg = Log.PrintDbg(1, 'e', 'Unknown key %s in %s' % (str(Diff), GetTreeAsStr(aValue1, 2)))
+        Msg = Log.PrintDbg(1, 'e', 'Unknown key %s in %s' % (str(aValue2), GetTreeAsStr(aValue1)))
         raise Exception(Msg)
