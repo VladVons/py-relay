@@ -13,24 +13,33 @@
             "Class":"TSensorTimeRangeCycle",
             "Alias":"SensorTimeRangeCycle",
             "Descr":"Air",
-            "Parameter":{"Ranges":[{"On":"3S", "Off": "3S"}]},
+            "Parameter":{
+                "Time":[{"On":"3S", "Off": "3S"}, {"On":"5S", "Off": "5S"}],
+                "Value":[{"On":1, "Off": 0}, {"On":11, "Off": 10}]
+            },
             "Checks":[
                 {"Enable":false, "If":"xInHour('08:14', '08:15')"}
             ],
             "Triggers":[
-                {"Enable":true, "Always":"xASetValue('$WriteLog', xValue and (not xInHours([['07:08', '07:09'], ['19:55', '19:56']])))"}
+                {"Enable":false, "Always":"xASetValue('$WriteLog', xValue and (not xInHours([['07:08', '07:09'], ['19:55', '19:56']])))"}
             ]
         },
         {
             "Class":"TSensorTimeRangeDay",
             "Alias":"SensorTRD_Humid",
             "Descr":"Day Humid",
-            "Parameter":{"Ranges":[
-                { "On":"01:00", "Off": "01:01"}, 
-                { "On":"12:10", "Off": "12:20"}, 
-                { "On":"20:00", "Off": "20:01"}, 
-                { "On":"22:30", "Off": "22:31"}
-            ], "Refresh":2},
+            "Parameter": {
+                "Time":[
+                    { "On":"01:00", "Off": "01:01"}, 
+                    { "On":"13:50", "Off": "13:54"}, 
+                    { "On":"20:00", "Off": "20:01"}, 
+                    { "On":"22:30", "Off": "22:31"}
+                ], 
+                "Value":[
+                    { "On": 11, "Off": 10}
+                ],
+                "Refresh":2
+            },
             "Triggers":[
                 {"Enable":false, "Always":"xASetValue('$IRelay_4')"}
             ]
@@ -39,7 +48,11 @@
             "Class":"TSensorTimeRangeDayFadeWave",
             "Alias":"SensorTRDF_1",
             "Descr":"Day temp wave  sum",
-            "Parameter":{"Ranges":[{ "On":"4:10", "Off": "4:30"}, { "On":"4:40", "Off": "4:50"}], "Min": -10, "Max": 10}
+            "Parameter":{"Ranges":[
+                { "On":"4:10", "Off": "4:30"}, 
+                { "On":"4:40", "Off": "4:50"}
+            ], 
+            "Min": -10, "Max": 10}
         },
         {
             "Class":"TSensorTimeRangeDayFadeWave",
@@ -52,10 +65,8 @@
             "Alias":"SensorTRDFW_Humid",
             "Descr":"Day humid wave",
             "Parameter": {
-                "Ranges":[
-                    { "On":"$<cDayOn>", "Off": "$<cDayOff>"}
-                ],
-                "Min": "$<cMatoch2_HumidMin>", "Max": "$<cMatoch2_HumidMax>",
+                "Time":[{ "On": "$<cDayOn>", "Off": "$<cDayOff>"}],
+                "Value":[{"On": "$<cMatoch2_HumidMin>", "Off": "$<cMatoch2_HumidMax>"}],
                 "Invert": true
             }
         }

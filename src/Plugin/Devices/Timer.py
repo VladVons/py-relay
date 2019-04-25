@@ -19,7 +19,7 @@ class TSensorTimeRange(TSensor):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 
-        Pattern = {'Ranges': [], 'Round': None}
+        Pattern = {'Time': [], 'Value': [], 'Round': None}
         self.Param.AddDefPattern(Pattern)
 
     def DoParameter(self, aParam):
@@ -29,23 +29,23 @@ class TSensorTimeRange(TSensor):
 
 class TSensorTimeRangeCycle(TSensorTimeRange):
     def SetProvider(self):
-        self.Provider = TProviderTimeRangeCycle(self.Param.Ranges)
+        self.Provider = TProviderTimeRangeCycle(self.Param.Time, self.Param.Value)
 
 
 class TSensorTimeRangeDay(TSensorTimeRange):
     def SetProvider(self):
-        self.Provider = TProviderTimeRangeDay(self.Param.Ranges)
+        self.Provider = TProviderTimeRangeDay(self.Param.Time, self.Param.Value)
 
 
 class TSensorTimeRangeDayFadeWave(TSensorTimeRange):
     def __init__(self, aParent):
         TSensorTimeRange.__init__(self, aParent)
 
-        Pattern = {'Min': TDictParam.Required, 'Max': TDictParam.Required, 'Invert': False}
+        Pattern = {'Invert': False}
         self.Param.AddDefPattern(Pattern)
 
     def SetProvider(self):
-        self.Provider = TProviderTimeRangeDayFadeWave(self.Param.Ranges, self.Param.Min, self.Param.Max, self.Param.Invert)
+        self.Provider = TProviderTimeRangeDayFadeWave(self.Param.Time, self.Param.Value, self.Param.Invert)
 
 """
 has no ReadTry() ?

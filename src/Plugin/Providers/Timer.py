@@ -16,7 +16,6 @@ while True:
 
 """
 
-import datetime
 import time
 #
 from Inc.Log   import Log
@@ -24,76 +23,77 @@ from Inc.Util  import Time
 from Inc.Util  import Num, Arr
 
 
-class TBaseRange():
+class TRangeBase():
     def __init__(self):
         self.Delim  = ''
         self.PadLen = 2
-        self.Ranges = []
+        self.Times  = []
+        self.Values = []
 
-    def AddRange(self, aOn, aOff):
-        self.Ranges.append([aOn, aOff])
+    def GetValue(self, aIdx):
+        if (aIdx >= len(self.Values)):
+            Result = self.Values[-1]
+        else:
+            Result = self.Values[aIdx]
+        return Result
 
-    # [ [1, 5], [10, 12], [30, 50] ]
-    def SetRangeList(self, aRanges):
-        self.Ranges = []
-        for Range in aRanges:
-            Len = len(Range)
-            if (Len != 2):
-                Msg = Log.PrintDbg(1, 'e', 'Range size must be 2. Got %s' % (Len))
-                raise ValueError(Msg)
+    def CheckOnOff(self, aList):
+        Keys  = ['On', 'Off']
 
-            On  = self._Adjust(Range[0])
-            Off = self._Adjust(Range[1])
+        Result = []
+        for Item in aList:
+            Arr.CheckDif(Item.keys(), Keys)
+            Range = [0, 0]
+            for Idx, Key in enumerate(Keys):
+                Value = Item.get(Key)
+                if (Value is None):
+                    Msg = Log.PrintDbg(1, 'e', 'Key %s is empty' % Key, aList)
+                    raise ValueError(Msg)
+                Range[Idx] = Value
+            Result.append(Range)
+        return Result
+
+    def SetRanges(self, aTime, aValue):
+        Items = self.CheckOnOff(aTime)
+        for Item in Items:
+            On  = self._Adjust(Item[0])
+            Off = self._Adjust(Item[1])
             self._Load(On, Off)
 
-    # [ {'On':1, 'Off':5}, {'On':10, 'Off':12} ]
-    def SetRanges(self, aRanges):
-        List = []
-        for Range in aRanges:
-            Arr.CheckDif(Range.keys(), ['On', 'Off'])
-
-            On  = Range.get('On')
-            if (not On):
-                Msg = Log.PrintDbg(1, 'e', 'On is empty')
-                raise ValueError(Msg)
-
-            Off = Range.get('Off')
-            if (not Off):
-                Msg = Log.PrintDbg(1, 'e', 'Off is empty')
-                raise ValueError(Msg)
-            List.append([On, Off])
-        self.SetRangeList(List)
+        self.Values = self.CheckOnOff(aValue)
+        if (not self.Values):
+            self.Values.append([1, 0])
 
     def GetUptime(self):
         return int(time.time())
 
 
 # [ { "On":"5", "Off": "2"} ]
-class TTimeRangeCycle(TBaseRange):
+class TTimeRangeCycle(TRangeBase):
     def _Adjust(self, aValue):
         return Time.StrToSec(aValue)
 
     def _Load(self, aOn, aOff):
-        self.AddRange(aOn, aOff)
+        self.Times.append([aOn, aOff])
 
     def Get(self):
-        Result = 0
-
         Duration = self.GetDuration()
         Offset   = self.GetUptime() % Duration
-        Idx      = 0
-        for On, Off in self.Ranges:
-            if ( (Offset >= Idx) and (Offset < Idx + On) ):
-                Result = 1
-                break
-            Idx += On + Off
-        return Result
+        Sum = 0
+        for Idx, (On, Off) in enumerate(self.Times):
+            SumOn = Sum + On
+            if ((Offset >= Sum) and (Offset < SumOn)):
+                return self.GetValue(Idx)[0]
+            elif ((Offset >= SumOn) and (Offset < SumOn + Off)):
+                return self.GetValue(Idx)[1]
+            Sum += On + Off
+        return self.GetValue(Idx)[1]
 
     def GetDuration(self):
-        return sum(On + Off for On, Off in self.Ranges)
+        return sum(On + Off for On, Off in self.Times)
 
 
-class TTimeRange(TBaseRange):
+class TTimeRange(TRangeBase):
     def _Adjust(self, aValue):
         # 7 to 07:00:00, 07:5 to 07:05:00, etc
         Result = self.Mask
@@ -115,23 +115,21 @@ class TTimeRange(TBaseRange):
             Msg = Log.PrintDbg(1, 'e', '(On %s) is greater then (Off %s)' % (aOn, aOff))
             raise ValueError(Msg)
 
-        if (self.Ranges):
-            LastOff = self.Ranges[-1][1]
+        if (self.Times):
+            LastOff = self.Times[-1][1]
             if (aOn < LastOff):
                 Msg = Log.PrintDbg(1, 'e', '(On %s) is less then last (Off %s)' % (aOn, LastOff))
                 raise ValueError(Msg)
 
-        self.AddRange(aOn, aOff)
+        self.Times.append([aOn, aOff])
 
     def Get(self):
-        Result = 0
-        Now = datetime.datetime.now().strftime(self.Format)
+        Now = time.strftime(self.Format)
 
-        for On, Off in self.Ranges:
-            if ( (Now >= On) and (Now < Off) ):
-                Result = 1
-                break
-        return Result
+        for Idx, (On, Off) in enumerate(self.Times):
+            if ((Now >= On) and (Now < Off)):
+                return self.GetValue(Idx)[0]
+        return self.GetValue(Idx)[1]
 
 
 # [{ "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]
@@ -179,56 +177,53 @@ class TTimeRangeYear(TTimeRange):
 
 
 class TTimeRangeDayFadeWave(TTimeRangeDay):
-    def __init__(self, aMin = -10, aMax = 10, aInvert = False):
+    def __init__(self, aInvert = False):
         TTimeRangeDay.__init__(self)
-        self.Min = aMin
-        self.Max = aMax
-        self.Mid = (aMin + aMax) / 2
         self.Invert = aInvert
 
-    def SetRanges(self, aRanges):
-        TTimeRangeDay.SetRanges(self, aRanges)
+    def SetRanges(self, aTime, aValue):
+        TTimeRangeDay.SetRanges(self, aTime, aValue)
 
         self.RangesSec = []
-        for i in range(len(self.Ranges)):
-            On, Off = self.Ranges[i]
+        for i in range(len(self.Times)):
+            On, Off = self.Times[i]
             self.RangesSec.append([Time.TimeToSec(On), Time.TimeToSec(Off)])
             On, Off = self._GetHoleRange(i)
             self.RangesSec.append([Time.TimeToSec(On) + 1, Time.TimeToSec(Off)])
 
     def _GetHoleRange(self, aIdx):
-        Len = len(self.Ranges)
+        Len = len(self.Times)
         if (aIdx == Len - 1):
-            Result = [self.Ranges[aIdx][1], '23:59:59']
+            Result = [self.Times[aIdx][1], '23:59:59']
         else:
-            Result = [self.Ranges[aIdx][1], self.Ranges[aIdx+1][0]]
+            Result = [self.Times[aIdx][1], self.Times[aIdx + 1][0]]
         return Result
 
     def Get(self):
-        StrNow = datetime.datetime.now().strftime(self.Format)
+        StrNow = time.strftime(self.Format)
         Now    = Time.TimeToSec(StrNow)
 
-        Len = len(self.RangesSec)
-        for i in range(Len):
-            On, Off = self.RangesSec[i]
+        for Idx, (On, Off) in enumerate(self.RangesSec):
+            Value = self.GetValue(Idx)
+            Mid   = sum(Value) / len(Value)
             if ((Now >= On) and (Now < Off)):
-                if (i % 2 == 0) ^ self.Invert:
-                    self.FadeW = Num.TFadeWave(On, Off, self.Mid, self.Max)
+                if (Idx % 2 == 0) ^ self.Invert:
+                    self.FadeW = Num.TFadeWave(On, Off, Mid, Value[1])
                 else:
-                    self.FadeW = Num.TFadeWave(On, Off, self.Mid, self.Min)
+                    self.FadeW = Num.TFadeWave(On, Off, Mid, Value[0])
                     self.FadeW.SetNight(True)
                 Result = round(self.FadeW.Get(Now), 2)
                 return Result
-        return self.Mid
+        return 0
 
 
 #---
 from ._Common import TProvider
 
 class TProviderTimeRangeBase(TProvider):
-    def __init__(self, aRanges):
+    def __init__(self, aTime, aValue):
         self.Obj = self.SetObj()
-        self.Obj.SetRanges(aRanges)
+        self.Obj.SetRanges(aTime, aValue)
 
     def Read(self, aNotUsed):
         Result = self.Obj.Get()
@@ -249,11 +244,9 @@ class TProviderTimeRangeDay(TProviderTimeRangeBase):
 
 
 class TProviderTimeRangeDayFadeWave(TProviderTimeRangeBase):
-    def __init__(self, aRanges, aMin, aMax, aInvert):
-        self.Min = aMin
-        self.Max = aMax
+    def __init__(self, aTime, aValue, aInvert):
         self.Invert = aInvert
-        TProviderTimeRangeBase.__init__(self, aRanges)
+        TProviderTimeRangeBase.__init__(self, aTime, aValue)
 
     def SetObj(self):
-        return TTimeRangeDayFadeWave(self.Min, self.Max, self.Invert)
+        return TTimeRangeDayFadeWave(self.Invert)
