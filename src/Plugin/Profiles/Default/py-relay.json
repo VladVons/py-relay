@@ -64,7 +64,7 @@
             "Checks": [
                 {"Enable":true,   "Always":"xASetValue('$WriteConsole')"},
                 {"Enable":false,  "Always":"xASetValue('$WriteConsole2')"},
-                {"Enable":false,  "Always":"xASetValue('$Grafana')"}
+                {"Enable":true,   "Always":"xASetValue('$Grafana')"}
             ]
         },
         {

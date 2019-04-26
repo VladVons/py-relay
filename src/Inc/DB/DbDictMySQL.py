@@ -29,13 +29,14 @@ class TDbDictMySQL(TDbDict):
         self.User  = aUser
         self.Passw = aPassw 
         self.DB    = aDB
+        self.timeout = 3
 
     def Connect(self):
-        self.Conn = MySQLdb.connect(self.Host, self.User, self.Passw, self.DB)
+        self.Conn = MySQLdb.connect(self.Host, self.User, self.Passw, self.DB, connect_timeout = self.timeout)
         #self.Cursor = self.Conn.cursor()
 
     def CreateTable(self):
-        SQL = '''
+        SQL = """
             CREATE TABLE IF NOT EXISTS %s (
                 ID       INTEGER UNSIGNED AUTO_INCREMENT,
                 Created  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -45,5 +46,5 @@ class TDbDictMySQL(TDbDict):
                 Data     TEXT,
                 PRIMARY  KEY (ID)
             )
-            ''' % (self.Dict)
+            """ % (self.Dict)
         self.Exec(SQL)

@@ -171,7 +171,7 @@ class TDictParam():
             Default = Pattern.get(Key)
             Param   = aParam.get(Key, Default)
             if ( (Default == TDictParam.Required) and (Param == TDictParam.Required) ):
-                Msg = Log.PrintDbg(1, 'e', 'Key %s is required in %s' % (Key, Obj.GetTreeAsStr(aParam, 2)))
+                Msg = Log.PrintDbg(1, 'e', 'Key %s is required in %s' % (Key, Obj.GetTreeAsStr(aParam)))
                 raise Exception(Msg)
 
             self.SetAttr(Key, Param)

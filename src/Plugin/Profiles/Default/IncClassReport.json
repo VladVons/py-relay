@@ -12,7 +12,7 @@
         {
             "Class":"TControlGrafana",
             "Alias":"Grafana",
-            "Parameter":{"Host":"192.168.2.111", "User":"grafana", "Password":"xxxx", "DB":"3w_grafana", "Prefix":1}
+            "Parameter":{"Host":"10.10.1.1", "User":"grafana5", "Password":"graf20195", "DB":"app_grafana5", "Table": "Dict1", "Prefix":1}
         },
         {
             "Class":"TControlWriteLog",
