@@ -176,43 +176,70 @@ class TTimeRangeYear(TTimeRange):
         self.Format = '%m.%d'
 
 
-class TTimeRangeDayFadeWave(TTimeRangeDay):
-    def __init__(self, aInvert = False):
-        TTimeRangeDay.__init__(self)
-        self.Invert = aInvert
-
-    def SetRanges(self, aTime, aValue):
-        TTimeRangeDay.SetRanges(self, aTime, aValue)
-
-        self.RangesSec = []
-        for i in range(len(self.Times)):
-            On, Off = self.Times[i]
-            self.RangesSec.append([Time.TimeToSec(On), Time.TimeToSec(Off)])
-            On, Off = self._GetHoleRange(i)
-            self.RangesSec.append([Time.TimeToSec(On) + 1, Time.TimeToSec(Off)])
-
+class TTimeRangeDayFade(TTimeRangeDay):
     def _GetHoleRange(self, aIdx):
-        Len = len(self.Times)
-        if (aIdx == Len - 1):
+        if (aIdx == len(self.Times) - 1):
             Result = [self.Times[aIdx][1], '23:59:59']
         else:
             Result = [self.Times[aIdx][1], self.Times[aIdx + 1][0]]
         return Result
 
-    def Get(self):
-        StrNow = time.strftime(self.Format)
-        Now    = Time.TimeToSec(StrNow)
+    def SetRanges(self, aTime, aValue):
+        TTimeRangeDay.SetRanges(self, aTime, aValue)
 
-        for Idx, (On, Off) in enumerate(self.RangesSec):
+        Times = []
+        for Idx, (On, Off) in enumerate(self.Times):
+            Times.append([Time.TimeToSec(On), Time.TimeToSec(Off)])
+            On, Off = self._GetHoleRange(Idx)
+            Times.append([Time.TimeToSec(On) + 1, Time.TimeToSec(Off)])
+        self.Times = Times
+
+        Values = []
+        for Idx, (On, Off) in enumerate(self.Values):
+            Values.append([On, Off])
+            if (Idx == len(self.Values) - 1):
+                NextOff = self.Values[0][0]
+            else:
+                NextOff = self.Values[Idx + 1][0]
+            Values.append([Off, NextOff])
+        self.Values = Values
+
+    def GetSecNow(self):
+        Now = time.strftime(self.Format)
+        return Time.TimeToSec(Now)
+
+
+class TTimeRangeDayFadeWave(TTimeRangeDayFade):
+    def __init__(self, aInvert = False):
+        TTimeRangeDayFade.__init__(self)
+        self.Invert = aInvert
+
+    def Get(self):
+        Now = self.GetSecNow()
+
+        for Idx, (On, Off) in enumerate(self.Times):
             Value = self.GetValue(Idx)
             Mid   = sum(Value) / len(Value)
             if ((Now >= On) and (Now < Off)):
                 if (Idx % 2 == 0) ^ self.Invert:
-                    self.FadeW = Num.TFadeWave(On, Off, Mid, Value[1])
+                    FadeW = Num.TFadeWave(On, Off, Mid, Value[1])
                 else:
-                    self.FadeW = Num.TFadeWave(On, Off, Mid, Value[0])
-                    self.FadeW.SetNight(True)
-                Result = round(self.FadeW.Get(Now), 2)
+                    FadeW = Num.TFadeWave(On, Off, Mid, Value[0])
+                    FadeW.SetNight(True)
+                Result = round(FadeW.Get(Now), 2)
+                return Result
+        return 0
+
+
+class TTimeRangeDayFadeLine(TTimeRangeDayFade):
+    def Get(self):
+        Now = self.GetSecNow()
+
+        for Idx, (On, Off) in enumerate(self.Times):
+            Value = self.GetValue(Idx)
+            Ratio = (Value[1] - Value[0]) / float(Off - On)
+            if ((Now >= On) and (Now < Off)):
+                Result = Value[0] + round((Now - On) * Ratio, 2)
                 return Result
         return 0
 
@@ -243,6 +270,11 @@ class TProviderTimeRangeDay(TProviderTimeRangeBase):
         return TTimeRangeDay()
 
 
+class TProviderTimeRangeMonth(TProviderTimeRangeBase):
+    def SetObj(self):
+        return TTimeRangeMonth()
+
+
 class TProviderTimeRangeDayFadeWave(TProviderTimeRangeBase):
     def __init__(self, aTime, aValue, aInvert):
         self.Invert = aInvert
@@ -250,3 +282,7 @@ class TProviderTimeRangeDayFadeWave(TProviderTimeRangeBase):
 
     def SetObj(self):
         return TTimeRangeDayFadeWave(self.Invert)
+
+class TProviderTimeRangeDayFadeLine(TProviderTimeRangeBase):
+    def SetObj(self):
+        return TTimeRangeDayFadeLine()

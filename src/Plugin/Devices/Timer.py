@@ -8,7 +8,14 @@ Description:
 
 from Inc.Param    import TDictParam
 from Core.Device  import TSensor
-from Plugin.Providers.Timer import TProviderTimeRangeCycle, TProviderTimeRangeDay, TProviderTimeRangeDayFadeWave, TTimeRangeCycle
+from Plugin.Providers.Timer import (
+    TProviderTimeRangeCycle,
+    TProviderTimeRangeDay,
+    TProviderTimeRangeDayFadeWave,
+    TProviderTimeRangeDayFadeLine,
+    TProviderTimeRangeMonth
+)
+
 
 PkgConf = {
     "Version": "1.01",
@@ -37,6 +44,11 @@ class TSensorTimeRangeDay(TSensorTimeRange):
         self.Provider = TProviderTimeRangeDay(self.Param.Time, self.Param.Value)
 
 
+class TSensorTimeRangeMonth(TSensorTimeRange):
+    def SetProvider(self):
+        self.Provider = TProviderTimeRangeMonth(self.Param.Time, self.Param.Value)
+
+
 class TSensorTimeRangeDayFadeWave(TSensorTimeRange):
     def __init__(self, aParent):
         TSensorTimeRange.__init__(self, aParent)
@@ -46,6 +58,13 @@ class TSensorTimeRangeDayFadeWave(TSensorTimeRange):
 
     def SetProvider(self):
         self.Provider = TProviderTimeRangeDayFadeWave(self.Param.Time, self.Param.Value, self.Param.Invert)
+
+
+class TSensorTimeRangeDayFadeLine(TSensorTimeRange):
+    def SetProvider(self):
+        self.Provider = TProviderTimeRangeDayFadeLine(self.Param.Time, self.Param.Value)
+
+
 
 """
 has no ReadTry() ?

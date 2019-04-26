@@ -45,6 +45,21 @@
             ]
         },
         {
+            "Class":"TSensorTimeRangeDayFadeLine",
+            "Alias":"SensorTRDFL_Humid",
+            "Descr":"Month Humid",
+            "Parameter": {
+                "Time":[
+                    { "On":"01:00", "Off": "02:00"}, 
+                    { "On":"04:00", "Off": "05:00"},
+                    { "On":"05:30", "Off": "05:55"}
+                ], 
+                "Value":[
+                    { "On": 0, "Off": 300}
+                ]
+            }
+        },
+        {
             "Class":"TSensorTimeRangeDayFadeWave",
             "Alias":"SensorTRDF_1",
             "Descr":"Day temp wave  sum",
@@ -65,7 +80,7 @@
             "Alias":"SensorTRDFW_Humid",
             "Descr":"Day humid wave",
             "Parameter": {
-                "Time":[{ "On": "$<cDayOn>", "Off": "$<cDayOff>"}],
+                "Time":[{"On": "$<cDayOn>", "Off": "$<cDayOff>"}],
                 "Value":[{"On": "$<cMatoch2_HumidMin>", "Off": "$<cMatoch2_HumidMax>"}],
                 "Invert": true
             }

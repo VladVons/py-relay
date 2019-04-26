@@ -15,8 +15,10 @@
             {"Enable":false,  "ClassRef":"Random_15_25"},
             {"Enable":false,  "ClassRef":"Random_15_25"},
             {"Enable":false,  "ClassRef":"CounterInc"},
-            {"Enable":true,   "ClassRef":"SensorTRDFW_Humid"},
+            {"Enable":false,  "ClassRef":"SensorTRDFW_Humid"},
+            {"Enable":true,   "ClassRef":"SensorTRDFL_Humid"},
             {"Enable":false,  "ClassRef":"SensorTRD_Humid"},
+            {"Enable":false,  "ClassRef":"SensorTRM_Humid"},
             {"Enable":false,  "ClassRef":"SensorTimeRangeCycle"},
 
             {"Enable":false, "ClassRef":"SensorGroupSum"},
