@@ -42,6 +42,7 @@ class TThreadPipeApi(TThreadPipe):
         self.Cnt = 0
         self.PathProc = {
             '/get/app/api':      self.GetApi,
+            '/get/app/profile':  self.GetProfile,
             '/get/app/devices':  self.GetDevices,
             '/get/app/version':  self.GetVersion,
             '/get/app/classes':  self.GetClasses,
@@ -181,6 +182,8 @@ class TWeb():
         Param = {'cTitle': aTitle, 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
+    #--- Thread
+
     def UrlGetDevValue(self, aParam):
         self.QueueTable(True, aParam, 'Device value', ['Alias', 'Value'])
 
@@ -196,6 +199,8 @@ class TWeb():
     def UrlGetAppVersion(self, aParam):
         self.QueueTable(True, aParam, 'Version', ['Name', 'Value'])
 
+    #--- Direct
+
     def UrlGetAppDevices(self, aParam):
         self.QueueTable(False, aParam, 'Devices', ['TClass', 'Path', 'Module', 'Inherit'])
 
@@ -209,7 +214,7 @@ class TWeb():
         self.HtmlPattern(self.Layout, Param)
 
     def UrlGetAppProfile(self, aParam):
-        Path = self.Server.ThreadPipe.GetProfile(self.Server.Manager, aParam)
+        Path = self.ProcessThreadQueue(False, aParam)
         self.Parent.Redirect(Path)
 
     def UrlSetDevValue(self, aParam):
