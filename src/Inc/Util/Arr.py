@@ -53,6 +53,13 @@ def Diff(aData1, aData2):
 def Combine(aList1, aList2):
     return list(set(aList1) | set(aList2))
 
+def Avg(aList):
+    Len = len(aList)
+    if (Len != 0):
+        return sum(aList) / Len
+    else:
+        return 0
+
 def CheckDif(aValue1, aValue2):
     if (type(aValue1).__name__ == 'dict'):
         aValue1  = aValue1.keys()

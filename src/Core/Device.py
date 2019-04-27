@@ -153,6 +153,10 @@ class TDevice(TDeviceParse):
     def Direction(self):
         return self.Avg.Direction
 
+    @property
+    def LastUpdate(self):
+        return self.GetUptime() - self.LastChange
+
     def GetAlias(self, aCaller):
         Result = ''
         if (aCaller):
@@ -195,7 +199,7 @@ class TDevice(TDeviceParse):
             return False
 
         Result = False
-        if (self.Value != aValue) or (self.Param.AllValue) or (self.GetUptime() - self.LastChange > self.Param.Refresh):
+        if (self.Value != aValue) or (self.Param.AllValue) or (self.LastUpdate > self.Param.Refresh):
             if (self.OnValue):
                 aValue = self.OnValue(self, aValue)
             self.Value = aValue

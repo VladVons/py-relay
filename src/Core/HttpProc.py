@@ -52,10 +52,22 @@ def HtmlTable(aColumns, aItems):
                 text(Column)
 
         # table rows
-        for Row in aItems:
+        Type = type(aItems)
+        if (Type is list):
+            for Row in aItems:
+                with tag('tr'):
+                    Type = type(Row)
+                    if (Type is list) or (Type is tuple):
+                        for Col in Row:
+                            with tag('td'):
+                                doc.asis(str(Col))
+                    else:
+                        with tag('td'):
+                            doc.asis(str(Row))
+        else:
             with tag('tr'):
-                for Col in Row:
-                    with tag('td'):
-                        doc.asis(str(Col))
+                with tag('td'):
+                    doc.asis(str(aItems))
+
     Result = doc.getvalue()
     return Result

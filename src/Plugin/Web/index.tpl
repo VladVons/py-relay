@@ -3,6 +3,7 @@ $<File /layout.tpl>
 $<Block cBody>
 <a href="get/app/profile">current profile</a><br>
 <a href="get/app/version">get version</a><br>
+<a href="get/app/api">api</a><br>
 <a href="get/app/classes">get classes</a><br>
 <a href="get/app/devices">get devices</a><br>
 <a href="get/dev/values">get values</a><br>

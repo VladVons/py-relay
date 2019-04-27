@@ -41,6 +41,8 @@ class TThreadPipeApi(TThreadPipe):
 
         self.Cnt = 0
         self.PathProc = {
+            '/get/app/api':      self.GetApi,
+            '/get/app/devices':  self.GetDevices,
             '/get/app/version':  self.GetVersion,
             '/get/app/classes':  self.GetClasses,
             '/get/dev/values':   self.GetValues,
@@ -48,6 +50,14 @@ class TThreadPipeApi(TThreadPipe):
             '/get/dev/value':    self.GetValue,
             '/set/dev/value':    self.SetValue
         }
+
+    #---  Main
+
+    def GetApi(self, aManager, aData):
+        AnyFirstKey = next(iter(aManager.SecClass.Data))
+        Class = aManager.SecClass.Data[AnyFirstKey]
+        Result = Arr.ListFilter(dir(Class.Exec.apix), '^x')
+        return Result
 
     def GetDevices(self, aManager, aData):
         Base   = '/object/TDeviceParse/'
@@ -61,6 +71,14 @@ class TThreadPipeApi(TThreadPipe):
                 Inherit = Inherit.replace(Base, '').replace('/' + Item, '')
                 Result.append([Item, Dict['Path'], Dict['Module'], Inherit])
         return Result
+
+    def GetProfile(self, aManager, aData):
+        Data = aManager.Info('Total')
+        Path = '/' + Data.get('Profile', '')
+        Path = Path.replace('/Plugin', '')
+        return Path
+
+    #---  Threaded
 
     def GetVersion(self, aManager, aData):
         Result = Misc.Version()
@@ -98,8 +116,12 @@ class TThreadPipeApi(TThreadPipe):
     # we are in main process with parameters
     def DoReceive(self, aManager, aData):
         self.Cnt += 1
-        Func = self.PathProc.get(aData['path'])
-        Result = Func(aManager, aData)
+        Path = aData['path']
+        Func = self.PathProc.get(Path)
+        if (Func):
+            Result = Func(aManager, aData)
+        else:
+            Result = Log.PrintDbg(1, 'e', 'Unknown path %s' % Path)
         return Result
 
 
@@ -112,10 +134,13 @@ class TWeb():
     def Server(self):
         return self.Parent.Parent
 
-    def ProcessThreadQueue(self, aData):
+    def ProcessThreadQueue(self, aAsThread, aData):
         ThreadPipe = self.Parent.Parent.ThreadPipe
         if (ThreadPipe):
-            aData = ThreadPipe.ThreadSend(aData)
+            if (aAsThread):
+                aData = ThreadPipe.ThreadSend(aData)
+            else:
+                aData = ThreadPipe.DoReceive(self.Server.Manager, aData)
         return aData
 
     def HtmlPattern(self, aFile, aDict = {}):
@@ -143,35 +168,39 @@ class TWeb():
         Data = DReplace.Parse(Data)
         self.Parent.AddData(Data)
 
-    def QueueTable(self, aParam, aTitle, aColumns):
-        Data = self.ProcessThreadQueue(aParam)
-        if (type(Data) is dict):
+    def QueueTable(self, aAsThread, aParam, aTitle, aColumns):
+        Data = self.ProcessThreadQueue(aAsThread, aParam)
+        Type = type(Data)
+        if (Type is dict):
             Data  = Data.items()
-        Data.sort()
+
+        if (Type is dict) or (Type is list):
+            Data.sort()
+
         Data  = HttpProc.HtmlTable(aColumns, Data)
         Param = {'cTitle': aTitle, 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
     def UrlGetDevValue(self, aParam):
-        self.QueueTable(aParam, 'Device value', ['Alias', 'Value'])
+        self.QueueTable(True, aParam, 'Device value', ['Alias', 'Value'])
 
     def UrlGetDevValues(self, aParam):
-        self.QueueTable(aParam, 'Devices value', ['Alias', 'Value'])
+        self.QueueTable(True, aParam, 'Devices value', ['Alias', 'Value'])
 
     def UrlGetDevValuesF(self, aParam):
-        self.QueueTable(aParam, 'Devices value', ['Alias', 'Value'])
+        self.QueueTable(True, aParam, 'Devices value', ['Alias', 'Value'])
 
     def UrlGetAppClasses(self, aParam):
-        self.QueueTable(aParam, 'Aliases', ['Alias', 'Class', 'Descr'])
+        self.QueueTable(True, aParam, 'Aliases', ['Alias', 'Class', 'Descr'])
 
     def UrlGetAppVersion(self, aParam):
-        self.QueueTable(aParam, 'Version', ['Name', 'Value'])
+        self.QueueTable(True, aParam, 'Version', ['Name', 'Value'])
 
-    def UrlGetAppProfile(self, aParam):
-        Data = self.Server.Manager.Info('Total')
-        Path = '/' + Data.get('Profile', '')
-        Path = Path.replace('/Plugin', '')
-        self.Parent.Redirect(Path)
+    def UrlGetAppDevices(self, aParam):
+        self.QueueTable(False, aParam, 'Devices', ['TClass', 'Path', 'Module', 'Inherit'])
+
+    def UrlGetAppApi(self, aParam):
+        self.QueueTable(False, aParam, 'Api', ['Api'])
 
     def HtmlDir(self, aPath, aFullPath):
         Data  = HttpProc.HtmlDir(aPath, aFullPath)
@@ -179,15 +208,12 @@ class TWeb():
         Param = {'cTitle': 'HtmlDir', 'cBody': Data}
         self.HtmlPattern(self.Layout, Param)
 
-    def UrlGetAppDevices(self, aParam):
-        Data = self.Server.ThreadPipe.GetDevices(self.Server.Manager, aParam)
-        Data.sort()
-        Data  = HttpProc.HtmlTable(['TClass', 'Path', 'Module', 'Inherit'], Data)
-        Param = {'cTitle': 'Devices', 'cBody': Data}
-        self.HtmlPattern(self.Layout, Param)
+    def UrlGetAppProfile(self, aParam):
+        Path = self.Server.ThreadPipe.GetProfile(self.Server.Manager, aParam)
+        self.Parent.Redirect(Path)
 
     def UrlSetDevValue(self, aParam):
-        Data = self.ProcessThreadQueue(aParam)
+        Data = self.ProcessThreadQueue(True, aParam)
         pass
 
 
@@ -198,6 +224,7 @@ class TConnSessionApp(TConnSessionHttp):
         self.Web = TWeb(self)
         self.Manager = None
         self.UrlPattern = {
+            '/get/app/api':      {'func': self.Web.UrlGetAppApi,      'param': []},
             '/get/app/version':  {'func': self.Web.UrlGetAppVersion,  'param': []},
             '/get/app/devices':  {'func': self.Web.UrlGetAppDevices,  'param': []},
             '/get/app/classes':  {'func': self.Web.UrlGetAppClasses,  'param': []},

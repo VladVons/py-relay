@@ -12,7 +12,7 @@ import time
 import random
 #
 from Inc.Log  import Log
-from Inc.Util import Str
+from Inc.Util import Str, Arr
 
 
 
@@ -79,10 +79,10 @@ class TAvg():
         self.Direction = 0
 
     def SetSize(self, aSize):
-        self.Arr = collections.deque([], aSize)
+        self.Data = collections.deque([], aSize)
 
     def GetSize(self):
-        return self.Arr.maxlen
+        return self.Data.maxlen
 
     def Validate(self, aValue):
         if (aValue is None):
@@ -96,20 +96,17 @@ class TAvg():
 
         self.Direction = aValue - self.GetAvg()
         self.LastTime = time.time()
-        self.Arr.append(self.Validate(aValue))
+        self.Data.append(self.Validate(aValue))
 
     def GetAvg(self):
-        Result = sum(self.Arr)
-        if (Result != 0):
-            Result = Result / len(self.Arr)
-        return Result
+        return Arr.Avg(self.Data)
 
     def GetAvgRound(self):
         return round(self.GetAvg(), self.Round)
 
     def Check(self, aValue, aDevation = 0.5):
         Result = True
-        if (self.Arr and self.Enable):
+        if (self.Data and self.Enable):
             Result = InDevation(self.GetAvg(), self.Validate(aValue), aDevation)
         return Result
 

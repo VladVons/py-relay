@@ -53,6 +53,10 @@ class TExecApi():
         return self.Device.Direction
 
     @property
+    def xLastUpdate(self):
+        return self.Device.LastUpdate
+
+    @property
     def xError(self):
         return self.Device.MaxErr < 0
 
