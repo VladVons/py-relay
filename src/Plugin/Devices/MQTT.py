@@ -7,9 +7,7 @@ Description:
 """
 
 import json
-#import socket
 import paho.mqtt.client as mqtt
-#import paho.mqtt.publish as pub
 #
 from Inc.Util         import Net
 from Inc.Log          import Log
@@ -26,7 +24,8 @@ class TControlMQTT(TControl):
         self.Param.AddDefPattern(Pattern)
 
     def __del__(self):
-        self.Client.disconnect()
+        if (self.Client):
+            self.Client.disconnect()
 
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
@@ -38,7 +37,7 @@ class TControlMQTT(TControl):
         try:
             self.Client.connect(self.Param.Host, self.Param.Port)
         except Exception as E:
-            Msg = Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (self.Param.Host, self.Param.Port), E)
+            Msg = Log.PrintDbg(1, 'e', 'Host %s:%s' % (self.Param.Host, self.Param.Port), E.strerror)
             raise Exception(Msg)
 
         self.Client.subscribe('py-relay2')
@@ -51,18 +50,6 @@ class TControlMQTT(TControl):
             Msg = Log.PrintDbg(1, 'e', 'HttpServer not running. Check ApiPort option')
             raise Exception(Msg)
 
-    def OnMessage(self, aClient, aMessage):
-        aData = {'path': '/get/dev/values'}
-        Data = self.Pipe.ThreadSend(aData)
-        print ('on_message', aMessage.topic, aMessage.payload, Data)
-
-        DataStr = json.dumps(Data)
-        self.Client.publish(self.Param.Topic, DataStr)
-
-    @staticmethod
-    def on_message(aClient, aSelf, aMessage):
-        aSelf.OnMessage(aClient, aMessage)
-
     def _Set(self, aCaller, aValue):
         Data = {'Caller': aCaller.Alias, 'Value': aValue}
         DataStr = json.dumps(Data)
@@ -70,3 +57,15 @@ class TControlMQTT(TControl):
 
     def _Get(self):
         pass
+
+    @staticmethod
+    def on_message(aClient, aSelf, aMessage):
+        aSelf.OnMessage(aClient, aMessage)
+
+    def OnMessage(self, aClient, aMessage):
+        aData = {'path': '/get/dev/values'}
+        Data = self.Pipe.ThreadSend(aData)
+        print ('on_message', aMessage.topic, aMessage.payload, Data)
+
+        DataStr = json.dumps(Data)
+        self.Client.publish(self.Param.Topic, DataStr)

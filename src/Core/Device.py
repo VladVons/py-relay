@@ -22,6 +22,7 @@ class TDeviceParse(object):
         self.Provider   = None
         self.Alias      = None
         self.Descr      = None
+        self.Data       = None
         self.HasParam   = False
         self.Actions    = {}
 

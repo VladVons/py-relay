@@ -62,7 +62,7 @@
             "Class":"TDeviceGroup",
             "Alias":"GroupOnValue",
             "Checks": [
-                {"Enable":false,  "If": "not xCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
+                {"Enable":false,  "If": "not xIsCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
                 {"Enable":true,   "Always":"xASetValue('$WriteConsole')"},
                 {"Enable":false,  "Always":"xASetValue('$WriteConsole2')"},
                 {"Enable":false,  "Always":"xASetValue('$Grafana')"},
@@ -99,8 +99,13 @@
             "Alias":"WriteConsoleFinish"
         },
         {
+            "Data": {"One": 1},
             "Class":"TControlMQTT",
             "Alias":"MQTT",
+            "Checks": [
+                {"Enable":false,  "If": "not xIsCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
+                {"Enable":true,  "If": "xData.get('One') == 1", "Then": "xData['One'] = 2"}
+            ],
             "Parameter": {"Host": "vpn2.oster.com.ua"}
         }
     ]

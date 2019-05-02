@@ -318,6 +318,7 @@ class TSecClass(TSec):
             Result = TClass(aParent)
             Result.Alias = Alias
             Result.Descr = aData.get('Descr')
+            Result.Data  = aData.get('Data')
             Result.Manager = self.Parent
             Result = self.AddClass(Result)
             # print('->_CreateClass', 'Alias', Result.Alias, 'Class', aClassName)
@@ -326,7 +327,7 @@ class TSecClass(TSec):
                 Def  = self.Parent.SecDefault.GetClassKeys(Result)
                 Keys = Arr.Combine(aData.keys(), Def)
                 for Key in Keys:
-                    if (Key not in ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment']):
+                    if (Key not in ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment', 'Data']):
                         Result.ExtParam(Key, aData.get(Key), {'Parent': self})
                 #Result.DoStart()
         return Result

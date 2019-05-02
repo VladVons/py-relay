@@ -53,6 +53,10 @@ class TExecApi():
         return self.Device.Direction
 
     @property
+    def xData(self):
+        return self.Device.Data
+
+    @property
     def xLastUpdate(self):
         return self.Device.LastUpdate
 
@@ -73,7 +77,7 @@ class TExecApi():
     def xGetParam(self, aKey):
         self.Device.Param.GetAttr(aKey)
 
-    def xIsCallers(self, aAliases):
+    def xIsCaller(self, aAliases):
         CAlias = self.Device.Caller.Alias
         Result = CAlias in aAliases
         return Result

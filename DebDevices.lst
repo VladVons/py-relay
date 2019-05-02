@@ -6,6 +6,7 @@ Grafana.py
 Group.py
 File.py
 I2C_Relay_8574.py
+MQTT.py
 Random.py
 SensorProvider.py
 Sleep.py
