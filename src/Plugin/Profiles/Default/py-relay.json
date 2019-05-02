@@ -14,7 +14,7 @@
             {"Enable":false,  "ClassRef":"SensorUptimeSys"},
             {"Enable":false,  "ClassRef":"Random_15_25"},
             {"Enable":false,  "ClassRef":"Random_15_25"},
-            {"Enable":false,  "ClassRef":"CounterInc"},
+            {"Enable":true,   "ClassRef":"CounterInc"},
             {"Enable":true,  "ClassRef":"SensorTRDFW_Humid"},
             {"Enable":false,  "ClassRef":"SensorTRDFL_Humid"},
             {"Enable":false,  "ClassRef":"SensorTRD_Humid"},
@@ -62,9 +62,11 @@
             "Class":"TDeviceGroup",
             "Alias":"GroupOnValue",
             "Checks": [
+                {"Enable":false,  "If": "not xCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
                 {"Enable":true,   "Always":"xASetValue('$WriteConsole')"},
                 {"Enable":false,  "Always":"xASetValue('$WriteConsole2')"},
-                {"Enable":true,   "Always":"xASetValue('$Grafana')"}
+                {"Enable":false,  "Always":"xASetValue('$Grafana')"},
+                {"Enable":true,   "Always":"xASetValue('$MQTT')"}
             ]
         },
         {
@@ -95,6 +97,11 @@
         {
             "Class":"TControlWriteConsole",
             "Alias":"WriteConsoleFinish"
+        },
+        {
+            "Class":"TControlMQTT",
+            "Alias":"MQTT",
+            "Parameter": {"Host": "localhost"}
         }
     ]
 }

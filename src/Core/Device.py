@@ -123,13 +123,13 @@ class TDevice(TDeviceParse):
     def __init__(self, aParent):
         TDeviceParse.__init__(self, aParent)
 
-        self.LastChange = 0
+        self.UpdateTime = 0
         self.Value      = 0
-        self.PrevValue  = 0
         self.PostCnt    = 0
         self.MaxErr     = 0
         self.Key        = ''
         self.OnValue    = None
+        self.Caller     = None
         self.Range      = TRange()
 
         self.Avg = Num.TAvg()
@@ -142,7 +142,7 @@ class TDevice(TDeviceParse):
                     'AllValue': False,
                     'Refresh':  3600,
                     'OnValue':  True,
-                    'MaxErr':   5,
+                    'MaxErr':   3,
                     'ForceLog': False}
         self.Param.AddDefPattern(Pattern)
 
@@ -155,7 +155,7 @@ class TDevice(TDeviceParse):
 
     @property
     def LastUpdate(self):
-        return self.GetUptime() - self.LastChange
+        return self.GetUptime() - self.UpdateTime
 
     def GetAlias(self, aCaller):
         Result = ''
@@ -179,6 +179,7 @@ class TDevice(TDeviceParse):
         self.PostCnt += 1
         if (self.Param.Enable and (self.PostCnt % self.Param.Periodic == 0) and (self.PostCnt >= self.Param.Delay)):
             self.Manager.SecRun.InClass = self
+            self.Caller = aCaller
 
             if (self.Param.ForceLog):
                 Log.PrintDbg(0, 'i', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
@@ -209,8 +210,7 @@ class TDevice(TDeviceParse):
 
             self.Exec.Conditions('Triggers')
 
-            self.LastChange = self.GetUptime()
-            self.PrevValue  = aValue 
+            self.UpdateTime = self.GetUptime()
             self.MaxErr     = self.Param.MaxErr
             Result = True
 

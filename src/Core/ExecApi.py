@@ -70,6 +70,14 @@ class TExecApi():
     def xSetParam(self, aKey, aValue):
         self.Device.Param.SetAttr(aKey, aValue)
 
+    def xGetParam(self, aKey):
+        self.Device.Param.GetAttr(aKey)
+
+    def xIsCallers(self, aAliases):
+        CAlias = self.Device.Caller.Alias
+        Result = CAlias in aAliases
+        return Result
+
     @property
     def xIf(self):
         return self.Exec.CurResult.If

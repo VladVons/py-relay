@@ -117,12 +117,12 @@ class TThreadPipeApi(TThreadPipe):
     # we are in main process with parameters
     def DoReceive(self, aManager, aData):
         self.Cnt += 1
-        Path = aData['path']
+        Path = aData.get('path')
         Func = self.PathProc.get(Path)
         if (Func):
             Result = Func(aManager, aData)
         else:
-            Result = Log.PrintDbg(1, 'e', 'Unknown path %s' % Path)
+            Result = Log.PrintDbg(1, 'e', 'Unknown key path %s' % Path)
         return Result
 
 

@@ -3,7 +3,7 @@
         {
             "Class":"TSensorCounterInc",
             "Alias":"CounterInc",
-            "Parameter":{"Begin":0, "End":10, "Cycle": false, "Periodic": 10}
+            "Parameter":{"Begin":0, "End":10, "Cycle": false, "Periodic": 3}
         },
         {
             "Class":"TSensorCounterDec",
