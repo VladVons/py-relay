@@ -46,17 +46,20 @@ class TThreadPipeApi(TThreadPipe):
             '/get/app/devices':  self.GetDevices,
             '/get/app/version':  self.GetVersion,
             '/get/app/classes':  self.GetClasses,
+            '/get/class/keys':   self.GetClassKeys,
             '/get/dev/values':   self.GetValues,
             '/get/dev/values-f': self.GetValuesF,
             '/get/dev/value':    self.GetValue,
             '/set/dev/value':    self.SetValue
         }
 
-    #---  Main
-
-    def GetApi(self, aManager, aData):
+    def _GetAnyClass(self, aManager):
         AnyFirstKey = next(iter(aManager.SecClass.Data))
-        Class = aManager.SecClass.Data[AnyFirstKey]
+        return aManager.SecClass.Data[AnyFirstKey]
+
+    #---  Main
+    def GetApi(self, aManager, aData):
+        Class = self._GetAnyClass(aManager)
         Result = Arr.ListFilter(dir(Class.Exec.apix), '^x')
         return Result
 
@@ -71,6 +74,11 @@ class TThreadPipeApi(TThreadPipe):
             if (Base in Inherit):
                 Inherit = Inherit.replace(Base, '').replace('/' + Item, '')
                 Result.append([Item, Dict['Path'], Dict['Module'], Inherit])
+        return Result
+
+    def GetClassKeys(self, aManager, aData):
+        Class = self._GetAnyClass(aManager)
+        Result = Arr.Combine(Class.ExtParam.keys(), aManager.SecClass.Keys)
         return Result
 
     def GetProfile(self, aManager, aData):
@@ -201,6 +209,9 @@ class TWeb():
 
     #--- Direct
 
+    def UrlGetClassKeys(self, aParam):
+        self.QueueTable(False, aParam, 'Keys', ['Keys'])
+
     def UrlGetAppDevices(self, aParam):
         self.QueueTable(False, aParam, 'Devices', ['TClass', 'Path', 'Module', 'Inherit'])
 
@@ -233,6 +244,7 @@ class TConnSessionApp(TConnSessionHttp):
             '/get/app/version':  {'func': self.Web.UrlGetAppVersion,  'param': []},
             '/get/app/devices':  {'func': self.Web.UrlGetAppDevices,  'param': []},
             '/get/app/classes':  {'func': self.Web.UrlGetAppClasses,  'param': []},
+            '/get/class/keys':   {'func': self.Web.UrlGetClassKeys,   'param': []},
             '/get/app/profile':  {'func': self.Web.UrlGetAppProfile,  'param': []},
             '/get/dev/values':   {'func': self.Web.UrlGetDevValues,   'param': []},
             '/get/dev/values-f': {'func': self.Web.UrlGetDevValuesF,  'param': ['alias']},

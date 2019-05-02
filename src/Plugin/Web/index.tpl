@@ -5,6 +5,7 @@ $<Block cBody>
 <a href="get/app/version">get version</a><br>
 <a href="get/app/api">api</a><br>
 <a href="get/app/classes">get classes</a><br>
+<a href="get/class/keys">get class keys</a><br>
 <a href="get/app/devices">get devices</a><br>
 <a href="get/dev/values">get values</a><br>
 <a href="get/dev/values-f?alias=Sensor">get values filtered</a><br>

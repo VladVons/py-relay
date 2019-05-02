@@ -187,9 +187,11 @@ class TSecClass(TSec):
         TSec.__init__(self, aParent)
         self.OnClass = None
         self.Unused  = []
+        self.Keys = ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment', 'Data']
 
         self.Import = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
+
 
     def _DecorAliasesVar(aFunc):
         def Wrapper(self, aArrAlias, aVar, aValue = None):
@@ -327,7 +329,7 @@ class TSecClass(TSec):
                 Def  = self.Parent.SecDefault.GetClassKeys(Result)
                 Keys = Arr.Combine(aData.keys(), Def)
                 for Key in Keys:
-                    if (Key not in ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment', 'Data']):
+                    if (Key not in self.Keys):
                         Result.ExtParam(Key, aData.get(Key), {'Parent': self})
                 #Result.DoStart()
         return Result
