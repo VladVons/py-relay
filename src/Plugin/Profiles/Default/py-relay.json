@@ -101,7 +101,7 @@
         {
             "Class":"TControlMQTT",
             "Alias":"MQTT",
-            "Parameter": {"Host": "localhost"}
+            "Parameter": {"Host": "vpn2.oster.com.ua"}
         }
     ]
 }

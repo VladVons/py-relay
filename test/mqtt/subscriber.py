@@ -97,4 +97,5 @@ class TMqtt():
 
 
 Mqtt = TMqtt()
-Mqtt.Connect('localhost', 1883, 'py-relay')
+#Mqtt.Connect('localhost', 1883, 'py-relay')
+Mqtt.Connect('vpn2.oster.com.ua', 1883, 'py-relay')
