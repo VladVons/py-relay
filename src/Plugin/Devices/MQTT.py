@@ -10,7 +10,7 @@ import json
 try:
     import paho.mqtt.client as mqtt
 except Exception as E:
-    print(__file__, E, 'apt-get install python-paho-mqtt')
+    print(__file__, E, 'apt-get install python-paho-mqtt', 'pip install paho-mqtt')
 #
 from Inc.Util         import Net
 from Inc.Log          import Log
