@@ -7,7 +7,10 @@ Description:
 """
 
 import json
-import paho.mqtt.client as mqtt
+try:
+    import paho.mqtt.client as mqtt
+except Exception as E:
+    print(__file__, E, 'apt-get install python-paho-mqtt')
 #
 from Inc.Util         import Net
 from Inc.Log          import Log
