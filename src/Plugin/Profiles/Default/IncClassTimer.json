@@ -1,6 +1,11 @@
 {
     "Class":[
         {
+            "Class":"TControlSleep",
+            "Alias":"Sleep_1",
+            "Parameter":{"Time":1}
+        },
+        {
             "Class":"TSensorTimeRangeDay",
             "Alias":"SensorTimeRangeDay",
             "Descr":"Day light",

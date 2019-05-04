@@ -1,6 +1,33 @@
 {
     "Class":[
         {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnValue",
+            "Checks": [
+                {"Enable":false,  "If": "not xIsCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
+                {"Enable":true,   "Always":"xASetValue('$WriteConsole')"},
+                {"Enable":false,  "Always":"xASetValue('$WriteConsole2')"},
+                {"Enable":false,  "Always":"xASetValue('$Grafana')"},
+                {"Enable":true,   "Always":"xASetValue('$MQTT')"}
+            ]
+        },
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnStart",
+            "Checks": [
+                {"Enable":false, "Always":"xASetValue('$IRelay_1', 0)"},
+                {"Enable":false, "Always":"xASetValue('$IRelay_2', 0)"},
+                {"Enable":false, "Always":"xASetValue('$IRelay_3', 0)"}
+            ]
+        },
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnFinish",
+            "Checks": [
+                {"Enable":false,  "Always":"xASetValue('$DH1_Relay_A', 0)"}
+            ]
+        },
+        {
             "Enable":"false",
             "Class":"TSensorGroupSum",
             "Alias":"SensorGroupSum",

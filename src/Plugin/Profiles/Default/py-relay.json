@@ -15,19 +15,21 @@
             {"Enable":false,  "ClassRef":"Random_15_25"},
             {"Enable":false,  "ClassRef":"Random_15_25"},
             {"Enable":true,   "ClassRef":"CounterInc"},
-            {"Enable":true,  "ClassRef":"SensorTRDFW_Humid"},
+            {"Enable":false,  "ClassRef":"SensorTRDFW_Humid"},
             {"Enable":false,  "ClassRef":"SensorTRDFL_Humid"},
             {"Enable":false,  "ClassRef":"SensorTRD_Humid"},
             {"Enable":false,  "ClassRef":"SensorTRM_Humid"},
             {"Enable":false,  "ClassRef":"SensorTimeRangeCycle"},
 
+
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
             {"Enable":false, "ClassRef":"SensorTimeRangeCycle1"},
             {"Enable":false, "ClassRef":"SensorSun"},
-            {"Enable":false, "ClassRef":"DH1_Sensor_Humid"},
-            {"Enable":false, "ClassRef":"SensorTRD_Humid"},
-            {"Enable":false, "ClassRef":"SensorTRDF_2"},
+
+            {"Enable":true, "ClassRef":"DH1_Sensor_Temper"},
+            {"Enable":true, "ClassRef":"DH1_Sensor_Humid"},
+
             {"Enable":false, "ClassRef":"IRelay_A1"}
         ],
         "Finish":[
@@ -44,7 +46,7 @@
         {"Enable":true,  "File":"IncClassReport.json"},
         {"Enable":false, "File":"IncClassSolar.json"},
         {"Enable":true,  "File":"IncClassRelay.json"},
-        {"Enable":false, "File":"IncClassDh1.json"},
+        {"Enable":true,  "File":"IncClassDh1.json"},
         {"Enable":true,  "File":"IncClassRasPi.json"}
     ],
     "Action":[
@@ -58,55 +60,5 @@
     "Default":[
     ],
     "Class":[
-        {
-            "Class":"TDeviceGroup",
-            "Alias":"GroupOnValue",
-            "Checks": [
-                {"Enable":false,  "If": "not xIsCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
-                {"Enable":true,   "Always":"xASetValue('$WriteConsole')"},
-                {"Enable":false,  "Always":"xASetValue('$WriteConsole2')"},
-                {"Enable":false,  "Always":"xASetValue('$Grafana')"},
-                {"Enable":true,   "Always":"xASetValue('$MQTT')"}
-            ]
-        },
-        {
-            "Class":"TDeviceGroup",
-            "Alias":"GroupOnStart",
-            "Checks": [
-                {"Enable":false, "Always":"xASetValue('$IRelay_1', 0)"},
-                {"Enable":false, "Always":"xASetValue('$IRelay_2', 0)"},
-                {"Enable":false, "Always":"xASetValue('$IRelay_3', 0)"}
-            ]
-        },
-        {
-            "Class":"TDeviceGroup",
-            "Alias":"GroupOnFinish",
-            "Checks": [
-                {"Enable":false,  "Always":"xASetValue('$DH1_Relay_A', 0)"}
-            ]
-        },
-        {
-            "Class":"TControlSleep",
-            "Alias":"Sleep_1",
-            "Parameter":{"Time":1}
-        },
-        {
-            "Class":"TControlWriteConsole",
-            "Alias":"WriteConsoleStart"
-        },
-        {
-            "Class":"TControlWriteConsole",
-            "Alias":"WriteConsoleFinish"
-        },
-        {
-            "Data": {"One": 1},
-            "Class":"TControlMQTT",
-            "Alias":"MQTT",
-            "Checks": [
-                {"Enable":false,  "If": "not xIsCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
-                {"Enable":true,  "If": "xData.get('One') == 1", "Then": "xData['One'] = 2"}
-            ],
-            "Parameter": {"Host": "vpn2.oster.com.ua"}
-        }
     ]
 }

@@ -15,6 +15,16 @@
             "Parameter":{"Host":"10.10.1.1", "User":"grafana5", "Password":"graf20195", "DB":"app_grafana5", "Table": "Dict1", "Prefix":1}
         },
         {
+            "Data": {"One": 1},
+            "Class":"TControlMQTT",
+            "Alias":"MQTT",
+            "Checks": [
+                {"Enable":false,  "If": "not xIsCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
+                {"Enable":false,  "If": "xData.get('One') == 1", "Then": "xData['One'] = 2"}
+            ],
+            "Parameter": {"Host": "vpn2.oster.com.ua", "Topic": "tr24"}
+        },
+        {
             "Class":"TControlWriteLog",
             "Alias":"WriteLogErr"
         },
@@ -42,6 +52,14 @@
             "Class":"TControlWriteConsole",
             "Alias":"WriteConsoleRand",
             "Parameter":{"Enable":true}
+        },
+        {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsoleStart"
+        },
+        {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsoleFinish"
         }
     ]
 }

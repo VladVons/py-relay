@@ -43,7 +43,9 @@ class TControlMQTT(TControl):
             Msg = Log.PrintDbg(1, 'e', 'Host %s:%s' % (self.Param.Host, self.Param.Port), E.strerror)
             raise Exception(Msg)
 
-        self.Client.subscribe('py-relay2')
+        Topic = self.Param.Topic + '/get/dev/values'
+        self.Client.subscribe(Topic)
+
         self.Client.on_message = TControlMQTT.on_message
         self.Client.loop_start()
 
@@ -58,6 +60,9 @@ class TControlMQTT(TControl):
         DataStr = json.dumps(Data)
         self.Client.publish(self.Param.Topic, DataStr)
 
+        Topic = '%s/%s' % (self.Param.Topic, aCaller.Alias)
+        self.Client.publish(Topic, aValue)
+
     def _Get(self):
         pass
 
@@ -66,9 +71,11 @@ class TControlMQTT(TControl):
         aSelf.OnMessage(aClient, aMessage)
 
     def OnMessage(self, aClient, aMessage):
-        aData = {'path': '/get/dev/values'}
+        Path = aMessage.topic.replace(self.Param.Topic, '')
+        aData = {'path': Path}
         Data = self.Pipe.ThreadSend(aData)
-        print ('on_message', aMessage.topic, aMessage.payload, Data)
-
-        DataStr = json.dumps(Data)
-        self.Client.publish(self.Param.Topic, DataStr)
+        if (Path == '/get/dev/values'):
+            for Item in Data:
+                Topic = '%s/%s' % (self.Param.Topic, Item)
+                Value = Data[Item]
+                self.Client.publish(Topic, Value)
