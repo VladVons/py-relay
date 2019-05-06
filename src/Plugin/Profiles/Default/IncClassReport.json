@@ -19,8 +19,8 @@
             "Class":"TControlMQTT",
             "Alias":"MQTT",
             "Checks": [
-                {"Enable":false,  "If": "not xIsCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
-                {"Enable":false,  "If": "xData.get('One') == 1", "Then": "xData['One'] = 2"}
+                {"Enable":true,  "If": "xIsCallerClass(['TSensorProvider'])"},
+                {"Enable":false, "If": "xData.get('One') == 1", "Then": "xData['One'] = 2"}
             ],
             "Parameter": {"Host": "vpn2.oster.com.ua", "Topic": "tr24"}
         },

@@ -21,7 +21,6 @@
             {"Enable":false,  "ClassRef":"SensorTRM_Humid"},
             {"Enable":false,  "ClassRef":"SensorTimeRangeCycle"},
 
-
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
             {"Enable":false, "ClassRef":"SensorTimeRangeCycle1"},

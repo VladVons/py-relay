@@ -8,6 +8,7 @@ Description:
 
 
 from Inc.Log  import Log
+from Inc.Util import Obj, Str
 
 
 class TExecApi():
@@ -64,6 +65,10 @@ class TExecApi():
     def xError(self):
         return self.Device.MaxErr < 0
 
+    def xMacros(self, aName):
+        Value = self.Device.Manager.LoadConf.DictReplace.Data.get(aName)
+        return Str.ConvertTo(Value)
+
     @property
     def xValue(self):
         return self.Device.Value
@@ -77,10 +82,17 @@ class TExecApi():
     def xGetParam(self, aKey):
         self.Device.Param.GetAttr(aKey)
 
-    def xIsCaller(self, aAliases):
-        CAlias = self.Device.Caller.Alias
-        Result = CAlias in aAliases
-        return Result
+    @property
+    def xCaller(self):
+        return self.Device.Caller
+
+    def xIsCallerAlias(self, aNames):
+        Name = self.xCaller.Alias
+        return Name in aNames
+
+    def xIsCallerClass(self, aNames):
+        Name = Obj.GetName(self.xCaller)
+        return Name in aNames
 
     @property
     def xIf(self):

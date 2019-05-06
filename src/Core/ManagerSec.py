@@ -152,7 +152,7 @@ class TSecDefault(TSec):
     def __init__(self, aParent):
         TSec.__init__(self, aParent)
 
-        self.Keys = ['Parameter', 'Action']
+        self.Keys = ['Public', 'Parameter', 'Action']
 
     def Load(self, aData):
         Keys = ['Enable', 'Class'] + self.Keys
@@ -162,7 +162,7 @@ class TSecDefault(TSec):
                 Name = Item.get('Class')
                 for Key in self.Keys:
                     Value = Item.get(Key)
-                    if (Value):
+                    if (Value is not None):
                         if (Key not in self.Data):
                             self.Data[Key] = {}
                         self.Data[Key][Name] = Value
@@ -187,7 +187,7 @@ class TSecClass(TSec):
         TSec.__init__(self, aParent)
         self.OnClass = None
         self.Unused  = []
-        self.Keys = ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment', 'Data']
+        self.Keys = ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment', 'Data', 'Public']
 
         self.Import = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
@@ -318,6 +318,10 @@ class TSecClass(TSec):
 
             Log.PrintDbg(1, 'i', 'Load %s->%s (%s)' % (PAlias, Alias, TClass.__name__))
             Result = TClass(aParent)
+
+            Value = aData.get('Public', True)
+            Result.Public = self.Parent.SecDefault.GetSect('Public', Result, Value)
+
             Result.Alias = Alias
             Result.Descr = aData.get('Descr')
             Result.Data  = aData.get('Data')

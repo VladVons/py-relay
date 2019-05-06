@@ -21,6 +21,7 @@ class TDeviceParse(object):
         self.Manager    = None
         self.Provider   = None
         self.Alias      = None
+        self.Public     = None
         self.Descr      = None
         self.Data       = None
         self.HasParam   = False

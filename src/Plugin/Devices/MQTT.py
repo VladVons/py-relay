@@ -7,6 +7,7 @@ Description:
 """
 
 import json
+import time
 try:
     import paho.mqtt.client as mqtt
 except Exception as E:
@@ -56,26 +57,30 @@ class TControlMQTT(TControl):
             raise Exception(Msg)
 
     def _Set(self, aCaller, aValue):
-        Data = {'Caller': aCaller.Alias, 'Value': aValue}
-        DataStr = json.dumps(Data)
-        self.Client.publish(self.Param.Topic, DataStr)
-
-        Topic = '%s/%s' % (self.Param.Topic, aCaller.Alias)
-        self.Client.publish(Topic, aValue)
+        self.Publish(aCaller.Alias, aValue)
 
     def _Get(self):
         pass
+
+    def Publish(self, aAlias, aValue):
+        Class = self.Manager.SecClass.GetClass(aAlias)
+        if (Class.Public):
+            Data = {'Alias': aAlias, 'Value': aValue}
+            DataStr = json.dumps(Data)
+            self.Client.publish(self.Param.Topic, DataStr)
+
+            Topic = '%s/%s' % (self.Param.Topic, aAlias)
+            self.Client.publish(Topic, aValue)
 
     @staticmethod
     def on_message(aClient, aSelf, aMessage):
         aSelf.OnMessage(aClient, aMessage)
 
     def OnMessage(self, aClient, aMessage):
-        Path = aMessage.topic.replace(self.Param.Topic, '')
-        aData = {'path': Path}
-        Data = self.Pipe.ThreadSend(aData)
+        Path  = aMessage.topic.replace(self.Param.Topic, '')
         if (Path == '/get/dev/values'):
-            for Item in Data:
-                Topic = '%s/%s' % (self.Param.Topic, Item)
-                Value = Data[Item]
-                self.Client.publish(Topic, Value)
+            aData = {'path': Path}
+            Data = self.Pipe.ThreadSend(aData)
+            for Idx, Item in enumerate(Data):
+                self.Publish(Item, Data[Item])
+                time.sleep(0.1)

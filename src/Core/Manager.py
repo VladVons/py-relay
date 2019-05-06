@@ -34,10 +34,12 @@ class TLoadConf():
         return Result
 
     def Macros(self, aFile):
-        FilePath = self.Path(aFile)
-        EditorConf = TEditorConf()
-        EditorConf.LoadFromFile(FilePath)
-        self.DictReplace.Data = EditorConf.Section.KeyList()
+        Files = [aFile, self.Path(aFile)]
+        for File in Files:
+            EditorConf = TEditorConf()
+            EditorConf.LoadFromFile(File)
+            Data = EditorConf.Section.KeyList()
+            self.DictReplace.Data.update(Data)
 
     def Conf(self, aFile):
         Log.PrintDbg(3, 'i', 'Load file %s' % aFile)

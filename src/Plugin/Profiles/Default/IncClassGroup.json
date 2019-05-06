@@ -4,11 +4,12 @@
             "Class":"TDeviceGroup",
             "Alias":"GroupOnValue",
             "Checks": [
-                {"Enable":false,  "If": "not xIsCaller(['SensorTRDFW_Humid'])", "Then": "xBreak()"},
-                {"Enable":true,   "Always":"xASetValue('$WriteConsole')"},
-                {"Enable":false,  "Always":"xASetValue('$WriteConsole2')"},
-                {"Enable":false,  "Always":"xASetValue('$Grafana')"},
-                {"Enable":true,   "Always":"xASetValue('$MQTT')"}
+                {"Enable":false,  "If": "not xIsCallerClass(['TSensorProvider'])", "Then":"xBreak()"},
+                {"Enable":false,  "If": "xMacros('cMatoch2_HumidMin') == 70", "Then":"xBreak()"},
+                {"Enable":true,  "Always":"xASetValue('$WriteConsole')"},
+                {"Enable":false, "Always":"xASetValue('$WriteConsole2')"},
+                {"Enable":false, "Always":"xASetValue('$Grafana')"},
+                {"Enable":true,  "Always":"xASetValue('$MQTT')"}
             ]
         },
         {

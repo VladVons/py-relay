@@ -138,7 +138,7 @@ class TMain():
             'CheckUpdate':   False,
             'DebugAlias':    False,
             'FileConf':      cAppName + '.json',
-            'FileMacros':    cAppName + '.conf',
+            'FileMacros':    'macros.conf',
             'FileDb':        cAppName + '.db',
             'FileLog':       '/var/log/%s/%s.log' % (cAppName, cAppName),
             'PkgPath':       ''

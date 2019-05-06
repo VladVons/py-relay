@@ -109,10 +109,10 @@ class TMqtt():
 #
 #Topic = 'Noviki01'
 #
-Topic = 'Mishk01'
+#Topic = 'Mishk01'
 #Topic = 'Mishk01/DH2_Sensor_Humid'
 #
-#Topic = 'tr24'
+Topic = 'tr24'
 #Topic = 'Mishk01/DH2_Sensor_Humid'
 
 #Topic = 'Watch01'

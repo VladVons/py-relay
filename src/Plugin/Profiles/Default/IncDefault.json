@@ -16,7 +16,8 @@
             "Parameter":{"Invert": true, "Mirror": false}
         },
         {
-            "Enable":true,
+            "Enable": true,
+            "Public": false,
             "Class":"TSensorProvider",
             "Parameter":{"Refresh":600, "Round": 0.5}
         }

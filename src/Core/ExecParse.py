@@ -69,10 +69,10 @@ class TExecParse(TExec):
 
     def Conditions(self, aKey):
         Result = True
-        Items = self.Keys.get(aKey)
+        Items  = self.Keys.get(aKey)
         if (Items):
             self.BreakLabel = None
-            for Item in Items:
+            for Idx, Item in enumerate(Items):
                 if (self.BreakLabel):
                     if (self.BreakLabel == 'EXIT'):
                         return Result
@@ -84,6 +84,6 @@ class TExecParse(TExec):
                         Result &= bool(self.CurResult.If)
 
             if (self.BreakLabel):
-                Msg = Log.PrintDbg(1, 'e', 'Unknown Label %s in %s' % (self.BreakLabel, self.Parent.Alias))
+                Msg = Log.PrintDbg(1, 'e', 'Unknown label or last item with Break %s in %s' % (self.BreakLabel, self.Parent.Alias))
                 raise Exception(Msg)
         return Result

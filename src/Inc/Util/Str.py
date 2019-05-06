@@ -21,7 +21,9 @@ def ActionDelim(self, aStr, aFunc, aDelim = ","):
 
 def ConvertTo(aData):
     if ( (aData) and (type(aData).__name__ in ['str', 'unicode']) ):
-        if (aData.lower() in ['true', 'false']):
+        if (aData[0] == '"') and (aData[-1] == '"'):
+            aData = aData[1:-1]
+        elif (aData.lower() in ['true', 'false']):
             aData = bool(aData)
         elif (aData.isdigit()):
             aData = int(aData)

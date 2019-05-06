@@ -266,7 +266,8 @@ class TDictReplace():
         return self._ParseRecurs(aData)
 
     def ParseTo(self, aData):
-        return Str.ConvertTo(self.Parse(aData))
+        Value = self.Parse(aData)
+        return Str.ConvertTo(Value)
 
     def ParseVar(self, aData):
         if (isinstance(aData, dict)):
