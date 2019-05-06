@@ -36,36 +36,6 @@ ExecM()
 }
  
 
-Install_pi_img()
-{
-  Log "$0->$FUNCNAME"
-
-  #--- Download image.
-  #https://www.raspberrypi.org/downloads/raspbian/
-  wget https://downloads.raspberrypi.org/raspbian_lite_latest -O raspbian-jessie-lite.zip
-  unzip raspbian-jessie-lite.zip
-
-  Dir="/mnt/hdd/data1/share/public/image/raspberry/img"
-  Img="2018-11-13-raspbian-stretch-lite.img"
-
-  #--- List usb disks
-  df -h
-  echo "in most cases USB stick is /dev/sdb (not a dev/sdb1)"
-  echo "do not use buffer bs=4M. Write direct. More stableX"
-  echo "dd conv=fsync if=$Dir/$Img of=/dev/sdX"
-  sync
-
-  #--- Boot Raspberry
-  #user: pi
-  #password: raspberry
-
-  #--- configure raspberry
-  raspi-config
-  #Menu->Advanced Options->SSH Enable/Disable
-
-}
-
-
 Install_PkgMin()
 {
   aPkg="$1";

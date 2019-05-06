@@ -15,4 +15,4 @@ if [ -d /run/systemd/system ] ; then
     systemctl --system daemon-reload >/dev/null || true
 fi
 
-echo "postrm: $1" >> /$Name.log
+#echo "postrm: $1" >> /$Name.log

@@ -1,6 +1,24 @@
-#!/bin/bash -x
+##!/bin/bash
+
+##!/bin/bash -x
+
 # Created: 28.09.2016
 # Vladimir Vons, VladVons@gmail.com
+
+
+Nuitka()
+{
+  CODENAME=`grep UBUNTU_CODENAME /etc/os-release | cut -d= -f2`
+  if ["$CODENAME"] = ""]
+  then
+    CODENAME=`lsb_release -c -s`
+  fi;
+
+  wget -O - http://nuitka.net/deb/archive.key.gpg | apt-key add -
+  echo > /etc/apt/sources.list.d/nuitka.list "deb http://nuitka.net/deb/stable/$CODENAME $CODENAME main"
+  apt-get update
+  apt-get install nuitka
+}
 
 
 Install()
@@ -29,7 +47,8 @@ Install()
   pip install setuptools
 
   ## python binary compiler 
-  pip install nuitka
+  Nuitka
+  #pip install nuitka
   apt install python-dev
   #apt install build-essential
 
@@ -111,25 +130,41 @@ RaspiImg()
   Dir="/mnt/hdd/data1/share/public/image/raspberry/img"
   Img="2018-11-13-raspbian-stretch-lite.img"
   Arc="raspbian-jessie-lite.zip"
-  Dev="/dev/sdb"
+  Dev="/dev/sdX"
 
   cd $Dir
   #wget https://downloads.raspberrypi.org/raspbian_lite_latest -O $Arc
   #unzip $Arc
 
-  lsblk
+  lsblk | grep "sd"
+
+  echo "in most cases USB stick is /dev/sdb (not a dev/sdb1)"
+  echo "do not use buffer bs=4M. Write direct. More stable"
+  echo "dd conv=fsync if=$Dir/$Img of=$Dev"
+  sync
+
   # with cache
   #dd bs=4M conv=fsync if=$Img of=$Dev
 
   ## disable buffering for safe ?
-  dd conv=fsync if=$Img of=$Dev
 
   ## resize only 200M or comment to disable resizing
   ##/media/linux/rootfs/etc/init.d/resize2fs_once
   #resize2fs $ROOT_DEV 200M &&
+
+  #--- Boot Raspberry
+  #user: pi
+  #password: raspberry
+
+  #--- configure raspberry
+  #raspi-config
+  #Menu->Advanced Options->SSH Enable/Disable
+
   ## --- ssh enable 
+  #echo > /ssh
   #update-rc.d ssh enable 
   #update-rc.d ssh defaults
+
 
   # LCD display driver
   #https://github.com/goodtft/LCD-show
