@@ -5,7 +5,8 @@
 cApp="py-relay"
 
 #cAppRun="./$cApp.bin -p Default"
-cAppRun="python ./$cApp.py -p Default"
+#cAppRun="python ./$cApp.py -p Default"
+cAppRun="python ./$cApp.py -p Client/Miskovichi1"
 
 
 Log()

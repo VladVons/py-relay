@@ -168,7 +168,7 @@ class TSecDefault(TSec):
                         self.Data[Key][Name] = Value
 
     def GetSect(self, aSect, aClass, aDef = {}):
-        Name   = aClass.__class__.__name__
+        Name   = Obj.GetName(aClass)
         Result = self.Data.get(aSect, aDef)
         if (Result):
             Result = Result.get(Name, aDef)
@@ -319,8 +319,10 @@ class TSecClass(TSec):
             Log.PrintDbg(1, 'i', 'Load %s->%s (%s)' % (PAlias, Alias, TClass.__name__))
             Result = TClass(aParent)
 
-            Value = aData.get('Public', True)
-            Result.Public = self.Parent.SecDefault.GetSect('Public', Result, Value)
+            # boolean value
+            Result.Public = self.Parent.SecDefault.GetSect('Public', Result, None)
+            if (Result.Public is None):
+                Result.Public = aData.get('Public', True)
 
             Result.Alias = Alias
             Result.Descr = aData.get('Descr')
