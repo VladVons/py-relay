@@ -37,6 +37,7 @@ Install()
   apt install lsof
   apt install zip
   apt install screen
+  apt install sqlite
 
   #@ some package for app 
   apt install python-prctl
@@ -56,10 +57,19 @@ Install()
   Nuitka
   #pip install nuitka
   apt install python-dev
+  #apt install libcap-dev
   #apt install build-essential
 
   ## for test connections
   apt install mysql-client --no-install-recommends
+
+  #pip install apcaccess
+  #pip install Adafruit-BMP
+  #pip install Adafruit-ADS1x15
+  #pip install Adafruit_Python_DHT
+  #pip install minimalmodbus
+ 
+  adduser pi i2c
 }
 
 
@@ -95,34 +105,6 @@ Install_1()
 }
 
 
-Relay() 
-{
-  apt-get install libpython2.7
-  apt-get install python-pip --no-install-recommends --reinstall
-  apt-get install python-dev
-  apt-get install python-prctl
-  apt-get install build-essential libcap-dev
-  apt-get install python-mysqldb
-  
-  apt-get install python-smbus
-  adduser linux i2c # allow non root user access
-
-  pip install --upgrade pip
-  pip install setuptools
-  #pip install wheel
-  #pip install prctl
-  pip install Adafruit-BMP
-  pip install Adafruit-ADS1x15
-  pip install Adafruit_Python_DHT
-  pip install minimalmodbus
-  pip install yattag
-  pip install apcaccess
-  #pip install pycryptodome
-
-  #ln -s /usr/lib/python2.7/dist-packages /usr/local/lib/python2.7/dist-packages
-}
-
-
 RaspiImg()
 {
   ## 7 raspi
@@ -130,7 +112,8 @@ RaspiImg()
 
   ## copy all data
   #dd if=/dev/sdb of=raspi.img bs=4M conv=notrunc,noerror
-  ## copy only 1.7G data
+
+  ## copy only 1.7G data with 1M cache 
   #dd if=/dev/sdb of=raspi_1700M.img bs=1M count=1700 conv=noerror
 
   Dir="/mnt/hdd/data1/share/public/image/raspberry/img"
@@ -142,6 +125,9 @@ RaspiImg()
   #wget https://downloads.raspberrypi.org/raspbian_lite_latest -O $Arc
   #unzip $Arc
 
+  # mount dd image
+  #losetup --partscan --find --show $Dir/$Img
+
   lsblk | grep "sd"
 
   echo "in most cases USB stick is /dev/sdb (not a dev/sdb1)"
@@ -149,14 +135,11 @@ RaspiImg()
   echo "dd conv=fsync if=$Dir/$Img of=$Dev"
   sync
 
-  # with cache
-  #dd bs=4M conv=fsync if=$Img of=$Dev
-
   ## disable buffering for safe ?
 
   ## resize only 200M or comment to disable resizing
   ##/media/linux/rootfs/etc/init.d/resize2fs_once
-  #resize2fs $ROOT_DEV 200M &&
+  #resize2fs $ROOT_DEV 1800M &&
 
   #--- Boot Raspberry
   #user: pi
@@ -165,12 +148,6 @@ RaspiImg()
   #--- configure raspberry
   #raspi-config
   #Menu->Advanced Options->SSH Enable/Disable
-
-  ## --- ssh enable 
-  #echo > /ssh
-  #update-rc.d ssh enable 
-  #update-rc.d ssh defaults
-
 
   # LCD display driver
   #https://github.com/goodtft/LCD-show
