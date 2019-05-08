@@ -7,7 +7,7 @@ Name="py-relay"
 Mail="vladvons@gmail.com"
 #
 #Branch="master"
-Branch="v2"
+Branch="v3"
 #
 Url="https://github.com/$User/$Name.git"
 
@@ -186,6 +186,7 @@ case $1 in
     GitToServ|t)         GitToServ   "$2" "$3" ;;
     GitFromServ|f)       GitFromServ "$2" "$3" ;;
     GitFromServMissed|m) GitFromServMissed "$2" "$3" ;;
+    GitNewBranch)        "$1"        "$2" "$3" ;;
     GitClone)            "$1"        "$2" "$3" ;;
     *)                   Help ;;
 esac
