@@ -21,7 +21,8 @@ class TControlTelegram(TControl):
     def __init__(self, aParent):
         TControl.__init__(self, aParent)
 
-        Pattern = {'Token': TDictParam.Required, 'Chats': TDictParam.Required, 'Refresh': 600, 'Diff': 0.05, 'Footer': ''}
+        Pattern = {'Token': TDictParam.Required, 'Chats': TDictParam.Required,
+                   'Refresh': 1200, 'Diff': 0.05, 'Footer': ''}
         self.Param.AddDefPattern(Pattern)
 
     def DoParameter(self, aParam):
@@ -38,5 +39,5 @@ class TControlTelegram(TControl):
         if (self.UpdateDelay.Check(aCaller.Alias, aValue)):
             self.UpdateDelay.Update(aCaller.Alias)
 
-            Info = '{}->{}: {}\n{}'.format(aCaller.Descr, aCaller.Alias, aCaller.Value, self.Param.Footer)
+            Info = '{}, {}: {}\n{}'.format(aCaller.Alias, aCaller.Descr, aCaller.Value, self.Param.Footer)
             self.Telegram.Set(aCaller, Info)

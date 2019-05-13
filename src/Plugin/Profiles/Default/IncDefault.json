@@ -16,10 +16,15 @@
             "Parameter":{"Invert": true, "Mirror": false}
         },
         {
-            "Enable": true,
-            "Public": false,
+            "Enable":true,
+            "Public":false,
             "Class":"TSensorProvider",
             "Parameter":{"Refresh":600, "Round": 0.5}
+        },
+        {
+            "Enable":true,
+            "Class":"TProviderDeviceHivePinThread_DHT22",
+            "Parameter": {"Periodic": 30}
         }
    ]
 }

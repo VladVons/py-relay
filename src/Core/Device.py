@@ -128,6 +128,7 @@ class TDevice(TDeviceParse):
         self.UpdateTime = 0
         self.Value      = 0
         self.PostCnt    = 0
+        self.Err        = False
         self.MaxErr     = 0
         self.Key        = ''
         self.OnValue    = None
@@ -197,7 +198,8 @@ class TDevice(TDeviceParse):
     def SetValue(self, aValue):
         Log.PrintDbg(3, 'i', 'Alias %s, Value %s' % (self.Alias, aValue))
 
-        if (not self.CheckValue(aValue)):
+        self.Err = not self.CheckValue(aValue)
+        if (self.Err):
             self.Exec.Conditions('Triggers')
             return False
 
