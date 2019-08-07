@@ -38,6 +38,7 @@ Install()
   apt install zip
   apt install screen
   apt install sqlite
+  apt install ntpdate
 
   #@ some package for app 
   apt install python-prctl

@@ -204,7 +204,7 @@ class TDevice(TDeviceParse):
             return False
 
         Result = False
-        if (self.Value != aValue) or (self.Param.AllValue) or (self.LastUpdate > self.Param.Refresh):
+        if (self.Value != aValue) or (self.Param.AllValue) or (self.Param.Refresh > 0 and self.LastUpdate > self.Param.Refresh):
             if (self.OnValue):
                 aValue = self.OnValue(self, aValue)
             self.Value = aValue

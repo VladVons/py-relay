@@ -32,25 +32,28 @@ Start()
 {
     Log "$0->$FUNCNAME"
 
+
     # allow only one instance
-    (
-        echo "Check running ..."
-        flock -x -w 5 200
-        if [ $? -eq 0 ]; then
+    #(
+    #    echo "Check running ..."
+    #    flock -x -w 5 200
+    #    if [ $? -eq 0 ]; then
             OnStart
             $cAppRun
             OnStart
-        else
-            Log "Already running $cApp"
-        fi;
-    )200> /var/lock/$cApp
-    
+    #    else
+    #        Log "Already running $cApp"
+    #    fi;
+    #)200> /var/lock/$cApp
+
 }
 
 
 Restart()
 {
     Log "$0->$FUNCNAME, $1"
+
+    ps -eo pid,lstart,etime,args | grep $cAppRun
 
     OnStart
     service $cApp restart
