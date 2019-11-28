@@ -1,8 +1,12 @@
 $<File /layout.tpl>
 
 $<Block cBody>
-<a href="get/app/profile">current profile</a><br>
+<br>
+To get JSON output add to URL 'style=json'<br>
+<a href="get/app/version?style=json">get version as JSON</a><br>
+<br>
 <a href="get/app/version">get version</a><br>
+<a href="get/app/profile">current profile</a><br>
 <a href="get/app/api">api</a><br>
 <a href="get/app/classes">get classes</a><br>
 <a href="get/class/keys">get class keys</a><br>

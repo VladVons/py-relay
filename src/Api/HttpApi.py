@@ -115,7 +115,7 @@ class THttpApiWeb():
         return DReplace.Parse(Data)
 
     def Output(self, aParam,  aData, aTitle: str, aColumns: list) -> str:
-        if (aParam.get('json') == '1'):
+        if (aParam.get('style') == 'json'):
             Result = json.dumps(aData)
         else:
             Type = type(aData)
@@ -176,7 +176,8 @@ class THttpApiWeb():
 
 class THttpApiWebServer(THttpApiWeb):
     def Handler_CB(self, aRequest):
-        Log.PrintDbg(1, 'i', '%s from %s %s' % (aRequest.path_qs, aRequest.remote, aRequest.headers.get('User-Agent')))
+        #aRequest.headers.get('User-Agent')
+        Log.PrintDbg(1, 'i', '%s from %s %s' % (aRequest.path_qs, aRequest.remote, ''))
 
         self.Result.Clear()
         Text = self.ParseUrl(aRequest.rel_url.path, aRequest.query)

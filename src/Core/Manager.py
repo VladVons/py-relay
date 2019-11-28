@@ -121,9 +121,9 @@ class TManager():
         elif (aMode == 'Unused'):
             Result = self.SecClass.GetUnused()
         elif (aMode == 'Total'):
-            Result['Class']  = len(self.SecClass.Data)
-            Result['Unused'] = len(self.SecClass.GetUnused())
-            Result['Loop']   = len(self.SecRun.Data.get('Loop', []))
+            Result['Class']     = len(self.SecClass.Data)
+            Result['Unused']    = len(self.SecClass.GetUnused())
+            Result['InLoop']    = len(self.SecRun.Data.get('Loop', []))
             Result['Profile']   = self.LoadConf.Dir
             Result['UptimeApp'] = int(time.time() - self.StartTimeReal)
         return Result
