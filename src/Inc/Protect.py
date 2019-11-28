@@ -10,7 +10,7 @@ Description:
 import json
 #
 from Inc.Log          import Log
-from Inc.Util         import FS, Net
+from Inc.Util         import UFS, UNet
 from Inc.Crypt        import TCrypt
 
 
@@ -20,13 +20,13 @@ class TProtect():
         self.Info  = {}
 
     def GetSerial(self):
-        return Net.GetMac()
+        return UNet.GetMac()
 
     def GetSerialCrypted(self):
         Data = {'Hard': self.GetSerial()}
         return self.Crypt.Encode(json.dumps(Data))
 
-    def LoadKeyStr(self, aData):
+    def LoadKeyStr(self, aData: str):
         self.Info = {}
         try:
             StrInfo = self.Crypt.Decode(aData)
@@ -34,10 +34,10 @@ class TProtect():
         except:
             Log.PrintDbg(1, 'x', 'Error parsing license data')
 
-    def LoadKeyFile(self, aFile):
-        Result = FS.FileExists(aFile)
+    def LoadKeyFile(self, aFile: str):
+        Result = UFS.FileExists(aFile)
         if (Result):
-            Data = FS.LoadFromFileToStr(aFile)
+            Data = UFS.LoadFromFileToStr(aFile)
             self.LoadKeyStr(Data)
         else:
             Log.PrintDbg(1, 'e', 'License file not exists %s' % (aFile))

@@ -11,7 +11,7 @@ import hashlib
 import sys
 import os
 #
-from Inc.Util import FS, Net
+from Inc.Util import UFS, UNet
 
 def ExecM(aCmd, aMsg = ""):
     print("Exec in:", aCmd, aMsg)
@@ -24,11 +24,11 @@ def ExecM(aCmd, aMsg = ""):
     return Result
 
 def GetMachineId():
-    MachineId = FS.LoadFromFileToStr('/etc/machine-id')
+    MachineId = UFS.LoadFromFileToStr('/etc/machine-id')
     if (not MachineId):
         MachineId = 'Unknown'
 
-    MacId = Net.GetMac()
+    MacId = UNet.GetMac()
     if (not MacId):
         MacId = 'Unknown'
 

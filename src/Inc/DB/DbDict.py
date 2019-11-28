@@ -81,7 +81,7 @@ class TDbDict(TDbSQL):
         else:
             return self.Add(aKey, aValue)
 
-    def GetRecord(self, aKey, aFields = '*'):
+    def GetRecord(self, aKey: str, aFields = '*'):
         SQL = "SELECT %s \
                FROM   %s \
                WHERE  Item = '%s' AND Prefix = %d \
@@ -89,7 +89,7 @@ class TDbDict(TDbSQL):
                LIMIT  1" % (aFields, self.Dict, aKey, self.Prefix)
         return self.Exec(SQL)
 
-    def Get(self, aKey, aDef = None):
+    def Get(self, aKey: str, aDef = None):
         self.GetRecord(aKey, 'Data')
         Data = self.Cursor.fetchone()
         if (Data):

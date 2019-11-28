@@ -34,16 +34,16 @@ import asyncio
 #
 from Inc.Log          import Log, TLogFile, TLogConsole
 from Inc.DB           import TDbDictSQLite
-from Inc.Util         import Obj, FS, Net, Str
+from Inc.Util         import UObj, UFS, UNet, UStr
 from Inc.Param        import TDictParam
 from Inc.Protect      import TProtect
 from Api              import Misc
 from Core.Manager     import TManager
-from Core.HttpApi import THttpApiWebServer
+from Api.HttpApi      import THttpApiWebServer
 
 
 
-FInfo = FS.SplitName(__file__)
+FInfo = UFS.SplitName(__file__)
 cDirName = FInfo[0]
 cAppName = FInfo[2]
 
@@ -64,11 +64,11 @@ class TMain():
     def Init(self):
         Info = Misc.Version()
         Info['AppName'] = cAppName
-        Obj.Dump(Info)
+        UObj.Dump(Info)
         print('')
 
         FileLog = self.Options.FileLog
-        if (not FS.IsFileWrite(FileLog)):
+        if (not UFS.IsFileWrite(FileLog)):
             FileLog = '%s.log' % cAppName
         Log.AddEcho(TLogFile(FileLog))
         Log.SetTail('PID:%s' % os.getpid())
@@ -148,7 +148,7 @@ class TMain():
 
         Result = TDictParam()
         ConfFile = cAppName + '.conf'
-        if (FS.FileExists(ConfFile)):
+        if (UFS.FileExists(ConfFile)):
             Result.LoadFile(ConfFile, Pattern)
         else:
             Result.AddDefPattern(Pattern)
@@ -161,7 +161,7 @@ class TMain():
         for Item in sys.path:
             print('path', Item)
 
-    def GetProfilePath(self, aName):
+    def GetProfilePath(self, aName: str) -> str:
         return self.Options.Directory + '/' + self.Options.Profile + '/' + aName
 
     def GlobalUnhandledExceptionHook(self, aType, aValue, aTraceback):
@@ -180,10 +180,10 @@ class TMain():
             aValue *= round(0.5 + random.random(), 1)
         return aValue
 
-    def GetUptime(self):
+    def GetUptime(self) -> int:
         StartTime = self.DbDict.Get('StartTime')
         if (StartTime):
-            Result = Str.ConvertTo(StartTime)
+            Result = UStr.ConvertTo(StartTime)
             Log.PrintDbg(1, 'i', 'StartTime restored to %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(Result)))
         else:
             Result = int(time.time())
@@ -198,9 +198,9 @@ class TMain():
         #self.LCD.Print('Software', InfoLoc['Software'])
         #self.LCD.Print('Hardware', InfoLoc['Hardware'])
 
-        if (Net.CheckInterface('eth0')):
+        if (UNet.CheckInterface('eth0')):
             Url  = InfoLoc.get('Homepage') + '/' + cAppName + '/version.json'
-            Data = Net.GetHttpData(Url.lower())
+            Data = UNet.GetHttpData(Url.lower())
             if (Data):
                 try:
                     InfoWeb = json.loads(Data)
@@ -222,7 +222,7 @@ class TMain():
         return self.CheckRegistration(aObj, aValue)
 
     def _CallBack_OnClass(self, aObj):
-        ObjPath = Obj.GetClassPath(aObj)
+        ObjPath = UObj.GetClassPath(aObj)
         if ('TSensor' in ObjPath):
             aObj.OnValue = self._CallBack_OnValue
         return aObj
@@ -246,13 +246,8 @@ class TMain():
         self.ALoop.create_task(self.Manager.Run())
 
         if (self.Options.ApiPort):
-            #HttpServer = THttpServer
-            #HttpServer = THttpServerApi(self.Options.ApiPort)
-            #HttpServer.Manager = self.Manager
-            #HttpServer.Exec(True)
-
             HttpApiWebServer = THttpApiWebServer()
-            HttpApiWebServer.ExtApi.Manager = self.Manager
+            HttpApiWebServer.ExternApi.Manager = self.Manager
             self.ALoop.create_task(HttpApiWebServer.Run(self.Options.ApiPort))
 
         self.ALoop.run_forever()

@@ -10,11 +10,11 @@ import sys
 import time
 import os
 #
-from Inc.Util       import Time, Net, OS
+from Inc.Util       import UTime, UNet, UOS
 
 
-def Version():
-    Disk = OS.GetDiskInfo('/')
+def Version() -> dict:
+    Disk = UOS.GetDiskInfo('/')
 
     Result = {
         "Now":       time.strftime('%Y-%m-%d %H:%M:%S'),
@@ -24,10 +24,10 @@ def Version():
         "Author":    'Volodymyr Vons, VladVons@gmail.com, UA',
         "Homepage":  'http://oster.com.ua/software',
         "Platform":  sys.platform,
-        "Python":    OS.GetVersion(),
-        "UptimeSys": Time.Uptime(),
-        "Mac":       Net.GetMac(),
-        "IP":        Net.GetLocalIP(),
+        "Python":    UOS.GetVersion(),
+        "UptimeSys": UTime.Uptime(),
+        "Mac":       UNet.GetMac(),
+        "IP":        UNet.GetLocalIP(),
         "DiskSize":  '%d (M)' % (Disk[0] / (1024*1024)),
         "DiskFree":  '%d (M)' % (Disk[1] / (1024*1024)),
         "CurDir":    os.getcwd()

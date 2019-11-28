@@ -8,7 +8,7 @@ Description:
 
 
 from Inc.Param        import TDictParam
-from Inc.Util         import Num
+from Inc.Util         import UNum
 from Core.Device      import TControl
 from Plugin.Providers.Telegram import TProviderTelegram
 
@@ -31,7 +31,7 @@ class TControlTelegram(TControl):
         #self.Provider = TProviderTelegram(self.Param.Token, self.Param.Chats)
         self.Telegram = TProviderTelegram(self.Param.Token, self.Param.Chats)
 
-        self.UpdateDelay = Num.TUpdateDelay()
+        self.UpdateDelay = UNum.TUpdateDelay()
         self.UpdateDelay.Diff    = self.Param.Diff
         self.UpdateDelay.Refresh = self.Param.Refresh
 

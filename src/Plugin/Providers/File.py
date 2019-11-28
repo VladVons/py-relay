@@ -9,7 +9,7 @@ Description:
 import os
 #
 from Inc.Log   import Log
-from Inc.Util  import FS, Str
+from Inc.Util  import UFS, UStr
 from ._Common  import TProvider
 
 
@@ -24,7 +24,7 @@ class TProviderFile(TProvider):
 
 class TProviderFile_Size(TProviderFile):
     def Read(self, aUnused = None):
-        return FS.GetFileSize(self.File)
+        return UFS.GetFileSize(self.File)
 
     def Get(self):
         return self.Read()
@@ -32,7 +32,7 @@ class TProviderFile_Size(TProviderFile):
 
 class TProviderFile_Read(TProviderFile):
     def Read(self, aUnused = None):
-        return FS.LoadFromFileToStr(self.File)
+        return UFS.LoadFromFileToStr(self.File)
 
 
 class TProviderFile_Write(TProvider):
@@ -41,7 +41,7 @@ class TProviderFile_Write(TProvider):
         self.Mode = aMode
 
 
-        if (not FS.IsFileWrite(aFile)):
+        if (not UFS.IsFileWrite(aFile)):
             Msg = Log.PrintDbg(1, 'e', 'Cant write to %s' % aFile)
             raise Exception(Msg)
 
@@ -70,7 +70,7 @@ class TProviderFile_W1DS(TProviderFile_Read):
         Result = self.ReadTry()
         if (Result):
             Str1   = Result.split('\n')[1].split(' ')[9]
-            Result = Str.ToFloat(Str1[2:]) / 1000
+            Result = UStr.ToFloat(Str1[2:]) / 1000
         return Result
 
 
@@ -80,8 +80,8 @@ class TProviderFile_CPULoad(TProviderFile_Read):
         Data = self.ReadTry()
         if (Data):
             Arr = Data.split()
-            Result['m1']  = Str.ToFloat(Arr[0])
-            Result['m5']  = Str.ToFloat(Arr[1])
-            Result['m15'] = Str.ToFloat(Arr[2])
+            Result['m1']  = UStr.ToFloat(Arr[0])
+            Result['m5']  = UStr.ToFloat(Arr[1])
+            Result['m15'] = UStr.ToFloat(Arr[2])
             Result['default'] = Result['m1']
         return Result.get(aKey)

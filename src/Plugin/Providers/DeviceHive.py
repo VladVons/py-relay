@@ -18,7 +18,7 @@ import base64
 #
 from ._Common  import TProvider
 from Inc.Log   import Log
-from Inc.Util  import Net
+from Inc.Util  import UNet
 
 
 class TDeviceHive():
@@ -30,12 +30,12 @@ class TDeviceHive():
         Url  = self.Host + aCommand
         #print('---Send', Url, aData)
 
-        Request = Net.Request(Url)
+        Request = UNet.Request(Url)
         Request.add_header('Content-Type', 'text/json')
         while (aTries > 0):
             aTries -= 1
             try:
-                Response = Net.urlopen(Request, json.dumps(aData), timeout = self.Timeout)
+                Response = UNet.urlopen(Request, json.dumps(aData), timeout = self.Timeout)
                 Data     = Response.read()
                 Result   = json.loads(Data)
                 break

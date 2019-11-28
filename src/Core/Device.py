@@ -12,7 +12,7 @@ import sys
 #
 from Inc.Log         import Log
 from Inc.Param       import TDictParam, TDictCall, TRange
-from Inc.Util        import Num
+from Inc.Util        import UNum
 from Core.ExecParse  import TExecParse
 from Inc.Import      import TDynImport
 
@@ -137,7 +137,7 @@ class TDevice(TDeviceParse):
         self.Caller     = None
         self.Range      = TRange()
 
-        self.Avg = Num.TAvg()
+        self.Avg = UNum.TAvg()
         #self.Avg.Enable = False
 
         Pattern = {'Enable':    True,
@@ -286,7 +286,7 @@ class TSensor(TDevice):
             Value = self.Avg.GetAvgRound()
 
             try:
-                Result = Num.RoundPart(Value, self.Param.Round)
+                Result = UNum.RoundPart(Value, self.Param.Round)
             except:
                 Result = None
                 Log.PrintDbg(1, 'x', 'Alias: %s, Value: %s' % (self.Alias, aValue))

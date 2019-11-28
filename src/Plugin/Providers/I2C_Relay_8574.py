@@ -19,7 +19,7 @@ Obj.Set(None, Value)
 import os
 #
 from Inc.Log  import Log
-from Inc.Util import Num, Time
+from Inc.Util import UNum, UTime
 from .I2C     import TProviderI2C
 
 class TProviderI2C_Relay_8574(TProviderI2C):
@@ -31,9 +31,9 @@ class TProviderI2C_Relay_8574(TProviderI2C):
     def WriteCheck(self, aValue):
         MaxCnt = 3
         for Cnt in range(MaxCnt):
-            Time.DelayMiliSec(self.Delay)
+            UTime.DelayMiliSec(self.Delay)
             Result = self.WriteByte(aValue)
-            Time.DelayMiliSec(self.Delay)
+            UTime.DelayMiliSec(self.Delay)
             Check  = self.ReadByte()
             if (aValue == Check):
                 break
@@ -47,14 +47,14 @@ class TProviderI2C_Relay_8574(TProviderI2C):
         State  = self.Get()
         if (State != aValue):
             Byte  = self.ReadByte()
-            Value = Num.SetBit(Byte, self.Command, aValue)
+            Value = UNum.SetBit(Byte, self.Command, aValue)
             #print('--1', self.Address, self.Command, "{0:b}".format(Byte), "{0:b}".format(Value), aValue)
             Result = self.WriteCheck(Value)
         return Result
 
     def Get(self):
-        Time.DelayMiliSec(self.Delay)
+        UTime.DelayMiliSec(self.Delay)
         Byte = self.ReadByte()
         #Log.PrintDbg(1, 'i', 'Get Vale: {0:b}'.format(Byte))
-        Result = Num.CheckBit(Byte, self.Command)
+        Result = UNum.CheckBit(Byte, self.Command)
         return Result

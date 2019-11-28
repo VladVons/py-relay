@@ -8,7 +8,7 @@ Description:
 
 import datetime
 #
-from Inc.Util     import Time
+from Inc.Util     import UTime
 from Inc.Param    import TDictParam
 from Core.Device  import TSensor
 
@@ -29,7 +29,7 @@ class TSensorUptime(TSensor):
 
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
-        self.Ratio = Time.CharToSec(self.Param.Unit, 1)
+        self.Ratio = UTime.CharToSec(self.Param.Unit, 1)
 
 
 class TSensorUptimeSys(TSensorUptime):
@@ -37,7 +37,7 @@ class TSensorUptimeSys(TSensorUptime):
         TSensorUptime.__init__(self, aParent)
 
     def _Get(self):
-        Result = Time.Uptime() / float(self.Ratio)
+        Result = UTime.Uptime() / float(self.Ratio)
         return self.Round(Result)
 
 

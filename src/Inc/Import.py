@@ -17,7 +17,7 @@ import sys
 import re
 #
 from Inc.Log  import Log
-from Inc.Util import Obj
+from Inc.Util import UObj
 
 
 # nuitka --module Manager.py 
@@ -29,11 +29,11 @@ class TDynImport():
     def Clear(self):
         self.Data.clear()
 
-    def GetInherited(self, aInvert = False):
+    def GetInherited(self, aInvert: bool = False):
         Tree = []
         for Item in self.Data:
             TClass = self.GetInstance(Item)
-            Path = Obj.GetClassInstancePath(TClass)
+            Path = UObj.GetClassInstancePath(TClass)
             Tree.append(Path)
 
         Result = {}
@@ -44,7 +44,7 @@ class TDynImport():
                 Result[Last] = Item
         return Result
 
-    def AddClass(self, aClassName, aModule, aPath):
+    def AddClass(self, aClassName: str, aModule: str, aPath: str):
         Data = self.Data.get(aClassName)
         if (Data):
             Msg = Log.PrintDbg(1, 'e', 'Class %s already exists in' % aClassName, Data)
@@ -54,7 +54,7 @@ class TDynImport():
         if (aPath and (aPath not in sys.path)):
             sys.path.insert(0, aPath)
 
-    def ParseFile(self, aFileName):
+    def ParseFile(self, aFileName: str) -> int:
         Result = 0
         if (not os.path.exists(aFileName)):
             return Result
@@ -75,7 +75,7 @@ class TDynImport():
                     # print('--- FilePath, line, ClassName', FilePath, Line, ClassName)
         return Result
 
-    def ParseDir(self, aDir):
+    def ParseDir(self, aDir: str):
         for Root, Dirs, Files in os.walk(aDir):
             for File in Files:
                 FilePath = Root + '/' + File

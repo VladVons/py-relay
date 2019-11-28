@@ -20,7 +20,7 @@ except: from urllib.request import Request, urlopen
 try: from urllib import urlencode
 except: from urllib.parse import urlencode
 #
-from Inc.Util import FS
+from Inc.Util import UFS
 
 
 def SockReceive(aConn, aBufSize):
@@ -58,7 +58,7 @@ def GetMac(aSplit = True):
     return Result
 
 def CheckInterface(aName = 'eth0'):
-    Data = FS.LoadFromFileToStr('/sys/class/net/%s/operstate' % aName)
+    Data = UFS.LoadFromFileToStr('/sys/class/net/%s/operstate' % aName)
     return ('up' in Data)
 
 def GetHttpData(aUrl):

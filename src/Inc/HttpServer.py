@@ -12,9 +12,7 @@ import mimetypes
 import time
 #
 from Inc.Log    import Log
-from Inc.Util   import Net
-from Inc.Util   import FS
-
+from Inc.Util   import UNet
 from Inc.Thread import CreateThread
 
 
@@ -33,7 +31,7 @@ class TConnSession():
         raise NotImplementedError(Msg)
 
     def Receive(self):
-        Result = Net.SockReceive(self.Conn, self.BuffSize)
+        Result = UNet.SockReceive(self.Conn, self.BuffSize)
         return Result
 
     def Send(self, aData):

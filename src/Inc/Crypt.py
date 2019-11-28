@@ -18,7 +18,7 @@ class TCrypt():
     def __init__(self):
         self.SetKey('123456789012345678901234')
 
-    def SetKey(self, aValue):
+    def SetKey(self, aValue: str):
         Just = aValue.rjust(24, 'x')
         self.Cipher = AES.new(Just, AES.MODE_ECB)
 
@@ -28,6 +28,6 @@ class TCrypt():
         Data = self.Cipher.encrypt(Just)
         return base64.b64encode(Data)
 
-    def Decode(self, aValue):
+    def Decode(self, aValue: str) -> str:
         Data = base64.b64decode(aValue)
         return self.Cipher.decrypt(Data).strip()

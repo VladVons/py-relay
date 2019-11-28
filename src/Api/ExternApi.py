@@ -7,10 +7,10 @@ Description:
 """
 
 from Api        import Misc
-from Inc.Util   import Arr
+from Inc.Util   import UArr
 
 
-class TExtApi():
+class TExternApi():
     def __init__(self, aManager = None):
         self.Manager = aManager
 
@@ -21,7 +21,7 @@ class TExtApi():
     #---  Main
     def get_app_api(self, aNotUsed):
         Class = self._GetAnyClass()
-        Result = Arr.ListFilter(dir(Class.Exec.apix), '^x')
+        Result = UArr.ListFilter(dir(Class.Exec.apix), '^x')
         return Result
 
     def get_app_devices(self, aNotUsed):
@@ -38,18 +38,15 @@ class TExtApi():
         return Result
 
     def get_class_keys(self, aNotUsed):
-        Class = self._GetAnyClass(self.Manager)
-        Result = Arr.Combine(Class.ExtParam.keys(), self.Manager.SecClass.Keys)
+        Class = self._GetAnyClass()
+        Result = UArr.Combine(Class.ExtParam.keys(), self.Manager.SecClass.Keys)
         return Result
 
-    def get_profile(self, aNotUsed):
-        Data = self.Manager.Info('Total')
-        Path = '/' + Data.get('Profile', '')
-        Path = Path.replace('/Plugin', '')
-        return Path
+    def get_app_profile(self, aNotUsed) -> dict:
+        return {'Path': self.Manager.LoadConf.Dir}
 
     #---  Threaded
-    def get_app_version(self, aNotUsed):
+    def get_app_version(self, aNotUsed) -> dict:
         Result = Misc.Version()
         Result.update(self.Manager.Info('Total'))
         return Result
@@ -64,17 +61,17 @@ class TExtApi():
     def get_dev_valuesf(self, aData):
         Alias = aData.get('alias')
         Aliases = self.Manager.SecClass.GetAliases()
-        Aliases = Arr.ListFilter(Aliases, Alias)
+        Aliases = UArr.ListFilter(Aliases, Alias)
         return self.Manager.SecClass.GetAliasVar(Aliases, 'Value')
 
-    def get_app_classes(self, aNotUsed):
+    def get_app_classes(self, aNotUsed) -> list:
         Result = []
         for Item in self.Manager.SecClass.GetAliases():
             Class = self.Manager.SecClass.GetClass(Item)
             Result.append([Class.Alias, Class.__class__.__name__, Class.Descr])
         return Result
 
-    def set_dev_value(self, aData):
+    def set_dev_value(self, aData: dict):
         Alias = aData.get('alias')
         Value = aData.get('value')
         Class = self.Manager.SecClass.GetClass(Alias)

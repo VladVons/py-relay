@@ -10,7 +10,7 @@ Description:
 import time
 import datetime
 #
-from Inc.Util import Time
+from Inc.Util import UTime
 from Core.ExecApi import TExecApi
 
 
@@ -61,28 +61,28 @@ class TExecApiEx(TExecApi):
     def xInValue(self, aBegin, aEnd, aValue = None):
         if (aValue is None):
             aValue = self.xValue
-        return Time.CheckRange(aValue, aBegin, aEnd)
+        return UTime.CheckRange(aValue, aBegin, aEnd)
 
     def xInUptime(self, aBegin = '0S', aEnd = '10y'):
-        Sec1 = Time.StrToSec(aBegin)
-        Sec2 = Time.StrToSec(aEnd)
+        Sec1 = UTime.StrToSec(aBegin)
+        Sec2 = UTime.StrToSec(aEnd)
         Now  = self.xUptime
-        return Time.CheckRange(Now, Sec1, Sec2)
+        return UTime.CheckRange(Now, Sec1, Sec2)
 
     def xInHour(self, aBegin = '00:00:00', aEnd = '23:59:59'):
-        Sec1 = Time.TimeToSec(aBegin)
-        Sec2 = Time.TimeToSec(aEnd)
-        Now  = Time.TimeToSec(datetime.datetime.now().strftime('%H:%M:%S'))
-        return Time.CheckRange(Now, Sec1, Sec2)
+        Sec1 = UTime.TimeToSec(aBegin)
+        Sec2 = UTime.TimeToSec(aEnd)
+        Now  = UTime.TimeToSec(datetime.datetime.now().strftime('%H:%M:%S'))
+        return UTime.CheckRange(Now, Sec1, Sec2)
 
-    @Time.RangeDecorator
+    @UTime.RangeDecorator
     def xInValues(self, aRange):
         return self.xInValue(aRange[0], aRange[1])
 
-    @Time.RangeDecorator
+    @UTime.RangeDecorator
     def xInUptimes(self, aRange):
         return self.xInUptime(aRange[0], aRange[1])
 
-    @Time.RangeDecorator
+    @UTime.RangeDecorator
     def xInHours(self, aRange):
         return self.xInHour(aRange[0], aRange[1])

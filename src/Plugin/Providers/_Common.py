@@ -14,7 +14,7 @@ Abstract base classes for Providers
 import socket
 #
 from Inc.Log    import Log
-from Inc.Util   import Net, Time
+from Inc.Util   import UNet, UTime
 
 
 class TProvider():
@@ -35,7 +35,7 @@ class TProvider():
         for Cnt in range(self.ReadMax):
             Result = self._ReadWithExcept(aValue)
             if (self.ReadConfirm):
-                Time.DelayMicroSec(self.ReadDelayMs)
+                UTime.DelayMicroSec(self.ReadDelayMs)
                 Result2 = self._ReadWithExcept(aValue)
                 #print('---x1', Result, Result2)
                 if (Result != Result2):
@@ -75,4 +75,4 @@ class TProvider():
 
 class TProviderHTTP(TProvider):
     def Read(self, aUrl):
-        return Net.GetHttpData(aUrl)
+        return UNet.GetHttpData(aUrl)

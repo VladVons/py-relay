@@ -19,7 +19,7 @@ import multiprocessing
 from Inc.Log        import Log
 
 
-def CreateThread(aTarget, aArgs = []):
+def CreateThread(aTarget, aArgs: list = []):
     Process = multiprocessing.Process(target = aTarget, args = aArgs)
     Process.daemon = True
     Process.start()

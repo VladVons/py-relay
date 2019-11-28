@@ -62,7 +62,7 @@ class TSerializeObj():
         self.Data.clear()
         self.LastError = ''
 
-    def AddModule(self, aName):
+    def AddModule(self, aName: str):
         Last = aName.split(self.Delim)[-1]
         __import__(aName)
         globals()[Last] = sys.modules[aName]
@@ -70,21 +70,21 @@ class TSerializeObj():
     def AddClass(self, aObj):
         self.AddObj(aObj.__class__.__name__, aObj)
 
-    def AddObj(self, aName, aObj):
+    def AddObj(self, aName: str, aObj):
         try:
             aObj
             self.Data[aName] = aObj
         except NameError as E:
             Log.PrintDbg(1, 'x', E.message)
 
-    def FindObj(self, aObj, aName):
+    def FindObj(self, aObj, aName: str):
         if (hasattr(aObj, aName)):
             Result = getattr(aObj, aName)
         else:
             Result = globals().get(aName)
         return Result
 
-    def GetObj(self, aName):
+    def GetObj(self, aName: str):
         if (aName in self.Data):
             return self.Data[aName]
 
@@ -127,7 +127,7 @@ class TSerialize(TSerializeObj):
         else:
             return {}
 
-    def CallFunc(self, aFuncName, aArgs = []):
+    def CallFunc(self, aFuncName: str, aArgs: list = []):
         Arr = self.SplitFunc(aFuncName)
         if (Arr):
             aFuncName = Arr['Name']
@@ -151,16 +151,16 @@ class TSerialize(TSerializeObj):
     def EncodeData(self, aData):
         return TSerialize.CEncodeData(aData)
 
-    def EncodeFuncAuth(self, aUser, aPassw):
+    def EncodeFuncAuth(self, aUser: str, aPassw: str):
         return self.EncodeFunc('AuthUser', aUser, aPassw)
 
-    def EncodeFunc(self, aFuncName, *aArgs):
+    def EncodeFunc(self, aFuncName: str, *aArgs) -> str:
         Data = {'Type': 'Func', 'Name': aFuncName}
         if (len(aArgs) > 0):
             Data['Arg'] = aArgs
         return json.dumps(Data)
 
-    def EncodeProp(self, aPropName):
+    def EncodeProp(self, aPropName: str) -> str:
         Data = {'Type': 'Prop', 'Name': aPropName}
         return json.dumps(Data)
 

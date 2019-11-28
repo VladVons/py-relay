@@ -8,7 +8,7 @@ Description:
 
 from Inc.Log     import Log
 from Inc.Param   import TDictParam
-from Inc.Util    import Net
+from Inc.Util    import UNet
 from Plugin.Devices._Common import TRelay
 
 
@@ -31,12 +31,12 @@ PkgConf = {
 }
 
 def CheckHostPort(aHost):
-    Arr = Net.UrlParse(aHost)
+    Arr = UNet.UrlParse(aHost)
     Host = Arr.netloc
     if (not Host):
         Host = Arr.path
     Port = 80
-    if (not Net.CheckHostPort(Host, Port)):
+    if (not UNet.CheckHostPort(Host, Port)):
         Msg = Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (Host, Port))
         #raise Exception(Msg)
 

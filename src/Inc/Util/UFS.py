@@ -24,7 +24,7 @@ def FindFile(aDirs, aFiles, aSubDir = False):
     return Result
 
 
-def IsFileWrite(aPath):
+def IsFileWrite(aPath: str) -> bool:
     if (os.path.exists(aPath)):
         Result = os.access(aPath, os.W_OK)
     else:
@@ -37,7 +37,7 @@ def IsFileWrite(aPath):
     return Result
 
 
-def FileExists(aPath) -> bool:
+def FileExists(aPath: str) -> bool:
     return os.path.exists(aPath)
 
 def LoadFromFile(aFileName: str, aMode = 'rb') -> bytes:
@@ -47,10 +47,10 @@ def LoadFromFile(aFileName: str, aMode = 'rb') -> bytes:
             Result = File.read()
     return Result
 
-def LoadFromFileToStr(aFileName) -> str:
+def LoadFromFileToStr(aFileName: str) -> str:
     return LoadFromFile(aFileName, 'r')
 
-def LoadFromFileToList(aName) -> list:
+def LoadFromFileToList(aName: str) -> list:
     Result = []
     if (os.path.isfile(aName)):
         with open(aName, 'r') as File:

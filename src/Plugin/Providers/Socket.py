@@ -12,7 +12,7 @@ Example:
 import socket
 #
 from Inc.Log   import Log
-from Inc.Util  import Net
+from Inc.Util  import UNet
 from ._Common import TProvider
 
 
@@ -32,7 +32,7 @@ class TProviderSocket(TProvider):
         try:
             Sock.connect(Addr)
             Sock.sendall(aData)
-            Result = Net.SockReceive(Sock, self.BufSize)
+            Result = UNet.SockReceive(Sock, self.BufSize)
         except Exception as E:
             Log.PrintDbg(1, 'x', 'Socket error', E, Addr)
         finally:
@@ -56,7 +56,7 @@ class TProviderCheckHost(TProvider):
         self.Port = aPort
 
     def Read(self, aNotUsed):
-        Result = Net.CheckHostPort(self.Host, self.Port)
+        Result = UNet.CheckHostPort(self.Host, self.Port)
         return int(Result)
 
     def Get(self):

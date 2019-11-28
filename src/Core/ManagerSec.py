@@ -8,11 +8,10 @@ Description:
 
 
 import sys
-import time
 import asyncio
 #
 from Inc.Log        import Log
-from Inc.Util       import Arr, Obj
+from Inc.Util       import UArr, UObj
 
 # for nuitka compiler
 # from Plugin.Devices import *
@@ -33,7 +32,7 @@ class TSec():
 
 
 class TSecVar(TSec):
-    def Load(self, aData):
+    def Load(self, aData: dict):
         for Item in aData:
             self.Data[Item] = aData[Item]
 
@@ -48,7 +47,7 @@ class TSecInclude(TSec):
 
     def Load(self, aData):
         for Item in aData:
-            Arr.CheckDif(Item.keys(), ['Enable', 'File'])
+            UArr.CheckDif(Item.keys(), ['Enable', 'File'])
             if (Item.get('Enable', True)):
                 FileName = Item.get('File')
                 Data = self.Parent.LoadConf.Conf(FileName)
@@ -63,23 +62,23 @@ class TSecRun(TSec):
         self.OnPost  = None
         self.ThreadPipe = None
 
-    def DoFunc(self, aFunc):
+    def DoFunc(self, aFunc: str):
         Items = self.Parent.SecClass.Data
         for Item in Items:
             Class = Items.get(Item)
             Func = getattr(Class, aFunc)
             Func()
 
-    def Add(self, aData, aKey):
+    def Add(self, aData: dict, aKey: str):
         Class = self.Parent.SecClass.Parse(aData, None)
         if (Class):
             if (aKey not in self.Data):
                 self.Data[aKey] = []
             self.Data[aKey].append(Class)
 
-    def Load(self, aData):
+    def Load(self, aData: dict):
         Keys  = ['Start', 'Loop', 'Finish']
-        Arr.CheckDif(aData.keys(), Keys)
+        UArr.CheckDif(aData.keys(), Keys)
 
         for Key in Keys:
             Data = aData.get(Key)
@@ -87,7 +86,7 @@ class TSecRun(TSec):
                 for Item in aData.get(Key):
                     self.Add(Item, Key)
 
-    def PostAll(self, aClasses):
+    def PostAll(self, aClasses: list):
         if (aClasses):
             for Class in aClasses:
                 Class.Post(None, 0, None)
@@ -137,10 +136,10 @@ class TSecRun(TSec):
 
 
 class TSecAction(TSec):
-    def Add(self, aData, aDict):
+    def Add(self, aData: list, aDict: dict):
         Keys = ['OnError', 'OnValue', 'OnRange', 'OnLoop', 'OnAvg']
         for Item in aData:
-            Arr.CheckDif(Item.keys(), Keys)
+            UArr.CheckDif(Item.keys(), Keys)
             for Key in Keys:
                 Data = Item.get(Key)
                 if (Data):
@@ -148,7 +147,7 @@ class TSecAction(TSec):
                     if (Class):
                         aDict[Key] = Class
 
-    def Load(self, aData):
+    def Load(self, aData: list):
         self.Add(aData, self.Data)
 
 
@@ -161,7 +160,7 @@ class TSecDefault(TSec):
     def Load(self, aData):
         Keys = ['Enable', 'Class'] + self.Keys
         for Item in aData:
-            Arr.CheckDif(Item.keys(), Keys)
+            UArr.CheckDif(Item.keys(), Keys)
             if (Item.get('Enable', True)):
                 Name = Item.get('Class')
                 for Key in self.Keys:
@@ -172,7 +171,7 @@ class TSecDefault(TSec):
                         self.Data[Key][Name] = Value
 
     def GetSect(self, aSect, aClass, aDef = {}):
-        Name   = Obj.GetName(aClass)
+        Name   = UObj.GetName(aClass)
         Result = self.Data.get(aSect, aDef)
         if (Result):
             Result = Result.get(Name, aDef)
@@ -213,14 +212,14 @@ class TSecClass(TSec):
         return Wrapper
 
     @_DecorAliasesVar
-    def GetAliasVar(self, aAlias, aVar, aValueNotUsed):
+    def GetAliasVar(self, aAlias: str, aVarName: str, aValueNotUsed):
         Class = self.GetClass(aAlias)
-        return Obj.GetAttr(Class, aVar)
+        return UObj.GetAttr(Class, aVarName)
 
     @_DecorAliasesVar
-    def SetAliasVar(self, aAlias, aVar, aValue):
+    def SetAliasVar(self, aAlias: str, aVarName: str, aValue):
         Class = self.GetClass(aAlias)
-        return Obj.SetAttr(Class, aVar, aValue)
+        return UObj.SetAttr(Class, aVarName, aValue)
 
     def GetUnused(self):
         Result = []
@@ -234,7 +233,7 @@ class TSecClass(TSec):
                     Result.append(Alias)
         return Result
 
-    def GetSection(self, aAlias):
+    def GetSection(self, aAlias: str):
         Items = self.Parent.SecInclude.Data.get('Class')
         if (Items):
             for Item in Items:
@@ -243,7 +242,7 @@ class TSecClass(TSec):
                     return Item
         return None
 
-    def GetClass(self, aAlias):
+    def GetClass(self, aAlias: str):
         return self.Data.get(aAlias)
 
     def GetAliases(self):
@@ -266,7 +265,7 @@ class TSecClass(TSec):
     def Load(self, aData):
         pass
 
-    def Parse(self, aData, aParent):
+    def Parse(self, aData: dict, aParent):
         Result = None
 
         PAlias = ''
@@ -337,7 +336,7 @@ class TSecClass(TSec):
 
             if (Result):
                 Def  = self.Parent.SecDefault.GetClassKeys(Result)
-                Keys = Arr.Combine(aData.keys(), Def)
+                Keys = UArr.Combine(aData.keys(), Def)
                 for Key in Keys:
                     if (Key not in self.Keys):
                         Result.ExtParam(Key, aData.get(Key), {'Parent': self})

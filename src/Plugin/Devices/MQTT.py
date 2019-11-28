@@ -13,8 +13,8 @@ try:
 except Exception as E:
     print(__file__, E, 'apt-get install python-paho-mqtt', 'pip install paho-mqtt')
 #
-from Inc.Util         import Net
 from Inc.Log          import Log
+#from Inc.Util         import UNet
 from Core.Device      import TControl
 #from Plugin.Providers.Modbus import TProviderModbusRTU
 
@@ -34,7 +34,7 @@ class TControlMQTT(TControl):
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
 
-        #if (not Net.CheckHostPort(self.Param.Host, self.Param.Port)):
+        #if (not UNet.CheckHostPort(self.Param.Host, self.Param.Port)):
         #    Msg = Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (self.Param.Host, self.Param.Port))
 
         self.Client = mqtt.Client(userdata = self)

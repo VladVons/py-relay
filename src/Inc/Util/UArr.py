@@ -8,11 +8,11 @@ Description:
 
 import re
 #
-from .Obj    import GetTreeAsStr
+from .UObj   import GetTreeAsStr
 from Inc.Log import Log
 
 
-def FindNode(aNode, aPath):
+def FindNode(aNode, aPath: str):
     for Item in aPath.strip("/").split("/"):
         if (Item != ""):
             try:
@@ -27,14 +27,14 @@ def FindNode(aNode, aPath):
                 aNode = Value
     return aNode
 
-def FindNodeDef(aNode, aPath, aDef):
+def FindNodeDef(aNode, aPath: str, aDef):
     Node = FindNode(aNode, aPath)
     if (Node is None):
         return aDef
     else:
         return Node
 
-def ListFilter(aNode, aRegEx):
+def ListFilter(aNode, aRegEx: str) -> list:
     Result = []
     if (aNode):
         for Item in aNode:
@@ -42,7 +42,7 @@ def ListFilter(aNode, aRegEx):
                 Result.append(Item)
     return Result
 
-def Find(aList, aData):
+def Find(aList: list, aData) -> int:
     if (aData in aList):
         return aList.index(aData)
     return -1
@@ -50,10 +50,10 @@ def Find(aList, aData):
 def Diff(aData1, aData2):
     return set(aData1) - set(aData2)
 
-def Combine(aList1, aList2):
+def Combine(aList1: list, aList2: list) -> list:
     return list(set(aList1) | set(aList2))
 
-def Avg(aList):
+def Avg(aList: list) -> float:
     Len = len(aList)
     if (Len != 0):
         return sum(aList) / Len

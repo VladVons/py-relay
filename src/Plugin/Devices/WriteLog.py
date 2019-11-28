@@ -16,7 +16,7 @@ import datetime
 from Inc.Param    import TDictParam
 from Core.Device  import TControl
 from Inc.Log      import Log
-from Inc.Util     import FS, Time
+from Inc.Util     import UFS, UTime
 
 
 PkgConf = {
@@ -80,7 +80,7 @@ class TControlWriteFile(TControlWrite):
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
 
-        if (not FS.IsFileWrite(self.Param.File)):
+        if (not UFS.IsFileWrite(self.Param.File)):
             Msg = Log.PrintDbg(1, 'e', 'Cant write file %s' % self.Param.File)
             raise Exception(Msg)
 
@@ -103,7 +103,7 @@ class TControl_WatchDog(TControlWriteFile):
         Result = '{}, {}, UTSys {}, UTApp {}, Alias: {}'.format(
             self.Cnt,
             datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            Time.Uptime(),
+            UTime.Uptime(),
             self.GetUptimeReal(),
             self.Alias
         )

@@ -9,7 +9,7 @@ Description:
 import re
 import os
 #
-from Inc.Util import FS, Str
+from Inc.Util import UFS, UStr
 
 __all__ = ['TEditorConf', 'TEditorIni', 'TEditorDir']
 
@@ -51,10 +51,10 @@ class TConfSect(TConfSectBase):
     def _LineUncomment(self, aIdx):
         self.LineSet(aIdx, self.LineGet(aIdx).lstrip(self.CharComment))
 
-    def LineGet(self, aIdx):
+    def LineGet(self, aIdx: int):
         return self.Lines[aIdx]
 
-    def LineCommented(self, aIdx):
+    def LineCommented(self, aIdx: int):
         return self.LineGet(aIdx).lstrip().startswith(self.CharComment)
 
     def Delete(self):
@@ -65,7 +65,7 @@ class TConfSect(TConfSectBase):
         self.Name    = aName
         self.Updated = False
 
-    def KeyList(self, aAsIs = True):
+    def KeyList(self, aAsIs: bool = True):
         Result = {}
         for Idx in range(0, len(self.Lines)):
             if (not self.LineCommented(Idx)):
@@ -78,7 +78,7 @@ class TConfSect(TConfSectBase):
                     if (aAsIs):
                         Result[Key] = Value
                     else:
-                        Result[Key] = Str.ConvertTo(Value)
+                        Result[Key] = UStr.ConvertTo(Value)
         return Result
 
     def KeySearch(self, aKey):
@@ -92,7 +92,7 @@ class TConfSect(TConfSectBase):
     def KeyGetIdx(self, aKey, aIdx):
         return re.findall(self.Patern_KeyNamePair(aKey), self.LineGet(aIdx))
 
-    def AnyGetIdx(self, aIdx):
+    def AnyGetIdx(self, aIdx: int):
         return re.findall(self.Patern_KeyAnyPair, self.LineGet(aIdx))
 
     def LineSet(self, aIdx, aStr):
@@ -206,20 +206,20 @@ class TEditorConf(TEditorBase):
     def GetPath(self):
         return self.PathName
 
-    def _SectionCreate(self, aName = ''):
+    def _SectionCreate(self, aName: str = ''):
         return self._SectionInit(TConfSect(), aName)
 
-    def LoadFromFile(self, aName):
+    def LoadFromFile(self, aName: str):
         self.PathName = aName
         self.Section  = self._SectionCreate('')
-        self.Section.Lines = FS.LoadFromFileToList(aName)
+        self.Section.Lines = UFS.LoadFromFileToList(aName)
 
     def SaveToFile(self, aName = ''):
         if (aName == ''):
             aName = self.PathName
 
         if (self.Section.Updated):
-            FS.SaveToFileFromList(aName, self.Section.Lines)
+            UFS.SaveToFileFromList(aName, self.Section.Lines)
 
 
 class TEditorIni(TEditorConf):
@@ -251,7 +251,7 @@ class TEditorIni(TEditorConf):
         # First lines usually commented description. They have no section
         self._SectionAdd('')
 
-        for Line in FS.LoadFromFileToList(aName):
+        for Line in UFS.LoadFromFileToList(aName):
             Arr = re.findall('\[\s*(.*)\s*\]', Line)
             if (Arr and Line.lstrip().startswith('#') is False):
                 Name = Arr[0]

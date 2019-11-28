@@ -12,7 +12,7 @@ import time
 import random
 #
 from Inc.Log  import Log
-from Inc.Util import Str, Arr
+from Inc.Util import UStr, UArr
 
 
 
@@ -92,14 +92,14 @@ class TAvg():
     def Add(self, aValue):
         if (not type(aValue).__name__ in ['int', 'float']):
             Log.PrintDbg(1, 'w', 'Value is not digital %s' % aValue)
-            aValue = Str.ToFloat(aValue)
+            aValue = UStr.ToFloat(aValue)
 
         self.Direction = aValue - self.GetAvg()
         self.LastTime = time.time()
         self.Data.append(self.Validate(aValue))
 
     def GetAvg(self):
-        return Arr.Avg(self.Data)
+        return UArr.Avg(self.Data)
 
     def GetAvgRound(self):
         return round(self.GetAvg(), self.Round)

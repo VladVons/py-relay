@@ -13,7 +13,7 @@ from Inc.DB.DbDict  import TDbDict
 
 
 class TDbDictSQLite(TDbDict):
-    def SetSource(self, aFile):
+    def SetSource(self, aFile: str):
         self.File = aFile
 
     def Connect(self):

@@ -17,7 +17,7 @@ Obj.CursorTo(0,0)
 Obj.PrintLn('Hello world')
 """
 
-from Inc.Util        import Time
+from Inc.Util        import UTime
 from .I2C            import TProviderI2C
 
 class TProviderI2C_LCD_8574(TProviderI2C):
@@ -42,23 +42,23 @@ class TProviderI2C_LCD_8574(TProviderI2C):
             self.MaskData = self.MaskData & ~self.MaskBacklight
  
     def InitDisplay(self):
-        Time.DelayMiliSec(1.0)
+        UTime.DelayMiliSec(1.0)
         self.Write4Bits(0x30)
-        Time.DelayMiliSec(4.5)
+        UTime.DelayMiliSec(4.5)
         self.Write4Bits(0x30)
-        Time.DelayMiliSec(4.5)
+        UTime.DelayMiliSec(4.5)
         self.Write4Bits(0x30)
-        Time.DelayMiliSec(0.15)
+        UTime.DelayMiliSec(0.15)
         self.Write4Bits(0x20)
         self.SendCommand(0x20 | 0x08)
         self.SendCommand(0x04 | 0x08, aDelay = 80.0)
         self.Clear()
         self.SendCommand(0x04 | 0x02)
-        Time.DelayMiliSec(3)
+        UTime.DelayMiliSec(3)
 
     def SendCommand(self, aValue, aDelay = 50.0):
         self.Send(aValue, 0)
-        Time.DelayMicroSec(aDelay)
+        UTime.DelayMicroSec(aDelay)
 
     def Send(self, aData, aMode):
         self.Write4Bits( (aData & 0xF0) | aMode)

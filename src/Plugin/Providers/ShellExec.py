@@ -15,7 +15,7 @@ Value   = Obj.Set()
 
 import subprocess
 #
-from  Inc.Util import Str
+from  Inc.Util import UStr
 from ._Common  import TProvider
 
 
@@ -42,5 +42,5 @@ class TProviderShellExec_CPULoad(TProviderShellExec):
     def Get(self):
         Result = self.ReadTry(self.Command)
         if (Result):
-            Result = Str.ConvertTo(Result.strip())
+            Result = UStr.ConvertTo(Result.strip())
         return Result

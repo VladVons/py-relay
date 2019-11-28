@@ -23,7 +23,7 @@ class TScreenTxt():
         self.ArrShift  = range(self.Provider.Rows)
         self.Clear()
 
-    def Shift(self, aCnt = 1):
+    def Shift(self, aCnt: int= 1):
         # self.ArrShift = self.ArrShift[aCnt:] + self.ArrShift[:aCnt] # __need 2.7
         a = collections.deque(self.ArrShift) 
         a.rotate(-aCnt)

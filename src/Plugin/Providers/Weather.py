@@ -18,7 +18,7 @@ http://api.wunderground.com/api/380d2c36ad44e4e5/conditions/q/CA/San_Francisco.j
 import json 
 import datetime
 #
-from Inc.Util import Net
+from Inc.Util import UNet
 from ._Common import TProvider
 
 
@@ -28,7 +28,7 @@ class TProviderWeatherToday(TProvider):
 
     def Read(self, aNotUsed):
         Result = {}
-        PostData = Net.PostRequest(self.Url, None)
+        PostData = UNet.PostRequest(self.Url, None)
         if (PostData):
             Data = json.loads(PostData)['current_observation']
             Result['date']       = datetime.datetime.fromtimestamp(float(Data['observation_epoch']))
@@ -53,7 +53,7 @@ class TProviderWeatherForecast(TProvider):
 
     def Read(self, aNotUsed):
         Result = {}
-        PostData = Net.PostRequest(self.Url, None)
+        PostData = UNet.PostRequest(self.Url, None)
         if (PostData):
             Data = json.loads(PostData)['forecast']['simpleforecast']['forecastday'][self.Days]
             Result['date']     = datetime.datetime.fromtimestamp(float(Data['date']['epoch']))

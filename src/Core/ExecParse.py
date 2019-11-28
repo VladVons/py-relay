@@ -9,7 +9,7 @@ Description:
 import re
 #
 from Inc.Log  import Log
-from Inc.Util import Obj
+from Inc.Util import UObj
 from Inc.Exec import TExec, TExecResult
 
 
@@ -26,7 +26,7 @@ class TExecParse(TExec):
         Allow = self.Cond + ['Enable', 'Label', 'ClassRef']
         Diff = set(aData.keys()) - set(Allow)
         if (Diff):
-            Msg = Log.PrintDbg(1, 'e', 'Unknown key %s in %s' % (str(Diff), Obj.GetTreeAsStr(aData)))
+            Msg = Log.PrintDbg(1, 'e', 'Unknown key %s in %s' % (str(Diff), UObj.GetTreeAsStr(aData)))
             raise Exception(Msg)
 
         Result = []
@@ -67,7 +67,7 @@ class TExecParse(TExec):
             Item['Result'] = TExecResult()
             self.Keys[aKey].append(Item)
 
-    def Conditions(self, aKey):
+    def Conditions(self, aKey: str) -> bool:
         Result = True
         Items  = self.Keys.get(aKey)
         if (Items):

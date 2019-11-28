@@ -2,7 +2,7 @@ import os
 import time
 from   yattag import Doc
 #
-from Inc.Util       import FS, Obj
+from Inc.Util       import UFS
 
 
 def DeviceTree(aObj, aStr = ''):
@@ -28,7 +28,7 @@ def HtmlDir(aPath, aFullPath):
     for Folder in Folders:
         FullPath = aFullPath + '/' + Folder
         Href = '<a href="%s">%s</a>' % (aPath + '/' + Folder, Folder + '/')
-        Date = time.strftime('%Y-%m-%d %H:%M:%S', FS.GetCTime(FullPath))
+        Date = time.strftime('%Y-%m-%d %H:%M:%S', UFS.GetCTime(FullPath))
         Result.append([Href, 'DIR', Date])
 
     for File in Files:
@@ -37,8 +37,8 @@ def HtmlDir(aPath, aFullPath):
         if (os.path.islink(FullPath)):
             Size = Date = ''
         else:
-            Size = FS.GetFileSize(FullPath)
-            Date = time.strftime('%Y-%m-%d %H:%M:%S', FS.GetCTime(FullPath))
+            Size = UFS.GetFileSize(FullPath)
+            Date = time.strftime('%Y-%m-%d %H:%M:%S', UFS.GetCTime(FullPath))
         Result.append([Href, Size, Date])
     return Result
 

@@ -11,7 +11,7 @@ import time
 import json
 #
 from Inc.Log         import Log
-from Inc.Util        import Obj, FS, Arr
+from Inc.Util        import UObj, UFS, UArr
 from Inc.Param       import TDictReplace
 from Inc.ConfEditor  import TEditorConf
 from Core.ManagerSec import TSecAction, TSecClass, TSecDefault, TSecInclude, TSecRun, TSecVar
@@ -22,18 +22,18 @@ class TLoadConf():
         self.Dir = aDir
         self.DictReplace = TDictReplace()
 
-    def Path(self, aFile):
+    def Path(self, aFile: str) -> str:
         return self.Dir + aFile
 
-    def File(self, aFile):
+    def File(self, aFile: str) -> str:
         FilePath = self.Path(aFile)
-        Result = FS.LoadFromFileToStr(FilePath)
+        Result = UFS.LoadFromFileToStr(FilePath)
         if (not Result):
             Msg = Log.PrintDbg(1, 'e', 'Cant load file %s' % (FilePath))
             raise Exception(Msg)
         return Result
 
-    def Macros(self, aFile):
+    def Macros(self, aFile: str):
         Files = [aFile, self.Path(aFile)]
         for File in Files:
             EditorConf = TEditorConf()
@@ -41,7 +41,7 @@ class TLoadConf():
             Data = EditorConf.Section.KeyList()
             self.DictReplace.Data.update(Data)
 
-    def Conf(self, aFile):
+    def Conf(self, aFile: str):
         Log.PrintDbg(3, 'i', 'Load file %s' % aFile)
 
         Data = self.File(aFile)
@@ -61,6 +61,7 @@ class TLoadConf():
 class TManager():
     def __init__(self, aParent, aDir):
         self.Parent   = aParent
+        self.File     = None
         self.LoadConf = TLoadConf(aDir)
 
         self.StartTimeVirt = time.time()
@@ -80,24 +81,24 @@ class TManager():
     def SetStartTimeVirt(self, aValue):
         self.StartTimeVirt = int(aValue)
 
-    def Load(self, aData):
+    def Load(self, aData: dict):
         Log.PrintDbg(2, 'i')
 
         #self.SecClass.OnClass miss?
         #self.Init()
 
         Keys = ['Include', 'Default', 'Run', 'Action', 'Var']
-        Arr.CheckDif(aData.keys(), Keys + ['Class'])
+        UArr.CheckDif(aData.keys(), Keys + ['Class'])
         self.SecInclude.Data = aData
 
         # call self.SecInclude, self.SecDefault etc
         for Key in Keys:
             Name = 'Sec' + Key
-            Obj  = getattr(self, Name)
-            if (Obj):
+            ObjC  = getattr(self, Name)
+            if (ObjC):
                 Data = self.SecInclude.Data.get(Key)
                 if (Data):
-                    Obj.Load(Data)
+                    ObjC.Load(Data)
                 else:
                     Log.PrintDbg(1, 'w', 'Empty section %s' % Key)
             else:
@@ -112,7 +113,7 @@ class TManager():
     def Stop(self):
         self.SecRun.Stop()
 
-    def Info(self, aMode):
+    def Info(self, aMode: str):
         Result = {}
         if (aMode == 'Attrs'):
             for Item in self.SecClass.Data:
@@ -129,10 +130,10 @@ class TManager():
 
     def InfoDump(self, aMode):
         Arr = self.Info(aMode)
-        Obj.Dump(Arr)
+        UObj.Dump(Arr)
         print('')
 
-    def LoadFile(self, aFile):
+    def LoadFile(self, aFile: str):
         Log.PrintDbg(1, 'i', '%s%s' % (self.LoadConf.Dir, aFile))
 
         self.File = aFile

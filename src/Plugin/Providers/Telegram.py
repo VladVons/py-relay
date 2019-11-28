@@ -18,7 +18,8 @@ https://api.telegram.org/bot<YourToken>/getUpdates
 import json 
 import datetime
 #
-from Inc.Util import Net
+from Inc.Util import UNet
+
 
 class TTelegram():
     def __init__(self, aToken):
@@ -33,7 +34,7 @@ class TTelegram():
         #Data = requests.post(aUrl, data = aData)
         #return Data.content.decode('utf8')
 
-        Data = Net.urlopen(aUrl, Net.urlencode(aData), timeout = 1)
+        Data = UNet.urlopen(aUrl, UNet.urlencode(aData), timeout = 1)
         return Data
 
     def GetData(self, aUrl, aParam):

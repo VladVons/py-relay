@@ -19,8 +19,7 @@ while True:
 import time
 #
 from Inc.Log   import Log
-from Inc.Util  import Time
-from Inc.Util  import Num, Arr
+from Inc.Util  import UTime, UNum, UArr
 
 
 class TRangeBase():
@@ -42,7 +41,7 @@ class TRangeBase():
 
         Result = []
         for Item in aList:
-            Arr.CheckDif(Item.keys(), Keys)
+            UArr.CheckDif(Item.keys(), Keys)
             Range = [0, 0]
             for Idx, Key in enumerate(Keys):
                 Value = Item.get(Key)
@@ -71,7 +70,7 @@ class TRangeBase():
 # [ { "On":"5", "Off": "2"} ]
 class TTimeRangeCycle(TRangeBase):
     def _Adjust(self, aValue):
-        return Time.StrToSec(aValue)
+        return UTime.StrToSec(aValue)
 
     def _Load(self, aOn, aOff):
         self.Times.append([aOn, aOff])
@@ -189,9 +188,9 @@ class TTimeRangeDayFade(TTimeRangeDay):
 
         Times = []
         for Idx, (On, Off) in enumerate(self.Times):
-            Times.append([Time.TimeToSec(On), Time.TimeToSec(Off)])
+            Times.append([UTime.TimeToSec(On), UTime.TimeToSec(Off)])
             On, Off = self._GetHoleRange(Idx)
-            Times.append([Time.TimeToSec(On) + 1, Time.TimeToSec(Off)])
+            Times.append([UTime.TimeToSec(On) + 1, UTime.TimeToSec(Off)])
         self.Times = Times
 
         Values = []
@@ -206,7 +205,7 @@ class TTimeRangeDayFade(TTimeRangeDay):
 
     def GetSecNow(self):
         Now = time.strftime(self.Format)
-        return Time.TimeToSec(Now)
+        return UTime.TimeToSec(Now)
 
 
 class TTimeRangeDayFadeWave(TTimeRangeDayFade):
@@ -219,12 +218,12 @@ class TTimeRangeDayFadeWave(TTimeRangeDayFade):
 
         for Idx, (On, Off) in enumerate(self.Times):
             Value = self.GetValue(Idx)
-            Mid   = Arr.Avg(Value)
+            Mid   = UArr.Avg(Value)
             if ((Now >= On) and (Now < Off)):
                 if (Idx % 2 == 0) ^ self.Invert:
-                    FadeW = Num.TFadeWave(On, Off, Mid, Value[1])
+                    FadeW = UNum.TFadeWave(On, Off, Mid, Value[1])
                 else:
-                    FadeW = Num.TFadeWave(On, Off, Mid, Value[0])
+                    FadeW = UNum.TFadeWave(On, Off, Mid, Value[0])
                     FadeW.SetNight(True)
                 Result = round(FadeW.Get(Now), 2)
                 return Result
@@ -244,7 +243,7 @@ class TTimeRangeDayFadeLine(TTimeRangeDayFade):
                 Result = Value[0] + round((Now - On) * Ratio, 2)
                 return Result
             else:
-                return Arr.Avg(Value)
+                return UArr.Avg(Value)
         return 0
 
 

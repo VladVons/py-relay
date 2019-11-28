@@ -29,7 +29,7 @@ import datetime
 from Inc.Log      import Log
 from Inc.DB       import TDbDictMySQL, TDeliveryArr, TDeliverySQLite
 from Inc.Param    import TDictParam
-from Inc.Util     import Net, Num
+from Inc.Util     import UNet, UNum
 
 from Core.Device import TControl, TSensor
 
@@ -61,7 +61,7 @@ class TControlGrafana(TControl):
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
 
-        if (not Net.CheckHostPort(self.Param.Host, MySQL_Port)):
+        if (not UNet.CheckHostPort(self.Param.Host, MySQL_Port)):
             Msg = Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (self.Param.Host, MySQL_Port))
             #raise Exception(Msg)
 
@@ -69,7 +69,7 @@ class TControlGrafana(TControl):
         self.MySQL.SetSource(self.Param.Host, self.Param.User, self.Param.Password, self.Param.DB, self.Param.Table)
         self.MySQL.SetPrefix(self.Param.Prefix)
 
-        self.UpdateDelay = Num.TUpdateDelay()
+        self.UpdateDelay = UNum.TUpdateDelay()
         self.UpdateDelay.Diff    = self.Param.Diff
         self.UpdateDelay.Refresh = self.Param.Refresh
 
@@ -97,7 +97,7 @@ class TControlGrafana(TControl):
 
     def Send(self, aData):
         Result = False
-        if (Net.CheckHostPort(self.Param.Host, MySQL_Port )):
+        if (UNet.CheckHostPort(self.Param.Host, MySQL_Port )):
             try:
                 self.MySQL.Connect()
 
@@ -123,7 +123,7 @@ class TSensorGrafana(TSensor):
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
 
-        if (not Net.CheckHostPort(self.Param.Host, MySQL_Port)):
+        if (not UNet.CheckHostPort(self.Param.Host, MySQL_Port)):
             Msg = Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (self.Param.Host, MySQL_Port))
             #raise Exception(Msg)
 
@@ -133,7 +133,7 @@ class TSensorGrafana(TSensor):
 
     def _Get(self):
         Result = -1
-        if (Net.CheckHostPort(self.Param.Host, MySQL_Port)):
+        if (UNet.CheckHostPort(self.Param.Host, MySQL_Port)):
             try:
                 self.MySQL.Connect()
                 Data = self.MySQL.GetLast('Modified')
