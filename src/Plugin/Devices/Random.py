@@ -56,12 +56,12 @@ class TSensorRandomNone(TSensorRange):
     def __init__(self, aParent):
         TSensor.__init__(self, aParent)
 
-        Pattern = {'None': 5}
+        Pattern = {'Val': 5}
         self.Param.AddDefPattern(Pattern)
 
     def _Get(self):
         Result = random.randint(self.Param.Begin, self.Param.End)
         Div    = Result % 10
-        if (Div < self.Param.None):
+        if (Div < self.Param.Val):
             Result = None
         return Result

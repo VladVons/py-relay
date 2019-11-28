@@ -31,107 +31,17 @@ from Inc.Util       import FS, Arr, Obj
 from Inc.Param      import TDictReplace, TDictBlock
 from Inc.HttpServer import TSockServer, TConnSessionHttp
 from Inc.Thread     import CreateThread, TThreadPipe
-from Api            import Misc
-from Core           import HttpProc
+from Core           import HttpProc, HttpApi
 
 
 class TThreadPipeApi(TThreadPipe):
     def __init__(self):
         TThreadPipe.__init__(self)
-
-        self.Cnt = 0
-        self.PathProc = {
-            '/get/app/api':      self.GetApi,
-            '/get/app/profile':  self.GetProfile,
-            '/get/app/devices':  self.GetDevices,
-            '/get/app/version':  self.GetVersion,
-            '/get/app/classes':  self.GetClasses,
-            '/get/class/keys':   self.GetClassKeys,
-            '/get/dev/values':   self.GetValues,
-            '/get/dev/values-f': self.GetValuesF,
-            '/get/dev/value':    self.GetValue,
-            '/set/dev/value':    self.SetValue
-        }
-
-    def _GetAnyClass(self, aManager):
-        AnyFirstKey = next(iter(aManager.SecClass.Data))
-        return aManager.SecClass.Data[AnyFirstKey]
-
-    #---  Main
-    def GetApi(self, aManager, aData):
-        Class = self._GetAnyClass(aManager)
-        Result = Arr.ListFilter(dir(Class.Exec.apix), '^x')
-        return Result
-
-    def GetDevices(self, aManager, aData):
-        Base   = '/object/TDeviceParse/'
-        Import = aManager.SecClass.Import
-        Items  = Import.GetInherited(True)
-        Result = []
-        for Item in Items:
-            Dict = Import.Data[Item]
-            Inherit = Items[Item]
-            if (Base in Inherit):
-                Inherit = Inherit.replace(Base, '').replace('/' + Item, '')
-                Result.append([Item, Dict['Path'], Dict['Module'], Inherit])
-        return Result
-
-    def GetClassKeys(self, aManager, aData):
-        Class = self._GetAnyClass(aManager)
-        Result = Arr.Combine(Class.ExtParam.keys(), aManager.SecClass.Keys)
-        return Result
-
-    def GetProfile(self, aManager, aData):
-        Data = aManager.Info('Total')
-        Path = '/' + Data.get('Profile', '')
-        Path = Path.replace('/Plugin', '')
-        return Path
-
-    #---  Threaded
-
-    def GetVersion(self, aManager, aData):
-        Result = Misc.Version()
-        Result.update(aManager.Info('Total'))
-        return Result
-
-    def GetValue(self, aManager, aData):
-        Alias = aData.get('alias')
-        return aManager.SecClass.GetAliasVar([Alias], 'Value')
-
-    def GetValues(self, aManager, aData):
-        return aManager.SecClass.GetAliasVar([], 'Value')
-
-    def GetValuesF(self, aManager, aData):
-        Alias = aData.get('alias')
-        Aliases = aManager.SecClass.GetAliases()
-        Aliases = Arr.ListFilter(Aliases, Alias)
-        return aManager.SecClass.GetAliasVar(Aliases, 'Value')
-
-    def GetClasses(self, aManager, aData):
-        Result = []
-        for Item in aManager.SecClass.GetAliases():
-            Class = aManager.SecClass.GetClass(Item)
-            Result.append([Class.Alias, Class.__class__.__name__, Class.Descr])
-        return Result
-
-    def SetValue(self, aManager, aData):
-        Alias = aData.get('alias')
-        Value = aData.get('value')
-        Class = aManager.SecClass.GetClass(Alias)
-        Path  = Obj.GetClassPath(Class)
-        #if ('TControl' in Path):
-        return aManager.SecClass.SetAliasVar([Alias], 'Value', Value)
+        self.HttpApi = HttpApi.THttpApi()
 
     # we are in main process with parameters
     def DoReceive(self, aManager, aData):
-        self.Cnt += 1
-        Path = aData.get('path')
-        Func = self.PathProc.get(Path)
-        if (Func):
-            Result = Func(aManager, aData)
-        else:
-            Result = Log.PrintDbg(1, 'e', 'Unknown key path %s' % Path)
-        return Result
+        return self.HttpApi.Api(aManager, aData)
 
 
 class TWeb():

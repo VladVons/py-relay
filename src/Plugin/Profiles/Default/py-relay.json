@@ -49,8 +49,6 @@
         {"Enable":true,  "File":"IncClassRasPi.json"}
     ],
     "Action":[
-        {"OnLoop":  {"Enable":false, "ClassRef":"MainLoop"}},
-
         {"OnValue": {"Enable":true,  "ClassRef":"GroupOnValue"}},
         {"OnError": {"Enable":true,  "ClassRef":"WriteLogErr"}},
         {"OnRange": {"Enable":true,  "ClassRef":"WriteLogErr"}},

@@ -106,7 +106,7 @@ class TDictCall(dict):
         if (callable(aValue)):
             dict.__setitem__(self, aKey, aValue)
         else:
-            Msg = Log.PrintDbg(1, 'e', 'Function %s is not callable' %  (aValue))
+            Msg = Log.PrintDbg(1, 'e', 'Function %s is not callable' % (aValue))
             raise ValueError(Msg)
 
     def __call__(self, aKey, aParam, aData = {}):
@@ -118,13 +118,58 @@ class TDictCall(dict):
             raise NotImplementedError(Msg)
 
 
-class TDictParam():
+class TDictNamed():
+    def __init__(self, aData = None):
+        Type = type(aData).__name__
+        if (Type == 'dict'):
+            self.SetDict(aData)
+        elif (Type == 'list'):
+            self.SetList(aData)
+        elif (Type == 'str'):
+            self.SetStr(aData)
+
+    def SetDict(self, aData: dict):
+        for Key in aData:
+            Value = aData.get(Key)
+            setattr(self, Key.strip(), Value)
+
+    def SetList(self, aData: list, aValue = None):
+        for Item in aData:
+            setattr(self, Item.strip(), aValue)
+
+    def SetStr(self, aData: str, aValue = None):
+        Items = aData.split(',')
+        self.SetList(Items, aValue)
+
+    def Clear(self):
+        Types = {'str': '', 'int':  0, 'float': 0.0, 'bool': False, 'dict': {}, 'list': []}
+        Items = dict(vars(self))
+        for Item in Items:
+            Type = type(getattr(self, Item)).__name__
+            Value = Types.get(Type)
+            setattr(self, Item, Value)
+
+    def GetVars(self):
+        return dict(vars(self))
+
+    def GetDict(self):
+        Result = {}
+        Items  = self.GetVars()
+        for Item in Items:
+            Result[Item] = getattr(self, Item)
+        return Result
+
+
+class TDictParam(TDictNamed):
     Required = 'Required'
 
-    def __init__(self):
-        self.Loaded  = False
-        self.OnLoad  = None
+    def __init__(self, aDict = {}):
+        self.Loaded = False
+        self.OnLoad = None
         self.DefPattern = {}
+
+        if (aDict):
+            self.Load(aDict)
 
     def GetPattern(self):
         return self.DefPattern
@@ -134,7 +179,7 @@ class TDictParam():
         return (aName in Vars)
 
     def GetAttrs(self):
-        Result = dict(vars(self))
+        Result = self.GetVars()
         for Item in ['Loaded', 'OnLoad', 'DefPattern']:
             Result.pop(Item)
         return Result

@@ -7,6 +7,8 @@ Description:
 """
 
 import time
+import inspect
+import sys
 #
 from Inc.Log         import Log
 from Inc.Param       import TDictParam, TDictCall, TRange
@@ -177,6 +179,12 @@ class TDevice(TDeviceParse):
         if (self.Options.DebugAlias):
             Msg = Log.Format(1, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
             Log.PrintTo(Msg)
+
+        Level = len(inspect.stack())
+        if (Level > 30):
+            Log.PrintStack(1, 'x', 'Post', 'aCaller')
+            Msg = Log.PrintDbg(1, 'x', 'Recursion level to deep %s' % Level)
+            raise RecursionError(Msg)
 
         Result = True
         self.PostCnt += 1

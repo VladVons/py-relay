@@ -8,6 +8,8 @@ Description:
 
 
 import sys
+import time
+import asyncio
 #
 from Inc.Log        import Log
 from Inc.Util       import Arr, Obj
@@ -29,6 +31,11 @@ class TSec():
         Msg = Log.PrintDbg(1, 'e', 'Not implemented')
         raise NotImplementedError(Msg)
 
+
+class TSecVar(TSec):
+    def Load(self, aData):
+        for Item in aData:
+            self.Data[Item] = aData[Item]
 
 class TSecInclude(TSec):
     def Add(self, aData):
@@ -89,10 +96,10 @@ class TSecRun(TSec):
                 self.OnPost(self)
 
             # check if something comes from thread
-            if (self.ThreadPipe):
-                self.ThreadPipe.MainReceive(self.Parent)
+            #if (self.ThreadPipe):
+            #    self.ThreadPipe.MainReceive(self.Parent)
 
-    def Run(self):
+    async def Run(self):
         Log.PrintDbg(2, 'i')
 
         self.DoFunc('DoStart')
@@ -106,13 +113,10 @@ class TSecRun(TSec):
 
             self.InRun = True
             try:
-                OnLoop = self.Parent.SecAction.Data.get('OnLoop')
-                if (OnLoop):
-                    OnLoop.Post(Items, 0, None)
-                else:
-                    while (self.InRun):
-                        self.PostAll(Items)
-                        # time.sleep(1)
+                Sleep = self.Parent.SecVar.Data.get('LoopSleep', 1)
+                while (self.InRun):
+                    await asyncio.sleep(Sleep)
+                    self.PostAll(Items)
             finally:
                 self.Stop()
         else:

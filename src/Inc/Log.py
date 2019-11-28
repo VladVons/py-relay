@@ -46,6 +46,12 @@ class TLog():
         self.Tail     = ''
         self.DateFmt  = '%Y-%m-%d %H.%M.%S'
 
+    def _GetStack(self, aStack):
+        File   = os.path.split(aStack[1])
+        Method = aStack[3]
+        Line   = aStack[2]
+        return '%s->%s(%s)' % (File, Method, Line)
+
     def AddEcho(self, aEcho):
         if (not isinstance(aEcho, TLogEcho)):
             raise ValueError('Class %s must be inherited from TLogEcho' % aEcho)
@@ -61,15 +67,18 @@ class TLog():
         if (aLevel <= self.LogLevel):
             self.Cnt += 1
             for Echo in self.Echoes:
-                Echo.Write(Result)
+                Echo.   Write(Result)
         return Result
 
+    def PrintStack(self, aLevel, aType, aFunc, aVar):
+        Items = inspect.stack()
+        for Item in Items:
+            if (Item.function == aFunc):
+                Str = self._GetStack(Item) + ('->%s:%s' % (aVar, Item.frame.f_locals.get(aVar)))
+                self.Print(aLevel, aType, Str)
+
     def PrintDbg(self, aLevel, aType, *aParam):
-        Prev   = inspect.stack()[1]
-        File   = os.path.split(Prev[1])[1]
-        Method = Prev[3]
-        Line   = Prev[2]
-        Str    = '%s->%s(%s)' % (File, Method, Line)
+        Str = self._GetStack(inspect.stack()[1])
         return self.Print(aLevel, aType, Str, aParam)
 
     def PrintTo(self, aMsg, aToEcho = 0):

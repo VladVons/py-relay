@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 """
@@ -25,6 +26,7 @@ import sys
 import optparse
 import random
 import traceback
+import asyncio
 
 #
 #sys.path.insert(0, './Plugin/Providers')
@@ -37,7 +39,7 @@ from Inc.Param        import TDictParam
 from Inc.Protect      import TProtect
 from Api              import Misc
 from Core.Manager     import TManager
-from Core.HttpServerApi import THttpServerApi
+from Core.HttpApi import THttpApiWebServer
 
 
 
@@ -240,12 +242,21 @@ class TMain():
             self.Info()
             sys.exit()
 
-        if (self.Options.ApiPort):
-            HttpServer = THttpServerApi(self.Options.ApiPort)
-            HttpServer.Manager = self.Manager
-            HttpServer.Exec(True)
+        self.ALoop = asyncio.get_event_loop()
+        self.ALoop.create_task(self.Manager.Run())
 
-        self.Manager.Run()
+        if (self.Options.ApiPort):
+            #HttpServer = THttpServer
+            #HttpServer = THttpServerApi(self.Options.ApiPort)
+            #HttpServer.Manager = self.Manager
+            #HttpServer.Exec(True)
+
+            HttpApiWebServer = THttpApiWebServer()
+            HttpApiWebServer.ExtApi.Manager = self.Manager
+            self.ALoop.create_task(HttpApiWebServer.Run(self.Options.ApiPort))
+
+        self.ALoop.run_forever()
+        self.ALoop.close()
 
     def Stop(self, aReason):
         Log.PrintDbg(1, 'i', 'Reason %s' % aReason)
@@ -258,8 +269,11 @@ class TMain():
 if (__name__ == '__main__'):
     # kill all threads on SIGTERM via 'service relay stop'
     def SetExitHandler(aFunc):
+        #prctl.prctl(prctl.NAME, cAppName)
+        #prctl.prctl(prctl.PDEATHSIG, signal.SIGTERM)
         prctl.set_name(cAppName)
         prctl.set_pdeathsig(signal.SIGINT)
+
         signal.signal(signal.SIGTERM, aFunc)
 
     def OnExit(aSignal, func=None):

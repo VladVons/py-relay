@@ -1,10 +1,15 @@
 {
+    "Var":{
+        "LoopSleep":2
+    },
     "Run":{
         "Start":[
         ],
         "Loop":[
-            {"Enable":true,  "ClassRef":"Sleep_1"},
-            {"Enable":true,  "ClassRef":"Sensor_CPU_Temp"}
+            {"Enable":false,  "ClassRef":"Sleep_1"},
+            {"Enable":true,  "ClassRef":"Sensor_CPU_Temp"},
+            {"Enable":false,  "ClassRef":"Random_15_25"},
+            {"Enable":false,  "ClassRef":"WriteConsole2"}
         ],
         "Finish":[
             {"Enable":true,   "ClassRef":"SensorUptimeApp"}
@@ -38,6 +43,10 @@
             "Alias":"WriteConsole"
         },
         {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsole2"
+        },
+        {
             "Class":"TSensorUptimeApp",
             "Alias":"SensorUptimeApp",
             "Parameter":{"Unit":"S"}
@@ -45,6 +54,11 @@
         {
             "Class":"TSensorFile_CPU_Temp",
             "Alias":"Sensor_CPU_Temp"
+        },
+        {
+            "Class":"TSensorRandom",
+            "Alias":"Random_15_25",
+            "Parameter":{"Begin":15, "End":25, "Periodic": 1}
         },
         {
             "Class":"TControlMQTT",

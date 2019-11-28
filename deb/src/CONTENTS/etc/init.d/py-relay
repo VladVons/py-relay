@@ -50,7 +50,8 @@ case "$1" in
       start-stop-daemon --start --background --pidfile $PIDFILE1 --make-pidfile --chuid $USER --chdir $WORKDIR --exec $DAEMON -- $ARGS
       log_end_msg $?
     else
-      log_daemon_msg "Disabled by $DEFAULT"
+      log_progress_msg "(disabled)"
+      log_daemon_msg "Disabled in $DEFAULT"
     fi
     ;;
   stop)

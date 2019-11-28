@@ -37,21 +37,23 @@ def IsFileWrite(aPath):
     return Result
 
 
-def FileExists(aPath):
+def FileExists(aPath) -> bool:
     return os.path.exists(aPath)
 
-def LoadFromFileToStr(aFileName):
+def LoadFromFile(aFileName: str, aMode = 'rb') -> bytes:
     Result = None
     if (os.path.isfile(aFileName)):
-        File = open(aFileName, 'rb')
-        Result = File.read()
-        File.close()
+        with open(aFileName, aMode) as File:
+            Result = File.read()
     return Result
 
-def LoadFromFileToList(aName):
+def LoadFromFileToStr(aFileName) -> str:
+    return LoadFromFile(aFileName, 'r')
+
+def LoadFromFileToList(aName) -> list:
     Result = []
     if (os.path.isfile(aName)):
-        with open(aName, "r") as File:
+        with open(aName, 'r') as File:
             Result = File.readlines()
     return Result
 

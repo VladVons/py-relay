@@ -14,7 +14,7 @@ from Inc.Log         import Log
 from Inc.Util        import Obj, FS, Arr
 from Inc.Param       import TDictReplace
 from Inc.ConfEditor  import TEditorConf
-from Core.ManagerSec import TSecAction, TSecClass, TSecDefault, TSecInclude, TSecRun
+from Core.ManagerSec import TSecAction, TSecClass, TSecDefault, TSecInclude, TSecRun, TSecVar
 
 
 class TLoadConf():
@@ -70,6 +70,7 @@ class TManager():
         self.Init()
 
     def Init(self):
+        self.SecVar     = TSecVar(self)
         self.SecAction  = TSecAction(self)
         self.SecClass   = TSecClass(self)
         self.SecDefault = TSecDefault(self)
@@ -85,7 +86,7 @@ class TManager():
         #self.SecClass.OnClass miss?
         #self.Init()
 
-        Keys = ['Include', 'Default', 'Run', 'Action']
+        Keys = ['Include', 'Default', 'Run', 'Action', 'Var']
         Arr.CheckDif(aData.keys(), Keys + ['Class'])
         self.SecInclude.Data = aData
 
@@ -105,8 +106,8 @@ class TManager():
 
         #self.SecClass.SetParam('Sleep_1', 'Time', 5)
 
-    def Run(self):
-        self.SecRun.Run()
+    async def Run(self):
+        await self.SecRun.Run()
 
     def Stop(self):
         self.SecRun.Stop()
