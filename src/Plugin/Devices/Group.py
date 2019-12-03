@@ -16,6 +16,7 @@ PkgConf = {
     "Author": "Vladvons"
 }
 
+
 class TDeviceGroup(TDevice):
     def DoPostBegin(self, aCaller, aValue, aData):
         #Log.PrintDbg(3, 'i', 'Alias %s, CAlias %s, Value %s' % (self.Alias, aCaller.Alias, aValue))

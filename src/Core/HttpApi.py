@@ -12,10 +12,10 @@ import json
 from aiohttp import web
 #
 from Inc.Log        import Log
-from Inc.Util       import UFS
+from Inc.Util       import UFS, UObj
 from Inc.Param      import TDictReplace, TDictBlock, TDictNamed
-from Api.ExternApi  import TExternApi
-from Api            import HttpProc
+from Api.ExternApi  import TExternApi, Urls
+from Core           import HttpProc
 
 
 class THttpApiWeb():
@@ -25,51 +25,48 @@ class THttpApiWeb():
         self.FileIndex  = '/index.tpl'
         self.File404    = '/page_404.tpl'
 
-        self.Url = {
-            '/':                {'func': '', 'param': []},
-            '/get/app/api':     {'func': '', 'param': []},
-            '/get/app/version': {'func': '', 'param': []},
-            '/get/app/devices': {'func': '', 'param': []},
-            '/get/app/classes': {'func': '', 'param': []},
-            '/get/class/keys':  {'func': '', 'param': []},
-            '/get/app/profile': {'func': '', 'param': []},
-            '/get/dev/values':  {'func': '', 'param': []},
-            '/get/dev/valuesf': {'func': '', 'param': ['alias']},
-            '/get/dev/value':   {'func': '', 'param': ['alias']},
-            '/set/dev/value':   {'func': '', 'param': ['alias', 'value']}
-        }
-
-        self._CheckUrl()
         self.Result = TDictNamed({'Text': '', 'Context': '', 'Redirect': ''})
         self.ExternApi = TExternApi()
+        self._CheckUrls()
 
-    def _CheckUrl(self):
-        for Item in self.Url:
-            if (self.GetObj(Item) is None):
-                Log.PrintDbg(1, 'x', 'Unknown url %s' % Item)
+    def _CheckUrls(self):
+        for Url in Urls:
+            Method = self.GetMethodName(Url)
+            if (UObj.GetAttr(self, Method, True) is None) and (UObj.GetAttr(self.ExternApi, Method, True) is None):
+                Log.PrintDbg(1, 'x', 'Unknown url %s' % Url)
 
-    def GetObj(self, aPath: str):
+    @staticmethod
+    def GetMethodName(aPath: str) -> str:
+        return 'path' + aPath.replace('/', '_')
+
+    def CallObj(self, aPath: str, aParam):
         Result = None
 
-        Data = self.Url.get(aPath)
-        if (Data):
-            Func = Data.get('func')
-            if (Func == ''):
-                Func = 'Url' + aPath.replace('/', '_')
+        Method = self.GetMethodName(aPath)
+        Obj = UObj.GetAttr(self, Method, True)
+        if (Obj):
+            Result = Obj(aParam)
+        else:
+            Obj = UObj.GetAttr(self.ExternApi, Method, True)
+            if (Obj):
+                Result = Obj(aParam)
 
-            if (hasattr(self, Func)) and (callable(getattr(self, Func))):
-                Result = getattr(self, Func)
+                Url = Urls.get(aPath)
+                if (Url):
+                    Format = Url.get('format')
+                    Result = self.Output(aParam, Result, Format[0], Format[1])
+                else:
+                    Result = json.dumps(Result)
         return Result
 
     def ParseUrl(self, aPath: str, aParam):
-        Obj = self.GetObj(aPath)
-        if (Obj):
-            Result = Obj(aParam)
-        elif (UFS.FileExists(self.RootDir + aPath)):
-            Result = self.ParseUrlFile(aPath)
-        else:
-            Log.PrintDbg(1, 'e', 'Unknown url %s' % aPath)
-            Result = self.HtmlPattern(self.File404, {'cErr': aPath})
+        Result = self.CallObj(aPath, aParam)
+        if (Result is None):
+            if (UFS.FileExists(self.RootDir + aPath)):
+                Result = self.ParseUrlFile(aPath)
+            else:
+                Log.PrintDbg(1, 'e', 'Unknown url %s' % aPath)
+                Result = self.HtmlPattern(self.File404, {'cErr': aPath})
         return Result
 
     def ParseUrlFile(self, aPath: str):
@@ -85,7 +82,7 @@ class THttpApiWeb():
                 Result = UFS.LoadFromFile(FilePath)
         return Result
 
-    def HtmlDir(self, aPath, aFullPath):
+    def HtmlDir(self, aPath: str, aFullPath: str):
         Data  = HttpProc.HtmlDir(aPath, aFullPath)
         Data  = HttpProc.HtmlTable(['Name', 'Size', 'Date'], Data)
         Param = {'cTitle': 'HtmlDir', 'cBody': Data}
@@ -129,49 +126,13 @@ class THttpApiWeb():
             Result = self.HtmlPattern(self.FileLayout, Param)
         return Result
 
-    def Url_(self, aParam):
+    def path_(self, aParam):
         return self.HtmlPattern(self.FileIndex)
 
-    def Url_get_dev_value(self, aParam):
-        Data = self.ExternApi.get_dev_value(aParam)
-        return self.Output(aParam, Data, 'Device value', ['Alias', 'Value'])
-
-    def Url_get_dev_values(self, aParam):
-        Data = self.ExternApi.get_dev_values(aParam)
-        return self.Output(aParam, Data, 'Devices value', ['Alias', 'Value'])
-
-    def Url_get_dev_valuesf(self, aParam):
-        Data = self.ExternApi.get_dev_valuesf(aParam)
-        return self.Output(aParam, Data, 'Devices value', ['Alias', 'Value'])
-
-    def Url_get_app_classes(self, aParam):
-        Data = self.ExternApi.get_app_classes(aParam)
-        return self.Output(aParam, Data, 'Aliases', ['Alias', 'Class', 'Descr'])
-
-    def Url_get_app_version(self, aParam):
-        Data = self.ExternApi.get_app_version(aParam)
-        return self.Output(aParam, Data, 'Version', ['Name', 'Value'])
-
-    def Url_get_class_keys(self, aParam):
-        Data = self.ExternApi.get_class_keys(aParam)
-        return self.Output(aParam, Data, 'Keys', ['Keys'])
-
-    def Url_get_app_devices(self, aParam):
-        Data = self.ExternApi.get_app_devices(aParam)
-        return self.Output(aParam, Data, 'Devices', ['TClass', 'Path', 'Module', 'Inherit'])
-
-    def Url_get_app_api(self, aParam):
-        Data = self.ExternApi.get_app_api(aParam)
-        return self.Output(aParam, Data, 'Api', ['Api'])
-
-    def Url_get_app_profile(self, aParam):
-        Data = self.ExternApi.get_app_profile(aParam)
+    def path_get_app_profile(self, aParam):
+        Data = self.ExternApi.path_get_app_profile(aParam)
         self.Result.Redirect = Data.get('Path').rstrip('/').replace('Plugin', '')
         return ''
-
-    def Url_set_dev_value(self, aParam):
-        Data = self.ExternApi.set_dev_value(aParam)
-        return 'OK'
 
 
 class THttpApiWebServer(THttpApiWeb):
@@ -186,7 +147,7 @@ class THttpApiWebServer(THttpApiWeb):
         else:
             return web.Response(body = Text, content_type = self.Result.Context)
 
-    async def Run(self, aPort):
+    async def Run(self, aPort: int):
         Log.PrintDbg(1, 'i', 'Starting server at http://127.0.0.1:%s' % aPort)
 
         App = web.Application()

@@ -39,7 +39,7 @@ from Inc.Param        import TDictParam
 from Inc.Protect      import TProtect
 from Api              import Misc
 from Core.Manager     import TManager
-from Api.HttpApi      import THttpApiWebServer
+from Core.HttpApi     import THttpApiWebServer
 
 
 

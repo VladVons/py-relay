@@ -31,4 +31,3 @@ class TSensorPsUtil_CPU_Usage(TSensor):
     def _Get(self):
         Result = psutil.cpu_percent(interval = 0.3)
         return self.Round(Result)
-

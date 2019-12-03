@@ -32,15 +32,15 @@ def GetClassInstancePath(aInstance, aPath = '', aDepth = 99):
 def GetClassPath(aClass):
     return GetClassInstancePath(aClass.__class__)
 
-def GetAttr(aObj, aVarPath, aDelim = '.'):
-    for VarName in aVarPath.split(aDelim):
-        if (hasattr(aObj, VarName)):
-            aObj = getattr(aObj, VarName)
+def GetAttrPath(aObj, aVarPath: str, aDelim: str = '.'):
+    for Name in aVarPath.split(aDelim):
+        if (hasattr(aObj, Name)):
+            aObj = getattr(aObj, Name)
         else:
             return None
         return aObj
 
-def SetAttr(aObj, aVarPath, aValue, aDelim = '.'):
+def SetAttrPath(aObj, aVarPath: str, aValue, aDelim: str = '.'):
     for VarName in aVarPath.split(aDelim):
         if (hasattr(aObj, VarName)):
             LastObj = aObj
@@ -51,11 +51,12 @@ def SetAttr(aObj, aVarPath, aValue, aDelim = '.'):
     return aObj
 
 
-def GetAttr(aClass, aName):
-    try:
+def GetAttr(aClass, aName: str, aCallable: bool = False):
+    Result = None
+    if (hasattr(aClass, aName)):
         Result = getattr(aClass, aName)
-    except AttributeError:
-        Result = None
+        if (aCallable and (not callable(Result))):
+            Result = None
     return Result
 
 def TupleToStr(aValue):

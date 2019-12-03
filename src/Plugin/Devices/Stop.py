@@ -13,5 +13,6 @@ class TControlStop(TControl):
     def DoParameter(self, aParam):
         pass
 
+    # ToDo async 
     def Set(self, aCaller, aValue):
         self.Manager.Stop()

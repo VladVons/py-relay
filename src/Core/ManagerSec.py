@@ -11,7 +11,7 @@ import sys
 import asyncio
 #
 from Inc.Log        import Log
-from Inc.Util       import UArr, UObj
+from Inc.Util       import UObj, UArr
 
 # for nuitka compiler
 # from Plugin.Devices import *
@@ -60,14 +60,15 @@ class TSecRun(TSec):
         self.InClass = None
         self.InRun   = False
         self.OnPost  = None
-        self.ThreadPipe = None
+        #self.ThreadPipe = None
 
-    def DoFunc(self, aFunc: str):
+    def DoFunc(self, aName: str):
         Items = self.Parent.SecClass.Data
         for Item in Items:
             Class = Items.get(Item)
-            Func = getattr(Class, aFunc)
-            Func()
+            Func = UObj.GetAttr(Class, aName, True)
+            if (Func):
+                Func()
 
     def Add(self, aData: dict, aKey: str):
         Class = self.Parent.SecClass.Parse(aData, None)
@@ -86,17 +87,25 @@ class TSecRun(TSec):
                 for Item in aData.get(Key):
                     self.Add(Item, Key)
 
-    def PostAll(self, aClasses: list):
+    async def PostLoop(self, aClasses: list):
         if (aClasses):
+            self.DoFunc('DoLoop')
+
+            Sleep = self.Parent.SecVar.Data.get('LoopSleep', 1)
+            await asyncio.sleep(Sleep)
+
+            Sleep = self.Parent.SecVar.Data.get('LoopSleepEach', 0)
             for Class in aClasses:
+                await asyncio.sleep(Sleep)
                 Class.Post(None, 0, None)
 
             if (self.OnPost):
                 self.OnPost(self)
 
-            # check if something comes from thread
-            #if (self.ThreadPipe):
-            #    self.ThreadPipe.MainReceive(self.Parent)
+    def Post(self, aClasses: list):
+        if (aClasses):
+            for Class in aClasses:
+                Class.Post(None, 0, None)
 
     async def Run(self):
         Log.PrintDbg(2, 'i')
@@ -104,7 +113,7 @@ class TSecRun(TSec):
         self.DoFunc('DoStart')
 
         Items = self.Data.get('Start')
-        self.PostAll(Items)
+        self.Post(Items)
 
         Items = self.Data.get('Loop')
         if (Items):
@@ -112,10 +121,8 @@ class TSecRun(TSec):
 
             self.InRun = True
             try:
-                Sleep = self.Parent.SecVar.Data.get('LoopSleep', 1)
                 while (self.InRun):
-                    await asyncio.sleep(Sleep)
-                    self.PostAll(Items)
+                    await self.PostLoop(Items)
             finally:
                 self.Stop()
         else:
@@ -130,7 +137,7 @@ class TSecRun(TSec):
             self.InRun = False
 
             Items = self.Data.get('Finish')
-            self.PostAll(Items)
+            self.Post(Items)
 
             self.DoFunc('DoFinish')
 
@@ -214,12 +221,12 @@ class TSecClass(TSec):
     @_DecorAliasesVar
     def GetAliasVar(self, aAlias: str, aVarName: str, aValueNotUsed):
         Class = self.GetClass(aAlias)
-        return UObj.GetAttr(Class, aVarName)
+        return UObj.GetAttrPath(Class, aVarName)
 
     @_DecorAliasesVar
     def SetAliasVar(self, aAlias: str, aVarName: str, aValue):
         Class = self.GetClass(aAlias)
-        return UObj.SetAttr(Class, aVarName, aValue)
+        return UObj.SetAttrPath(Class, aVarName, aValue)
 
     def GetUnused(self):
         Result = []
@@ -245,8 +252,9 @@ class TSecClass(TSec):
     def GetClass(self, aAlias: str):
         return self.Data.get(aAlias)
 
-    def GetAliases(self):
-        return self.Data.keys()
+    def GetAliases(self, aSubstr = ''):
+        Keys = self.Data.keys()
+        return UArr.ListFilter(Keys, aSubstr)
 
     def AddClass(self, aClass):
         # print("aAlias", aAlias, "aClass", aClass)

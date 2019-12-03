@@ -23,7 +23,7 @@ except: from urllib.parse import urlencode
 from Inc.Util import UFS
 
 
-def SockReceive(aConn, aBufSize):
+def SockReceive(aConn, aBufSize: int):
     Result = ''
     while True:
         Data = aConn.recv(aBufSize)
@@ -35,7 +35,7 @@ def SockReceive(aConn, aBufSize):
             break
     return Result
 
-def GetLocalIP():
+def GetLocalIP() -> str:
     Socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         # doesn't even have to be reachable
@@ -49,7 +49,7 @@ def GetLocalIP():
     return Result
 
    
-def GetMac(aSplit = True):
+def GetMac(aSplit: bool = True) -> str:
     Mac = hex(uuid.getnode())[2:]
     if (aSplit):
         Result = ':'.join(Mac[i : i+2] for i in range(0, 12, 2))
@@ -57,11 +57,11 @@ def GetMac(aSplit = True):
         Result = Mac
     return Result
 
-def CheckInterface(aName = 'eth0'):
+def CheckInterface(aName: str = 'eth0') -> bool:
     Data = UFS.LoadFromFileToStr('/sys/class/net/%s/operstate' % aName)
     return ('up' in Data)
 
-def GetHttpData(aUrl):
+def GetHttpData(aUrl: str):
     if (sys.version_info[0] < 3):
         import urllib2
         Obj = urllib2
@@ -75,7 +75,7 @@ def GetHttpData(aUrl):
         Result = None
     return Result
 
-def CheckHostPort(aHost, aPort, aTimeOut = 1):
+def CheckHostPort(aHost: str, aPort: str, aTimeOut: int = 1) -> bool:
     Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     Sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     Sock.settimeout(aTimeOut)
@@ -86,16 +86,15 @@ def CheckHostPort(aHost, aPort, aTimeOut = 1):
     Sock.close()
     return Result
 
-def CheckInternet():
+def CheckInternet() -> bool:
     return CheckHostPort('8.8.8.8', 53)
 
 def UrlParse(aUrl):
-
     Result = urlparse.urlparse(aUrl)
     #print(Result.scheme, Result.netloc, Result.path)
     return Result
 
-def PostRequest(aUrl, aData):
+def PostRequest(aUrl: str, aData):
     '''
     import requests
 

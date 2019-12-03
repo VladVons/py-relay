@@ -5,14 +5,14 @@ from   yattag import Doc
 from Inc.Util       import UFS
 
 
-def DeviceTree(aObj, aStr = ''):
+def DeviceTree(aObj, aStr: str = '') -> str:
     if (aObj.Parent):
         aStr += DeviceTree(aObj.Parent) + ' -> '
     aStr += 'Alias:%s, Class:%s, Descr:%s' % (aObj.Alias, Obj.GetName(aObj), aObj.Descr)
     return aStr
 
 
-def HtmlDir(aPath, aFullPath):
+def HtmlDir(aPath: str, aFullPath: str) -> list:
     Root, Folders, Files = next(os.walk(aFullPath))
     Folders.sort()
     Files.sort()
@@ -43,7 +43,7 @@ def HtmlDir(aPath, aFullPath):
     return Result
 
 
-def HtmlTable(aColumns, aItems):
+def HtmlTable(aColumns: list, aItems: list) -> str:
     doc, tag, text, line = Doc().ttl()
     with tag('table'):
         # table head

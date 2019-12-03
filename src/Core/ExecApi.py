@@ -21,7 +21,6 @@ class TExecApi():
 
     def xAClass(self, aAlias: str):
         Class = self.Device.Manager.SecClass.GetClass(aAlias[1:])
-        #print('---', aAlias, Class.Parent.Value)
         if (not Class):
             Msg = Log.PrintDbg(1, 'x', 'Alias not found %s' % aAlias)
             raise Exception(Msg)

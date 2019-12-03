@@ -19,10 +19,10 @@ class TExecParse(TExec):
         self.Keys = {}
         self.Cond = ['If', 'Then', 'Else', 'Always']
 
-    def GetKey(self, aKey):
+    def GetKey(self, aKey: str) -> dict:
         return self.Keys.get(aKey, {})
 
-    def ExtractAlias(self, aData):
+    def ExtractAlias(self, aData: dict) -> list:
         Allow = self.Cond + ['Enable', 'Label', 'ClassRef']
         Diff = set(aData.keys()) - set(Allow)
         if (Diff):
@@ -44,7 +44,7 @@ class TExecParse(TExec):
                                 Result.append(Match[1:])
         return Result
 
-    def Parse(self, aKey, aParam, aData):
+    def Parse(self, aKey: str, aParam: list, aData: dict):
         for Item in aParam:
             if (not Item.get('Enable', True)):
                 continue

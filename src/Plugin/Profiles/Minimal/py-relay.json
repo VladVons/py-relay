@@ -1,6 +1,7 @@
 {
     "Var":{
-        "LoopSleep":2
+        "LoopSleep":3,
+        "LoopSleepEach":1
     },
     "Run":{
         "Start":[
@@ -8,7 +9,7 @@
         "Loop":[
             {"Enable":false,  "ClassRef":"Sleep_1"},
             {"Enable":true,  "ClassRef":"Sensor_CPU_Temp"},
-            {"Enable":false,  "ClassRef":"Random_15_25"},
+            {"Enable":true,   "ClassRef":"Random_15_25"},
             {"Enable":false,  "ClassRef":"WriteConsole2"}
         ],
         "Finish":[
@@ -43,8 +44,8 @@
             "Alias":"WriteConsole"
         },
         {
-            "Class":"TControlWriteConsole",
-            "Alias":"WriteConsole2"
+            "Class":"TControlWriteLog",
+            "Alias":"WriteLog"
         },
         {
             "Class":"TSensorUptimeApp",
@@ -58,7 +59,10 @@
         {
             "Class":"TSensorRandom",
             "Alias":"Random_15_25",
-            "Parameter":{"Begin":15, "End":25, "Periodic": 1}
+            "Parameter":{"Begin":15, "End":25, "Periodic": 1},
+            "Triggers":[
+                {"Enable":true, "If":"xValue > 20", "Then":"xASetValue('$WriteLog')"}
+            ]
         },
         {
             "Class":"TControlMQTT",

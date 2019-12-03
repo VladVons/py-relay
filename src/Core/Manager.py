@@ -18,7 +18,7 @@ from Core.ManagerSec import TSecAction, TSecClass, TSecDefault, TSecInclude, TSe
 
 
 class TLoadConf():
-    def __init__(self, aDir):
+    def __init__(self, aDir: str):
         self.Dir = aDir
         self.DictReplace = TDictReplace()
 
@@ -41,7 +41,7 @@ class TLoadConf():
             Data = EditorConf.Section.KeyList()
             self.DictReplace.Data.update(Data)
 
-    def Conf(self, aFile: str):
+    def Conf(self, aFile: str) -> dict:
         Log.PrintDbg(3, 'i', 'Load file %s' % aFile)
 
         Data = self.File(aFile)
@@ -59,7 +59,7 @@ class TLoadConf():
 
 
 class TManager():
-    def __init__(self, aParent, aDir):
+    def __init__(self, aParent, aDir: str):
         self.Parent   = aParent
         self.File     = None
         self.LoadConf = TLoadConf(aDir)
@@ -78,7 +78,7 @@ class TManager():
         self.SecInclude = TSecInclude(self)
         self.SecRun     = TSecRun(self)
 
-    def SetStartTimeVirt(self, aValue):
+    def SetStartTimeVirt(self, aValue: float):
         self.StartTimeVirt = int(aValue)
 
     def Load(self, aData: dict):
@@ -94,11 +94,11 @@ class TManager():
         # call self.SecInclude, self.SecDefault etc
         for Key in Keys:
             Name = 'Sec' + Key
-            ObjC  = getattr(self, Name)
-            if (ObjC):
+            Obj  = UObj.GetAttr(self, Name)
+            if (Obj):
                 Data = self.SecInclude.Data.get(Key)
                 if (Data):
-                    ObjC.Load(Data)
+                    Obj.Load(Data)
                 else:
                     Log.PrintDbg(1, 'w', 'Empty section %s' % Key)
             else:

@@ -60,7 +60,7 @@ class TDeviceParse(object):
     def Options(self):
         return self.Manager.Parent.Options
 
-    def _LoadClass(self, aParam, aData):
+    def _LoadClass(self, aParam: dict, aData: dict):
         return aData.get('Parent').Parse(aParam, self)
 
     def ExtAction(self, aKey, aParam, aData):
@@ -79,11 +79,11 @@ class TDeviceParse(object):
         self.DoParameterExit()
         self.HasParam = True
 
-    def GetUptime(self):
+    def GetUptime(self) -> int:
         Now = int(time.time())
         return Now - self.Manager.StartTimeVirt
 
-    def GetUptimeReal(self):
+    def GetUptimeReal(self) -> int:
         return int(time.time() - self.Manager.StartTimeReal)
 
     def DoStart(self):
@@ -96,14 +96,15 @@ class TDeviceParse(object):
     def DoFinish(self):
         self.Exec.Conditions('Finish')
 
-    def IsInRecursion(self, aOnClass, aClass):
+    @staticmethod
+    def IsInRecursion(aOnClass, aClass) -> bool:
         while aClass:
             if (aOnClass == aClass):
                 return True
             aClass = aClass.Parent
         return False
 
-    def Action(self, aKey, aValue):
+    def Action(self, aKey: str, aValue):
         OnActionClass = self.Actions.get(aKey)
         if (OnActionClass is None):
             OnActionClass = self.Manager.SecAction.Data.get(aKey)
@@ -125,10 +126,11 @@ class TDeviceParse(object):
 
 class TDevice(TDeviceParse):
     def __init__(self, aParent):
-        TDeviceParse.__init__(self, aParent)
+        super().__init__(aParent)
 
         self.UpdateTime = 0
-        self.Value      = 0
+        self._Value     = 0
+        self.Protected  = False
         self.PostCnt    = 0
         self.Err        = False
         self.MaxErr     = 0
@@ -140,29 +142,32 @@ class TDevice(TDeviceParse):
         self.Avg = UNum.TAvg()
         #self.Avg.Enable = False
 
-        Pattern = {'Enable':    True,
-                    'Periodic': 1,
-                    'Delay':    0,
-                    'Debug':    False,
-                    'AllValue': False,
-                    'Refresh':  3600,
-                    'OnValue':  True,
-                    'MaxErr':   3,
-                    'ForceLog': False}
+        Pattern = {
+            'Enable':   True,
+            'Periodic': 1,
+            'Delay':    0,
+            'Debug':    False,
+            'AllValue': False,
+            'Refresh':  3600,
+            'OnValue':  True,
+            'MaxErr':   3,
+            'ForceLog': False
+        }
         self.Param.AddDefPattern(Pattern)
 
         self.ExtParam['Checks']   = self.Exec.Parse
         self.ExtParam['Triggers'] = self.Exec.Parse
 
     @property
-    def Direction(self):
+    def Direction(self) -> int:
         return self.Avg.Direction
 
     @property
-    def LastUpdate(self):
+    def LastUpdate(self) -> int:
         return self.GetUptime() - self.UpdateTime
 
-    def GetAlias(self, aCaller):
+    @staticmethod
+    def GetAlias(aCaller) -> str:
         Result = ''
         if (aCaller):
             Result = aCaller.Alias
@@ -171,20 +176,23 @@ class TDevice(TDeviceParse):
     def DoPostBegin(self, aCaller, aValue, aData):
         return True
 
+    def DoLoop(self):
+        pass
+
     def DoPost(self, aCaller, aValue, aData):
         pass
 
-    def Post(self, aCaller, aValue, aData = None):
+    def Post(self, aCaller, aValue, aData = None) -> bool:
         Log.PrintDbg(3, 'i', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
         if (self.Options.DebugAlias):
             Msg = Log.Format(1, 'i', self.__class__.__name__, 'Post()', 'Alias:%s, CAlias:%s, Value:%s' % (self.Alias, self.GetAlias(aCaller), aValue))
             Log.PrintTo(Msg)
 
-        Level = len(inspect.stack())
-        if (Level > 30):
-            Log.PrintStack(1, 'x', 'Post', 'aCaller')
-            Msg = Log.PrintDbg(1, 'x', 'Recursion level to deep %s' % Level)
-            raise RecursionError(Msg)
+        #Level = len(inspect.stack())
+        #if (Level > 100):
+        #    Log.PrintStack(1, 'x', 'Post', 'aCaller')
+        #    Msg = Log.PrintDbg(1, 'x', 'Recursion level is to deep %s' % Level)
+        #    raise RecursionError(Msg)
 
         Result = True
         self.PostCnt += 1
@@ -203,19 +211,25 @@ class TDevice(TDeviceParse):
                 Log.PrintDbg(1, 'i', 'Alias:%s, CAlias:%s, Value:%s, Result:%s' % (self.Alias, self.GetAlias(aCaller), aValue, Result))
         return Result
 
-    def SetValue(self, aValue):
+    def GetValue(self) -> int:
+        return self._Value
+
+    def SetValue(self, aValue) -> bool:
         Log.PrintDbg(3, 'i', 'Alias %s, Value %s' % (self.Alias, aValue))
+        Result = False
+
+        if (self.Protected):
+            return Result
 
         self.Err = not self.CheckValue(aValue)
         if (self.Err):
             self.Exec.Conditions('Triggers')
-            return False
+            return Result
 
-        Result = False
-        if (self.Value != aValue) or (self.Param.AllValue) or (self.Param.Refresh > 0 and self.LastUpdate > self.Param.Refresh):
+        if (self._Value != aValue) or (self.Param.AllValue) or (self.Param.Refresh > 0 and self.LastUpdate > self.Param.Refresh):
             if (self.OnValue):
                 aValue = self.OnValue(self, aValue)
-            self.Value = aValue
+            self._Value = aValue
 
             if (self.Param.OnValue):
                 self.Action('OnValue', aValue)
@@ -228,7 +242,13 @@ class TDevice(TDeviceParse):
 
         return Result
 
-    def CheckValue(self, aValue):
+    def SetValueForce(self, aValue) -> bool:
+        self.Protected = False
+        Result = self.SetValue(aValue)
+        self.Protected = True
+        return Result
+
+    def CheckValue(self, aValue: int) -> bool:
         if (aValue is None):
             self.MaxErr -= 1
             if (self.MaxErr < 0):
@@ -244,6 +264,8 @@ class TDevice(TDeviceParse):
             return False
 
         return True
+
+    Value = property(GetValue, SetValue)
 
 
 class TSensor(TDevice):

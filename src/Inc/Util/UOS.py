@@ -13,7 +13,7 @@ import os
 #
 from Inc.Util import UFS, UNet
 
-def ExecM(aCmd, aMsg = ""):
+def ExecM(aCmd: str, aMsg: str = ""):
     print("Exec in:", aCmd, aMsg)
 
     # return os.system(aCmd)
@@ -38,9 +38,9 @@ def GetMachineId():
         Str1 = (MachineId  + MacId).encode('utf-8')
     return hashlib.md5(Str1).hexdigest()
 
-def GetVersion():
+def GetVersion() -> str:
     return '{}.{}.{}'.format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro)
 
-def GetDiskInfo(aName):
+def GetDiskInfo(aName) -> list:
     Disk = os.statvfs(aName)
     return [Disk.f_bsize * Disk.f_blocks, Disk.f_bsize * Disk.f_bfree]

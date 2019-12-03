@@ -34,11 +34,11 @@ def FindNodeDef(aNode, aPath: str, aDef):
     else:
         return Node
 
-def ListFilter(aNode, aRegEx: str) -> list:
+def ListFilter(aNode, aRegEx: str = '') -> list:
     Result = []
     if (aNode):
         for Item in aNode:
-            if (Item != '' and re.match(aRegEx, Item)):
+            if (aRegEx == '') or (Item != '' and re.match(aRegEx, Item)):
                 Result.append(Item)
     return Result
 
