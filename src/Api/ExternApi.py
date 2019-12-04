@@ -7,7 +7,7 @@ Description:
 """
 
 from Api        import Misc
-from Inc.Util   import UArr, UObj
+from Inc.Util   import UArr, UStr
 
 
 Urls = {
@@ -19,7 +19,8 @@ Urls = {
     '/get/dev/values':  {'param': [],           'format': ['Devices value',  ['Alias', 'Value']]},
     '/get/dev/valuesf': {'param': ['alias'],    'format': ['Devices value',  ['Alias', 'Value']]},
     '/get/dev/value':   {'param': ['alias'],    'format': ['Device value',   ['Alias', 'Value']]},
-    '/set/dev/value':   {'param': ['alias','value'], 'format': ['Device value', ['Alias', 'Value']]}
+    '/set/dev/value':   {'param': ['alias','value'], 'format': ['Device value', ['Alias', 'Value']]},
+    '/set/dev/auto':    {'param': ['alias'],    'format': ['Device auto',    ['Alias', 'Value']]}
 }
 
 class TExternApi():
@@ -30,23 +31,16 @@ class TExternApi():
         AnyFirstKey = next(iter(self.Manager.SecClass.Data))
         return self.Manager.SecClass.Data[AnyFirstKey]
 
-    def SetAliasVar(self, aAlias: str, aVar: str, aValue):
-        Result = None
-        Class = self.Manager.SecClass.GetClass(aAlias)
+    def SetDevVar(self, aData):
+        Alias = aData.get('alias')
+        Value = aData.get('value')
+        Var   = aData.get('var')
+        CurValue = self.Manager.SecClass.GetAliasVar([Alias], Var).get(Alias)
+        if (CurValue is not None):
+            Value = UStr.ConvertToType(Value, type(CurValue).__name__)
+            self.Manager.SecClass.SetAliasVar([Alias], Var, Value)
+        return Value
 
-        #if (aVar == 'Value'):
-        #    Class = self.Manager.SecClass.GetClass(aAlias)
-        #    if (Class):
-        #        Class.
-        #else:
-        #    self.Manager.SecClass.SetAliasVar([aAlias], 'Protected', False)
-
-        #self.Manager.SecClass.SetAliasVar([aAlias], aVar, aValue)
-        #Result = self.Manager.SecClass.GetAliasVar([aAlias], aVar)
-        #self.Manager.SecClass.SetAliasVar([aAlias], 'Protected', True)
-        return {aVar: Result}
-
-    #---  Main
     def path_get_app_api(self, aNotUsed):
         Class = self._GetAnyClass()
         Result = UArr.ListFilter(dir(Class.Exec.apix), '^x')
@@ -73,7 +67,6 @@ class TExternApi():
     def path_get_app_profile(self, aNotUsed) -> dict:
         return {'Path': self.Manager.LoadConf.Dir}
 
-    #---  Threaded
     def path_get_app_version(self, aNotUsed) -> dict:
         Result = Misc.Version()
         Result.update(self.Manager.Info('Total'))
@@ -117,16 +110,7 @@ class TExternApi():
             Result = Class.Value
         return {Alias: Result}
 
-    def path_set_dev_var(self, aData: dict):
-        Result = None
-
-        Alias = aData.get('alias')
-        Value = int(aData.get('value'))
-        Class = self.Manager.SecClass.GetClass(Alias)
-        Path  = UObj.GetClassPath(Class)
-        if ('TControl' in Path):
-            self.Manager.SecClass.SetAliasVar([Alias], 'Protected', False)
-            self.Manager.SecClass.SetAliasVar([Alias], 'Value', Value)
-            Result = self.Manager.SecClass.GetAliasVar([Alias], 'Value')
-            self.Manager.SecClass.SetAliasVar([Alias], 'Protected', True)
-        return {'value': Result}
+    def path_set_dev_auto(self, aData: dict):
+        aData['var']   = 'Protected'
+        aData['value'] = '1'
+        return self.SetDevVar(aData)

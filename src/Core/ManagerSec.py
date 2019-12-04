@@ -60,7 +60,6 @@ class TSecRun(TSec):
         self.InClass = None
         self.InRun   = False
         self.OnPost  = None
-        #self.ThreadPipe = None
 
     def DoFunc(self, aName: str):
         Items = self.Parent.SecClass.Data
@@ -102,7 +101,8 @@ class TSecRun(TSec):
             if (self.OnPost):
                 self.OnPost(self)
 
-    def Post(self, aClasses: list):
+    @staticmethod
+    def Post(aClasses: list):
         if (aClasses):
             for Class in aClasses:
                 Class.Post(None, 0, None)
@@ -111,7 +111,6 @@ class TSecRun(TSec):
         Log.PrintDbg(2, 'i')
 
         self.DoFunc('DoStart')
-
         Items = self.Data.get('Start')
         self.Post(Items)
 
@@ -138,7 +137,6 @@ class TSecRun(TSec):
 
             Items = self.Data.get('Finish')
             self.Post(Items)
-
             self.DoFunc('DoFinish')
 
 

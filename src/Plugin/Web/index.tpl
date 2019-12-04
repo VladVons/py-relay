@@ -13,6 +13,7 @@ To get JSON output add to URL 'style=json'<br>
 <a href="get/app/devices">get devices</a><br>
 <a href="get/dev/values">get values</a><br>
 <a href="get/dev/values?alias=Sensor">get values filtered</a><br>
-<a href="get/dev/value?alias=Sleep_1">get value</a><br>
-<a href="set/dev/value?alias=Sleep_1&value=1">set value</a><br>
+<a href="get/dev/value?alias=WriteLog">get value WriteLog</a><br>
+<a href="set/dev/value?alias=WriteLog&value=1">set value WriteLog</a><br>
+<a href="set/dev/auto?alias=WriteLog">set auto mode WriteLog</a><br>
 $</Block cBody>

@@ -19,6 +19,17 @@ def ActionDelim(self, aStr, aFunc, aDelim = ","):
             Result += aFunc(Item)
     return Result
 
+def ConvertToType(aData, aType: str):
+    if (aType == 'bool'):
+        aData = bool(aData)
+    elif (aType == 'int'):
+        aData = int(aData)
+    elif (aType == 'float'):
+        aData = float(aData)
+    elif (aType == 'list' or aType == 'dict'):
+        aData = json.loads(aData)
+    return aData
+
 def ConvertTo(aData):
     if ( (aData) and (type(aData).__name__ in ['str', 'unicode']) ):
         if (aData[0] == '"') and (aData[-1] == '"'):

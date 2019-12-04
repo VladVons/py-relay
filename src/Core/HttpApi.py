@@ -39,9 +39,27 @@ class THttpApiWeb():
     def GetMethodName(aPath: str) -> str:
         return 'path' + aPath.replace('/', '_')
 
-    def CallObj(self, aPath: str, aParam):
-        Result = None
+    def CheckParam(self, aPath: str, aParam) -> str:
+        Result = ''
+        Url = Urls.get(aPath)
+        if (Url):
+            # duplicate copy for later modification
+            Param = Url.get('param', [])[:]
 
+            Diff = set(Param) - set(aParam)
+            if (Diff):
+                Result ='Param %s not set' % Diff
+                Log.PrintDbg(1, 'e', Result)
+
+            Param.append('style')
+            Diff = set(aParam) - set(Param)
+            if (Diff):
+                Result = 'Unknown parameter %s' % Diff
+                Log.PrintDbg(1, 'e', Result)
+        return Result
+
+    def CallObj(self, aPath: str, aParam) -> str:
+        Result = ''
         Method = self.GetMethodName(aPath)
         Obj = UObj.GetAttr(self, Method, True)
         if (Obj):
@@ -50,7 +68,6 @@ class THttpApiWeb():
             Obj = UObj.GetAttr(self.ExternApi, Method, True)
             if (Obj):
                 Result = Obj(aParam)
-
                 Url = Urls.get(aPath)
                 if (Url):
                     Format = Url.get('format')
@@ -60,13 +77,17 @@ class THttpApiWeb():
         return Result
 
     def ParseUrl(self, aPath: str, aParam):
-        Result = self.CallObj(aPath, aParam)
-        if (Result is None):
-            if (UFS.FileExists(self.RootDir + aPath)):
-                Result = self.ParseUrlFile(aPath)
-            else:
-                Log.PrintDbg(1, 'e', 'Unknown url %s' % aPath)
-                Result = self.HtmlPattern(self.File404, {'cErr': aPath})
+        Err = self.CheckParam(aPath, aParam)
+        if (Err != ''):
+            Result = self.HtmlPattern(self.File404, {'cErr': Err})
+        else:
+            Result = self.CallObj(aPath, aParam)
+            if (Result == ''):
+                if (UFS.FileExists(self.RootDir + aPath)):
+                    Result = self.ParseUrlFile(aPath)
+                else:
+                    Log.PrintDbg(1, 'e', 'Unknown url %s' % aPath)
+                    Result = self.HtmlPattern(self.File404, {'cErr': aPath})
         return Result
 
     def ParseUrlFile(self, aPath: str):
@@ -141,7 +162,7 @@ class THttpApiWebServer(THttpApiWeb):
         Log.PrintDbg(1, 'i', '%s from %s %s' % (aRequest.path_qs, aRequest.remote, ''))
 
         self.Result.Clear()
-        Text = self.ParseUrl(aRequest.rel_url.path, aRequest.query)
+        Text = self.ParseUrl(aRequest.rel_url.path, dict(aRequest.query))
         if (self.Result.Redirect):
             raise web.HTTPFound(location = self.Result.Redirect)
         else:
