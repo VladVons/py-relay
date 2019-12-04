@@ -14,9 +14,22 @@ from aiohttp import web
 from Inc.Log        import Log
 from Inc.Util       import UFS, UObj
 from Inc.Param      import TDictReplace, TDictBlock, TDictNamed
-from Api.ExternApi  import TExternApi, Urls
+from Api.ExternApi  import TExternApi
 from Core           import HttpProc
 
+
+Urls = {
+    '/get/app/api':     {'param': [],           'format': ['Api',            ['Api']]},
+    '/get/app/version': {'param': [],           'format': ['Version',        ['Name', 'Value']]},
+    '/get/app/devices': {'param': [],           'format': ['Devices',        ['TClass', 'Path', 'Module', 'Inherit']]},
+    '/get/app/classes': {'param': [],           'format': ['Aliases',        ['Alias', 'Class', 'Descr']]},
+    '/get/class/keys':  {'param': [],           'format': ['Keys',           ['Keys']]},
+    '/get/dev/values':  {'param': [],           'format': ['Devices value',  ['Alias', 'Value']]},
+    '/get/dev/valuesf': {'param': ['alias'],    'format': ['Devices value',  ['Alias', 'Value']]},
+    '/get/dev/value':   {'param': ['alias'],    'format': ['Device value',   ['Alias', 'Value']]},
+    '/set/dev/value':   {'param': ['alias','value'], 'format': ['Device value', ['Alias', 'Value']]},
+    '/set/dev/auto':    {'param': ['alias'],    'format': ['Device auto',    ['Alias', 'Value']]}
+}
 
 class THttpApiWeb():
     def __init__(self):
