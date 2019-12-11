@@ -46,6 +46,9 @@ from Core.HttpApi     import THttpApiWebServer
 FInfo = UFS.SplitName(__file__)
 cDirName = FInfo[0]
 cAppName = FInfo[2]
+#cAppName = 'py-relay'
+#cDirName = ''
+#print('---1', cDirName, cAppName)
 
 
 class TMain():
@@ -242,16 +245,21 @@ class TMain():
             self.Info()
             sys.exit()
 
-        self.ALoop = asyncio.get_event_loop()
-        self.ALoop.create_task(self.Manager.Run())
+        Loop = asyncio.get_event_loop()
+        Loop.create_task(self.Manager.Run())
 
         if (self.Options.ApiPort):
             HttpApiWebServer = THttpApiWebServer()
             HttpApiWebServer.ExternApi.Manager = self.Manager
-            self.ALoop.create_task(HttpApiWebServer.Run(self.Options.ApiPort))
+            Loop.create_task(HttpApiWebServer.Run(self.Options.ApiPort))
 
-        self.ALoop.run_forever()
-        self.ALoop.close()
+        #Loop.add_signal_handler(signal.SIGTERM, self.AskExit)
+        #Loop.add_signal_handler(signal.SIGINT, self.AskExit)
+
+        #global AStop
+        #AStop = asyncio.Event()
+        Loop.run_forever()
+        Loop.close()
 
     def Stop(self, aReason):
         Log.PrintDbg(1, 'i', 'Reason %s' % aReason)
@@ -259,6 +267,10 @@ class TMain():
 
         if (self.Manager):
             self.Manager.Stop()
+
+    #@staticmethod
+    #def AskExit(*args):
+    #    AStop.set()
 
 
 if (__name__ == '__main__'):

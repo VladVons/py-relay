@@ -47,10 +47,12 @@ class TLog():
         self.DateFmt  = '%Y-%m-%d %H.%M.%S'
 
     def _GetStack(self, aStack) -> str:
-        File   = os.path.split(aStack[1])
+        CurDir    = os.getcwd()
+        Dir, File = os.path.split(aStack[1])
+        Path   = Dir.replace(CurDir, '').strip('/') + '/' + File
         Method = aStack[3]
         Line   = aStack[2]
-        return '%s->%s(%s)' % (File, Method, Line)
+        return '%s->%s(%s)' % (Path, Method, Line)
 
     def AddEcho(self, aEcho: TLogEcho):
         if (not isinstance(aEcho, TLogEcho)):
