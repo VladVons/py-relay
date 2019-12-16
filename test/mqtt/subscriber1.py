@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 """
 Copyright:   (c) 2017, Vladimir Vons, UA
@@ -15,14 +15,15 @@ https://mntolia.com/mqtt-python-with-paho-mqtt-client
 """
 
 try:
-    import paho.mqtt.client as mqtt
+    import paho.mqtt.client  as mqtt
+    import paho.mqtt.publish as pub
 except:
     print('sudo apt install python-paho-mqtt')
 
 import time
 
 
-class TMqtt():
+class TMqttSub():
     def __init__(self):
         self.Connected = False
         self.Timeout   = 5
@@ -53,7 +54,9 @@ class TMqtt():
     @staticmethod
     def on_message(aClient, aSelf, aMessage):
         aSelf.Cnt += 1
+        #pub.single('Hust01', 'Hello world 3', hostname="vpn2.oster.com.ua",  port=1883)
         print ('on_message', aSelf.Cnt, aMessage.topic, aMessage.payload)
+        #return 'Hello'
 
     @staticmethod
     def on_publish(aClient, aSelf, aMid):
@@ -67,6 +70,10 @@ class TMqtt():
     def on_log(aClient, aSelf, aLevel, aString):
         print(aString)
 
+    @staticmethod
+    def on_disconnect(aClient, aSelf, aMid):
+      aClient.reconnect()
+
     def Subscribe(self, aClient, aTopic):
         for Topic in aTopic:
             aClient.subscribe(Topic)
@@ -76,21 +83,22 @@ class TMqtt():
         self.Client = mqtt.Client(userdata = self)
         #self.Client.username_pw_set('username', 'password')
 
-        self.Client.on_connect = TMqtt.on_connect
-        self.Client.on_message = TMqtt.on_message
-        self.Client.on_publish = TMqtt.on_publish
-        #self.Client.on_log     = TMqtt.on_log
-        self.Client.on_subscribe = TMqtt.on_subscribe
-        #self.Client.message_callback_add("/topic/test2", TMqtt.on_message_test2)
+        self.Client.on_connect = TMqttSub.on_connect
+        self.Client.on_message = TMqttSub.on_message
+        self.Client.on_publish = TMqttSub.on_publish
+        #self.Client.on_log     = TMqttSub.on_log
+        self.Client.on_subscribe  = TMqttSub.on_subscribe
+        self.Client.on_disconnect = TMqttSub.on_disconnect
+        #self.Client.message_callback_add("/topic/test2", TMqttSub.on_message_test2)
 
         self.Client.connect(aHost, aPort)
         self.Client.subscribe(aSubscriber)
+        #self.Client.subscribe('Hust02')
         #self.Client.publish('py-relay2', 'Hello')
         #self.Subscribe(self.Client, ['/topic/test1', '/topic/test2', '/topic/test3', '/topic/test4'])
         self.Client.loop_start()
         while (not self.Connected):
             time.sleep(1)
-
         try:
             while True:
                 #self.Client.loop()
@@ -105,7 +113,8 @@ class TMqtt():
 
 
 
-Topic = 'Hust01'
+#Topic = 'Hust01'
+Topic = 'Hust02'
 #
 #Topic = 'Noviki01'
 #
@@ -117,5 +126,7 @@ Topic = 'Hust01'
 
 #Topic = 'Watch01'
 #
-Mqtt = TMqtt()
-Mqtt.Connect('vpn2.oster.com.ua', 1883, Topic)
+MqttSub = TMqttSub()
+MqttSub.Connect('vpn2.oster.com.ua', 1883, Topic)
+#MqttSub.Connect('localhost', 1883, Topic)
+#---end
