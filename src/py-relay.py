@@ -44,8 +44,8 @@ from Core.HttpApi     import THttpApiWebServer
 
 
 FInfo = UFS.SplitName(__file__)
-cDirName = FInfo[0]
-cAppName = FInfo[2]
+cDirName = FInfo.Root
+cAppName = FInfo.Base
 #cAppName = 'py-relay'
 #cDirName = ''
 #print('---1', cDirName, cAppName)

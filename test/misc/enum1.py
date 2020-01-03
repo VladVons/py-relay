@@ -18,6 +18,7 @@ def Test2():
         #boy = 7
     print(Animal, Animal.cat, Animal.cat.value)
 
+
 def Test3():
     wsi = collections.namedtuple('WorldSideInfo', ['angle', 'mode', 'char'])
 
@@ -58,11 +59,21 @@ def Test5():
     print(Color.Two, Color.Two.value)
 
 
+def Test6():
+    user = dict(name="John", age=20)
+
+    Obj = collections.namedtuple('FilePart', ['Root', 'Name', 'Base', 'Ext'])
+    Result = Obj(Root=11, Name=22, Base=33, Ext=44)
+    #Result = Obj(11, 22, 33, 44)
+
+    print('result', Result.Root)
+    print('OK')
+
 #Test1()
 #Test2()
 #Test3()
 #Test4()
-Test5()
+Test6()
 
 
 #def x1():

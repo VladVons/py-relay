@@ -8,6 +8,7 @@ Description:
 
 import os
 import time
+import collections
 
 
 def FindFile(aDirs, aFiles, aSubDir = False):
@@ -65,7 +66,9 @@ def SaveToFileFromList(aName, aList):
 def SplitName(aFullPath):
     Root, Name = os.path.split(aFullPath)
     Base, Ext  = os.path.splitext(Name)
-    return [Root, Name, Base, Ext]
+
+    Obj = collections.namedtuple('FilePart', ['Orig', 'Root', 'Name', 'Base', 'Ext'])
+    return Obj(Orig=aFullPath, Root=Root, Name=Name, Base=Base, Ext=Ext)
 
 def ChangeExt(aPath, aExt):
     return os.path.splitext(aPath)[0] + aExt

@@ -108,7 +108,7 @@ class THttpApiWeb():
         if (os.path.isdir(FilePath)):
             Result = self.HtmlDir(aPath, FilePath)
         else:
-            Ext = UFS.SplitName(FilePath)[3]
+            Ext = UFS.SplitName(FilePath).Ext
             if (Ext == '.tpl'):
                 Result = self.HtmlPattern(aPath)
             else:
