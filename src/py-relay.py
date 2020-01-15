@@ -58,8 +58,6 @@ class TMain():
 
         self.TimeStart = int(time.time())
 
-        Log.AddEcho(TLogConsole())
-
         self.Protect   = TProtect()
         self.Options   = self.ParseOptions()
         self.Init()

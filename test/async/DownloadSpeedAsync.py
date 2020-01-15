@@ -3,7 +3,6 @@
 # https://www.youtube.com/watch?v=LO61F07s7gw
 # VladVons@gmail.com
 
-
 import os
 import sys
 import time

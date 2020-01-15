@@ -38,13 +38,16 @@ class TLogFile(TLogEcho):
 
 
 class TLog():
-    def __init__(self):
+    def __init__(self, aAddConsole = True):
         self.Cnt      = 0
         self.LogLevel = 1
         self.Echoes   = []
         self.OnPrint  = None
         self.Tail     = ''
         self.DateFmt  = '%Y-%m-%d %H.%M.%S'
+
+        if (aAddConsole):
+          self.AddEcho(TLogConsole())
 
     def _GetStack(self, aStack) -> str:
         CurDir    = os.getcwd()
@@ -57,7 +60,9 @@ class TLog():
     def AddEcho(self, aEcho: TLogEcho):
         if (not isinstance(aEcho, TLogEcho)):
             raise ValueError('Class %s must be inherited from TLogEcho' % aEcho)
-        self.Echoes.append(aEcho)
+
+        if [aEcho not in self.Echoes]:
+          self.Echoes.append(aEcho)
 
     def Format(self, aLevel: int, aType: str, *aParam) -> str:
         Data   = UObj.TupleToStr(aParam)
@@ -69,7 +74,7 @@ class TLog():
         if (aLevel <= self.LogLevel):
             self.Cnt += 1
             for Echo in self.Echoes:
-                Echo.   Write(Result)
+                Echo.Write(Result)
         return Result
 
     def PrintStack(self, aLevel: int, aType: str, aFunc, aVar):
