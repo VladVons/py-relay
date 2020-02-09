@@ -190,4 +190,3 @@ case $1 in
     GitClone)            "$1"        "$2" "$3" ;;
     *)                   Help ;;
 esac
-

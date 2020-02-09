@@ -69,8 +69,8 @@ Release()
 
   echo "Building in $(pwd) ..."
   #nuitka3 --follow-imports --remove-output $Name.py
-  #nuitka --follow-imports --remove-output $Name.py
-  nuitka --follow-imports --remove-output --standalone $Name.py
+  nuitka --follow-imports --remove-output $Name.py
+  #nuitka --follow-imports --remove-output --standalone $Name.py
 
   cd $CurDir
   cp $DirSrcRelease/$Name.bin $DirSrc
@@ -80,6 +80,7 @@ Release()
 Install()
 {
   pip install nuitka
+  pip install --upgrade nuitka
   apt install python-dev --no-install-recommends
 }
 

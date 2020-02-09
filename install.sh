@@ -82,7 +82,8 @@ Install_1()
   pip freeze | xargs pip uninstall -y
 
   # update all
-  pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
+  #pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
+  pip list --outdated | cut -d ' ' -f 1 | xargs -n 1 pip install --upgrade
 
   Installed=$(pip list | grep Flask)
   if [ ! "$Installed" ]; then
