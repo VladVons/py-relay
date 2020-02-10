@@ -51,10 +51,11 @@ class TControlMQTT(TControl):
         self.Client.loop_start()
 
     def DoStartExit(self):
-        self.Pipe = self.Manager.SecRun.ThreadPipe
-        if (not self.Pipe):
-            Msg = Log.PrintDbg(1, 'e', 'HttpServer not running. Check ApiPort option')
-            raise Exception(Msg)
+        #self.Pipe = self.Manager.SecRun.ThreadPipe
+        #if (not self.Pipe):
+        #    Msg = Log.PrintDbg(1, 'e', 'HttpServer not running. Check ApiPort option')
+        #    raise Exception(Msg)
+        pass
 
     def _Set(self, aCaller, aValue):
         self.Publish(aCaller.Alias, aValue)

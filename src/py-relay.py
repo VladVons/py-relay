@@ -36,7 +36,7 @@ from Inc.Log          import Log, TLogFile, TLogConsole
 from Inc.DB           import TDbDictSQLite
 from Inc.Util         import UObj, UFS, UNet, UStr
 from Inc.Param        import TDictParam
-from Inc.Protect      import TProtect
+#from Inc.Protect      import TProtect
 from Api              import Misc
 from Core.Manager     import TManager
 from Core.HttpApi     import THttpApiWebServer
@@ -58,7 +58,7 @@ class TMain():
 
         self.TimeStart = int(time.time())
 
-        self.Protect   = TProtect()
+        #self.Protect   = TProtect()
         self.Options   = self.ParseOptions()
         self.Init()
 
@@ -79,12 +79,12 @@ class TMain():
             sys.exit(1)
 
         if (self.Options.Serial):
-            print('Serial', self.Protect.GetSerial())
+            #print('Serial', self.Protect.GetSerial())
             sys.exit(1)
 
         KeyFile = cAppName + '.key'
-        if (not self.Protect.LoadKeyFile(KeyFile)):
-            sys.exit(1)
+        #if (not self.Protect.LoadKeyFile(KeyFile)):
+        #    sys.exit(1)
         #if (not self.Protect.Check()):
         #    sys.exit(1)
 
