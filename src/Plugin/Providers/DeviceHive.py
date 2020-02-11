@@ -40,7 +40,7 @@ class TDeviceHive():
                 Data     = Response.read()
                 Result   = json.loads(Data)
                 break
-            except Exception as E:
+            except Exception as E: 
                 time.sleep(aSleep)
                 Result = None
                 Log.PrintDbg(1, 'e', 'Url %s, Data %s' % (Url, aData))
