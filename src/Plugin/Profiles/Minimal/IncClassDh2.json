@@ -1,0 +1,27 @@
+{
+    "Class":[
+       {
+            "Class":"TProviderDeviceHivePinThread_DHT22",
+            "Alias":"DH2_Provider",
+            "Parameter":{"Host":"http://192.168.2.202", "Pin":14}
+        },
+        {
+            "Class":"TSensorProvider",
+            "Alias":"DH2_Sensor_Temper",
+            "Descr":"Matoch1_ST (BAD HUMID)",
+            "Parameter":{"ClassRef":"DH2_Provider", "Tag":"temperature"},
+            "Triggers":[
+                {"Enable":false,  "If":"xError", "Then":"xASetValue('$IRelay_A3', 0); xBreak()"}
+            ]
+        },
+        {
+            "Class":"TSensorProvider",
+            "Alias":"DH2_Sensor_Humid",
+            "Descr":"Matoch1_SH",
+            "Parameter":{"ClassRef":"DH2_Provider", "Tag":"humidity", "Round":1},
+            "Triggers":[
+                {"Enable":false, "If":"xValue < 50", "Always":"xASetIf('$DH2_Relay_A')"}
+            ]
+        }
+    ]
+}

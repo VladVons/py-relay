@@ -7,17 +7,18 @@
         "Start":[
         ],
         "Loop":[
-            {"Enable":false,  "ClassRef":"Sleep_1"},
             {"Enable":true,  "ClassRef":"Sensor_CPU_Temp"},
-            {"Enable":true,   "ClassRef":"Random_15_25"},
+            {"Enable":true,  "ClassRef":"DH2_Sensor_Temper"},
+            {"Enable":true,  "ClassRef":"DH2_Sensor_Humid"},
+            {"Enable":false,  "ClassRef":"Random_15_25"},
             {"Enable":false,  "ClassRef":"WriteConsole2"}
         ],
         "Finish":[
             {"Enable":true,   "ClassRef":"SensorUptimeApp"}
         ]
     },
-   "Include":[
-
+    "Include":[
+       {"Enable":true, "File":"IncClassDh2.json"}
     ],
     "Action":[
         {"OnValue": {"Enable":true,  "ClassRef":"GroupOnValue"}}

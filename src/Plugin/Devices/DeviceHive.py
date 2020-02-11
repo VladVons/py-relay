@@ -21,7 +21,8 @@ from Plugin.Providers.DeviceHive import (
     TProviderDeviceHive_DHT22, 
     TProviderDeviceHive_DS18B20, 
     TProviderDeviceHive_PinOut,
-    TProviderDeviceHive_MHZ19
+    TProviderDeviceHive_MHZ19,
+    TProviderDeviceHive_BME280
 )
 
 
@@ -56,6 +57,13 @@ class TSensorDeviceHiveThread(TSensorThreadRead):
 
         self.SetProvider()
         self.CreateThread()
+
+
+class TSensorDeviceHive_BME280(TSensorDeviceHiveThread):
+    def SetProvider(self):
+        self.Range.Set('temperature', [-40, 80])
+        self.Range.Set('humidity',    [0, 100])
+        self.Provider = TProviderDeviceHive_BME280(self.Param.Host)
 
 
 #--- SensorDeviceHivePinThread Begin

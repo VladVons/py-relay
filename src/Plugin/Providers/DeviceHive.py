@@ -35,22 +35,21 @@ class TDeviceHive():
         while (aTries > 0):
             aTries -= 1
             try:
-                Response = UNet.urlopen(Request, json.dumps(aData), timeout = self.Timeout)
+                Data     = json.dumps(aData).encode('ascii')
+                Response = UNet.urlopen(Request, Data, timeout = self.Timeout)
                 Data     = Response.read()
                 Result   = json.loads(Data)
                 break
             except Exception as E:
                 time.sleep(aSleep)
                 Result = None
-        #print('Result', aTries, Url, aData, Result)
-        if (Result is None):
-            Log.PrintDbg(1, 'e', 'Url %s, Data %s' % (Url, aData))
+                Log.PrintDbg(1, 'e', 'Url %s, Data %s' % (Url, aData))
         return Result
 
 
 class TDeviceHiveOrig(TDeviceHive):
     def CmdReadDHT22(self, aPin):
-        return self.Send('/api/devices/dht22/read', {'pin': aPin}, 1, 0.3)
+        return self.Send('/api/devices/dht22/read', {'pin': aPin}, 1, 0.4)
 
     def CmdReadDS18B20(self, aPin):
         return self.Send('/api/devices/ds18b20/read', {'pin': aPin}, 1, 0.5)
@@ -77,6 +76,9 @@ class TDeviceHiveOrig(TDeviceHive):
 
 
 class TDeviceHiveMy(TDeviceHive):
+    def CmdReadBME280(self):
+        return self.Send('/dev/bme280', {}, 3, 0.3)
+
     def CmdReadDHT22(self, aPin):
         return self.Send('/dev/dht22', {'pin': aPin}, 3, 0.3)
 
@@ -95,6 +97,21 @@ class TDeviceHiveMy(TDeviceHive):
     def CmdReadPin(self, aPin):
         Data = self.CmdReadPins()
         return Data.get(str(aPin))
+
+
+class TProviderDeviceHive_BME280(TProvider):
+    def __init__(self, aHost):
+        self.DH  = TDeviceHiveMy(aHost)
+
+    def Read(self, aNotUsed):
+        Result = self.DH.CmdReadBME280()
+        return Result
+
+    def Get(self):
+        Result = self.ReadTry()
+        if (Result):
+            Result = Result['humidity']
+        return Result
 
 
 class TProviderDeviceHivePin(TProvider):
@@ -128,7 +145,6 @@ class TProviderDeviceHive_DS18B20(TProviderDeviceHivePin):
     def Get(self):
         Result = self.ReadTry()
         if (Result and (len(Result) > 0)):
-            print('---1', Result)
             Result = Result['temperature'][0]
         return Result
 
