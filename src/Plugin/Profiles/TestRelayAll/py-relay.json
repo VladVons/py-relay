@@ -1,0 +1,48 @@
+{
+    "Run":{
+        "Start":[
+            {"Enable":false,   "ClassRef":"GroupOnStart"}
+        ],
+         "Loop":[
+            {"Enable":true, "ClassRef":"Sleep_1"},
+            {"Enable":true, "ClassRef":"SensorTRC_Flash"}
+        ],
+        "Finish":[
+            {"Enable":true,   "ClassRef":"GroupOnStart"}
+        ]
+    },
+   "Include":[
+        {"Enable":true,  "File":"IncDefault.json"},
+        {"Enable":true,  "File":"IncClassRelayA.json"},
+        {"Enable":true,  "File":"IncClassRelayB.json"},
+        {"Enable":true,  "File":"IncClassGroup.json"}
+    ],
+    "Action":[
+        {"OnValue": {"Enable":true, "ClassRef":"WriteConsole"}},
+        {"OnError": {"Enable":true, "ClassRef":"WriteConsole"}}
+    ],
+    "Class":[
+        {
+            "Class":"TControlSleep",
+            "Alias":"Sleep_1",
+            "Parameter":{"Time": 1}
+        },
+        {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsole"
+        },
+        {
+            "Class":"TSensorTimeRangeCycle",
+            "Alias":"SensorTRC_Flash",
+            "Descr":"Air",
+            "Parameter":{
+                "Time":["$<Flash>"]
+            },
+            "Triggers":[
+                {"Enable":false, "Always":"xASetValue('$<Relay>')"},
+                {"Enable":true,  "Always":"xASetValue('$WriteConsole_A1')"},
+                {"Enable":false,  "Always":"xASetValue('$WriteConsole_B1')"}
+            ]
+        } 
+    ]
+}

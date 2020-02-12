@@ -1,0 +1,46 @@
+{
+    "Class":[
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnStart",
+            "Checks": [
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A1', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A2', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A3', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A4', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A5', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A6', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A7', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A8', 0)"}
+            ]
+        },
+        {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsole_A1",
+            "Triggers":[
+                {"Enable":true, "Always":"xASetValue('$IRelay_A1')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_A2')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_A3')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_A4')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_A5')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_A6')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_A7')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_A8')"}
+            ]
+        },
+        {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsole_B1",
+            "Triggers":[
+                {"Enable":true, "Always":"xASetValue('$IRelay_B1')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_B2')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_B3')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_B4')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_B5')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_B6')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_B7')"},
+                {"Enable":true, "Always":"xASetValue('$IRelay_B8')"}
+            ]
+        }
+    ]
+}

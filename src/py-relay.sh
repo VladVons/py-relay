@@ -5,9 +5,11 @@
 cApp="py-relay"
 
 #cAppRun="./$cApp.bin -p Default"
-#cAppRun="python ./$cApp.py -p Default"
-cAppRun="python ./$cApp.py -p Client/Draganivka1"
-#cAppRun="python ./$cApp.py -p Minimal"
+#cAppRun="python3 ./$cApp.py -p Default"
+#cAppRun="python3 ./$cApp.py -p TestCpuTemp"
+#cAppRun="python3 ./$cApp.py -p TestRelayAll"
+#cAppRun="python3 ./$cApp.py -p TestRelayOne"
+cAppRun="python3 ./$cApp.py -p Client/Draganivka1"
 #cAppRun="mypy ./$cApp.py -p Client/Miskovichi1"
 
 
@@ -26,7 +28,8 @@ OnStart()
 {
     echo "set all channels off"
     #i2cdetect -y 1
-    #i2cset -y 1 0x25 255
+    i2cset -y 1 0x25 255
+    i2cset -y 1 0x27 255
 }
 
 

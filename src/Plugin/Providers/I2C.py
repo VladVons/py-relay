@@ -19,6 +19,7 @@ from ._Common import TProvider
 
 class TProviderI2C(TProvider):
     def __init__(self, aBus, aAddress, aCommand = 0):
+        # raspberry /boot/config.txt dtparam=i2s=on
         self.Bus     = smbus.SMBus(aBus)
         self.Address = aAddress
         self.Command = aCommand

@@ -1,0 +1,62 @@
+{
+    "Var":{
+        "LoopSleep":2,
+        "LoopSleepEach":1
+    },
+    "Run":{
+        "Start":[
+            {"Enable":false,   "ClassRef":"GroupOnStart"}
+        ],
+         "Loop":[
+            {"Enable":true, "ClassRef":"SensorTRC_Flash"}
+        ],
+        "Finish":[
+            {"Enable":true,   "ClassRef":"GroupOnStart"}
+        ]
+    },
+   "Include":[
+        {"Enable":true,  "File":"IncDefault.json"},
+        {"Enable":true,  "File":"IncClassRelayA.json"},
+        {"Enable":true,  "File":"IncClassRelayB.json"}
+    ],
+    "Action":[
+        {"OnValue": {"Enable":true, "ClassRef":"WriteConsole"}},
+        {"OnError": {"Enable":true, "ClassRef":"WriteConsole"}}
+    ],
+    "Class":[
+        {
+            "Class":"TControlSleep",
+            "Alias":"Sleep_1",
+            "Parameter":{"Time": 1}
+        },
+        {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsole"
+        },
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnStart",
+            "Checks": [
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A1', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A2', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A3', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A4', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A5', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A6', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A7', 0)"},
+                {"Enable":true,  "Always":"xASetValue('$IRelay_A8', 0)"}
+            ]
+        },
+        {
+            "Class":"TSensorTimeRangeCycle",
+            "Alias":"SensorTRC_Flash",
+            "Descr":"Air",
+            "Parameter":{
+                "Time":["$<Flash>"]
+            },
+            "Triggers":[
+                {"Enable":true, "Always":"xASetValue('$<Relay>')"}
+            ]
+        } 
+    ]
+}

@@ -8,9 +8,7 @@
         ],
         "Loop":[
             {"Enable":true,  "ClassRef":"Sensor_CPU_Temp"},
-            {"Enable":true,  "ClassRef":"DH2_Sensor_Temper"},
-            {"Enable":true,  "ClassRef":"DH2_Sensor_Humid"},
-            {"Enable":false,  "ClassRef":"Random_15_25"},
+            {"Enable":true,  "ClassRef":"Random_15_25"},
             {"Enable":false,  "ClassRef":"WriteConsole2"}
         ],
         "Finish":[
@@ -18,7 +16,7 @@
         ]
     },
     "Include":[
-       {"Enable":true, "File":"IncClassDh2.json"}
+       {"Enable":false, "File":"IncClassDh2.json"}
     ],
     "Action":[
         {"OnValue": {"Enable":true,  "ClassRef":"GroupOnValue"}}

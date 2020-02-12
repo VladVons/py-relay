@@ -1,1 +1,0 @@
-/home/linux/PycharmProjects/Test/test1.py
