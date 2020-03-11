@@ -72,3 +72,12 @@ def CheckDif(aValue1, aValue2):
         print(aValue2)
         Msg = Log.PrintDbg(1, 'e', 'Unknown key %s in %s' % (str(aValue2), GetTreeAsStr(aValue1)))
         raise Exception(Msg)
+
+
+# python Sort dictionary of dictionaries by value
+def SortD(aObj: dict, aName: str) -> list:.
+    return sorted(aObj.items(), key = lambda k: k[1][aName])
+
+
+def SortL(aObj: list, aName: str) -> list:.
+    return sorted(aObj, key = lambda k: k[aName])
