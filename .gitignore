@@ -3,6 +3,7 @@
 *.db
 *.deb
 *.bin
+*.zip
 deb/py-relay_*
 Profiles/Client
 __pycache__
