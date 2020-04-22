@@ -44,7 +44,7 @@ def CheckHostPort(aHost):
 
 class TSensorDeviceHiveThread(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThreadRead.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Host': TDictParam.Required, 'Avg': 3, 'Round': 0.25}
         self.Param.AddDefPattern(Pattern)
@@ -69,7 +69,7 @@ class TSensorDeviceHive_BME280(TSensorDeviceHiveThread):
 #--- SensorDeviceHivePinThread Begin
 class TSensorDeviceHivePinThread(TSensorDeviceHiveThread):
     def __init__(self, aParent):
-        TSensorDeviceHiveThread.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Pin': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)
@@ -92,7 +92,7 @@ class TSensorDeviceHive_DS18B20(TSensorDeviceHivePinThread):
 #--- ProviderDeviceHivePinThread Begin
 class TProviderDeviceHivePinThread(TProviderThreadRead):
     def __init__(self, aParent):
-        TProviderThreadRead.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Host': TDictParam.Required, 'Pin': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)
@@ -119,7 +119,7 @@ class TSensorDeviceHiveMHZ19(TSensorDeviceHiveThread):
 
 class TRelayDeviceHive_PinOut(TRelay):
     def __init__(self, aParent):
-        TRelay.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Host': TDictParam.Required, 'Pin': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

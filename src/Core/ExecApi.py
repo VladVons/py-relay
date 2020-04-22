@@ -6,7 +6,8 @@ License:     GNU, see LICENSE for more details
 Description:
 """
 
-
+import time
+#
 from Inc.Log  import Log
 from Inc.Util import UObj, UStr
 
@@ -45,11 +46,15 @@ class TExecApi():
         return Result
 
     @property
-    def xUptime(self):
+    def xLastUpdate(self) -> int:
+        return self.Device.LastUpdate
+
+    @property
+    def xUptime(self) -> int:
         return self.Device.GetUptime()
 
     @property
-    def xDirection(self):
+    def xDirection(self) -> int:
         return self.Device.Direction
 
     @property
@@ -57,12 +62,12 @@ class TExecApi():
         return self.Device.Data
 
     @property
-    def xLastUpdate(self):
-        return self.Device.LastUpdate
-
-    @property
     def xError(self):
         return self.Device.MaxErr < 0
+
+    @property
+    def xErrors(self):
+        return self.Device.MaxErr * -1
 
     def xMacros(self, aName: str):
         Value = self.Device.Manager.LoadConf.DictReplace.Data.get(aName)

@@ -42,7 +42,7 @@ class TProviderSocket(TProvider):
 
 class TProviderSocket_Echo(TProviderSocket):
     def __init__(self, aHost, aPort, aData):
-        TProviderSocket.__init__(self, aHost, aPort)
+        super().__init__(aHost, aPort)
         self.Data = aData
 
     def Get(self):
@@ -65,4 +65,4 @@ class TProviderCheckHost(TProvider):
 
 class TProviderCheckInternet(TProviderCheckHost):
     def __init__(self):
-        TProviderCheckHost.__init__(self, '8.8.8.8', 53)
+        super().__init__('8.8.8.8', 53)

@@ -34,7 +34,7 @@ class TProviderShellExec(TProvider):
 
 class TProviderShellExec_CPULoad(TProviderShellExec):
     def __init__(self):
-        TProviderShellExec.__init__(self)
+        super().__init__()
 
         # Get Last element. It has 15 minutes average load
         self.Command = "uptime |  awk '{ print $NF }'"

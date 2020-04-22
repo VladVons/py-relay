@@ -16,7 +16,7 @@ from Core.Device  import TControl
 
 class TControlSendMail(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
 
         # Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com", "Password":"19710819"}
         Pattern = {'MailTo': TDictParam.Required, 'Subject': 'TGMail', 'User': '', 'Password': '', 'Port': 0, 'Relay': 'localhost', 'SSL': True}

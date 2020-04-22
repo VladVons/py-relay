@@ -1,0 +1,20 @@
+{
+    "Class":[
+       {
+            "Class":"TProviderDeviceHivePinThread_DHT22",
+            "Alias":"DH3_Provider",
+            "Parameter":{"Host":"http://192.168.2.208", "Pin":14}
+        },
+        {
+            "Class":"TSensorProvider",
+            "Alias":"DH3_Sensor_Temper",
+            "Descr":"Street_ST",
+            "Parameter":{"ClassRef":"DH3_Provider", "Tag":"temperature", "MaxErr": 10}
+        },
+        {
+            "Class":"TSensorProvider",
+            "Alias":"DH3_Sensor_Humid",
+            "Parameter":{"ClassRef":"DH3_Provider", "Tag":"humidity"}
+        }
+    ]
+}

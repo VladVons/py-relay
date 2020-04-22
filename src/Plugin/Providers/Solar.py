@@ -58,13 +58,13 @@ class TSolar():
 
 class TSun(TSolar):
     def __init__(self, aLatitude, aLongitude):
-        TSolar.__init__(self, aLatitude, aLongitude)
+        super().__init__(aLatitude, aLongitude)
         self.Obj = ephem.Sun()
 
 
 class TMoon(TSolar):
     def __init__(self, aLatitude, aLongitude):
-        TSolar.__init__(self, aLatitude, aLongitude)
+        super().__init__(aLatitude, aLongitude)
         self.Obj = ephem.Moon()
 
 

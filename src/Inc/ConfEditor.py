@@ -37,7 +37,7 @@ class TConfSectBase():
 #===
 class TConfSect(TConfSectBase):
     def __init__(self):
-        TConfSectBase.__init__(self)
+        super().__init__()
 
         self.CharPairDelim      = '='
         self.Patern_KeyNamePair = lambda aName: '(' + aName + ')\s*' + self.CharPairDelim + '(.*)'
@@ -178,7 +178,7 @@ class TConfSect(TConfSectBase):
 #===
 class TConfDir(TConfSect):
     def __init__(self):
-        TConfSect.__init__(self)
+        super().__init__()
 
 
 
@@ -200,7 +200,7 @@ class TEditorBase():
 #===
 class TEditorConf(TEditorBase):
     def __init__(self):
-        TEditorBase.__init__(self)
+        super().__init__()
         self.PathName = ''
 
     def GetPath(self):
@@ -225,7 +225,7 @@ class TEditorConf(TEditorBase):
 class TEditorIni(TEditorConf):
 
     def __init__(self):
-        TEditorConf.__init__(self)
+        super().__init__()
         self.Sections = []
 
     def _SectionAdd(self, aName):
@@ -297,7 +297,7 @@ class TEditorIni(TEditorConf):
 class TEditorDir(TEditorBase):
 
     def __init__(self):
-        TEditorBase.__init__(self)
+        super().__init__()
         self.DirPath  = ''
         self.PathName = lambda aName: self.DirPath + '/' + aName
 

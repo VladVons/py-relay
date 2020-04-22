@@ -27,7 +27,7 @@ Urls = {
     '/get/dev/values':  {'param': [],           'format': ['Devices value',  ['Alias', 'Value']]},
     '/get/dev/valuesf': {'param': ['alias'],    'format': ['Devices value',  ['Alias', 'Value']]},
     '/get/dev/value':   {'param': ['alias'],    'format': ['Device value',   ['Alias', 'Value']]},
-    '/set/dev/value':   {'param': ['alias','value'], 'format': ['Device value', ['Alias', 'Value']]},
+    '/set/dev/value':   {'param': ['alias', 'value'], 'format': ['Device value', ['Alias', 'Value']]},
     '/set/dev/auto':    {'param': ['alias'],    'format': ['Device auto',    ['Alias', 'Value']]}
 }
 

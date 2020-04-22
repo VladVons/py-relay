@@ -24,7 +24,7 @@ from .I2C     import TProviderI2C
 
 class TProviderI2C_Relay_8574(TProviderI2C):
     def __init__(self, aBus, aAddress, aCommand):
-        TProviderI2C.__init__(self, aBus, aAddress, aCommand)
+        super().__init__(aBus, aAddress, aCommand)
         self.Delay   = 50
         #self.ReadConfirm = True
 

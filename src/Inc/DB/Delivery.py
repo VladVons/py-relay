@@ -67,7 +67,7 @@ class TDelivery():
 
 class TDeliveryArr(TDelivery):
     def __init__(self):
-        TDelivery.__init__(self)
+        super().__init__()
         self.Fail = []
 
     def GetSize(self):
@@ -82,7 +82,7 @@ class TDeliveryArr(TDelivery):
 
 class TDeliverySQLite(TDelivery):
     def __init__(self):
-        TDelivery.__init__(self)
+        super().__init__()
 
         self.MaxFail = 1000000
         self.SQL   = TDbSQL()

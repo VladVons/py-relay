@@ -20,7 +20,7 @@ PkgConf = {
 
 class TSensorUptime(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         # 'S' - Second, 'M' - Minute, 'H' - Hour: 'd' - day, 'w' - week, 'm' - month 'y' - year
         Pattern = {'Unit': 'H'}
@@ -34,7 +34,7 @@ class TSensorUptime(TSensor):
 
 class TSensorUptimeSys(TSensorUptime):
     def __init__(self, aParent):
-        TSensorUptime.__init__(self, aParent)
+        super().__init__(aParent)
 
     def _Get(self):
         Result = UTime.Uptime() / float(self.Ratio)
@@ -43,7 +43,7 @@ class TSensorUptimeSys(TSensorUptime):
 
 class TSensorUptimeApp(TSensorUptime):
     def __init__(self, aParent):
-        TSensorUptime.__init__(self, aParent)
+        super().__init__(aParent)
 
     def _Get(self):
         Result = self.GetUptimeReal() / float(self.Ratio)

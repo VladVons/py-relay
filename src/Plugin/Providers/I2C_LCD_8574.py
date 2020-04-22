@@ -28,7 +28,7 @@ class TProviderI2C_LCD_8574(TProviderI2C):
     MaskBacklight = 1 << 3
 
     def __init__(self, aBus, aAddress, aCols, aRows):
-        TProviderI2C.__init__(self, aBus, aAddress)
+        super().__init__(aBus, aAddress)
         self.Cols    = aCols
         self.Rows    = aRows
 

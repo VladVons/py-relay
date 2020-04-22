@@ -37,7 +37,7 @@ class TSensorThreadFile(TSensorThreadRead):
 
 class TSensorFile_W1DS(TSensorThreadFile):
     def __init__(self, aParent):
-        TSensorThreadFile.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'File': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)
@@ -50,7 +50,7 @@ class TSensorFile_W1DS(TSensorThreadFile):
 #--- SensorFile
 class TSensorFile_CPU_Temp(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'File': '/sys/class/thermal/thermal_zone0/temp', 'Round': 1}
         self.Param.AddDefPattern(Pattern)
@@ -59,7 +59,7 @@ class TSensorFile_CPU_Temp(TSensor):
 
 class TSensorFile_CPU_Load(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'File': '/proc/loadavg'}
         self.Param.AddDefPattern(Pattern)
@@ -68,7 +68,7 @@ class TSensorFile_CPU_Load(TSensor):
 
 class TSensorFile_Size(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'File': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

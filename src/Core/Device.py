@@ -155,6 +155,7 @@ class TDevice(TDeviceParse):
         }
         self.Param.AddDefPattern(Pattern)
 
+        self.ExtParam['Start']    = self.Exec.Parse
         self.ExtParam['Checks']   = self.Exec.Parse
         self.ExtParam['Triggers'] = self.Exec.Parse
 
@@ -270,7 +271,7 @@ class TDevice(TDeviceParse):
 
 class TSensor(TDevice):
     def __init__(self, aParent):
-        TDevice.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Round': 0.1, 'Avg': 3}
         self.Param.AddDefPattern(Pattern)
@@ -317,7 +318,7 @@ class TSensor(TDevice):
 
 class TControl(TDevice):
     def __init__(self, aParent):
-        TDevice.__init__(self, aParent)
+        super().__init__(aParent)
         self.Range.SetMirror(None, 999999)
 
     def DoPost(self, aCaller, aValue, aData):

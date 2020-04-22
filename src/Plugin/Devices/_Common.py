@@ -13,7 +13,7 @@ from Core.Device          import TControl
 
 class TRelay(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'State': False, 'Invert': False}
         self.Param.AddDefPattern(Pattern)

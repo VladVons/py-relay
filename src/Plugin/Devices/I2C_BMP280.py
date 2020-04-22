@@ -15,7 +15,7 @@ from Plugin.Providers.I2C_BMP280 import TProviderI2C_BMP280
 
 class TSensorI2C_BMP280(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThreadRead.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Address': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

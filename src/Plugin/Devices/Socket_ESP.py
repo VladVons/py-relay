@@ -15,7 +15,7 @@ from Plugin.Providers.Socket_ESP import TProviderSocket_ESP
 
 class TSensorSocket_ESP_DHT(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThreadRead.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Host': TDictParam.Required, 'Port': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

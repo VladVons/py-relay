@@ -21,7 +21,7 @@ from Core.Device      import TControl
 
 class TControlMQTT(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
         self.Pipe = None
 
         Pattern = {'Host': 'localhost', 'Port': 1883, 'Topic': 'py-relay'}

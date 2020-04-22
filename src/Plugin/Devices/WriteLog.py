@@ -27,7 +27,7 @@ PkgConf = {
 
 class TControlWrite(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
         self.Cnt = 0
 
         self.Range.Enable = False
@@ -72,7 +72,7 @@ class TControlWriteLog(TControlWrite):
 
 class TControlWriteFile(TControlWrite):
     def __init__(self, aParent):
-        TControlWrite.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'File': TDictParam.Required, 'Mode': 'a+'}
         self.Param.AddDefPattern(Pattern)
@@ -92,7 +92,7 @@ class TControlWriteFile(TControlWrite):
 
 class TControl_WatchDog(TControlWriteFile):
     def __init__(self, aParent):
-        TControlWriteFile.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'File': '/var/log/py-relay/py-relay.wd.log', 'Mode':'w+', 'Periodic': 60, 'Refresh': 60}
         self.Param.AddDefPattern(Pattern)

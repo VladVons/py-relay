@@ -4,12 +4,12 @@
             "Class":"TDeviceGroup",
             "Alias":"GroupOnValue",
             "Checks": [
-                {"Enable":false,  "If": "not xIsCallerClass(['TSensorProvider'])", "Then":"xBreak()"},
-                {"Enable":false,  "If": "xMacros('cMatoch2_HumidMin') == 70", "Then":"xBreak()"},
+                {"Enable":false, "If": "not xIsCallerClass(['TSensorProvider'])", "Then":"xBreak()"},
+                {"Enable":false, "If": "xMacros('cMatoch1_Humid1_Min') == 70", "Then":"xBreak()"},
                 {"Enable":true,  "Always":"xASetValue('$WriteConsole')"},
                 {"Enable":false, "Always":"xASetValue('$WriteConsole2')"},
                 {"Enable":false, "Always":"xASetValue('$Grafana')"},
-                {"Enable":true,  "Always":"xASetValue('$MQTT')"}
+                {"Enable":false, "Always":"xASetValue('$MQTT')"}
             ]
         },
         {
@@ -56,10 +56,23 @@
             ]
         },
         {
+            "Class":"TDeviceGroupMaxErr",
+            "Alias":"GroupMaxErr",
+            "Parameter": {"Max": -3},
+            "Start": [
+                {"Enable":true, "ClassRef": "Random_15_25"},
+                {"Enable":true, "ClassRef": "RandomNone_10_100"},
+                {"Enable":true, "ClassRef": "CounterInc"}
+            ],
+            "Triggers":[
+                {"Enable": true, "If":"xValue == 1", "Then":"xASetValue('$WriteLog'); xSleep(1); xASetValue('$WriteLog');"}
+            ]
+        },
+        {
             "Class":"TDeviceGroup",
             "Alias":"GroupRaspi",
             "Checks":[
-                {"Enable":true,  "ClassRef":"FileSizeLog"}
+                {"Enable":true,  "ClassRef": "FileSizeLog"}
             ]
         }
 

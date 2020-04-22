@@ -15,7 +15,7 @@ from Inc.Exec import TExec, TExecResult
 
 class TExecParse(TExec):
     def __init__(self, aParent):
-        TExec.__init__(self, aParent)
+        super().__init__(aParent)
         self.Keys = {}
         self.Cond = ['If', 'Then', 'Else', 'Always']
 
@@ -31,17 +31,21 @@ class TExecParse(TExec):
 
         Result = []
         if (aData.get('Enable', True)):
-            Prefix  = "'"
-            Sufix   = "'"
-            Pattern = Prefix + "(.*?)" + Sufix
-            for Key in self.Cond:
-                Data = aData.get(Key)
-                if (Data):
-                    Matches = re.findall(Pattern, Data)
-                    if (Matches):
-                        for Match in Matches:
-                            if (Match.startswith('$')):
-                                Result.append(Match[1:])
+            if (aData.get('ClassRef')):
+                Result.append(aData.get('ClassRef'))
+                del aData['ClassRef']
+            else:
+                Prefix  = "'"
+                Sufix   = "'"
+                Pattern = Prefix + "(.*?)" + Sufix
+                for Key in self.Cond:
+                    Data = aData.get(Key)
+                    if (Data):
+                        Matches = re.findall(Pattern, Data)
+                        if (Matches):
+                            for Match in Matches:
+                                if (Match.startswith('$')):
+                                    Result.append(Match[1:])
         return Result
 
     def Parse(self, aKey: str, aParam: list, aData: dict):
@@ -58,11 +62,6 @@ class TExecParse(TExec):
 
             if (not aKey in self.Keys):
                 self.Keys[aKey] = []
-
-            if (Item.get('ClassRef')):
-                self.Parent._LoadClass(Item, aData)
-                Item['Always'] = "APost('$%s')" % Item.get('ClassRef')
-                del Item['ClassRef']
 
             Item['Result'] = TExecResult()
             self.Keys[aKey].append(Item)

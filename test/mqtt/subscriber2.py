@@ -3,7 +3,7 @@
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as pub
 
-Topic = 'Hust02'
+Topic = 'MyTopic'
 
 
 # The callback for when the client receives a CONNACK response from the server.

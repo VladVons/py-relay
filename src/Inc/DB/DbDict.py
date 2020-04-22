@@ -53,7 +53,7 @@ class TDbSQL():
 
 class TDbDict(TDbSQL):
     def __init__(self):
-        TDbSQL.__init__(self)
+        super().__init__()
         self.Prefix   = 1
         self.Dict     = 'Dict'
 

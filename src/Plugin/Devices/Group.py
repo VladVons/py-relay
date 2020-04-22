@@ -62,7 +62,7 @@ class TSensorGroup(TSensor):
 
 class TSensorGroupAvg(TSensorGroup):
     def __init__(self, aParent):
-        TSensorGroup.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Diff': 1.03}
         self.Param.AddDefPattern(Pattern)
@@ -107,3 +107,26 @@ class TSensorGroupOr(TSensorGroup):
             Value = self.GetItemClass(Item).Value
             Result = Result or bool(Value)
         return Result
+
+
+class TDeviceGroupMaxErr(TSensorGroup):
+    def __init__(self, aParent):
+        super().__init__(aParent)
+
+        Pattern = {'Max': -10}
+        self.Param.AddDefPattern(Pattern)
+
+    def _Get(self):
+        Val = 0
+        Items = self.Exec.GetKey('Start')
+        for Item in Items:
+            MaxErr = self.GetItemClass(Item).MaxErr
+            Val = min(Val, MaxErr)
+
+        Result = Val < self.Param.Max
+        if (Result):
+            for Item in Items:
+                Class = self.GetItemClass(Item)
+                Class.MaxErr = Class.Param.MaxErr
+
+        return int(Result)

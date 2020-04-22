@@ -14,7 +14,7 @@ from Core.Device  import TSensor, TDeviceParse
 
 class TSensorThreadRead(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
         self.Thread = None
 
     def CreateThread(self):
@@ -39,7 +39,7 @@ class TSensorThreadRead(TSensor):
 # === Read slow devices.
 class TProviderThreadRead(TDeviceParse):
     def __init__(self, aParent):
-        TDeviceParse.__init__(self, aParent)
+        super().__init__(aParent)
         self.Thread = None
 
         self.Param.AddDefPattern({'Periodic': 1})

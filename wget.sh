@@ -91,7 +91,7 @@ Once()
 Loop()
 {
   while true; do
-    Hosts "http://192.168.54.102"
+    Hosts "http://192.168.2.240"
     echo
     echo
     sleep 1

@@ -4,6 +4,9 @@ Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.02.25
 License:     GNU, see LICENSE for more details
 
+CREATE TABLE app_grafana2.Dict1 SELECT * FROM app_grafana1.Dict1;
+TRUNCATE TABLE grafana2.Dict1;
+
 SELECT
   UNIX_TIMESTAMP(Modified) as time_sec,
   CAST(Data as DECIMAL(10,2)) as value,
@@ -44,7 +47,7 @@ MySQL_Port = 3306
 
 class TControlGrafana(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {
             'Host': TDictParam.Required, 
@@ -115,7 +118,7 @@ class TControlGrafana(TControl):
 
 class TSensorGrafana(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Host': TDictParam.Required, 'User': TDictParam.Required, 'Password': TDictParam.Required, 'DB': TDictParam.Required, 'Table': TDictParam.Required, 'Prefix': 1}
         self.Param.AddDefPattern(Pattern)

@@ -18,7 +18,7 @@ PkgConf = {
 
 class TSensorCounter(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Begin': 0, 'End': 999999, 'Cycle': False}
         self.Param.AddDefPattern(Pattern)

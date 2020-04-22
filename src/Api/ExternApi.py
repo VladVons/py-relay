@@ -64,8 +64,7 @@ class TExternApi():
         return self.Manager.SecClass.GetAliasVar([Alias], 'Value')
 
     def path_get_dev_values(self, aData):
-        Alias = aData.get('alias')
-        return self.Manager.SecClass.GetAliasVar([Alias], 'Value')
+        return self.Manager.SecClass.GetAliasVar([], 'Value')
 
     def path_get_dev_valuesf(self, aData):
         Result = {}

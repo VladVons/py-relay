@@ -19,7 +19,7 @@ PkgConf = {
 
 class TSensorDHT_22(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThreadRead.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Address': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

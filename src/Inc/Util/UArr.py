@@ -69,15 +69,18 @@ def CheckDif(aValue1, aValue2):
 
     Diff = set(aValue1) - set(aValue2)
     if (Diff):
-        print(aValue2)
-        Msg = Log.PrintDbg(1, 'e', 'Unknown key %s in %s' % (str(aValue2), GetTreeAsStr(aValue1)))
+        Msg = Log.PrintDbg(1, 'e', 'Unknown key `%s` %s in %s' % (str(Diff), str(aValue2), GetTreeAsStr(aValue1)))
         raise Exception(Msg)
 
 
 # python Sort dictionary of dictionaries by value
-def SortD(aObj: dict, aName: str) -> list:.
+def SortD(aObj: dict, aName: str) -> list:
     return sorted(aObj.items(), key = lambda k: k[1][aName])
 
 
-def SortL(aObj: list, aName: str) -> list:.
+def SortL(aObj: list, aName: str) -> list:
     return sorted(aObj, key = lambda k: k[aName])
+
+# [{'pin1': 14}, {'pin2': 15}] -> {'pin1': 14, 'pin2': 15}
+def ListDict2Dict(aObj: list) -> dict:
+    return dict((key, d[key]) for d in aObj for key in d)

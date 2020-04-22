@@ -1,10 +1,13 @@
 {
+    "Var":{
+        "LoopSleep":1,
+        "LoopSleepEach":0
+    },
     "Run":{
         "Start":[
             {"Enable":true,   "ClassRef":"GroupOnStart"}
         ],
         "Loop":[
-            {"Enable":true,  "ClassRef":"Sleep_1"},
             {"Enable":false,  "ClassRef":"WatchDog"},
             {"Enable":false, "ClassRef":"GroupRaspi"},
             {"Enable":false,  "ClassRef":"FileSizeLog"},
@@ -12,22 +15,28 @@
             {"Enable":false,  "ClassRef":"Sensor_CPU_Usage"},
             {"Enable":false,  "ClassRef":"Sensor_CPU_Temp"},
             {"Enable":false,  "ClassRef":"SensorUptimeSys"},
-            {"Enable":false,  "ClassRef":"Random_15_25"},
-            {"Enable":false,  "ClassRef":"Random_15_25"},
-            {"Enable":true,   "ClassRef":"CounterInc"},
-            {"Enable":false,  "ClassRef":"SensorTRDFW_Humid"},
-            {"Enable":false,  "ClassRef":"SensorTRDFL_Humid"},
+            {"Enable":true,  "ClassRef":"Random_15_25"},
+            {"Enable":true,  "ClassRef":"RandomNone_10_100"},
+            {"Enable":true,  "ClassRef":"CounterInc"},
+            {"Enable":true,   "ClassRef":"Sensor_TRDFW_Humid1_Matoch1"},
+            {"Enable":false,   "ClassRef":"SensorTRDFL_Humid2"},
             {"Enable":false,  "ClassRef":"SensorTRD_Humid"},
             {"Enable":false,  "ClassRef":"SensorTRM_Humid"},
             {"Enable":false,  "ClassRef":"SensorTimeRangeCycle"},
 
             {"Enable":false, "ClassRef":"SensorGroupSum"},
             {"Enable":false, "ClassRef":"SensorGroupAvg"},
+            {"Enable":true,  "ClassRef":"GroupMaxErr"},
+
             {"Enable":false, "ClassRef":"SensorTimeRangeCycle1"},
             {"Enable":false, "ClassRef":"SensorSun"},
 
-            {"Enable":true, "ClassRef":"DH1_Sensor_Temper"},
-            {"Enable":true, "ClassRef":"DH1_Sensor_Humid"},
+            {"Enable":false, "ClassRef":"DH1_Sensor_Temper"},
+            {"Enable":false, "ClassRef":"DH1_Sensor_Humid"},
+            {"Enable":false, "ClassRef":"DH2_Sensor_Temper"},
+            {"Enable":false, "ClassRef":"DH2_Sensor_Humid"},
+            {"Enable":false, "ClassRef":"DH3_Sensor_Temper"},
+            {"Enable":false, "ClassRef":"DH3_Sensor_Humid"},
 
             {"Enable":false, "ClassRef":"IRelay_A1"}
         ],
@@ -46,6 +55,8 @@
         {"Enable":false, "File":"IncClassSolar.json"},
         {"Enable":true,  "File":"IncClassRelay.json"},
         {"Enable":true,  "File":"IncClassDh1.json"},
+        {"Enable":true,  "File":"IncClassDh2.json"},
+        {"Enable":true,  "File":"IncClassDh3.json"},
         {"Enable":true,  "File":"IncClassRasPi.json"}
     ],
     "Action":[

@@ -30,7 +30,7 @@ class TLCD():
 
 class TControlMonitorLCD(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Address': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

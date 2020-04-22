@@ -24,7 +24,7 @@ PkgConf = {
 
 class TSensorTimeRange(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Time': [], 'Value': [], 'Round': None}
         self.Param.AddDefPattern(Pattern)
@@ -51,7 +51,7 @@ class TSensorTimeRangeMonth(TSensorTimeRange):
 
 class TSensorTimeRangeDayFadeWave(TSensorTimeRange):
     def __init__(self, aParent):
-        TSensorTimeRange.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Invert': False}
         self.Param.AddDefPattern(Pattern)
@@ -70,7 +70,7 @@ class TSensorTimeRangeDayFadeLine(TSensorTimeRange):
 has no ReadTry() ?
 class TSensorTimeRangeCycleDirect{TSensor}:
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Ranges': []}
         self.Param.AddDefPattern(Pattern)

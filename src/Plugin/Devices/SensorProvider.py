@@ -12,7 +12,7 @@ from Core.Device      import TSensor
 
 class TSensorProvider(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'ClassRef': TDictParam.Required, 'Tag': TDictParam.Required, 'Avg': 3, 'Round': 0.25}
         self.Param.AddDefPattern(Pattern)

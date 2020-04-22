@@ -73,7 +73,7 @@ class TThreadRead():
 
 class TThreadReadPipe(TThreadRead):
     def __init__(self, aObjRead):
-        TThreadRead.__init__(self, aObjRead)
+        super().__init__(aObjRead)
 
         self.PipeParent, self.PipeChild = multiprocessing.Pipe()
 
@@ -87,7 +87,7 @@ class TThreadReadPipe(TThreadRead):
 
 class TThreadReadQueue(TThreadRead):
     def __init__(self, aObjRead):
-        TThreadRead.__init__(self, aObjRead)
+        super().__init__(aObjRead)
 
         self.Queue  = multiprocessing.Queue()
         self.MinQueue = 1
@@ -112,8 +112,9 @@ class TThreadReadQueue(TThreadRead):
 
 class TThreadReadList(TThreadRead):
     def __init__(self, aObjRead):
-        TThreadRead.__init__(self, aObjRead)
+        super().__init__(aObjRead)
 
+        # ToDo. Async debug hangs
         self.Data = multiprocessing.Manager().list([0, 1])
         self.Data[0] = None
 

@@ -18,7 +18,7 @@ PkgConf = {
 
 class TSensorSolar(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Latitude': TDictParam.Required, 'Longitude': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

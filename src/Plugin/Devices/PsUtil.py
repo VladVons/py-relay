@@ -23,7 +23,7 @@ PkgConf = {
 
 class TSensorPsUtil_CPU_Usage(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Round': 1}
         self.Param.AddDefPattern(Pattern)

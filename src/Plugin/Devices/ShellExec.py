@@ -13,7 +13,7 @@ from Plugin.Providers.ShellExec import TProviderShellExec, TProviderShellExec_CP
 
 class TSensorShellExec(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Command': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

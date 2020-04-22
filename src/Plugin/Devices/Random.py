@@ -19,7 +19,7 @@ PkgConf = {
 
 class TSensorRange(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Begin': 0, 'End': 99}
         self.Param.AddDefPattern(Pattern)
@@ -54,7 +54,7 @@ class TSensorRandomEx(TSensorRange):
 
 class TSensorRandomNone(TSensorRange):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Val': 5}
         self.Param.AddDefPattern(Pattern)

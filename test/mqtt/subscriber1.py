@@ -114,7 +114,7 @@ class TMqttSub():
 
 
 #Topic = 'Hust01'
-Topic = 'Hust02'
+Topic = 'MyTopic'
 #
 #Topic = 'Noviki01'
 #

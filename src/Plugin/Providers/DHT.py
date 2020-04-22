@@ -38,7 +38,7 @@ class TProviderDHT(TProvider):
 
 class TProviderDHT_22(TProviderDHT):
     def __init__(self, aAddress):
-        TProviderDHT.__init__(self, dht.DHT22, aAddress)
+        super().__init__(dht.DHT22, aAddress)
 
     def Read(self, aNotUsed):
         Data = TProviderDHT.Read(self, None)

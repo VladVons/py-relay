@@ -22,7 +22,7 @@ PkgConf = {
 
 class TControlSleep(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Time': 1, 'Init': False}
         self.Param.AddDefPattern(Pattern)

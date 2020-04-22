@@ -15,7 +15,7 @@ from Plugin.Providers.Socket import TProviderSocket_Echo, TProviderCheckHost, TP
 
 class TSensorSocket_Echo(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThreadRead.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Host': TDictParam.Required, 'Port': TDictParam.Required, 'Data': 'MyData'}
         self.Param.AddDefPattern(Pattern)
@@ -36,7 +36,7 @@ class TSensorSocket_Echo(TSensorThreadRead):
 
 class TSensorCheckHost(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Host': TDictParam.Required, 'Port': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)
@@ -48,5 +48,5 @@ class TSensorCheckHost(TSensor):
 
 class TSensorCheckInternet(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
         self.Provider = TProviderCheckInternet()

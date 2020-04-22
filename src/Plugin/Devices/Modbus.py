@@ -15,7 +15,7 @@ from Plugin.Providers.Modbus import TProviderModbusRTU
 
 class TControlModbus(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Port': TDictParam.Required, 'Address': TDictParam.Required, 'Register': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

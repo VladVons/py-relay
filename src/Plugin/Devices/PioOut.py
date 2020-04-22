@@ -13,7 +13,7 @@ from Plugin.Devices._Common import TRelay
 
 class TRelayPioOut(TRelay):
     def __init__(self, aParent):
-        TRelay.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Pin': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

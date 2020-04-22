@@ -49,9 +49,10 @@
                 {"Enable":false, "Always":"xASetValue('$IRelay_4')"}
             ]
         },
+
         {
             "Class":"TSensorTimeRangeDayFadeLine",
-            "Alias":"SensorTRDFL_Humid",
+            "Alias":"SensorTRDFL_Humid3",
             "Descr":"Month Humid",
             "Parameter": {
                 "Time":[
@@ -65,29 +66,26 @@
             }
         },
         {
-            "Class":"TSensorTimeRangeDayFadeWave",
-            "Alias":"SensorTRDF_1",
-            "Descr":"Day temp wave  sum",
-            "Parameter":{"Ranges":[
-                { "On":"4:10", "Off": "4:30"}, 
-                { "On":"4:40", "Off": "4:50"}
-            ], 
-            "Min": -10, "Max": 10}
-        },
-        {
-            "Class":"TSensorTimeRangeDayFadeWave",
-            "Alias":"SensorTRDF_2",
-            "Descr":"Day temp wave",
-            "Parameter":{"Ranges":[{ "On":"10:45", "Off": "11:00"}], "Min": 15, "Max": 25}
-        },
-        {
-            "Class":"TSensorTimeRangeDayFadeWave",
-            "Alias":"SensorTRDFW_Humid",
-            "Descr":"Day humid wave",
+            "Class":"TSensorTimeRangeDayFadeLine",
+            "Alias":"SensorTRDFL_Humid2",
             "Parameter": {
-                "Time":[{"On": "$<cDayOn>", "Off": "$<cDayOff>"}],
-                "Value":[{"On": "$<cMatoch2_HumidMin>", "Off": "$<cMatoch2_HumidMax>"}],
-                "Invert": true
+                "Time":[
+                    {"On": "$<cDay1_On>", "Off": "$<cDay1_Mid>"},
+                    {"On": "$<cDay1_Mid>", "Off": "$<cDay1_Off>"}
+                ],
+                "Value":[{"On": "$<cMatoch1_Humid1_Min>", "Off": "$<cMatoch1_Humid1_Max>"}]
+            }
+        },
+
+        {
+            "Class":"TSensorTimeRangeDayFadeWave",
+            "Alias":"Sensor_TRDFW_Humid1_Matoch1",
+            "Parameter":{
+                "Time":[ { "On":"03:00", "Off":"19:00"} ],
+                "Value":[ {"On":60, "Off":90} ],
+                "Invert": true,
+                "AllValue": false,
+                "Round": 1
             }
         }
     ]

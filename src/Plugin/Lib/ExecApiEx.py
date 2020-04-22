@@ -45,7 +45,7 @@ class TExecApiEx(TExecApi):
     def xASetIf(self, aAlias, aInvert = False):
         self.xAPost(aAlias, self.xIf ^ aInvert)
 
-    def xSleep(self, aValue):
+    def xSleep(self, aValue: int = 1):
         time.sleep(aValue)
 
     def xThermostat(self, aBase, aDif = 1, aValue = None):

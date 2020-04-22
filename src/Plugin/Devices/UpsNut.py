@@ -18,7 +18,7 @@ PkgConf = {
 
 class TSensorUpsNut(TSensor):
     def __init__(self, aParent):
-        TSensor.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Name': TDictParam.Required, "Round": 1}
         self.Param.AddDefPattern(Pattern)

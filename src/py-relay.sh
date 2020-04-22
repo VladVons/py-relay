@@ -5,11 +5,11 @@
 cApp="py-relay"
 
 #cAppRun="./$cApp.bin -p Default"
-#cAppRun="python3 ./$cApp.py -p Default"
+cAppRun="python3 ./$cApp.py -p Default"
 #cAppRun="python3 ./$cApp.py -p TestCpuTemp"
 #cAppRun="python3 ./$cApp.py -p TestRelayAll"
 #cAppRun="python3 ./$cApp.py -p TestRelayOne"
-cAppRun="python3 ./$cApp.py -p Client/Draganivka1"
+#cAppRun="python3 ./$cApp.py -p Client/Draganivka1"
 #cAppRun="mypy ./$cApp.py -p Client/Miskovichi1"
 
 

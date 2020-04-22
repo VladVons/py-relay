@@ -134,8 +134,7 @@ class TTimeRange(TRangeBase):
 # [{ "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]
 class TTimeRangeDay(TTimeRange):
     def __init__(self):
-        #super().__init__() # __need v3.5
-        TTimeRange.__init__(self)
+        super().__init__()
 
         self.Delim  = ':'
         self.Mask   = '00:00:00'
@@ -146,8 +145,7 @@ class TTimeRangeDay(TTimeRange):
 class TTimeRangeWeek(TTimeRange):
     # 0 is Sunday 
     def __init__(self):
-        #super().__init__() # __need v3.5
-        TTimeRange.__init__(self)
+        super().__init__()
 
         self.Mask   = '0'
         self.Format = '%w'
@@ -157,8 +155,7 @@ class TTimeRangeWeek(TTimeRange):
 # [ { "On":"2", "Off": "03"}, { "On":"10", "Off": "11"} ]
 class TTimeRangeMonth(TTimeRange):
     def __init__(self):
-        #super().__init__() # __need v3.5
-        TTimeRange.__init__(self)
+        super().__init__()
 
         self.Mask   = '00'
         self.Format = '%m'
@@ -167,8 +164,7 @@ class TTimeRangeMonth(TTimeRange):
 # [ { "On":"8", "Off": "08.12"}, { "On":"10.16", "Off": "10.17"} ]
 class TTimeRangeYear(TTimeRange):
     def __init__(self):
-        #super().__init__() # __need v3.5
-        TTimeRange.__init__(self)
+        super().__init__()
 
         self.Delim  = '.'
         self.Mask   = '00.01'
@@ -205,12 +201,15 @@ class TTimeRangeDayFade(TTimeRangeDay):
 
     def GetSecNow(self):
         Now = time.strftime(self.Format)
+        #Sec = int(time.strftime('%S')) % 24
+        #Now = '%s:00:00' % Sec
+        #print(Now)
         return UTime.TimeToSec(Now)
 
 
 class TTimeRangeDayFadeWave(TTimeRangeDayFade):
     def __init__(self, aInvert = False):
-        TTimeRangeDayFade.__init__(self)
+        super().__init__()
         self.Invert = aInvert
 
     def Get(self):
@@ -281,7 +280,7 @@ class TProviderTimeRangeMonth(TProviderTimeRangeBase):
 class TProviderTimeRangeDayFadeWave(TProviderTimeRangeBase):
     def __init__(self, aTime, aValue, aInvert):
         self.Invert = aInvert
-        TProviderTimeRangeBase.__init__(self, aTime, aValue)
+        super().__init__(aTime, aValue)
 
     def SetObj(self):
         return TTimeRangeDayFadeWave(self.Invert)

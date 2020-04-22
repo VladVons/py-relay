@@ -52,7 +52,7 @@ class TConnSession():
 
 class TConnSessionHttp(TConnSession):
     def __init__(self, aParent):
-        TConnSession.__init__(self, aParent)
+        super().__init__(aParent)
         self.RootDir  = 'Plugin/Web'
         self.MimePic  = ['jpg', 'jpeg', 'png', 'gif', 'ico']
 

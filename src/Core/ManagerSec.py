@@ -56,7 +56,7 @@ class TSecInclude(TSec):
 
 class TSecRun(TSec):
     def __init__(self, aParent):
-        TSec.__init__(self, aParent)
+        super().__init__(aParent)
         self.InClass = None
         self.InRun   = False
         self.OnPost  = None
@@ -158,7 +158,7 @@ class TSecAction(TSec):
 
 class TSecDefault(TSec):
     def __init__(self, aParent):
-        TSec.__init__(self, aParent)
+        super().__init__(aParent)
 
         self.Keys = ['Public', 'Parameter', 'Action']
 
@@ -192,7 +192,7 @@ class TSecDefault(TSec):
 
 class TSecClass(TSec):
     def __init__(self, aParent):
-        TSec.__init__(self, aParent)
+        super().__init__(aParent)
         self.OnClass = None
         self.Unused  = []
         self.Keys = ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment', 'Data', 'Public']
@@ -334,7 +334,7 @@ class TSecClass(TSec):
                 Result.Public = aData.get('Public', True)
 
             Result.Alias = Alias
-            Result.Descr = aData.get('Descr')
+            Result.Descr = aData.get('Descr', '')
             Result.Data  = aData.get('Data')
             Result.Manager = self.Parent
             Result = self.AddClass(Result)

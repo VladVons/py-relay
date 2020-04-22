@@ -15,7 +15,7 @@ from Plugin.Providers.I2C_BH1750 import TProviderI2C_BH1750
 
 class TSensorI2C_BH1750(TSensorThreadRead):
     def __init__(self, aParent):
-        TSensorThreadRead.__init__(self, aParent)
+        super().__init__(aParent)
 
         Pattern = {'Bus': 1, 'Address': TDictParam.Required}
         self.Param.AddDefPattern(Pattern)

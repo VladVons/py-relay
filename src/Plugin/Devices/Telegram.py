@@ -19,10 +19,14 @@ PkgConf = {
 
 class TControlTelegram(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
 
-        Pattern = {'Token': TDictParam.Required, 'Chats': TDictParam.Required,
-                   'Refresh': 1200, 'Diff': 0.05, 'Footer': ''}
+        Pattern = {'Token': TDictParam.Required,
+                   'Chats': TDictParam.Required,
+                   'Refresh': 1200,
+                   'Diff': 0.05,
+                   'Footer': ''
+        }
         self.Param.AddDefPattern(Pattern)
 
     def DoParameter(self, aParam):
