@@ -2,6 +2,19 @@
    "Default":[
         {
             "Enable":true,
+            "Class":"TDevice",
+            "Parameter": {"Periodic": 3, "Refresh": 5},
+            "Action":[
+                {"OnValue": {"Enable":true,  "ClassRef":"WriteConsole3"}}
+            ]
+        },
+        {
+            "Enable":true,
+            "Class":"TSensorRandom",
+            "Parameter": {"Periodic": 2}
+        },
+        {
+            "Enable":true,
             "Class":"TSensorCycleDec",
             "Parameter": {
                 "MaxErr": 2, "Periodic": 3

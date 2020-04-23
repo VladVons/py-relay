@@ -65,14 +65,14 @@ class TDeviceParse(object):
 
     def ExtAction(self, aKey, aParam, aData):
         if (aParam is None):
-            aParam = self.Manager.SecDefault.GetSect('Action', self, [])
+            aParam = self.Manager.SecDefault.GetSecPath('Action', self, [])
         self.Manager.SecAction.Add(aParam, self.Actions)
 
     def ExtParameter(self, aKey, aParam, aData):
         if (aParam and aParam.get('ClassRef')):
             self._LoadClass(aParam, aData)
 
-        Def = self.Manager.SecDefault.GetSect('Parameter', self, {})
+        Def = self.Manager.SecDefault.GetSecPath('Parameter', self, {})
         aParam.update(Def)
         self.DoParameter(aParam)
 
@@ -114,8 +114,9 @@ class TDeviceParse(object):
                 OnActionClass.Post(self, aValue, {'Key': aKey})
 
     def DoParameter(self, aParam):
-        Msg = Log.PrintDbg(1, 'e', 'Not implemented')
-        raise NotImplementedError(Msg)
+        #Msg = Log.PrintDbg(1, 'e', 'Not implemented')
+        #raise NotImplementedError(Msg)
+        pass
 
     def DoParameterExit(self):
         pass

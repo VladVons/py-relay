@@ -175,17 +175,33 @@ class TSecDefault(TSec):
                             self.Data[Key] = {}
                         self.Data[Key][Name] = Value
 
-    def GetSect(self, aSect, aClass, aDef = {}):
-        Name   = UObj.GetName(aClass)
-        Result = self.Data.get(aSect, aDef)
+    def GetSec(self, aSec: str, aClass: object, aDef: dict = {}):
+        Result = self.Data.get(aSec, aDef)
         if (Result):
+            Name = UObj.GetName(aClass)
             Result = Result.get(Name, aDef)
         return Result
+
+    # GetSec
+    def GetSecPath(self, aSec: str, aClass: object, aDef: dict = {}):
+        Sec = self.Data.get(aSec, aDef)
+        if (Sec):
+            Result = {}
+            Path = UObj.GetClassPath(aClass)[1:]
+            for Name in Path.split('/'):
+                Param = Sec.get(Name, aDef)
+                if (Param):
+                    if (type(Param) is dict):
+                        Result.update(Param)
+                    else:
+                        Result = Param
+            return Result
+        return Sec
 
     def GetClassKeys(self, aClass):
         Result = []
         for Key in self.Keys:
-            if (self.GetSect(Key, aClass)):
+            if (self.GetSecPath(Key, aClass)):
                 Result.append(Key)
         return Result
 
@@ -238,7 +254,7 @@ class TSecClass(TSec):
                     Result.append(Alias)
         return Result
 
-    def GetSection(self, aAlias: str):
+    def GetSec(self, aAlias: str):
         Items = self.Parent.SecInclude.Data.get('Class')
         if (Items):
             for Item in Items:
@@ -290,7 +306,7 @@ class TSecClass(TSec):
 
             Result = self.GetClass(ClassRef)
             if (not Result):
-                Data = self.GetSection(ClassRef)
+                Data = self.GetSec(ClassRef)
                 if (Data):
                     Result = self.Parse(Data, aParent)
                 else:
@@ -329,7 +345,7 @@ class TSecClass(TSec):
             Result = TClass(aParent)
 
             # boolean value
-            Result.Public = self.Parent.SecDefault.GetSect('Public', Result, None)
+            Result.Public = self.Parent.SecDefault.GetSecPath('Public', Result, None)
             if (Result.Public is None):
                 Result.Public = aData.get('Public', True)
 
@@ -345,6 +361,6 @@ class TSecClass(TSec):
                 Keys = UArr.Combine(aData.keys(), Def)
                 for Key in Keys:
                     if (Key not in self.Keys):
-                        Result.ExtParam(Key, aData.get(Key), {'Parent': self})
+                        Result.ExtParam(Key, aData.get(Key, {}), {'Parent': self})
                 #Result.DoStart()
         return Result
