@@ -182,7 +182,7 @@ class TSecDefault(TSec):
             Result = Result.get(Name, aDef)
         return Result
 
-    # GetSec
+    # GetSec -> GetSecPath
     def GetSecPath(self, aSec: str, aClass: object, aDef: dict = {}):
         Sec = self.Data.get(aSec, aDef)
         if (Sec):
