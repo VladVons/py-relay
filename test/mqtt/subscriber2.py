@@ -3,7 +3,9 @@
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as pub
 
-Topic = 'MyTopic'
+Host  = "vpn2.oster.com.ua"
+Port  = 1883
+Topic = 'DraganivkaSen'
 
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -33,7 +35,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("vpn2.oster.com.ua", 1883, 60)
+client.connect(Host, Port, 60)
 #client.publish("Hust02", 'Hello2')
 client.loop_forever()
 #client.loop_start()

@@ -8,15 +8,16 @@ Description:
 
 import json
 import time
+
 try:
     import paho.mqtt.client as mqtt
 except Exception as E:
     print(__file__, E, 'apt-get install python-paho-mqtt', 'pip install paho-mqtt')
 #
 from Inc.Log          import Log
-#from Inc.Util         import UNet
+from Inc.Util         import UNet, UObj
 from Core.Device      import TControl
-#from Plugin.Providers.Modbus import TProviderModbusRTU
+from Api.ExternApi    import TExternApi
 
 
 class TControlMQTT(TControl):
@@ -34,18 +35,19 @@ class TControlMQTT(TControl):
     def DoParameter(self, aParam):
         self.Param.LoadPattern(aParam)
 
-        #if (not UNet.CheckHostPort(self.Param.Host, self.Param.Port)):
-        #    Msg = Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (self.Param.Host, self.Param.Port))
+        self.ExternApi = TExternApi(self.Manager)
+
+        if (not UNet.CheckHostPort(self.Param.Host, self.Param.Port)):
+            Log.PrintDbg(1, 'e', 'Cant connect to host %s:%s' % (self.Param.Host, self.Param.Port))
 
         self.Client = mqtt.Client(userdata = self)
         try:
             self.Client.connect(self.Param.Host, self.Param.Port)
         except Exception as E:
-            Msg = Log.PrintDbg(1, 'e', 'Host %s:%s' % (self.Param.Host, self.Param.Port), E.strerror)
+            Msg = Log.PrintDbg(1, 'x', 'Host %s:%s' % (self.Param.Host, self.Param.Port), E.strerror)
             raise Exception(Msg)
 
-        Topic = self.Param.Topic + '/get/dev/values'
-        self.Client.subscribe(Topic)
+        self.Client.subscribe(self.Param.Topic + '/sub')
 
         self.Client.on_message = TControlMQTT.on_message
         self.Client.loop_start()
@@ -65,23 +67,26 @@ class TControlMQTT(TControl):
 
     def Publish(self, aAlias, aValue):
         Class = self.Manager.SecClass.GetClass(aAlias)
-        if (Class.Public):
-            Data = {'Alias': aAlias, 'Value': aValue}
+        if (Class.Param.Public):
+            Data = {'Alias': aAlias, 'Value': aValue, 'Time': time.strftime('%Y-%m-%d %H.%M.%S')}
             DataStr = json.dumps(Data)
             self.Client.publish(self.Param.Topic, DataStr)
 
-            Topic = '%s/%s' % (self.Param.Topic, aAlias)
-            self.Client.publish(Topic, aValue)
-
     @staticmethod
-    def on_message(aClient, aSelf, aMessage):
-        aSelf.OnMessage(aClient, aMessage)
+    def on_message(aClient, aSelf, aMessage: mqtt.MQTTMessage):
+        try:
+            Data = json.loads(aMessage.payload)
+            aSelf.OnMessage(Data)
+        except Exception as E:
+            Log.PrintDbg(1, 'x', aMessage.payload, E.strerror)
 
-    def OnMessage(self, aClient, aMessage):
-        Path  = aMessage.topic.replace(self.Param.Topic, '')
-        if (Path == '/get/dev/values'):
-            aData = {'path': Path}
-            Data = self.Pipe.ThreadSend(aData)
-            for Idx, Item in enumerate(Data):
-                self.Publish(Item, Data[Item])
+    def OnMessage(self, aData):
+        Path = aData.get('Path', '')
+        Method = 'path' + Path.replace('/', '_')
+        Obj = UObj.GetAttr(self.ExternApi, Method, True)
+        if (Obj):
+            Param = aData.get('Param', {})
+            Data = Obj(Param)
+            for Key, Val in Data.items():
+                self.Publish(Key, Val)
                 time.sleep(0.1)

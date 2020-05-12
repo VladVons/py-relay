@@ -23,6 +23,11 @@ except:
 import time
 
 
+Host  = "vpn2.oster.com.ua"
+Port  = 1883
+Topic = 'DraganivkaSen'
+
+
 class TMqttSub():
     def __init__(self):
         self.Connected = False
@@ -111,22 +116,5 @@ class TMqttSub():
             self.Client.loop_stop()
 
 
-
-
-#Topic = 'Hust01'
-Topic = 'MyTopic'
-#
-#Topic = 'Noviki01'
-#
-#Topic = 'Mishk01'
-#Topic = 'Mishk01/DH2_Sensor_Humid'
-#
-#Topic = 'tr24'
-#Topic = 'Mishk01/DH2_Sensor_Humid'
-
-#Topic = 'Watch01'
-#
 MqttSub = TMqttSub()
-MqttSub.Connect('vpn2.oster.com.ua', 1883, Topic)
-#MqttSub.Connect('localhost', 1883, Topic)
-#---end
+MqttSub.Connect(Host, Port, Topic)

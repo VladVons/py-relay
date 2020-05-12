@@ -9,7 +9,7 @@
                 {"Enable":true,  "Always":"xASetValue('$WriteConsole')"},
                 {"Enable":false, "Always":"xASetValue('$WriteConsole2')"},
                 {"Enable":false, "Always":"xASetValue('$Grafana')"},
-                {"Enable":false, "Always":"xASetValue('$MQTT')"}
+                {"Enable":true,  "Always":"xASetValue('$MQTT')"}
             ]
         },
         {

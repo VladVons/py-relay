@@ -26,7 +26,7 @@
             "Class":"TControlMQTT",
             "Alias":"MQTT",
             "Checks": [
-                {"Enable":true,  "If": "xIsCallerClass(['TSensorProvider'])"},
+                {"Enable":false, "If": "xIsCallerClass(['TSensorProvider'])"},
                 {"Enable":false, "If": "xData.get('One') == 1", "Then": "xData['One'] = 2"}
             ],
             "Parameter": {"Host": "vpn2.oster.com.ua", "Topic": "tr24"}

@@ -160,7 +160,7 @@ class TSecDefault(TSec):
     def __init__(self, aParent):
         super().__init__(aParent)
 
-        self.Keys = ['Public', 'Parameter', 'Action']
+        self.Keys = ['Parameter', 'Action']
 
     def Load(self, aData):
         Keys = ['Enable', 'Class'] + self.Keys
@@ -211,7 +211,7 @@ class TSecClass(TSec):
         super().__init__(aParent)
         self.OnClass = None
         self.Unused  = []
-        self.Keys = ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment', 'Data', 'Public']
+        self.Keys = ['Enable', 'Class', 'ClassRef', 'Alias', 'Module', 'Descr', 'Comment', 'Data']
 
         self.Import = TDynImport()
         self.Import.ParseDir('Plugin/Devices')
@@ -343,11 +343,6 @@ class TSecClass(TSec):
 
             Log.PrintDbg(1, 'i', 'Load %s->%s (%s)' % (PAlias, Alias, TClass.__name__))
             Result = TClass(aParent)
-
-            # boolean value
-            Result.Public = self.Parent.SecDefault.GetSecPath('Public', Result, None)
-            if (Result.Public is None):
-                Result.Public = aData.get('Public', True)
 
             Result.Alias = Alias
             Result.Descr = aData.get('Descr', '')

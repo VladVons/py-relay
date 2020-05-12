@@ -3,8 +3,8 @@
 #http://www.steves-internet-guide.com/mosquitto_pub-sub-clients/
 
 cHost="vpn2.oster.com.ua"
-cTopic="MyTopic"
-cMsg="m_pub.sh"
+#cTopic="DraganivkaSen"
+cTopic="tr24/sub"
 
 Pub()
 {
@@ -13,8 +13,10 @@ Pub()
     echo
 
     ((Cnt++))
-    Msg="$cMsg $Cnt"
+
+    Msg="{\"Path\": \"/get/dev/values\", \"Value\": $Cnt}"
     echo $Msg
+
     mosquitto_pub -h $cHost -t $cTopic -m "$Msg" -d
     sleep 3
   done
