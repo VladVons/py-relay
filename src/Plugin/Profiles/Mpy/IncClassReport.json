@@ -1,0 +1,12 @@
+{
+    "Class":[
+        {
+            "Class":"TControlWriteLog",
+            "Alias":"WriteLogErr"
+        },
+        {
+            "Class":"TControlWriteConsole",
+            "Alias":"WriteConsole"
+        }
+    ]
+}

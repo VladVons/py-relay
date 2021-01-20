@@ -1,0 +1,20 @@
+{
+    "Class":[
+       {
+            "Class":"TProviderDevMpyPinThread_DHT22",
+            "Alias":"DH1_Provider",
+            "Parameter":{"Host":"http://dht1.lan", "Pin":14}
+        },
+        {
+            "Class":"TSensorProvider",
+            "Alias":"DH1_Sensor_Temper",
+            "Descr":"Street_ST",
+            "Parameter":{"ClassRef":"DH1_Provider", "Tag":"temperature", "MaxErr": 10}
+        },
+        {
+            "Class":"TSensorProvider",
+            "Alias":"DH1_Sensor_Humid",
+            "Parameter":{"ClassRef":"DH1_Provider", "Tag":"humidity"}
+        }
+    ]
+}

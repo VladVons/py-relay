@@ -1,0 +1,13 @@
+{
+    "Class":[
+        {
+            "Class":"TDeviceGroup",
+            "Alias":"GroupOnValue",
+            "Checks": [
+                {"Enable":true,  "Always":"xASetValue('$WriteConsole')"},
+                {"Enable":false, "Always":"xASetValue('$Grafana')"},
+                {"Enable":false, "Always":"xASetValue('$MQTT')"}
+            ]
+        }
+    ]
+}

@@ -4,6 +4,7 @@
 # apt-get install mosquitto-clients
 
 cHost="vpn2.oster.com.ua"
-cTopic="DraganivkaSen"
+#cTopic="DraganivkaSen"
+cTopic="tr24"
 
 mosquitto_sub -h $cHost -t $cTopic -d -v 

@@ -1,0 +1,26 @@
+{
+    "Var":{
+        "LoopSleep":1,
+        "LoopSleepEach":0
+    },
+    "Run":{
+        "Loop":[
+            {"Enable":true, "ClassRef":"DH1_Sensor_Temper"},
+            {"Enable":true, "ClassRef":"DH1_Sensor_Humid"},
+
+            {"Enable":true, "ClassRef":"DH3_Sensor_Temper"},
+            {"Enable":true, "ClassRef":"DH3_Sensor_Humid"}
+        ]
+    },
+   "Include":[
+        {"Enable":true,  "File":"IncClassGroup.json"},
+        {"Enable":true,  "File":"IncClassReport.json"},
+        {"Enable":true,  "File":"IncClassDht1.json"},
+        {"Enable":true,  "File":"IncClassDht3.json"}
+    ],
+    "Action":[
+        {"OnValue": {"Enable":true,  "ClassRef":"GroupOnValue"}},
+        {"OnError": {"Enable":true,  "ClassRef":"WriteLogErr"}},
+        {"OnRange": {"Enable":true,  "ClassRef":"WriteLogErr"}}
+    ]
+}

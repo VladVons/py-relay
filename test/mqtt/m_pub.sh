@@ -18,7 +18,9 @@ Pub()
     echo $Msg
 
     mosquitto_pub -h $cHost -t $cTopic -m "$Msg" -d
-    sleep 3
+    #sleep 3
+
+    break
   done
 }
 
