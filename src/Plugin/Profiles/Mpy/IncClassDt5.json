@@ -1,0 +1,9 @@
+{
+    "Class":[
+        {
+            "Class":"TSensorDevMpyPinThread_DS18B20",
+            "Alias":"DT5_Sensor",
+            "Parameter":{"Host":"http://dt5.lan", "Pin":14}
+        }
+    ]
+}

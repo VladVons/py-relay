@@ -65,6 +65,7 @@ class TMain():
     def Init(self):
         Info = Misc.Version()
         Info['AppName'] = cAppName
+        Info['Profile'] = self.Options.Profile   
         UObj.Dump(Info)
         print('')
 

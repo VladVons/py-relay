@@ -22,11 +22,11 @@ from Inc.Util  import UNet
 
 
 class TDevMpyRequest():
-    def __init__(self, aHost):
+    def __init__(self, aHost: str):
         self.Host = aHost
         self.Timeout = 2.0
 
-    def Send(self, aCommand, aData = {}, aTries = 1, aSleep = 0.25):
+    def Send(self, aCommand, aData: dict = {}, aTries: int = 1, aSleep: float = 0.25):
         Url  = self.Host + aCommand
         #print('---Send', Url, aData)
 
@@ -48,25 +48,20 @@ class TDevMpyRequest():
 
 
 class TDevMpyCmd(TDevMpyRequest):
-    def CmdReadDHT22(self, aPin):
+    def CmdReadDHT22(self, aPin: int):
         return self.Send('/dev_dht22.py', {'pin': aPin}, 3, 0.3)
 
-    def CmdReadDS18B20(self, aPin):
-        return self.Send('/dev_ds18b20.py', {'pin': aPin}, 3, 0.5)
-
-
-class TProviderDevMpyPin(TProvider):
-    def __init__(self, aHost, aPin):
-        self.DH  = TDevMpyCmd(aHost)
-        self.Pin = aPin
+    def CmdReadDS18B20(self, aPin: int, aID: str):
+        return self.Send('/dev_ds18b20.py', {'pin': aPin, 'id': aID}, 3, 0.5)
 
 
 class TProviderDevMpy_DHT22(TProviderDevMpyPin):
+    def __init__(self, aHost: str, aPin: int):
+        self.DH  = TDevMpyCmd(aHost)
+        self.Pin = aPin
+
     def Read(self, aNotUsed):
         Result = self.DH.CmdReadDHT22(self.Pin)
-        #print(Result)
-        #if (not Result):
-        #    print('ERR')
         return Result
 
     def Get(self):
@@ -76,13 +71,20 @@ class TProviderDevMpy_DHT22(TProviderDevMpyPin):
         return Result
 
 
-class TProviderDevMpy_DS18B20(TProviderDevMpyPin):
+class TProviderDevMpy_DS18B20(TProvider):
+    def __init__(self, aHost: str, aPin: int, aID: str):
+        self.DH  = TDevMpyCmd(aHost)
+        self.Pin = aPin
+        self.ID  = aID
+
     def Read(self, aNotUsed):
-        Result = self.DH.CmdReadDS18B20(self.Pin)
+        Result = self.DH.CmdReadDS18B20(self.Pin, self.ID)
         return Result
 
     def Get(self):
-        Result = self.ReadTry()
-        if (Result and (len(Result) > 0)):
-            Result = Result['temperature'][0]
+        Data = self.ReadTry()
+        if (Data):
+            Result = Data[0].get('value')
+        else:
+            Result = None
         return Result
