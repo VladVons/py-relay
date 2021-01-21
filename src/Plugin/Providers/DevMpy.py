@@ -55,7 +55,7 @@ class TDevMpyCmd(TDevMpyRequest):
         return self.Send('/dev_ds18b20.py', {'pin': aPin, 'id': aID}, 3, 0.5)
 
 
-class TProviderDevMpy_DHT22(TProviderDevMpyPin):
+class TProviderDevMpy_DHT22(TProvider):
     def __init__(self, aHost: str, aPin: int):
         self.DH  = TDevMpyCmd(aHost)
         self.Pin = aPin
