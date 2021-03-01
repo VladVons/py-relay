@@ -3,4 +3,3 @@
 Path="/usr/lib/py-relay"
 cd $Path
 ./py-relay.bin $1 $2 $3 $4 $5 $6 $7
-
