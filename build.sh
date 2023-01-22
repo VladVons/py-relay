@@ -52,7 +52,7 @@ Deb()
 
   rm -f $DirDeb.deb
   dpkg-deb --build $DirDeb
-  rm -R $DirDeb
+  #rm -R $DirDeb
 }
 
 
